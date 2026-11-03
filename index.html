@@ -293,7 +293,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v9</span>
+    <span class="ver" id="verTag">v10</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -339,6 +339,8 @@
   if ('speechSynthesis' in window){
     pickVoice();
     speechSynthesis.onvoiceschanged = pickVoice;
+    /* 第一次觸碰時再抓一次，iOS 的清單常在互動後才完整 */
+    document.addEventListener('pointerdown', function(){ pickVoice(); }, { once:true });
   }
 
   function loadProgress(){
@@ -408,7 +410,13 @@
     if (!('speechSynthesis' in window)){ toast('此裝置不支援語音合成'); return null; }
     var u = new SpeechSynthesisUtterance(String(text).replace(/[～~]/g, ''));
     u.lang = 'ja-JP';
-    if (VOICE.ja) u.voice = VOICE.ja;
+    /* 聲音清單有時要等第一次互動才齊全 */
+    if (!VOICE.ja) pickVoice();
+    var v = VOICE.ja;
+    /* iOS Safari 不會列出「增強」人聲：只有在清單真的見到增強版才指定，
+       否則交給系統用「設定 → 輔助使用 → 聲音」選定的預設日語人聲 */
+    if (v && !/enhanced|premium|neural/i.test(v.name || '') && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
+    if (v) u.voice = v;
     u.rate = rate || (slow ? 0.68 : 0.92);
     u.pitch = 1;
     if (onend) u.onend = onend;
