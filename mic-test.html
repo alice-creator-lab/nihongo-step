@@ -120,6 +120,8 @@ iPhone 上請用 Safari 直接開啟網址（不要用「加到主畫面」的 A
         if (ev.error === 'language-not-supported') add('解讀', '此系統不支援日語辨識：請在 設定 → 一般 → 鍵盤 加入日文鍵盤後再試');
         if (ev.error === 'network') add('解讀', '辨識需要網絡，請檢查連線');
         if (ev.error === 'no-speech') add('解讀', '沒有收到聲音：靠近麥克風、在安靜地方再試一次');
+        if (ev.error === 'audio-capture') add('解讀', '系統取不到麥克風音訊：檢查是否有其他 App 正在錄音／通話，或重開 Safari 再試');
+        if (ev.error === 'aborted') add('解讀', '收音被中止：可能中途切換了 App 或鎖屏');
         resolve();
       };
       rec.onend = function(){
