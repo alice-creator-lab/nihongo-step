@@ -153,61 +153,61 @@
           "id": "L21",
           "no": 21,
           "title": "主題與對比（は／が）",
-          "available": false
+          "available": true
         },
         {
           "id": "L22",
           "no": 22,
           "title": "比較",
-          "available": false
+          "available": true
         },
         {
           "id": "L23",
           "no": 23,
           "title": "願望（ほしい・たい）",
-          "available": false
+          "available": true
         },
         {
           "id": "L24",
           "no": 24,
           "title": "可能形與「ことができる」",
-          "available": false
+          "available": true
         },
         {
           "id": "L25",
           "no": 25,
           "title": "名詞修飾",
-          "available": false
+          "available": true
         },
         {
           "id": "L26",
           "no": 26,
           "title": "自動詞與他動詞",
-          "available": false
+          "available": true
         },
         {
           "id": "L27",
           "no": 27,
           "title": "比喻（ようだ・みたいだ）",
-          "available": false
+          "available": true
         },
         {
           "id": "L28",
           "no": 28,
           "title": "意志與打算",
-          "available": false
+          "available": true
         },
         {
           "id": "L29",
           "no": 29,
           "title": "推測（でしょう・かもしれない）",
-          "available": false
+          "available": true
         },
         {
           "id": "L30",
           "no": 30,
           "title": "傳聞（そうです・らしいです）",
-          "available": false
+          "available": true
         }
       ]
     },
@@ -222,61 +222,61 @@
           "id": "L31",
           "no": 31,
           "title": "義務、不必與建議",
-          "available": false
+          "available": true
         },
         {
           "id": "L32",
           "no": 32,
           "title": "理由與逆接（ので・のに）",
-          "available": false
+          "available": true
         },
         {
           "id": "L33",
           "no": 33,
           "title": "條件（たら）與準備（ておく）",
-          "available": false
+          "available": true
         },
         {
           "id": "L34",
           "no": 34,
           "title": "ば形與狀態（てある）",
-          "available": false
+          "available": true
         },
         {
           "id": "L35",
           "no": 35,
           "title": "恆常條件（と）與路徑",
-          "available": false
+          "available": true
         },
         {
           "id": "L36",
           "no": 36,
           "title": "樣態（そうです）",
-          "available": false
+          "available": true
         },
         {
           "id": "L37",
           "no": 37,
           "title": "被動",
-          "available": false
+          "available": true
         },
         {
           "id": "L38",
           "no": 38,
           "title": "授受動詞",
-          "available": false
+          "available": true
         },
         {
           "id": "L39",
           "no": 39,
           "title": "使役與使役被動",
-          "available": false
+          "available": true
         },
         {
           "id": "L40",
           "no": 40,
           "title": "敬語",
-          "available": false
+          "available": true
         }
       ]
     }
