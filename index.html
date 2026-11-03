@@ -263,8 +263,11 @@
   .spkprog{font-size:12.5px; color:var(--ink2); text-align:center; min-height:18px; line-height:1.6}
   .padwrap{position:relative; margin-top:12px; background:#fffdf8; border:1px solid var(--line); border-radius:14px;
     background-image:linear-gradient(#f1eade 1px, transparent 1px), linear-gradient(90deg, #f1eade 1px, transparent 1px);
-    background-size:100% 50px, 50px 100%; background-position:0 49px, 49px 0}
-  .pad{display:block; width:100%; height:200px; touch-action:none; border-radius:14px}
+    background-size:100% 50px, 50px 100%; background-position:0 49px, 49px 0;
+    -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; -webkit-tap-highlight-color:transparent}
+  .pad{display:block; width:100%; height:200px; touch-action:none; border-radius:14px;
+    -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; -webkit-tap-highlight-color:transparent;
+    -webkit-user-drag:none; outline:none}
   .padhint{position:absolute; left:0; right:0; bottom:7px; text-align:center; font-size:11.5px; color:var(--muted); pointer-events:none}
   .dictbox{margin-top:14px; border:1px solid var(--line); border-radius:14px; background:var(--card); padding:10px 13px}
   .dictbox summary{font-size:13.5px; color:var(--ink2); outline:none}
@@ -299,7 +302,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v13</span>
+    <span class="ver" id="verTag">v14</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1078,7 +1081,8 @@
     host.innerHTML = '<div class="qcard">' +
         '<div class="qnum">第 '+(s.i+1)+' 題 · 共 '+total+' 題</div>' +
         '<div class="qq">'+esc(e.q)+'</div>' +
-        '<div class="padwrap"><canvas id="qpad" class="pad"></canvas>' +
+        '<div class="padwrap"><canvas id="qpad" class="pad" draggable="false" ' +
+          'onselectstart="return false" oncontextmenu="return false"></canvas>' +
           '<div class="padhint">用手指寫出答案</div></div>' +
         '<div class="row2" style="margin-top:10px">' +
           '<button class="btn2" id="qclear">清除</button>' +
