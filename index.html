@@ -299,7 +299,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v12</span>
+    <span class="ver" id="verTag">v13</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -883,13 +883,167 @@
     $('#quizHost').innerHTML = '<div class="sum">' +
         '<div class="big">'+s.ok+'<small> ／ '+total+'</small></div>' +
         '<p class="secnote" style="margin:8px 0 0">' +
-          (s.ok === total ? '全部聽對，可以試試角色扮演。' : '答錯的句子已記入錯題簿。') + '</p>' +
+          (s.ok === total ? '全部聽對。' : '答錯的句子已記入錯題簿。') + '</p>' +
         (wrong ? '<div class="chips">'+wrong+'</div>' : '') +
         '<div class="row2" style="justify-content:center">' +
           '<button class="btn2" id="lstAgain">再聽一次</button>' +
           '<a class="btn2" href="#/l/'+l.id+'/dialogue" style="text-decoration:none">去會話</a>' +
         '</div></div>';
     $('#lstAgain').addEventListener('click', function(){ lsRun = null; renderListen(l); });
+  }
+
+  /* ---------- 手寫辨識：本機筆順比對（KanjiVG 模板 + DTW，與 kana-dojo 同一做法） ---------- */
+  var TPL = null, TPL_N = 16, TPL_SQ = null, TPL_LOADED = null;
+
+  function tplSquash(set){
+    var out = {};
+    Object.keys(set).forEach(function(k){
+      var minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+      set[k].forEach(function(s){ s.forEach(function(p){
+        if (p[0] < minX) minX = p[0]; if (p[0] > maxX) maxX = p[0];
+        if (p[1] < minY) minY = p[1]; if (p[1] > maxY) maxY = p[1];
+      }); });
+      var w = Math.max(maxX - minX, 1e-6), h = Math.max(maxY - minY, 1e-6);
+      var cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
+      out[k] = set[k].map(function(s){ return s.map(function(p){ return [(p[0]-cx)/w, (p[1]-cy)/h]; }); });
+    });
+    return out;
+  }
+  function loadTemplates(){
+    if (TPL_LOADED) return TPL_LOADED;
+    TPL_LOADED = fetch('data/kana-templates.json').then(function(r){ return r.json(); }).then(function(j){
+      TPL = j.tpl; TPL_N = j.n || 16; TPL_SQ = tplSquash(TPL); return TPL;
+    });
+    return TPL_LOADED;
+  }
+  function resampleN(pts, n){
+    if (pts.length < 2){ var o = []; for (var i = 0; i < n; i++) o.push([pts[0][0], pts[0][1]]); return o; }
+    var d = [0], i, k;
+    for (i = 1; i < pts.length; i++) d.push(d[i-1] + Math.hypot(pts[i][0]-pts[i-1][0], pts[i][1]-pts[i-1][1]));
+    var total = d[d.length-1];
+    if (!total){ var q = []; for (k = 0; k < n; k++) q.push([pts[0][0], pts[0][1]]); return q; }
+    var out = [], j = 0;
+    for (k = 0; k < n; k++){
+      var tgt = total * k / (n - 1);
+      while (j < d.length - 2 && d[j+1] < tgt) j++;
+      var seg = d[j+1] - d[j], t = seg ? (tgt - d[j]) / seg : 0;
+      out.push([pts[j][0] + (pts[j+1][0]-pts[j][0])*t, pts[j][1] + (pts[j+1][1]-pts[j][1])*t]);
+    }
+    return out;
+  }
+  function dtw(a, b, band){
+    var n = a.length, m = b.length, INF = 1e9, W = m + 1, i, j;
+    var D = new Array((n+1)*(m+1));
+    for (i = 0; i < D.length; i++) D[i] = INF;
+    D[0] = 0;
+    for (i = 1; i <= n; i++){
+      var lo = Math.max(1, i - (band + Math.abs(n - m)));
+      var hi = Math.min(m, i + (band + Math.abs(n - m)));
+      for (j = lo; j <= hi; j++){
+        var cost = Math.hypot(a[i-1][0]-b[j-1][0], a[i-1][1]-b[j-1][1]);
+        D[i*W+j] = cost + Math.min(D[(i-1)*W+j], D[i*W+j-1], D[(i-1)*W+j-1]);
+      }
+    }
+    return D[n*W+m] / Math.max(n, m);
+  }
+  function strokeDist(a, b){
+    var a2 = resampleN(a, TPL_N), b2 = resampleN(b, TPL_N);
+    return Math.min(dtw(a2, b2, 3), dtw(a2, b2.slice().reverse(), 3));
+  }
+  function scoreKana(user, tpl){
+    var nu = user.length, nt = tpl.length, pen = Math.abs(nu - nt) * 0.45, d = 0, cnt = 0, i = 0, j = 0;
+    if (nu === nt){
+      for (i = 0; i < nu; i++) d += strokeDist(user[i], tpl[i]);
+      return d / nu + pen;
+    }
+    while (i < nu && j < nt){
+      if (nu - i > nt - j) i++;
+      else if (nu - i < nt - j) j++;
+      else { d += strokeDist(user[i], tpl[j]); cnt++; i++; j++; }
+    }
+    return (cnt ? d / cnt : 3) + pen;
+  }
+  function normSet(strokes, squash){
+    var minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+    strokes.forEach(function(s){ s.forEach(function(p){
+      if (p[0] < minX) minX = p[0]; if (p[0] > maxX) maxX = p[0];
+      if (p[1] < minY) minY = p[1]; if (p[1] > maxY) maxY = p[1];
+    }); });
+    var w = Math.max(maxX - minX, 1), h = Math.max(maxY - minY, 1);
+    var side = Math.max(w, h), cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
+    return strokes.map(function(s){
+      return s.map(function(p){
+        return squash ? [(p[0]-cx)/w, (p[1]-cy)/h] : [(p[0]-cx)/side, (p[1]-cy)/side];
+      });
+    });
+  }
+  function scoreForChar(strokes, ch){
+    if (!TPL || !TPL[ch] || !strokes.length) return null;
+    var un = normSet(strokes, false), unS = normSet(strokes, true);
+    var d = scoreKana(un, TPL[ch]);
+    if (TPL_SQ && TPL_SQ[ch]) d = Math.min(d, scoreKana(unS, TPL_SQ[ch]));
+    return d;
+  }
+  function classifyChar(strokes){
+    if (!TPL || !strokes.length) return null;
+    var un = normSet(strokes, false), unS = normSet(strokes, true), best = null;
+    Object.keys(TPL).forEach(function(k){
+      if (!/^[\u3041-\u3096]$/.test(k)) return;   /* 只認平假名 */
+      var d = scoreKana(un, TPL[k]);
+      if (TPL_SQ && TPL_SQ[k]) d = Math.min(d, scoreKana(unS, TPL_SQ[k]));
+      if (!best || d < best.d) best = { k: k, d: d };
+    });
+    return best;
+  }
+  /* 按筆畫的橫向位置切開每個字；切不出預期字數就按平均寬度分組 */
+  function segmentStrokes(strokes, n){
+    if (n <= 1 || strokes.length <= 1) return [strokes];
+    var info = strokes.map(function(s){
+      var minX = 1e9, maxX = -1e9, sum = 0;
+      s.forEach(function(p){ if (p[0] < minX) minX = p[0]; if (p[0] > maxX) maxX = p[0]; sum += p[0]; });
+      return { s: s, minX: minX, maxX: maxX, cx: sum / s.length };
+    }).sort(function(a, b){ return a.cx - b.cx; });
+
+    var totalW = Math.max(info[info.length-1].maxX - info[0].minX, 1);
+    var avgW = totalW / n, groups = [], cur = [info[0]], i;
+    for (i = 1; i < info.length; i++){
+      var gap = info[i].minX - cur[cur.length-1].maxX;
+      if (gap > avgW * 0.16){ groups.push(cur); cur = [info[i]]; }
+      else cur.push(info[i]);
+    }
+    groups.push(cur);
+    if (groups.length !== n){
+      groups = [];
+      for (i = 0; i < n; i++) groups.push([]);
+      info.forEach(function(o){
+        var idx = Math.min(n - 1, Math.max(0, Math.floor((o.cx - info[0].minX) / avgW)));
+        groups[idx].push(o);
+      });
+      if (groups.some(function(g){ return !g.length; })) return null;
+    }
+    return groups.map(function(g){ return g.map(function(o){ return o.s; }); });
+  }
+  function smallKana(c){
+    var map = { 'ゃ':'や','ゅ':'ゆ','ょ':'よ','っ':'つ','ぁ':'あ','ぃ':'い','ぅ':'う','ぇ':'え','ぉ':'お' };
+    return map[c] || c;
+  }
+  function recognizeWriting(strokes, expected){
+    var chars = String(expected).replace(/[\s\u3000、。，．,.!?！？]/g, '').split('');
+    var parts = segmentStrokes(strokes, chars.length);
+    if (!parts) return { text: null, hits: 0, total: chars.length };
+    var text = '', hits = 0;
+    parts.forEach(function(g, i){
+      var b = classifyChar(g);
+      var ch = b ? b.k : '?';
+      text += ch;
+      /* 判分用「與目標字的距離」：與最佳候選相差不到 15% 就當寫對，
+         避免辨識器把形近假名（は／あ）誤判而冤判錯 */
+      var want = chars[i];
+      var dWant = scoreForChar(g, want);
+      var near = b && dWant != null && dWant <= b.d * 1.15 + 0.02;
+      if (near || (b && smallKana(b.k) === smallKana(want))) hits++;
+    });
+    return { text: text, hits: hits, total: chars.length };
   }
 
   function renderQuiz(l){
@@ -949,9 +1103,9 @@
         var r = pad.getBoundingClientRect();
         ctx.clearRect(0, 0, r.width, r.height);
         strokes.forEach(function(st){
-          if (st.length === 1){ ctx.beginPath(); ctx.arc(st[0].x, st[0].y, 1.6, 0, Math.PI*2); ctx.fill(); return; }
+          if (st.length === 1){ ctx.beginPath(); ctx.arc(st[0][0], st[0][1], 1.6, 0, Math.PI*2); ctx.fill(); return; }
           ctx.beginPath();
-          st.forEach(function(pt, i){ if (i) ctx.lineTo(pt.x, pt.y); else ctx.moveTo(pt.x, pt.y); });
+          st.forEach(function(pt, i){ if (i) ctx.lineTo(pt[0], pt[1]); else ctx.moveTo(pt[0], pt[1]); });
           ctx.stroke();
         });
       }
@@ -966,7 +1120,7 @@
       }
       function pos(ev){
         var r = pad.getBoundingClientRect();
-        return { x: ev.clientX - r.left, y: ev.clientY - r.top };
+        return [ev.clientX - r.left, ev.clientY - r.top];
       }
       var drawing = false, cur = null;
       pad.addEventListener('pointerdown', function(ev){
@@ -975,14 +1129,14 @@
         drawing = true;
         cur = [pos(ev)];
         strokes.push(cur);
-        ctx.beginPath(); ctx.moveTo(cur[0].x, cur[0].y);
+        ctx.beginPath(); ctx.moveTo(cur[0][0], cur[0][1]);
         ev.preventDefault();
       });
       pad.addEventListener('pointermove', function(ev){
         if (!drawing || !cur || locked) return;
         var pt = pos(ev);
         cur.push(pt);
-        ctx.lineTo(pt.x, pt.y);
+        ctx.lineTo(pt[0], pt[1]);
         ctx.stroke();
         ev.preventDefault();
       });
@@ -1017,18 +1171,50 @@
       showNext();
     }
 
-    /* 手寫作答：自己對照參考答案後按「寫對了／寫錯了」，不經鍵盤 */
+    /* 手寫作答：本機筆順辨識自動判斷（與 kana-dojo 相同做法） */
+    loadTemplates().catch(function(){});
+    if (location.search.indexOf('dbg=1') >= 0){
+      window.__ngs = { strokes: strokes, classify: classifyChar, scoreFor: scoreForChar, tpl: function(){ return TPL; } };
+    }
     $('#qcheck').addEventListener('click', function(){
       if (locked) return;
       if (!strokes.length){ toast('請先用手寫出答案'); return; }
       locked = true;
-      var ans = isFree ? (e.model || e.a) : e.a;
+
+      if (isFree){
+        var model = e.model || e.a;
+        fb.className = 'fb';
+        fb.innerHTML = '參考答案<span class="corr">'+esc(model)+'</span>' +
+          '<div class="row2"><button class="btn2 b-ok" id="selfOk">意思一樣</button>' +
+          '<button class="btn2 b-no" id="selfNo">寫錯了</button></div>';
+        $('#selfOk').addEventListener('click', function(){ fb.innerHTML = ''; markRight(); });
+        $('#selfNo').addEventListener('click', function(){ markWrong(model); });
+        return;
+      }
+
+      var expected = e.kana || e.a;
       fb.className = 'fb';
-      fb.innerHTML = '參考答案<span class="corr">'+esc(ans)+'</span>' +
-        '<div class="row2"><button class="btn2 b-ok" id="selfOk">寫對了</button>' +
-        '<button class="btn2 b-no" id="selfNo">寫錯了</button></div>';
-      $('#selfOk').addEventListener('click', function(){ fb.innerHTML = ''; markRight(); });
-      $('#selfNo').addEventListener('click', function(){ markWrong(ans); });
+      fb.textContent = '辨識中…';
+      loadTemplates().then(function(){
+        var r = recognizeWriting(strokes, expected);
+        if (!r.text){
+          locked = false;
+          fb.className = 'fb';
+          fb.textContent = '筆畫分不開每個字，請字與字之間留一點空隙再試。';
+          return;
+        }
+        if (r.hits === r.total){ fb.textContent = ''; markRight(); return; }
+        fb.className = 'fb';
+        fb.innerHTML = '辨識結果<span class="corr">'+esc(r.text)+'</span>' +
+          '參考答案<span class="corr">'+esc(e.a)+'</span>' +
+          '<div class="row2"><button class="btn2 b-ok" id="selfOk">其實寫對了</button>' +
+          '<button class="btn2 b-no" id="selfNo">寫錯了</button></div>';
+        $('#selfOk').addEventListener('click', function(){ fb.innerHTML = ''; markRight(); });
+        $('#selfNo').addEventListener('click', function(){ markWrong(e.a); });
+      }).catch(function(err){
+        locked = false;
+        toast('辨識失敗：' + (err && err.message ? err.message : err));
+      });
     });
 
     $('#qclear').addEventListener('click', function(){
@@ -1066,19 +1252,11 @@
   }
 
   function segDialogue(l){
-    var who = speakersOf(l.dialogues[0]);
-    var h = '<div class="quizbar"><div class="qinfo"><b>角色扮演</b><span>選一個角色，唸出屬於你的句子</span></div>' +
-              '<div class="seg2" id="roleSel">' +
-                '<button data-role="0" class="'+(rolePref==='0'?'on':'')+'">我演 '+esc(who[0]||'A')+'</button>' +
-                '<button data-role="1" class="'+(rolePref==='1'?'on':'')+'">我演 '+esc(who[1]||'B')+'</button>' +
-              '</div>' +
-              '<button class="btn2" id="startRole">開始</button></div>' +
-            '<p class="secnote">播放時可同時隱藏中譯；角色扮演會先播對方的句子，再提示你要唸的那一句。錄音只在你的裝置上播放，不會上傳。</p>';
+    var h = '<p class="secnote">播放時可同時隱藏中譯；每句右邊的麥克風可做跟讀評分。</p>';
     l.dialogues.forEach(function(d, di){
       h += '<article class="dlg" data-dlg="'+di+'">' +
              '<div class="dlghd"><h3>'+esc(d.scene)+'</h3>' +
                '<button class="btn2" data-play="'+di+'">▶ 播放整段</button>' +
-               '<button class="btn2" data-roleplay="'+di+'">角色扮演</button>' +
              '</div>' +
              (d.note ? '<p class="dnote">'+esc(d.note)+'</p>' : '') +
              '<div class="lines">';
@@ -1088,7 +1266,7 @@
                  '<div class="ja">'+esc(x.ja)+'</div><div class="zh">'+esc(x.zh)+'</div>' +
                '</div>' +
                '<div class="lacts">' +
-                 '<button class="spk" data-say="'+esc(x.ja)+'" aria-label="播放這一句">'+SPK+'</button>' +
+                 '<button class="spk" data-say="'+esc(x.kana || x.ja)+'" aria-label="播放這一句">'+SPK+'</button>' +
                  '<button class="spk sm" data-speak="'+di+'-'+li+'" aria-label="跟讀評分">'+MIC+'</button>' +
                '</div></div></div>';
       });
@@ -1098,14 +1276,6 @@
     return h;
   }
   function wireDialogue(host, lesson){
-    var sel = $('#roleSel');
-    if (sel) sel.addEventListener('click', function(e){
-      var b = e.target.closest('[data-role]'); if (!b) return;
-      rolePref = b.dataset.role;
-      Array.prototype.forEach.call(sel.querySelectorAll('button'), function(x){
-        x.classList.toggle('on', x.dataset.role === rolePref);
-      });
-    });
     if (host.dataset.dlg) return;
     host.dataset.dlg = '1';
     host.addEventListener('click', function(e){
@@ -1119,9 +1289,6 @@
       }
       var sp = e.target.closest('[data-speak]');
       if (sp){ var parts = sp.dataset.speak.split('-'); openSpeak(lesson, +parts[0], +parts[1]); return; }
-      var rp = e.target.closest('[data-roleplay]');
-      if (rp){ startRole(lesson, +rp.dataset.roleplay, rolePref); return; }
-      if (e.target.id === 'startRole'){ startRole(lesson, 0, rolePref); return; }
       if (e.target.id === 'zhToggle'){
         var hide = !document.body.classList.contains('hidezh');
         document.body.classList.toggle('hidezh', hide);
@@ -1133,7 +1300,7 @@
     if (i >= lines.length || !box){ return; }
     var row = box.querySelector('.line[data-line="'+i+'"]');
     if (row) row.classList.add('playing');
-    var u = utter(lines[i].ja, null, function(){
+    var u = utter(lines[i].kana || lines[i].ja, null, function(){
       if (row) row.classList.remove('playing');
       playLines(lines, box, i + 1);
     });
@@ -1143,120 +1310,12 @@
     }
   }
 
-  /* ---------- 角色扮演 ---------- */
-  var rolePref = '0';
-  var roleRun = null;
-  var recUrl = null;
-  var recMr = null;
+  /* ---------- 朗讀與播放 ---------- */
   var curAudio = null;
 
   function speakAt(text, rate){
     stopAudio();
     utter(text, rate);
-  }
-
-  function startRole(l, di, role){
-    roleRun = { dlg: di || 0, role: role || '0', i: 0 };
-    renderRole(l);
-  }
-
-  function renderRole(l){
-    var host = $('#seg'), r = roleRun; if (!host || !r) return;
-    var d = l.dialogues[r.dlg];
-    var who = speakersOf(d);
-    var mine = who[+r.role] || who[0];
-    if (r.i >= d.lines.length) return roleSummary(l, mine);
-
-    var line = d.lines[r.i];
-    var me = line.who === mine;
-
-    host.innerHTML =
-      '<div class="cardmeta">'+esc(d.scene)+' · 你演 '+esc(mine)+' · 第 '+(r.i+1)+' ／ '+d.lines.length+' 句</div>' +
-      '<div class="rolecard '+(me?'me':'other')+'">' +
-        '<div class="rlabel">'+(me ? '你要說' : '對方（'+esc(line.who)+'）說')+'</div>' +
-        '<div class="rja">'+esc(line.ja)+'</div>' +
-        '<div class="rzh">'+esc(line.zh)+'</div>' +
-      '</div>' +
-      '<div class="cbtns">' +
-        '<button class="btn2" id="rolePlay">▶ 聽一次</button>' +
-        (me && asrSupported() ? '<button class="btn2" id="roleScore">跟讀評分</button>' : '') +
-        (me ? '<button class="btn2" id="roleRec">● 錄音</button>' : '') +
-        '<button class="btn2" id="roleNext">'+(me ? '唸完了，下一句' : '下一句')+' →</button>' +
-      '</div>' +
-      '<div id="recWrap"></div>' +
-      '<div class="cbtns" style="margin-top:10px"><button class="btn2" id="roleQuit">結束角色扮演</button></div>' +
-      '<p class="secnote" style="text-align:center">' +
-        (me ? '先聽一次示範，再照著句子唸。' : '先聽對方的句子，接著換你說。') + '</p>';
-
-    speak(line.kana || line.ja);
-
-    $('#rolePlay').addEventListener('click', function(){ speak(line.kana || line.ja); });
-    $('#roleNext').addEventListener('click', function(){ r.i++; renderRole(l); });
-    $('#roleQuit').addEventListener('click', function(){
-      roleRun = null; stopAudio();
-      $('#seg').innerHTML = segDialogue(l);
-      bindSpeakers($('#seg'));
-      wireDialogue($('#seg'), l);
-    });
-    if (me){
-      var rb = $('#roleRec');
-      if (rb) rb.addEventListener('click', function(){ toggleRecord(rb, line); });
-      var sc = $('#roleScore');
-      if (sc) sc.addEventListener('click', function(){ openSpeak(l, r.dlg, r.i); });
-    }
-  }
-
-  function toggleRecord(btn, line){
-    if (recMr && recMr.state === 'recording'){ recMr.stop(); return; }
-    if (!navigator.mediaDevices || !window.MediaRecorder){ toast('此瀏覽器不支援錄音'); return; }
-    navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
-      var chunks = [];
-      var mr = new MediaRecorder(stream);
-      recMr = mr;
-      mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
-      mr.onstop = function(){
-        stream.getTracks().forEach(function(t){ t.stop(); });
-        if (recUrl) URL.revokeObjectURL(recUrl);
-        var type = (chunks[0] && chunks[0].type) || 'audio/webm';
-        recUrl = URL.createObjectURL(new Blob(chunks, { type:type }));
-        recMr = null;
-        btn.textContent = '● 錄音';
-        var wrap = $('#recWrap');
-        if (wrap){
-          wrap.innerHTML = '<div class="cbtns"><button class="btn2" id="myPlay">▶ 聽我的錄音</button>' +
-                           '<button class="btn2" id="myModel">▶ 再聽示範</button></div>';
-          $('#myPlay').addEventListener('click', function(){
-            stopAudio();
-            if (curAudio){ curAudio.pause(); }
-            curAudio = new Audio(recUrl);
-            curAudio.play();
-          });
-          $('#myModel').addEventListener('click', function(){ speak(line.kana || line.ja); });
-        }
-      };
-      mr.start();
-      btn.textContent = '■ 停止';
-    }).catch(function(){ toast('無法取得麥克風權限'); });
-  }
-
-  function roleSummary(l, mine){
-    var r = roleRun; if (!r) return;
-    var d = l.dialogues[r.dlg];
-    var other = r.role === '0' ? '1' : '0';
-    $('#seg').innerHTML = '<div class="sum">' +
-        '<div class="big">'+d.lines.length+'<small> 句</small></div>' +
-        '<p class="secnote" style="margin:8px 0 0">你演 '+esc(mine)+' 的部分全部唸完了。</p>' +
-        '<div class="row2" style="justify-content:center">' +
-          '<button class="btn2" id="roleSwap">交換角色重來</button>' +
-          '<button class="btn2" id="roleBack">回會話</button>' +
-        '</div></div>';
-    $('#roleSwap').addEventListener('click', function(){ startRole(l, r.dlg, other); });
-    $('#roleBack').addEventListener('click', function(){
-      roleRun = null; stopAudio();
-      $('#seg').innerHTML = segDialogue(l);
-      bindSpeakers($('#seg'));
-      wireDialogue($('#seg'), l);
-    });
   }
 
   /* ---------- 跟讀評分 ---------- */
