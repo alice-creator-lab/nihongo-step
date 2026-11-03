@@ -11,16 +11,66 @@
       "vocab": 498,
       "patterns": 48,
       "lessons": [
-        { "id": "L01", "no": 1, "title": "自我介紹", "available": true },
-        { "id": "L02", "no": 2, "title": "指示代名詞與「も」", "available": false },
-        { "id": "L03", "no": 3, "title": "時間與方向", "available": false },
-        { "id": "L04", "no": 4, "title": "數字與購物", "available": false },
-        { "id": "L05", "no": 5, "title": "日期與位置", "available": false },
-        { "id": "L06", "no": 6, "title": "移動動詞與時間助詞", "available": false },
-        { "id": "L07", "no": 7, "title": "動作、場所與頻率", "available": false },
-        { "id": "L08", "no": 8, "title": "形容詞（現在式）", "available": false },
-        { "id": "L09", "no": 9, "title": "形容詞（過去式）", "available": false },
-        { "id": "L10", "no": 10, "title": "存在句與數量", "available": false }
+        {
+          "id": "L01",
+          "no": 1,
+          "title": "自我介紹",
+          "available": true
+        },
+        {
+          "id": "L02",
+          "no": 2,
+          "title": "指示代名詞與「も」",
+          "available": true
+        },
+        {
+          "id": "L03",
+          "no": 3,
+          "title": "時間與方向",
+          "available": true
+        },
+        {
+          "id": "L04",
+          "no": 4,
+          "title": "數字與購物",
+          "available": true
+        },
+        {
+          "id": "L05",
+          "no": 5,
+          "title": "日期與位置",
+          "available": true
+        },
+        {
+          "id": "L06",
+          "no": 6,
+          "title": "移動動詞與時間助詞",
+          "available": true
+        },
+        {
+          "id": "L07",
+          "no": 7,
+          "title": "動作、場所與頻率",
+          "available": true
+        },
+        {
+          "id": "L08",
+          "no": 8,
+          "title": "形容詞（現在式）",
+          "available": true
+        },
+        {
+          "id": "L09",
+          "no": 9,
+          "title": "形容詞（過去式）",
+          "available": true
+        },
+        {
+          "id": "L10",
+          "no": 10,
+          "title": "存在句與數量",
+          "available": true
+        }
       ]
     },
     {
@@ -30,16 +80,66 @@
       "vocab": 456,
       "patterns": 41,
       "lessons": [
-        { "id": "L11", "no": 11, "title": "動詞分類、喜好與興趣", "available": false },
-        { "id": "L12", "no": 12, "title": "て形與請求", "available": false },
-        { "id": "L13", "no": 13, "title": "た形與列舉", "available": false },
-        { "id": "L14", "no": 14, "title": "ない形與副詞形", "available": false },
-        { "id": "L15", "no": 15, "title": "て形（狀態）、てみる、前に", "available": false },
-        { "id": "L16", "no": 16, "title": "家族稱謂與年齡", "available": false },
-        { "id": "L17", "no": 17, "title": "經驗與剛剛", "available": false },
-        { "id": "L18", "no": 18, "title": "普通體與引用", "available": false },
-        { "id": "L19", "no": 19, "title": "「んです」與說明理由", "available": false },
-        { "id": "L20", "no": 20, "title": "許可與禁止", "available": false }
+        {
+          "id": "L11",
+          "no": 11,
+          "title": "動詞分類、喜好與興趣",
+          "available": true
+        },
+        {
+          "id": "L12",
+          "no": 12,
+          "title": "て形與請求",
+          "available": true
+        },
+        {
+          "id": "L13",
+          "no": 13,
+          "title": "た形與列舉",
+          "available": true
+        },
+        {
+          "id": "L14",
+          "no": 14,
+          "title": "ない形與副詞形",
+          "available": true
+        },
+        {
+          "id": "L15",
+          "no": 15,
+          "title": "て形（狀態）、てみる、前に",
+          "available": true
+        },
+        {
+          "id": "L16",
+          "no": 16,
+          "title": "家族稱謂與年齡",
+          "available": true
+        },
+        {
+          "id": "L17",
+          "no": 17,
+          "title": "經驗與剛剛",
+          "available": true
+        },
+        {
+          "id": "L18",
+          "no": 18,
+          "title": "普通體與引用",
+          "available": true
+        },
+        {
+          "id": "L19",
+          "no": 19,
+          "title": "「んです」與說明理由",
+          "available": true
+        },
+        {
+          "id": "L20",
+          "no": 20,
+          "title": "許可與禁止",
+          "available": true
+        }
       ]
     },
     {
@@ -49,16 +149,66 @@
       "vocab": 565,
       "patterns": 36,
       "lessons": [
-        { "id": "L21", "no": 21, "title": "主題與對比（は／が）", "available": false },
-        { "id": "L22", "no": 22, "title": "比較", "available": false },
-        { "id": "L23", "no": 23, "title": "願望（ほしい・たい）", "available": false },
-        { "id": "L24", "no": 24, "title": "可能形與「ことができる」", "available": false },
-        { "id": "L25", "no": 25, "title": "名詞修飾", "available": false },
-        { "id": "L26", "no": 26, "title": "自動詞與他動詞", "available": false },
-        { "id": "L27", "no": 27, "title": "比喻（ようだ・みたいだ）", "available": false },
-        { "id": "L28", "no": 28, "title": "意志與打算", "available": false },
-        { "id": "L29", "no": 29, "title": "推測（でしょう・かもしれない）", "available": false },
-        { "id": "L30", "no": 30, "title": "傳聞（そうです・らしいです）", "available": false }
+        {
+          "id": "L21",
+          "no": 21,
+          "title": "主題與對比（は／が）",
+          "available": false
+        },
+        {
+          "id": "L22",
+          "no": 22,
+          "title": "比較",
+          "available": false
+        },
+        {
+          "id": "L23",
+          "no": 23,
+          "title": "願望（ほしい・たい）",
+          "available": false
+        },
+        {
+          "id": "L24",
+          "no": 24,
+          "title": "可能形與「ことができる」",
+          "available": false
+        },
+        {
+          "id": "L25",
+          "no": 25,
+          "title": "名詞修飾",
+          "available": false
+        },
+        {
+          "id": "L26",
+          "no": 26,
+          "title": "自動詞與他動詞",
+          "available": false
+        },
+        {
+          "id": "L27",
+          "no": 27,
+          "title": "比喻（ようだ・みたいだ）",
+          "available": false
+        },
+        {
+          "id": "L28",
+          "no": 28,
+          "title": "意志與打算",
+          "available": false
+        },
+        {
+          "id": "L29",
+          "no": 29,
+          "title": "推測（でしょう・かもしれない）",
+          "available": false
+        },
+        {
+          "id": "L30",
+          "no": 30,
+          "title": "傳聞（そうです・らしいです）",
+          "available": false
+        }
       ]
     },
     {
@@ -68,16 +218,66 @@
       "vocab": 459,
       "patterns": 43,
       "lessons": [
-        { "id": "L31", "no": 31, "title": "義務、不必與建議", "available": false },
-        { "id": "L32", "no": 32, "title": "理由與逆接（ので・のに）", "available": false },
-        { "id": "L33", "no": 33, "title": "條件（たら）與準備（ておく）", "available": false },
-        { "id": "L34", "no": 34, "title": "ば形與狀態（てある）", "available": false },
-        { "id": "L35", "no": 35, "title": "恆常條件（と）與路徑", "available": false },
-        { "id": "L36", "no": 36, "title": "樣態（そうです）", "available": false },
-        { "id": "L37", "no": 37, "title": "被動", "available": false },
-        { "id": "L38", "no": 38, "title": "授受動詞", "available": false },
-        { "id": "L39", "no": 39, "title": "使役與使役被動", "available": false },
-        { "id": "L40", "no": 40, "title": "敬語", "available": false }
+        {
+          "id": "L31",
+          "no": 31,
+          "title": "義務、不必與建議",
+          "available": false
+        },
+        {
+          "id": "L32",
+          "no": 32,
+          "title": "理由與逆接（ので・のに）",
+          "available": false
+        },
+        {
+          "id": "L33",
+          "no": 33,
+          "title": "條件（たら）與準備（ておく）",
+          "available": false
+        },
+        {
+          "id": "L34",
+          "no": 34,
+          "title": "ば形與狀態（てある）",
+          "available": false
+        },
+        {
+          "id": "L35",
+          "no": 35,
+          "title": "恆常條件（と）與路徑",
+          "available": false
+        },
+        {
+          "id": "L36",
+          "no": 36,
+          "title": "樣態（そうです）",
+          "available": false
+        },
+        {
+          "id": "L37",
+          "no": 37,
+          "title": "被動",
+          "available": false
+        },
+        {
+          "id": "L38",
+          "no": 38,
+          "title": "授受動詞",
+          "available": false
+        },
+        {
+          "id": "L39",
+          "no": 39,
+          "title": "使役與使役被動",
+          "available": false
+        },
+        {
+          "id": "L40",
+          "no": 40,
+          "title": "敬語",
+          "available": false
+        }
       ]
     }
   ]
