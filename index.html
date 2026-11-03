@@ -316,7 +316,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v15</span>
+    <span class="ver" id="verTag">v16</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1113,14 +1113,14 @@
         (isFree ? '' : '<div class="slots" id="qslots"></div>') +
         '<div class="padwrap"><canvas id="qpad" class="pad" draggable="false" ' +
           'onselectstart="return false" oncontextmenu="return false"></canvas>' +
-          '<div class="padhint">'+(isFree ? '用手指寫出答案' : '一次寫一個字')+'</div></div>' +
+          '<div class="padhint">'+(isFree ? '用手指寫出答案' : '一次寫一個字，停手就自動辨識')+'</div></div>' +
         '<div class="row2" style="margin-top:10px">' +
           '<button class="btn2" id="qclear">清除</button>' +
           '<button class="btn2" id="qundo">復原</button>' +
         '</div>' +
         '<div id="qcands"></div>' +
         '<div class="row2">' +
-          '<button class="cta" id="qcheck">'+(isFree ? '對答案' : '辨識這個字')+'</button>' +
+          (isFree ? '<button class="cta" id="qcheck">對答案</button>' : '') +
           (e.hint ? '<button class="btn2" id="qhint">提示</button>' : '') +
         '</div>' +
         '<div id="qfb"></div><div id="qnextwrap"></div>' +
@@ -1179,9 +1179,19 @@
         var r = pad.getBoundingClientRect();
         return [ev.clientX - r.left, ev.clientY - r.top];
       }
-      var drawing = false, cur = null;
+      var drawing = false, cur = null, autoT = null;
+      function scheduleRecognize(){
+        clearTimeout(autoT);
+        autoT = setTimeout(function(){
+          if (locked) return;
+          if (strokes.length) showCandidates();
+        }, 650);
+      }
+      window.__ngsSchedule = scheduleRecognize;
       pad.addEventListener('pointerdown', function(ev){
         if (locked) return;
+        clearTimeout(autoT);
+        if (cands && cands.innerHTML) cands.innerHTML = '';
         try { pad.setPointerCapture(ev.pointerId); } catch(err){}
         document.body.classList.add('writing');
         drawing = true;
@@ -1202,6 +1212,7 @@
         if (drawing && ev && ev.pointerId != null){ try { pad.releasePointerCapture(ev.pointerId); } catch(err){} }
         drawing = false; cur = null;
         document.body.classList.remove('writing');
+        if (!isFree && strokes.length && !locked) scheduleRecognize();
       }
       pad.addEventListener('pointerup', stop);
       pad.addEventListener('pointercancel', stop);
@@ -1284,7 +1295,7 @@
       });
     }
 
-    $('#qcheck').addEventListener('click', function(){
+    if ($('#qcheck')) $('#qcheck').addEventListener('click', function(){
       if (locked) return;
       if (isFree){
         if (!strokes.length){ toast('請先用手寫出答案'); return; }
