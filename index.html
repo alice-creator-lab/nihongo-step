@@ -103,8 +103,9 @@
   .tab{flex:0 0 auto; appearance:none; border:1px solid var(--line); background:#fffdf8;
     color:var(--ink2); font-family:var(--sans); font-size:13px; padding:8px 13px;
     border-radius:999px; display:inline-flex; align-items:center; white-space:nowrap; position:relative}
-  .tab.on{background:var(--ink); color:#fffdf8; border-color:var(--ink)}
-  .tab.seen{background:#f7f0e2; border-color:#e0d3bd}
+  .tab.seen{background:#f7f0e2; border-color:#e0d3bd; color:var(--ink2)}
+  /* 選中的分頁要壓過「已看」的淺色底，否則白字落在淺底上 */
+  .tab.on, .tab.on.seen{background:var(--ink); color:#fffdf8; border-color:var(--ink)}
 
   .sec{padding-top:6px; animation:fade .25s ease}
   @keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
@@ -260,6 +261,11 @@
   .scorebox .heard{font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.7}
   .scorebox .note{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.7}
   .spkprog{font-size:12.5px; color:var(--ink2); text-align:center; min-height:18px; line-height:1.6}
+  .padwrap{position:relative; margin-top:12px; background:#fffdf8; border:1px solid var(--line); border-radius:14px;
+    background-image:linear-gradient(#f1eade 1px, transparent 1px), linear-gradient(90deg, #f1eade 1px, transparent 1px);
+    background-size:100% 50px, 50px 100%; background-position:0 49px, 49px 0}
+  .pad{display:block; width:100%; height:200px; touch-action:none; border-radius:14px}
+  .padhint{position:absolute; left:0; right:0; bottom:7px; text-align:center; font-size:11.5px; color:var(--muted); pointer-events:none}
   .dictbox{margin-top:14px; border:1px solid var(--line); border-radius:14px; background:var(--card); padding:10px 13px}
   .dictbox summary{font-size:13.5px; color:var(--ink2); outline:none}
   .dictbox[open] summary{margin-bottom:10px; color:var(--ink)}
@@ -293,7 +299,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v11</span>
+    <span class="ver" id="verTag">v12</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -918,17 +924,75 @@
     host.innerHTML = '<div class="qcard">' +
         '<div class="qnum">第 '+(s.i+1)+' 題 · 共 '+total+' 題</div>' +
         '<div class="qq">'+esc(e.q)+'</div>' +
-        '<input class="qinput" id="qin" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="' +
-          (isFree ? '用日文寫出整句' : '輸入日文答案') + '">' +
+        '<div class="padwrap"><canvas id="qpad" class="pad"></canvas>' +
+          '<div class="padhint">用手指寫出答案</div></div>' +
+        '<div class="row2" style="margin-top:10px">' +
+          '<button class="btn2" id="qclear">清除</button>' +
+          '<button class="btn2" id="qundo">復原</button>' +
+        '</div>' +
         '<div class="row2">' +
-          '<button class="cta" id="qcheck">檢查</button>' +
+          '<button class="cta" id="qcheck">對答案</button>' +
           (e.hint ? '<button class="btn2" id="qhint">提示</button>' : '') +
         '</div>' +
         '<div id="qfb"></div><div id="qnextwrap"></div>' +
       '</div>' +
       '<p class="secnote" style="text-align:center">目前答對 '+s.correct+' 題</p>';
 
-    var inp = $('#qin'), fb = $('#qfb'), nw = $('#qnextwrap'), locked = false;
+    var fb = $('#qfb'), nw = $('#qnextwrap'), locked = false;
+    var pad = $('#qpad'), strokes = [];
+
+    (function initPad(){
+      if (!pad) return;
+      var ctx = pad.getContext('2d');
+      var dpr = Math.min(window.devicePixelRatio || 1, 3);
+      function redraw(){
+        var r = pad.getBoundingClientRect();
+        ctx.clearRect(0, 0, r.width, r.height);
+        strokes.forEach(function(st){
+          if (st.length === 1){ ctx.beginPath(); ctx.arc(st[0].x, st[0].y, 1.6, 0, Math.PI*2); ctx.fill(); return; }
+          ctx.beginPath();
+          st.forEach(function(pt, i){ if (i) ctx.lineTo(pt.x, pt.y); else ctx.moveTo(pt.x, pt.y); });
+          ctx.stroke();
+        });
+      }
+      function fit(){
+        var r = pad.getBoundingClientRect();
+        pad.width = Math.max(1, Math.round(r.width * dpr));
+        pad.height = Math.max(1, Math.round(r.height * dpr));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.lineWidth = 3.4; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        ctx.strokeStyle = '#221e19'; ctx.fillStyle = '#221e19';
+        redraw();
+      }
+      function pos(ev){
+        var r = pad.getBoundingClientRect();
+        return { x: ev.clientX - r.left, y: ev.clientY - r.top };
+      }
+      var drawing = false, cur = null;
+      pad.addEventListener('pointerdown', function(ev){
+        if (locked) return;
+        try { pad.setPointerCapture(ev.pointerId); } catch(e){}
+        drawing = true;
+        cur = [pos(ev)];
+        strokes.push(cur);
+        ctx.beginPath(); ctx.moveTo(cur[0].x, cur[0].y);
+        ev.preventDefault();
+      });
+      pad.addEventListener('pointermove', function(ev){
+        if (!drawing || !cur || locked) return;
+        var pt = pos(ev);
+        cur.push(pt);
+        ctx.lineTo(pt.x, pt.y);
+        ctx.stroke();
+        ev.preventDefault();
+      });
+      function stop(){ drawing = false; cur = null; }
+      pad.addEventListener('pointerup', stop);
+      pad.addEventListener('pointercancel', stop);
+      pad.addEventListener('pointerleave', stop);
+      window.addEventListener('resize', fit);
+      fit();
+    })();
 
     function showNext(){
       var last = s.i === total - 1;
@@ -953,22 +1017,37 @@
       showNext();
     }
 
+    /* 手寫作答：自己對照參考答案後按「寫對了／寫錯了」，不經鍵盤 */
     $('#qcheck').addEventListener('click', function(){
       if (locked) return;
-      var val = inp.value.trim();
-      if (!val){ toast('請先輸入答案'); return; }
+      if (!strokes.length){ toast('請先用手寫出答案'); return; }
       locked = true;
-      if (isFree){
-        fb.className = 'fb';
-        fb.innerHTML = '參考答案<span class="corr">'+esc(e.model || e.a)+'</span>' +
-          '<div class="row2"><button class="btn2 b-ok" id="selfOk">意思一樣</button>' +
-          '<button class="btn2 b-no" id="selfNo">寫錯了</button></div>';
-        $('#selfOk').addEventListener('click', function(){ fb.innerHTML=''; markRight(); });
-        $('#selfNo').addEventListener('click', function(){ markWrong(e.model || e.a); });
-        return;
-      }
-      var ok = (e.answers || []).some(function(a){ return norm(a) === norm(val); });
-      if (ok) markRight(); else markWrong(e.a);
+      var ans = isFree ? (e.model || e.a) : e.a;
+      fb.className = 'fb';
+      fb.innerHTML = '參考答案<span class="corr">'+esc(ans)+'</span>' +
+        '<div class="row2"><button class="btn2 b-ok" id="selfOk">寫對了</button>' +
+        '<button class="btn2 b-no" id="selfNo">寫錯了</button></div>';
+      $('#selfOk').addEventListener('click', function(){ fb.innerHTML = ''; markRight(); });
+      $('#selfNo').addEventListener('click', function(){ markWrong(ans); });
+    });
+
+    $('#qclear').addEventListener('click', function(){
+      if (locked) return;
+      strokes.length = 0;
+      var ctx = pad.getContext('2d'), r = pad.getBoundingClientRect();
+      ctx.clearRect(0, 0, r.width, r.height);
+    });
+    $('#qundo').addEventListener('click', function(){
+      if (locked) return;
+      strokes.pop();
+      var ctx = pad.getContext('2d'), r = pad.getBoundingClientRect();
+      ctx.clearRect(0, 0, r.width, r.height);
+      strokes.forEach(function(st){
+        if (st.length === 1){ ctx.beginPath(); ctx.arc(st[0].x, st[0].y, 1.6, 0, Math.PI*2); ctx.fill(); return; }
+        ctx.beginPath();
+        st.forEach(function(pt, i){ if (i) ctx.lineTo(pt.x, pt.y); else ctx.moveTo(pt.x, pt.y); });
+        ctx.stroke();
+      });
     });
 
     if (e.hint){
@@ -978,9 +1057,6 @@
         fb.innerHTML = '提示：' + esc(e.hint);
       });
     }
-    inp.addEventListener('keydown', function(ev){
-      if (ev.key === 'Enter'){ ev.preventDefault(); $('#qcheck').click(); }
-    });
   }
 
   function speakersOf(d){
