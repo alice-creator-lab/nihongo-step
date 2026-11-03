@@ -83,6 +83,17 @@ for (const book of course.books || []) {
       errors.push(`${rel} culture 需要 title 與 paras`);
     }
     if ((les.vocab || []).length < 15) warn.push(`${rel} 單字只有 ${les.vocab.length} 個，初級每課通常 20 個以上`);
+    (les.listening || []).forEach((x, i) => {
+      if (!x.ja) errors.push(`${rel} listening[${i}] 缺少 ja`);
+      if (!Array.isArray(x.choices) || x.choices.length !== 4) {
+        errors.push(`${rel} listening[${i}] 需要 4 個選項，實際 ${(x.choices || []).length}`);
+      }
+      if (typeof x.answer !== 'number' || x.answer < 0 || x.answer > 3) {
+        errors.push(`${rel} listening[${i}] answer 必須是 0–3 的索引`);
+      }
+      const set = new Set((x.choices || []).map((c) => c.trim()));
+      if (set.size !== (x.choices || []).length) errors.push(`${rel} listening[${i}] 選項有重複`);
+    });
   }
 }
 

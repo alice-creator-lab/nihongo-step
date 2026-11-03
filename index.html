@@ -227,6 +227,23 @@
   .mk .k span{font-size:12px; color:var(--muted)}
   .mk .n{font-size:11px; color:var(--shu); white-space:nowrap}
 
+  /* role play + listening */
+  .rolecard{background:linear-gradient(160deg,#fffdf8,#f7f0e2); border:1px solid var(--line);
+    border-radius:20px; padding:20px 18px; text-align:center}
+  .rolecard.other{background:#f6f2ea; border-style:dashed}
+  .rlabel{font-size:11.5px; color:var(--shu); letter-spacing:.12em; margin-bottom:8px}
+  .rja{font-family:var(--serif); font-size:21px; line-height:1.7}
+  .rzh{font-size:13px; color:var(--muted); margin-top:8px}
+  body.hidezh .rzh{display:none}
+  .choice{display:block; width:100%; text-align:left; appearance:none; font-family:var(--sans);
+    font-size:14.5px; line-height:1.6; color:var(--ink); background:#fffdf8; border:1px solid var(--line);
+    border-radius:12px; padding:12px 14px; margin-bottom:8px}
+  .choice:last-child{margin-bottom:0}
+  .choice.ok{border-color:#7fa77f; background:#eef4ec}
+  .choice.bad{border-color:#d9a9a2; background:#fbf0ee}
+  .choice.dim{opacity:.55}
+  .mic{width:100%}
+
   .lfoot{margin:22px 0 10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
   .btn2{appearance:none; border:1px solid var(--line); background:#fffdf8; color:var(--ink);
     font-family:var(--sans); font-size:14px; padding:12px 20px; border-radius:999px}
@@ -253,7 +270,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v2</span>
+    <span class="ver" id="verTag">v3</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -350,6 +367,7 @@
   var playingEl = null;
   function stopAudio(){
     if ('speechSynthesis' in window) speechSynthesis.cancel();
+    if (typeof curAudio !== 'undefined' && curAudio){ curAudio.pause(); curAudio = null; }
     if (playingEl) playingEl.classList.remove('playing');
     playingEl = null;
     Array.prototype.forEach.call(document.querySelectorAll('.spk.playing'), function(b){ b.classList.remove('playing'); });
@@ -533,7 +551,7 @@
     var lp = $('#lprog');
     if (lp) lp.textContent = '第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+' · 進度 '+lessonPct(lesson.id)+'%';
     bindSpeakers(host);
-    if (tab === 'exercises') renderQuiz(lesson);
+    if (tab === 'exercises') renderExerciseMode(lesson);
     if (tab === 'dialogue') wireDialogue(host, lesson);
     if (tab === 'vocab'){ cardRun = null; wireVocab(host, lesson); }
   }
@@ -715,10 +733,116 @@
 
   var exRun = null;
 
+  var exMode = 'drill';
+  var lsRun = null;
+
   function segExercises(l){
     exRun = { i:0, correct:0, wrong:[], done:false };
-    return '<p class="secnote">共 '+l.exercises.length+' 題，自動評分。答錯會顯示正確答案，並收入錯題簿。</p>' +
+    lsRun = null;
+    return '<div class="quizbar"><div class="qinfo"><b>練習</b><span>文型作答或聽力測驗</span></div>' +
+             '<div class="seg2" id="exMode">' +
+               '<button data-mode="drill" class="'+(exMode==='drill'?'on':'')+'">文型練習</button>' +
+               '<button data-mode="listen" class="'+(exMode==='listen'?'on':'')+'">聽力</button>' +
+             '</div></div>' +
            '<div id="quizHost"></div>';
+  }
+
+  function renderExerciseMode(l){
+    var seg = $('#exMode');
+    if (seg && !seg.dataset.bound){
+      seg.dataset.bound = '1';
+      seg.addEventListener('click', function(e){
+        var b = e.target.closest('[data-mode]'); if (!b) return;
+        exMode = b.dataset.mode;
+        Array.prototype.forEach.call(seg.querySelectorAll('button'), function(x){
+          x.classList.toggle('on', x.dataset.mode === exMode);
+        });
+        if (exMode === 'drill'){ exRun = { i:0, correct:0, wrong:[], done:false }; renderQuiz(l); }
+        else { lsRun = null; renderListen(l); }
+      });
+    }
+    if (exMode === 'drill') renderQuiz(l); else renderListen(l);
+  }
+
+  function renderListen(l){
+    var host = $('#quizHost'); if (!host) return;
+    if (!l.listening || !l.listening.length){
+      host.innerHTML = '<p class="secnote">這一課還沒有聽力題目。</p>';
+      return;
+    }
+    var s = lsRun;
+    if (!s){ s = lsRun = { deck: shuffle(l.listening), i:0, ok:0, wrong:[], order:null, answered:false }; }
+    if (s.i >= s.deck.length) return listenSummary(l);
+
+    var item = s.deck[s.i];
+    if (!s.order){
+      s.order = shuffle(item.choices.map(function(_, k){ return k; }));
+      s.answered = false;
+    }
+    var choices = s.order.map(function(k){
+      return '<button class="choice" data-k="'+k+'">'+esc(item.choices[k])+'</button>';
+    }).join('');
+
+    host.innerHTML = '<div class="qcard">' +
+        '<div class="qnum">第 '+(s.i+1)+' 題 · 共 '+s.deck.length+' 題</div>' +
+        '<div class="row2" style="margin:8px 0 0">' +
+          '<button class="cta" id="lplay">▶ 播放</button>' +
+          '<button class="btn2" id="lslow">慢速</button>' +
+        '</div>' +
+        '<p class="secnote" style="margin:14px 0 8px">你聽到的是哪一句的意思？</p>' +
+        '<div id="lchoices">'+choices+'</div>' +
+        '<div id="lfb"></div><div id="lnext"></div>' +
+      '</div>' +
+      '<p class="secnote" style="text-align:center">目前答對 '+s.ok+' 題</p>';
+
+    speak(item.ja);
+
+    $('#lplay').addEventListener('click', function(){ speak(item.ja); });
+    $('#lslow').addEventListener('click', function(){ speakAt(item.ja, 0.62); });
+
+    $('#lchoices').addEventListener('click', function(e){
+      var b = e.target.closest('.choice'); if (!b || s.answered) return;
+      s.answered = true;
+      var k = +b.dataset.k;
+      var right = k === item.answer;
+      Array.prototype.forEach.call(host.querySelectorAll('.choice'), function(x){
+        if (+x.dataset.k === item.answer) x.classList.add('ok');
+        else if (x === b) x.classList.add('bad');
+        else x.classList.add('dim');
+      });
+      var fb = $('#lfb');
+      if (right){
+        s.ok++;
+        fb.className = 'fb ok';
+        fb.textContent = '✓ 正確';
+      } else {
+        s.wrong.push(item.ja);
+        addMistake({ key:l.id+':l:'+s.i, kind:'listen', prompt:item.ja, answer:item.choices[item.answer] });
+        fb.className = 'fb bad';
+        fb.innerHTML = '✗ 再聽一次<span class="corr">'+esc(item.ja)+'　'+esc(item.choices[item.answer])+'</span>';
+        speakAt(item.ja, 0.8);
+      }
+      var nw = $('#lnext');
+      nw.innerHTML = '<div class="row2"><button class="btn2" id="lnextBtn">' +
+        (s.i === s.deck.length - 1 ? '看結果' : '下一題') + ' →</button></div>';
+      $('#lnextBtn').addEventListener('click', function(){ s.i++; s.order = null; renderListen(l); });
+    });
+  }
+
+  function listenSummary(l){
+    var s = lsRun;
+    var total = s.deck.length;
+    var wrong = s.wrong.map(function(w){ return '<span>'+esc(w)+'</span>'; }).join('');
+    $('#quizHost').innerHTML = '<div class="sum">' +
+        '<div class="big">'+s.ok+'<small> ／ '+total+'</small></div>' +
+        '<p class="secnote" style="margin:8px 0 0">' +
+          (s.ok === total ? '全部聽對，可以試試角色扮演。' : '答錯的句子已記入錯題簿。') + '</p>' +
+        (wrong ? '<div class="chips">'+wrong+'</div>' : '') +
+        '<div class="row2" style="justify-content:center">' +
+          '<button class="btn2" id="lstAgain">再聽一次</button>' +
+          '<a class="btn2" href="#/l/'+l.id+'/dialogue" style="text-decoration:none">去會話</a>' +
+        '</div></div>';
+    $('#lstAgain').addEventListener('click', function(){ lsRun = null; renderListen(l); });
   }
 
   function renderQuiz(l){
@@ -818,12 +942,26 @@
     });
   }
 
+  function speakersOf(d){
+    var who = [];
+    d.lines.forEach(function(x){ if (who.indexOf(x.who) < 0) who.push(x.who); });
+    return who;
+  }
+
   function segDialogue(l){
-    var h = '<p class="secnote">播放時可同時隱藏中譯，練習只靠聽力理解。</p>';
+    var who = speakersOf(l.dialogues[0]);
+    var h = '<div class="quizbar"><div class="qinfo"><b>角色扮演</b><span>選一個角色，唸出屬於你的句子</span></div>' +
+              '<div class="seg2" id="roleSel">' +
+                '<button data-role="0" class="'+(rolePref==='0'?'on':'')+'">我演 '+esc(who[0]||'A')+'</button>' +
+                '<button data-role="1" class="'+(rolePref==='1'?'on':'')+'">我演 '+esc(who[1]||'B')+'</button>' +
+              '</div>' +
+              '<button class="btn2" id="startRole">開始</button></div>' +
+            '<p class="secnote">播放時可同時隱藏中譯；角色扮演會先播對方的句子，再提示你要唸的那一句。錄音只在你的裝置上播放，不會上傳。</p>';
     l.dialogues.forEach(function(d, di){
       h += '<article class="dlg" data-dlg="'+di+'">' +
              '<div class="dlghd"><h3>'+esc(d.scene)+'</h3>' +
                '<button class="btn2" data-play="'+di+'">▶ 播放整段</button>' +
+               '<button class="btn2" data-roleplay="'+di+'">角色扮演</button>' +
              '</div>' +
              (d.note ? '<p class="dnote">'+esc(d.note)+'</p>' : '') +
              '<div class="lines">';
@@ -840,6 +978,14 @@
     return h;
   }
   function wireDialogue(host, lesson){
+    var sel = $('#roleSel');
+    if (sel) sel.addEventListener('click', function(e){
+      var b = e.target.closest('[data-role]'); if (!b) return;
+      rolePref = b.dataset.role;
+      Array.prototype.forEach.call(sel.querySelectorAll('button'), function(x){
+        x.classList.toggle('on', x.dataset.role === rolePref);
+      });
+    });
     if (host.dataset.dlg) return;
     host.dataset.dlg = '1';
     host.addEventListener('click', function(e){
@@ -851,6 +997,9 @@
         playLines(d.lines, box, 0);
         return;
       }
+      var rp = e.target.closest('[data-roleplay]');
+      if (rp){ startRole(lesson, +rp.dataset.roleplay, rolePref); return; }
+      if (e.target.id === 'startRole'){ startRole(lesson, 0, rolePref); return; }
       if (e.target.id === 'zhToggle'){
         var hide = !document.body.classList.contains('hidezh');
         document.body.classList.toggle('hidezh', hide);
@@ -872,6 +1021,119 @@
     }
   }
 
+  /* ---------- 角色扮演 ---------- */
+  var rolePref = '0';
+  var roleRun = null;
+  var recUrl = null;
+  var recMr = null;
+  var curAudio = null;
+
+  function speakAt(text, rate){
+    stopAudio();
+    utter(text, rate);
+  }
+
+  function startRole(l, di, role){
+    roleRun = { dlg: di || 0, role: role || '0', i: 0 };
+    renderRole(l);
+  }
+
+  function renderRole(l){
+    var host = $('#seg'), r = roleRun; if (!host || !r) return;
+    var d = l.dialogues[r.dlg];
+    var who = speakersOf(d);
+    var mine = who[+r.role] || who[0];
+    if (r.i >= d.lines.length) return roleSummary(l, mine);
+
+    var line = d.lines[r.i];
+    var me = line.who === mine;
+
+    host.innerHTML =
+      '<div class="cardmeta">'+esc(d.scene)+' · 你演 '+esc(mine)+' · 第 '+(r.i+1)+' ／ '+d.lines.length+' 句</div>' +
+      '<div class="rolecard '+(me?'me':'other')+'">' +
+        '<div class="rlabel">'+(me ? '你要說' : '對方（'+esc(line.who)+'）說')+'</div>' +
+        '<div class="rja">'+esc(line.ja)+'</div>' +
+        '<div class="rzh">'+esc(line.zh)+'</div>' +
+      '</div>' +
+      '<div class="cbtns">' +
+        '<button class="btn2" id="rolePlay">▶ 聽一次</button>' +
+        (me ? '<button class="btn2" id="roleRec">● 錄音</button>' : '') +
+        '<button class="btn2" id="roleNext">'+(me ? '唸完了，下一句' : '下一句')+' →</button>' +
+      '</div>' +
+      '<div id="recWrap"></div>' +
+      '<div class="cbtns" style="margin-top:10px"><button class="btn2" id="roleQuit">結束角色扮演</button></div>' +
+      '<p class="secnote" style="text-align:center">' +
+        (me ? '先聽一次示範，再自己唸；可按錄音對照。' : '先聽對方的句子，接著換你說。') + '</p>';
+
+    speak(line.ja);
+
+    $('#rolePlay').addEventListener('click', function(){ speak(line.ja); });
+    $('#roleNext').addEventListener('click', function(){ r.i++; renderRole(l); });
+    $('#roleQuit').addEventListener('click', function(){
+      roleRun = null; stopAudio();
+      $('#seg').innerHTML = segDialogue(l);
+      bindSpeakers($('#seg'));
+      wireDialogue($('#seg'), l);
+    });
+    if (me){
+      var rb = $('#roleRec');
+      if (rb) rb.addEventListener('click', function(){ toggleRecord(rb, line); });
+    }
+  }
+
+  function toggleRecord(btn, line){
+    if (recMr && recMr.state === 'recording'){ recMr.stop(); return; }
+    if (!navigator.mediaDevices || !window.MediaRecorder){ toast('此瀏覽器不支援錄音'); return; }
+    navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
+      var chunks = [];
+      var mr = new MediaRecorder(stream);
+      recMr = mr;
+      mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+      mr.onstop = function(){
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        if (recUrl) URL.revokeObjectURL(recUrl);
+        var type = (chunks[0] && chunks[0].type) || 'audio/webm';
+        recUrl = URL.createObjectURL(new Blob(chunks, { type:type }));
+        recMr = null;
+        btn.textContent = '● 錄音';
+        var wrap = $('#recWrap');
+        if (wrap){
+          wrap.innerHTML = '<div class="cbtns"><button class="btn2" id="myPlay">▶ 聽我的錄音</button>' +
+                           '<button class="btn2" id="myModel">▶ 再聽示範</button></div>';
+          $('#myPlay').addEventListener('click', function(){
+            stopAudio();
+            if (curAudio){ curAudio.pause(); }
+            curAudio = new Audio(recUrl);
+            curAudio.play();
+          });
+          $('#myModel').addEventListener('click', function(){ speak(line.ja); });
+        }
+      };
+      mr.start();
+      btn.textContent = '■ 停止';
+    }).catch(function(){ toast('無法取得麥克風權限'); });
+  }
+
+  function roleSummary(l, mine){
+    var r = roleRun; if (!r) return;
+    var d = l.dialogues[r.dlg];
+    var other = r.role === '0' ? '1' : '0';
+    $('#seg').innerHTML = '<div class="sum">' +
+        '<div class="big">'+d.lines.length+'<small> 句</small></div>' +
+        '<p class="secnote" style="margin:8px 0 0">你演 '+esc(mine)+' 的部分全部唸完了。</p>' +
+        '<div class="row2" style="justify-content:center">' +
+          '<button class="btn2" id="roleSwap">交換角色重來</button>' +
+          '<button class="btn2" id="roleBack">回會話</button>' +
+        '</div></div>';
+    $('#roleSwap').addEventListener('click', function(){ startRole(l, r.dlg, other); });
+    $('#roleBack').addEventListener('click', function(){
+      roleRun = null; stopAudio();
+      $('#seg').innerHTML = segDialogue(l);
+      bindSpeakers($('#seg'));
+      wireDialogue($('#seg'), l);
+    });
+  }
+
   function segCulture(l){
     var c = l.culture;
     var h = '<article class="cul"><h3>'+esc(c.title)+'</h3>';
@@ -887,7 +1149,7 @@
     var items = M.items;
     var rows = items.length ? items.map(function(x){
       return '<div class="mk"><div class="k"><b>'+esc(x.prompt)+'</b>' +
-             '<span>'+(x.kind === 'word' ? '單字' : '練習') +
+             '<span>'+(x.kind === 'word' ? '單字' : x.kind === 'listen' ? '聽力' : '練習') +
              (x.sub ? ' · '+esc(x.sub) : '') + ' → '+esc(x.answer)+'</span></div>' +
              (x.n > 1 ? '<span class="n">×'+x.n+'</span>' : '') + '</div>';
     }).join('') : '<p class="secnote">目前沒有錯題。</p>';
