@@ -268,6 +268,20 @@
   .pad{display:block; width:100%; height:200px; touch-action:none; border-radius:14px;
     -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; -webkit-tap-highlight-color:transparent;
     -webkit-user-drag:none; outline:none}
+  .slots{display:flex; flex-wrap:wrap; gap:5px; margin:12px 0 2px; min-height:40px}
+  .slot{width:32px; height:38px; display:flex; align-items:center; justify-content:center;
+    font-size:19px; color:var(--ink); border-bottom:2px solid var(--line)}
+  .slot.filled{border-bottom-color:var(--ink2)}
+  .slot.bad{color:#b03a2e; border-bottom-color:#b03a2e}
+  .slot.cur{background:#f7f0e2; border-radius:7px}
+  .candlabel{font-size:12.5px; color:var(--ink2); margin:12px 0 7px}
+  .candrow{display:flex; flex-wrap:wrap; gap:8px}
+  .cand{min-width:54px; height:54px; font-size:23px; line-height:1; border:1px solid var(--line);
+    border-radius:12px; background:var(--card); color:var(--ink); -webkit-tap-highlight-color:transparent}
+  .cand.ghost{font-size:13px; min-width:auto; padding:0 12px; color:var(--ink2)}
+  body.writing, body.writing *{-webkit-user-select:none !important; user-select:none !important;
+    -webkit-touch-callout:none !important}
+  .btn2, .chip, .cta, .tab{-webkit-tap-highlight-color:transparent}
   .padhint{position:absolute; left:0; right:0; bottom:7px; text-align:center; font-size:11.5px; color:var(--muted); pointer-events:none}
   .dictbox{margin-top:14px; border:1px solid var(--line); border-radius:14px; background:var(--card); padding:10px 13px}
   .dictbox summary{font-size:13.5px; color:var(--ink2); outline:none}
@@ -302,7 +316,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v14</span>
+    <span class="ver" id="verTag">v15</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -998,6 +1012,18 @@
     });
     return best;
   }
+  function topCandidates(strokes, n){
+    if (!TPL || !strokes.length) return [];
+    var un = normSet(strokes, false), unS = normSet(strokes, true), list = [];
+    Object.keys(TPL).forEach(function(k){
+      if (!/^[\u3041-\u3096]$/.test(k)) return;
+      var d = scoreKana(un, TPL[k]);
+      if (TPL_SQ && TPL_SQ[k]) d = Math.min(d, scoreKana(unS, TPL_SQ[k]));
+      list.push({ k: k, d: d });
+    });
+    list.sort(function(a, b){ return a.d - b.d; });
+    return list.slice(0, n);
+  }
   /* 按筆畫的橫向位置切開每個字；切不出預期字數就按平均寬度分組 */
   function segmentStrokes(strokes, n){
     if (n <= 1 || strokes.length <= 1) return [strokes];
@@ -1078,26 +1104,53 @@
 
     var e = l.exercises[s.i];
     var isFree = e.type === 'free';
+    var chars = isFree ? [] : String(e.kana || e.a).replace(/[\s\u3000、。，．,.!?！？]/g, '').split('');
+    var picked = [];
+
     host.innerHTML = '<div class="qcard">' +
         '<div class="qnum">第 '+(s.i+1)+' 題 · 共 '+total+' 題</div>' +
         '<div class="qq">'+esc(e.q)+'</div>' +
+        (isFree ? '' : '<div class="slots" id="qslots"></div>') +
         '<div class="padwrap"><canvas id="qpad" class="pad" draggable="false" ' +
           'onselectstart="return false" oncontextmenu="return false"></canvas>' +
-          '<div class="padhint">用手指寫出答案</div></div>' +
+          '<div class="padhint">'+(isFree ? '用手指寫出答案' : '一次寫一個字')+'</div></div>' +
         '<div class="row2" style="margin-top:10px">' +
           '<button class="btn2" id="qclear">清除</button>' +
           '<button class="btn2" id="qundo">復原</button>' +
         '</div>' +
+        '<div id="qcands"></div>' +
         '<div class="row2">' +
-          '<button class="cta" id="qcheck">對答案</button>' +
+          '<button class="cta" id="qcheck">'+(isFree ? '對答案' : '辨識這個字')+'</button>' +
           (e.hint ? '<button class="btn2" id="qhint">提示</button>' : '') +
         '</div>' +
         '<div id="qfb"></div><div id="qnextwrap"></div>' +
       '</div>' +
       '<p class="secnote" style="text-align:center">目前答對 '+s.correct+' 題</p>';
 
-    var fb = $('#qfb'), nw = $('#qnextwrap'), locked = false;
+    var fb = $('#qfb'), nw = $('#qnextwrap'), cands = $('#qcands'), slots = $('#qslots');
+    var locked = false;
     var pad = $('#qpad'), strokes = [];
+
+    function clearPad(){
+      strokes.length = 0;
+      var ctx = pad.getContext('2d'), r = pad.getBoundingClientRect();
+      ctx.clearRect(0, 0, r.width, r.height);
+    }
+
+    /* 清楚顯示每個字：已寫的字、還沒寫的空格 */
+    function renderSlots(){
+      if (!slots) return;
+      var h = '';
+      chars.forEach(function(c, i){
+        if (i < picked.length){
+          var bad = !(picked[i] === c || smallKana(picked[i]) === smallKana(c));
+          h += '<span class="slot filled'+(bad ? ' bad' : '')+'">'+esc(picked[i])+'</span>';
+        } else {
+          h += '<span class="slot'+(i === picked.length ? ' cur' : '')+'"></span>';
+        }
+      });
+      slots.innerHTML = h;
+    }
 
     (function initPad(){
       if (!pad) return;
@@ -1129,7 +1182,8 @@
       var drawing = false, cur = null;
       pad.addEventListener('pointerdown', function(ev){
         if (locked) return;
-        try { pad.setPointerCapture(ev.pointerId); } catch(e){}
+        try { pad.setPointerCapture(ev.pointerId); } catch(err){}
+        document.body.classList.add('writing');
         drawing = true;
         cur = [pos(ev)];
         strokes.push(cur);
@@ -1144,12 +1198,17 @@
         ctx.stroke();
         ev.preventDefault();
       });
-      function stop(){ drawing = false; cur = null; }
+      function stop(ev){
+        if (drawing && ev && ev.pointerId != null){ try { pad.releasePointerCapture(ev.pointerId); } catch(err){} }
+        drawing = false; cur = null;
+        document.body.classList.remove('writing');
+      }
       pad.addEventListener('pointerup', stop);
       pad.addEventListener('pointercancel', stop);
       pad.addEventListener('pointerleave', stop);
       window.addEventListener('resize', fit);
       fit();
+      renderSlots();
     })();
 
     function showNext(){
@@ -1167,25 +1226,69 @@
       fb.innerHTML = '✓ 正確';
       showNext();
     }
-    function markWrong(text){
+    function markWrong(text, extra){
       if (s.wrong.indexOf(text) < 0) s.wrong.push(text);
       addMistake({ key:l.id+':e:'+s.i, kind:'ex', prompt:e.q, answer:text });
       fb.className = 'fb bad';
-      fb.innerHTML = '✗ 再看看<span class="corr">正確答案：'+esc(text)+'</span>';
+      fb.innerHTML = '✗ 再看看' + (extra || '') + '<span class="corr">正確答案：'+esc(text)+'</span>';
       showNext();
     }
 
-    /* 手寫作答：本機筆順辨識自動判斷（與 kana-dojo 相同做法） */
     loadTemplates().catch(function(){});
     if (location.search.indexOf('dbg=1') >= 0){
-      window.__ngs = { strokes: strokes, classify: classifyChar, scoreFor: scoreForChar, tpl: function(){ return TPL; } };
+      window.__ngs = { strokes: strokes, classify: classifyChar, scoreFor: scoreForChar, tpl: function(){ return TPL; }, picked: function(){ return picked; } };
     }
+
+    /* ---- 選擇題以外：逐字手寫 → 揀候選 → 下一個字（同 kana-dojo） ---- */
+    function finishSentence(){
+      locked = true;
+      var hits = 0;
+      picked.forEach(function(ch, i){
+        if (ch === chars[i] || smallKana(ch) === smallKana(chars[i])) hits++;
+      });
+      fb.className = 'fb' + (hits === chars.length ? ' ok' : ' bad');
+      fb.innerHTML = (hits === chars.length ? '✓ 正確' : '✗ 再看看') +
+        '你寫的<span class="corr">'+esc(picked.join(''))+'</span>';
+      if (hits === chars.length) markRight();
+      else markWrong(e.a);
+    }
+
+    function pickChar(ch){
+      picked.push(ch);
+      renderSlots();
+      cands.innerHTML = '';
+      clearPad();
+      if (picked.length >= chars.length) finishSentence();
+    }
+
+    function showCandidates(){
+      if (locked) return;
+      if (!strokes.length){ toast('請先寫一個字'); return; }
+      loadTemplates().then(function(){
+        var list = topCandidates(strokes, 6);
+        if (!list.length){ toast('看不清，請重寫一次'); return; }
+        cands.innerHTML = '<div class="candlabel">你寫的是哪一個？</div>' +
+          '<div class="candrow">' +
+            list.map(function(c){ return '<button class="cand" data-ch="'+esc(c.k)+'">'+esc(c.k)+'</button>'; }).join('') +
+            '<button class="cand ghost" data-ch="?">看答案</button>' +
+          '</div>';
+        Array.prototype.forEach.call(cands.querySelectorAll('.cand'), function(b){
+          b.addEventListener('click', function(){
+            var ch = b.dataset.ch;
+            if (ch === '?') ch = chars[picked.length];
+            pickChar(ch);
+          });
+        });
+      }).catch(function(err){
+        toast('辨識失敗：' + (err && err.message ? err.message : err));
+      });
+    }
+
     $('#qcheck').addEventListener('click', function(){
       if (locked) return;
-      if (!strokes.length){ toast('請先用手寫出答案'); return; }
-      locked = true;
-
       if (isFree){
+        if (!strokes.length){ toast('請先用手寫出答案'); return; }
+        locked = true;
         var model = e.model || e.a;
         fb.className = 'fb';
         fb.innerHTML = '參考答案<span class="corr">'+esc(model)+'</span>' +
@@ -1195,37 +1298,12 @@
         $('#selfNo').addEventListener('click', function(){ markWrong(model); });
         return;
       }
-
-      var expected = e.kana || e.a;
-      fb.className = 'fb';
-      fb.textContent = '辨識中…';
-      loadTemplates().then(function(){
-        var r = recognizeWriting(strokes, expected);
-        if (!r.text){
-          locked = false;
-          fb.className = 'fb';
-          fb.textContent = '筆畫分不開每個字，請字與字之間留一點空隙再試。';
-          return;
-        }
-        if (r.hits === r.total){ fb.textContent = ''; markRight(); return; }
-        fb.className = 'fb';
-        fb.innerHTML = '辨識結果<span class="corr">'+esc(r.text)+'</span>' +
-          '參考答案<span class="corr">'+esc(e.a)+'</span>' +
-          '<div class="row2"><button class="btn2 b-ok" id="selfOk">其實寫對了</button>' +
-          '<button class="btn2 b-no" id="selfNo">寫錯了</button></div>';
-        $('#selfOk').addEventListener('click', function(){ fb.innerHTML = ''; markRight(); });
-        $('#selfNo').addEventListener('click', function(){ markWrong(e.a); });
-      }).catch(function(err){
-        locked = false;
-        toast('辨識失敗：' + (err && err.message ? err.message : err));
-      });
+      showCandidates();
     });
 
     $('#qclear').addEventListener('click', function(){
       if (locked) return;
-      strokes.length = 0;
-      var ctx = pad.getContext('2d'), r = pad.getBoundingClientRect();
-      ctx.clearRect(0, 0, r.width, r.height);
+      clearPad();
     });
     $('#qundo').addEventListener('click', function(){
       if (locked) return;
@@ -1233,9 +1311,9 @@
       var ctx = pad.getContext('2d'), r = pad.getBoundingClientRect();
       ctx.clearRect(0, 0, r.width, r.height);
       strokes.forEach(function(st){
-        if (st.length === 1){ ctx.beginPath(); ctx.arc(st[0].x, st[0].y, 1.6, 0, Math.PI*2); ctx.fill(); return; }
+        if (st.length === 1){ ctx.beginPath(); ctx.arc(st[0][0], st[0][1], 1.6, 0, Math.PI*2); ctx.fill(); return; }
         ctx.beginPath();
-        st.forEach(function(pt, i){ if (i) ctx.lineTo(pt.x, pt.y); else ctx.moveTo(pt.x, pt.y); });
+        st.forEach(function(pt, i){ if (i) ctx.lineTo(pt[0], pt[1]); else ctx.moveTo(pt[0], pt[1]); });
         ctx.stroke();
       });
     });
