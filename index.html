@@ -293,7 +293,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v8</span>
+    <span class="ver" id="verTag">v9</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -323,9 +323,18 @@
   var VOICE = { ja: null };
   function pickVoice(){
     if (!('speechSynthesis' in window)) return;
-    var vs = speechSynthesis.getVoices() || [];
-    VOICE.ja = vs.filter(function(v){ return /^ja/i.test(v.lang); })
-                 .sort(function(a,b){ return (/JP/i.test(b.lang)?1:0) - (/JP/i.test(a.lang)?1:0); })[0] || null;
+    var vs = (speechSynthesis.getVoices() || []).filter(function(v){ return /^ja/i.test(v.lang); });
+    if (!vs.length){ VOICE.ja = null; return; }
+    /* 優先已下載的增強／優質人聲，其次常見的日語女聲 */
+    function rank(v){
+      var n = (v.name || ''), s = 0;
+      if (/enhanced|premium|neural|siri/i.test(n)) s += 40;
+      if (/Kyoko|O-ren|Oren|Hattori|Otoya/i.test(n)) s += 20;
+      if (/JP/i.test(v.lang)) s += 3;
+      if (!v.localService) s += 1;
+      return s;
+    }
+    VOICE.ja = vs.sort(function(a,b){ return rank(b) - rank(a); })[0];
   }
   if ('speechSynthesis' in window){
     pickVoice();
@@ -601,7 +610,7 @@
           h += '<div class="exrow"><div class="txt">' +
                '<div class="ja">'+esc(x.ja)+'</div>' +
                '<div class="zh">'+esc(x.zh)+'</div></div>' +
-               '<button class="spk" data-say="'+esc(x.ja)+'" aria-label="播放例句">'+SPK+'</button></div>';
+               '<button class="spk" data-say="'+esc(x.kana || x.ja)+'" aria-label="播放例句">'+SPK+'</button></div>';
         });
         h += '</div>';
       }
@@ -746,7 +755,7 @@
           h += '<div class="exrow"><div class="txt">' +
                '<div class="ja">'+esc(x.ja)+'</div>' +
                '<div class="zh">'+esc(x.zh)+'</div></div>' +
-               '<button class="spk" data-say="'+esc(x.ja)+'" aria-label="播放例句">'+SPK+'</button></div>';
+               '<button class="spk" data-say="'+esc(x.kana || x.ja)+'" aria-label="播放例句">'+SPK+'</button></div>';
         });
         h += '</div>';
       }
@@ -819,10 +828,10 @@
       '</div>' +
       '<p class="secnote" style="text-align:center">目前答對 '+s.ok+' 題</p>';
 
-    speak(item.ja);
+    speak(item.kana || item.ja);
 
-    $('#lplay').addEventListener('click', function(){ speak(item.ja); });
-    $('#lslow').addEventListener('click', function(){ speakAt(item.ja, 0.62); });
+    $('#lplay').addEventListener('click', function(){ speak(item.kana || item.ja); });
+    $('#lslow').addEventListener('click', function(){ speakAt(item.kana || item.ja, 0.62); });
 
     $('#lchoices').addEventListener('click', function(e){
       var b = e.target.closest('.choice'); if (!b || s.answered) return;
@@ -844,7 +853,7 @@
         addMistake({ key:l.id+':l:'+s.i, kind:'listen', prompt:item.ja, answer:item.choices[item.answer] });
         fb.className = 'fb bad';
         fb.innerHTML = '✗ 再聽一次<span class="corr">'+esc(item.ja)+'　'+esc(item.choices[item.answer])+'</span>';
-        speakAt(item.ja, 0.8);
+        speakAt(item.kana || item.ja, 0.8);
       }
       var nw = $('#lnext');
       nw.innerHTML = '<div class="row2"><button class="btn2" id="lnextBtn">' +
@@ -1093,11 +1102,11 @@
       '<div id="recWrap"></div>' +
       '<div class="cbtns" style="margin-top:10px"><button class="btn2" id="roleQuit">結束角色扮演</button></div>' +
       '<p class="secnote" style="text-align:center">' +
-        (me ? '先聽一次示範，再自己唸；可按錄音對照。' : '先聽對方的句子，接著換你說。') + '</p>';
+        (me ? '先聽一次示範，再照著句子唸。' : '先聽對方的句子，接著換你說。') + '</p>';
 
-    speak(line.ja);
+    speak(line.kana || line.ja);
 
-    $('#rolePlay').addEventListener('click', function(){ speak(line.ja); });
+    $('#rolePlay').addEventListener('click', function(){ speak(line.kana || line.ja); });
     $('#roleNext').addEventListener('click', function(){ r.i++; renderRole(l); });
     $('#roleQuit').addEventListener('click', function(){
       roleRun = null; stopAudio();
@@ -1138,7 +1147,7 @@
             curAudio = new Audio(recUrl);
             curAudio.play();
           });
-          $('#myModel').addEventListener('click', function(){ speak(line.ja); });
+          $('#myModel').addEventListener('click', function(){ speak(line.kana || line.ja); });
         }
       };
       mr.start();
@@ -1242,22 +1251,14 @@
         '<button class="btn2" id="spkModel">▶ 示範</button>' +
         (ok ? '<button class="btn2" id="spkRec">● 開始朗讀</button>' : '') +
         '<button class="btn2" id="spkAuto">● 自動辨識</button>' +
-        '<button class="btn2" id="spkRecOnly">● 錄音對照</button>' +
       '</div>' +
       '<div id="spkProg" class="spkprog"></div>' +
-      '<div id="spkRecWrap"></div>' +
       (best ? '<p class="secnote" style="text-align:center">這一句最高 '+best+' 分</p>' : '') +
       '<div id="spkFb"></div>' +
       '<p class="secnote">「自動辨識」在手機瀏覽器內執行，第一次需下載約 40MB 模型；音訊不會上傳。</p>' +
-      '<details class="dictbox"><summary>用鍵盤聽寫評分（iPhone 適用）</summary>' +
-        '<p class="note">點下面的框，再按鍵盤右下角的麥克風圖示，照上面句子唸一次；文字出現後按「檢查」。需要已加入日文鍵盤（設定 → 一般 → 鍵盤 → 鍵盤 → 加入日文）。</p>' +
-        '<textarea id="dictIn" rows="3" placeholder="在這裡用聽寫輸入日文…"></textarea>' +
-        '<div class="row2"><button class="btn2" id="dictCheck">檢查</button>' +
-        '<button class="btn2" id="dictClear">清除</button></div>' +
-      '</details>' +
       '<div class="cbtns" style="margin-top:10px"><button class="btn2" id="spkBack">回會話</button></div>';
 
-    $('#spkModel').addEventListener('click', function(){ speak(line.ja); });
+    $('#spkModel').addEventListener('click', function(){ speak(line.kana || line.ja); });
     $('#spkBack').addEventListener('click', function(){
       if (spkState.rec){ try{ spkState.rec.stop(); }catch(e){} spkState.rec = null; }
       stopAudio();
@@ -1267,15 +1268,7 @@
     });
     if (ok) $('#spkRec').addEventListener('click', function(){ startSpeak(l, di, li, line); });
     $('#spkAuto').addEventListener('click', function(){ autoRead(l, di, li, line); });
-    $('#spkRecOnly').addEventListener('click', function(){ toggleRecOnly(this, $('#spkRecWrap'), line); });
-    var dc = $('#dictCheck');
-    if (dc) dc.addEventListener('click', function(){
-      var v = ($('#dictIn').value || '').trim();
-      if (!v){ toast('請先在框內輸入或聽寫'); return; }
-      paintScore(l, di, li, line, v, function(){ $('#dictIn').focus(); });
-    });
-    var dcl = $('#dictClear');
-    if (dcl) dcl.addEventListener('click', function(){ $('#dictIn').value = ''; $('#spkFb').innerHTML = ''; });
+    
 
   }
 
@@ -1365,38 +1358,6 @@
       spkProg('');
       toast('自動辨識失敗：' + (e && e.message ? e.message : e));
     });
-  }
-
-  function toggleRecOnly(btn, wrap, line){
-    if (recMr && recMr.state === 'recording'){ recMr.stop(); return; }
-    if (!navigator.mediaDevices || !window.MediaRecorder){ toast('此瀏覽器不支援錄音'); return; }
-    navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
-      var chunks = [];
-      var mr = new MediaRecorder(stream);
-      recMr = mr;
-      mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
-      mr.onstop = function(){
-        stream.getTracks().forEach(function(t){ t.stop(); });
-        if (recUrl) URL.revokeObjectURL(recUrl);
-        var type = (chunks[0] && chunks[0].type) || 'audio/webm';
-        recUrl = URL.createObjectURL(new Blob(chunks, { type:type }));
-        recMr = null;
-        btn.textContent = '● 錄音對照';
-        if (wrap){
-          wrap.innerHTML = '<div class="cbtns"><button class="btn2" id="spkMine">▶ 聽我的錄音</button>' +
-                           '<button class="btn2" id="spkModel3">▶ 再聽示範</button></div>';
-          $('#spkMine').addEventListener('click', function(){
-            stopAudio();
-            if (curAudio) curAudio.pause();
-            curAudio = new Audio(recUrl);
-            curAudio.play();
-          });
-          $('#spkModel3').addEventListener('click', function(){ speak(line.ja); });
-        }
-      };
-      mr.start();
-      btn.textContent = '■ 停止錄音';
-    }).catch(function(){ toast('無法取得麥克風權限'); });
   }
 
   function startSpeak(l, di, li, line){
@@ -1506,7 +1467,7 @@
     var again = $('#spkAgain');
     if (again) again.addEventListener('click', function(){ if (retry) retry(); });
     var m2 = $('#spkModel2');
-    if (m2) m2.addEventListener('click', function(){ speak(line.ja); });
+    if (m2) m2.addEventListener('click', function(){ speak(line.kana || line.ja); });
   }
 
   function segCulture(l){
