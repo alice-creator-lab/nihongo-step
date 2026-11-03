@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>收音與語音辨識測試 · 日語階梯</title>
+<meta name="theme-color" content="#f6f2ea" />
+<style>
+  :root{--paper:#f6f2ea;--card:#fffdf8;--ink:#221e19;--ink2:#5d5549;--muted:#98907f;--line:#e5dccb;--shu:#b03a2e;
+    --sans:-apple-system,"PingFang TC","Hiragino Sans","Noto Sans CJK TC",sans-serif;--serif:"Hiragino Mincho ProN","Songti TC",serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;
+    padding:20px 16px calc(24px + env(safe-area-inset-bottom));max-width:640px;margin:0 auto}
+  h1{font-size:19px;margin:0 0 4px}
+  p.sub{margin:0 0 18px;font-size:13px;color:var(--ink2)}
+  .cta{appearance:none;border:0;background:var(--shu);color:#fffdf8;font-size:15px;padding:13px 24px;border-radius:999px;
+    font-family:var(--sans);width:100%;margin-bottom:14px}
+  .cta[disabled]{opacity:.5}
+  .row{display:flex;gap:10px;margin-bottom:14px}
+  .row button{flex:1;appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);
+    font-family:var(--sans);font-size:14px;padding:11px 10px;border-radius:12px}
+  pre{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:12.5px;
+    line-height:1.75;white-space:pre-wrap;word-break:break-word;margin:0;font-family:ui-monospace,Menlo,monospace}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.8}
+  .ok{color:#3f7a4f}.bad{color:var(--shu)}
+</style>
+</head>
+<body>
+<h1>收音與語音辨識測試</h1>
+<p class="sub">這個頁面只做檢查，不會錄音、不會上傳。按下面按鈕後，把結果文字整段複製給我看。</p>
+<button class="cta" id="run">開始測試</button>
+<div class="row">
+  <button id="copy">複製結果</button>
+  <button id="clear">清除</button>
+</div>
+<pre id="out">尚未開始。</pre>
+<p class="hint">
+測試會依次檢查：瀏覽器是否提供語音辨識、麥克風權限、實際啟動辨識並以日語唸一句。<br>
+iPhone 上請用 Safari 直接開啟網址（不要用「加到主畫面」的 App）。
+</p>
+
+<script>
+(function(){
+  'use strict';
+  var out = document.getElementById('out');
+  var lines = [];
+  function add(k, v){
+    lines.push(k + '：' + v);
+    out.innerHTML = lines.map(function(l, i){
+      var bad = /失敗|被拒|不支援|錯誤|沒有|undefined|null/.test(l);
+      var ok = /^✓/.test(l);
+      return (bad ? '<span class="bad">' : ok ? '<span class="ok">' : '<span>') + l.replace(/[<>&]/g, function(c){
+        return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];
+      }) + '</span>';
+    }).join('\n');
+  }
+  function stamp(){
+    add('時間', new Date().toISOString());
+    add('網址', location.href);
+    add('UA', navigator.userAgent);
+    add('語言', navigator.language + ' / ' + (navigator.languages || []).join(','));
+    add('standalone（主畫面模式）', String(navigator.standalone === true));
+    add('display-mode standalone', String(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches));
+    add('安全連線（https）', String(location.protocol === 'https:' || location.hostname === 'localhost'));
+    add('視窗', window.innerWidth + '×' + window.innerHeight + ' dpr ' + (window.devicePixelRatio || 1));
+  }
+
+  function getMic(){
+    return new Promise(function(resolve){
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        add('麥克風 API', '不存在（navigator.mediaDevices.getUserMedia 為 undefined）');
+        return resolve(false);
+      }
+      navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
+        var t = stream.getAudioTracks();
+        add('麥克風權限', '✓ 已取得（' + t.length + ' 條音軌，label=' + (t[0] && t[0].label ? t[0].label : '(空白)') + '）');
+        t.forEach(function(x){ x.stop(); });
+        resolve(true);
+      }).catch(function(e){
+        add('麥克風權限', '失敗：' + e.name + ' — ' + (e.message || ''));
+        if (e.name === 'NotAllowedError') add('解讀', '權限被拒：Safari 網址列左邊「大小」或「aA」→ 網站設定 → 麥克風 → 允許，或設定 → Safari → 麥克風');
+        if (e.name === 'NotFoundError') add('解讀', '找不到麥克風：檢查是否有其他 App 佔用，或裝置設定');
+        if (e.name === 'NotReadableError') add('解讀', '麥克風被佔用：關閉其他正在錄音的 App 再試');
+        resolve(false);
+      });
+    });
+  }
+
+  function testASR(){
+    return new Promise(function(resolve){
+      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      add('webkitSpeechRecognition', String(!!window.webkitSpeechRecognition));
+      add('SpeechRecognition', String(!!window.SpeechRecognition));
+      if (!SR){ add('辨識測試', '不支援：沒有可用的建構子'); return resolve(); }
+
+      var rec;
+      try { rec = new SR(); } catch(e){ add('辨識測試', '建立失敗：' + e); return resolve(); }
+      rec.lang = 'ja-JP';
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+      rec.continuous = false;
+      var done = false, timer = setTimeout(function(){
+        if (done) return; done = true;
+        try { rec.stop(); } catch(e){}
+        add('辨識測試', '失敗：8 秒內沒有任何結果（timeout）');
+        resolve();
+      }, 8000);
+
+      rec.onstart = function(){ add('辨識狀態', '已啟動收音'); };
+      rec.onresult = function(ev){
+        if (done) return; done = true; clearTimeout(timer);
+        add('辨識測試', '✓ 成功，辨識結果：' + ev.results[0][0].transcript);
+        resolve();
+      };
+      rec.onerror = function(ev){
+        if (done) return; done = true; clearTimeout(timer);
+        add('辨識測試', '失敗：' + (ev.error || 'unknown') + (ev.message ? ' — ' + ev.message : ''));
+        if (ev.error === 'not-allowed') add('解讀', '麥克風或語音辨識權限被拒（Safari 網站設定 → 麥克風）');
+        if (ev.error === 'service-not-allowed') add('解讀', '辨識服務不可用：多數是 Siri 語言與日語不符，或使用「主畫面 App」。可試把 Siri 語言改為 Japanese (Japan)');
+        if (ev.error === 'language-not-supported') add('解讀', '此系統不支援日語辨識：請在 設定 → 一般 → 鍵盤 加入日文鍵盤後再試');
+        if (ev.error === 'network') add('解讀', '辨識需要網絡，請檢查連線');
+        if (ev.error === 'no-speech') add('解讀', '沒有收到聲音：靠近麥克風、在安靜地方再試一次');
+        resolve();
+      };
+      rec.onend = function(){
+        if (done) return; done = true; clearTimeout(timer);
+        add('辨識測試', '失敗：收音結束但沒有結果（ended-without-result）');
+        resolve();
+      };
+
+      add('辨識測試', '現在請對著麥克風用日語說一句，例如「こんにちは」……');
+      try { rec.start(); } catch(e){ done = true; clearTimeout(timer); add('辨識測試', '啟動時拋出錯誤：' + e); resolve(); }
+    });
+  }
+
+  document.getElementById('run').addEventListener('click', function(){
+    this.disabled = true;
+    lines = [];
+    out.textContent = '測試中……';
+    stamp();
+    add('MediaRecorder', String(!!window.MediaRecorder));
+    add('speechSynthesis', String(!!window.speechSynthesis));
+    var voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+    var ja = voices.filter(function(v){ return /^ja/i.test(v.lang); });
+    add('日語語音（示範發音）', voices.length ? (ja.length ? '✓ ' + ja[0].name + '（共 ' + ja.length + ' 個）' : '沒有日語聲音（可用數量：' + voices.length + '）') : '尚未載入（voice 列表為空）');
+
+    getMic().then(function(){
+      return testASR();
+    }).then(function(){
+      add('完成', new Date().toLocaleTimeString());
+      document.getElementById('run').disabled = false;
+    });
+  });
+
+  document.getElementById('copy').addEventListener('click', function(){
+    var text = lines.join('\n');
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ out.scrollTop = 0; alert('已複製，貼回對話即可。'); })
+        .catch(function(){ alert('複製失敗，請長按文字手動選取。'); });
+    } else {
+      var r = document.createRange(); r.selectNodeContents(out);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      alert('已選取文字，請長按「複製」。');
+    }
+  });
+  document.getElementById('clear').addEventListener('click', function(){
+    lines = []; out.textContent = '尚未開始。';
+  });
+})();
+</script>
+</body>
+</html>

@@ -285,7 +285,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v4</span>
+    <span class="ver" id="verTag">v5</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1298,9 +1298,21 @@
     var fb = $('#spkFb'); if (!fb) return;
     var err = data.error;
 
-    if (err === 'not-allowed' || err === 'service-not-allowed'){
-      fb.innerHTML = '<div class="scorebox"><p class="verdict">無法使用麥克風或語音辨識</p>' +
-        '<p class="note">iPhone 請確認：設定 → Siri 與搜尋 已開啟，並允許 Safari 使用麥克風；如果你用的是「加到主畫面」的版本，請改用 Safari 開啟網址再試。</p></div>';
+    if (err === 'not-allowed'){
+      fb.innerHTML = '<div class="scorebox"><p class="verdict">麥克風或辨識權限被拒</p>' +
+        '<p class="note">Safari 網址列左邊「aA」或「大小」→ 網站設定 → 麥克風 → 允許；或 設定 → Safari → 麥克風 → 詢問。改完要重新載入頁面。</p>' +
+        '<p class="note"><a href="mic-test.html">開測試頁確認是哪一步失敗</a></p></div>';
+      return;
+    }
+    if (err === 'service-not-allowed'){
+      fb.innerHTML = '<div class="scorebox"><p class="verdict">語音辨識服務不可用</p>' +
+        '<p class="note">多數是 Siri 語言與日語不符：設定 → Siri → Language 改為 Japanese (Japan)；若你用「加到主畫面」的 App，請改用 Safari 開啟網址。另外 設定 → 一般 → 鍵盤 需加入日文鍵盤。</p>' +
+        '<p class="note"><a href="mic-test.html">開測試頁確認是哪一步失敗</a></p></div>';
+      return;
+    }
+    if (err === 'language-not-supported'){
+      fb.innerHTML = '<div class="scorebox"><p class="verdict">這個系統不支援日語辨識</p>' +
+        '<p class="note">請到 設定 → 一般 → 鍵盤 → 鍵盤 → 加入日文鍵盤，然後重新載入頁面。</p></div>';
       return;
     }
     if (err === 'start-failed'){
