@@ -83,6 +83,21 @@ for (const book of course.books || []) {
       errors.push(`${rel} culture 需要 title 與 paras`);
     }
     if ((les.vocab || []).length < 15) warn.push(`${rel} 單字只有 ${les.vocab.length} 個，初級每課通常 20 個以上`);
+    /* 用單字表與人名表反查讀音：句子裡出現某個漢字詞，假名就要含它的讀音 */
+    const NAMES = { 李: 'り', 林: 'りん', 王: 'おう', 田中: 'たなか', 山田: 'やまだ', 佐藤: 'さとう', 鈴木: 'すずき' };
+    const pairs = {};
+    (les.vocab || []).forEach((v) => { if (v.kanji) pairs[v.kanji] = v.kana; });
+    Object.assign(pairs, NAMES);
+    function checkReadings(where, ja, kana) {
+      if (!ja || !kana) return;
+      Object.keys(pairs).forEach((word) => {
+        if (!ja.includes(word)) return;
+        if (kana.indexOf(pairs[word]) < 0) {
+          errors.push(`${rel} ${where} 的假名疑似讀錯：「${word}」應讀「${pairs[word]}」，但 kana 是「${kana}」`);
+        }
+      });
+    }
+
     /* 朗讀一律用假名，缺 kana 就會由 TTS 猜漢字讀音而出錯 */
     const KANJI = /[\u3400-\u9fff]/;
     function checkKana(where, ja, kana) {
@@ -90,13 +105,15 @@ for (const book of course.books || []) {
       if (KANJI.test(kana) && !KANJI.test(ja)) errors.push(`${rel} ${where} 的 kana 含有漢字：${kana}`);
       if (kana === ja && KANJI.test(ja)) errors.push(`${rel} ${where} 的 kana 與 ja 相同，應改為假名讀音`);
     }
-    (les.patterns || []).forEach((p, i) => (p.ex || []).forEach((x, j) => checkKana(`patterns[${i}].ex[${j}]`, x.ja, x.kana)));
-    (les.grammar || []).forEach((g, i) => (g.ex || []).forEach((x, j) => checkKana(`grammar[${i}].ex[${j}]`, x.ja, x.kana)));
-    (les.dialogues || []).forEach((d, i) => (d.lines || []).forEach((x, j) => checkKana(`dialogues[${i}].lines[${j}]`, x.ja, x.kana)));
+    function both(where, x) { checkKana(where, x.ja, x.kana); checkReadings(where, x.ja, x.kana); }
+    (les.patterns || []).forEach((p, i) => (p.ex || []).forEach((x, j) => both(`patterns[${i}].ex[${j}]`, x)));
+    (les.grammar || []).forEach((g, i) => (g.ex || []).forEach((x, j) => both(`grammar[${i}].ex[${j}]`, x)));
+    (les.dialogues || []).forEach((d, i) => (d.lines || []).forEach((x, j) => both(`dialogues[${i}].lines[${j}]`, x)));
 
     (les.listening || []).forEach((x, i) => {
       if (!x.ja) errors.push(`${rel} listening[${i}] 缺少 ja`);
       checkKana(`listening[${i}]`, x.ja || '', x.kana);
+      checkReadings(`listening[${i}]`, x.ja || '', x.kana);
       if (!Array.isArray(x.choices) || x.choices.length !== 4) {
         errors.push(`${rel} listening[${i}] 需要 4 個選項，實際 ${(x.choices || []).length}`);
       }
