@@ -244,6 +244,21 @@
   .choice.dim{opacity:.55}
   .mic{width:100%}
 
+  /* 跟讀評分 */
+  .lacts{display:flex; flex-direction:column; gap:6px; flex:0 0 auto}
+  .spk.sm{width:26px; height:26px}
+  .spk.sm svg{width:13px; height:13px}
+  .spk.rec{background:var(--shu); border-color:var(--shu); color:#fffdf8}
+  .rkana{font-size:12.5px; color:var(--muted); margin-top:6px; letter-spacing:.02em}
+  .scorebox{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; text-align:center; margin-top:12px}
+  .scorebox .num{font-family:var(--serif); font-size:40px; line-height:1.1}
+  .scorebox .num small{font-size:14px; color:var(--muted)}
+  .scorebox .verdict{font-size:14px; margin:6px 0 0; color:var(--ink2)}
+  .scorebox .target{font-family:var(--serif); font-size:17px; line-height:1.9; margin-top:12px; letter-spacing:.02em}
+  .scorebox .target b.miss{color:var(--shu); font-weight:400; text-decoration:underline; text-underline-offset:3px}
+  .scorebox .heard{font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.7}
+  .scorebox .note{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.7}
+
   .lfoot{margin:22px 0 10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
   .btn2{appearance:none; border:1px solid var(--line); background:#fffdf8; color:var(--ink);
     font-family:var(--sans); font-size:14px; padding:12px 20px; border-radius:999px}
@@ -270,7 +285,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v3</span>
+    <span class="ver" id="verTag">v4</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -395,6 +410,7 @@
     return String(s == null ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+  var MIC = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.2a3.2 3.2 0 0 0 3.2-3.2V6.4a3.2 3.2 0 0 0-6.4 0v5.6a3.2 3.2 0 0 0 3.2 3.2z"/><path d="M6.4 11.4a5.6 5.6 0 0 0 11.2 0M12 17v3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
   var SPK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.5h3.2L12 5.4v13.2L6.7 14.5H3.5z"/><path d="M15.4 8.4a5 5 0 0 1 0 7.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M17.9 5.9a8.4 8.4 0 0 1 0 12.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
 
   function getJSON(path){
@@ -970,7 +986,10 @@
                '<div class="linerow"><div class="txt">' +
                  '<div class="ja">'+esc(x.ja)+'</div><div class="zh">'+esc(x.zh)+'</div>' +
                '</div>' +
-               '<button class="spk" data-say="'+esc(x.ja)+'" aria-label="播放這一句">'+SPK+'</button></div></div>';
+               '<div class="lacts">' +
+                 '<button class="spk" data-say="'+esc(x.ja)+'" aria-label="播放這一句">'+SPK+'</button>' +
+                 '<button class="spk sm" data-speak="'+di+'-'+li+'" aria-label="跟讀評分">'+MIC+'</button>' +
+               '</div></div></div>';
       });
       h += '</div></article>';
     });
@@ -997,6 +1016,8 @@
         playLines(d.lines, box, 0);
         return;
       }
+      var sp = e.target.closest('[data-speak]');
+      if (sp){ var parts = sp.dataset.speak.split('-'); openSpeak(lesson, +parts[0], +parts[1]); return; }
       var rp = e.target.closest('[data-roleplay]');
       if (rp){ startRole(lesson, +rp.dataset.roleplay, rolePref); return; }
       if (e.target.id === 'startRole'){ startRole(lesson, 0, rolePref); return; }
@@ -1057,6 +1078,7 @@
       '</div>' +
       '<div class="cbtns">' +
         '<button class="btn2" id="rolePlay">▶ 聽一次</button>' +
+        (me && asrSupported() ? '<button class="btn2" id="roleScore">跟讀評分</button>' : '') +
         (me ? '<button class="btn2" id="roleRec">● 錄音</button>' : '') +
         '<button class="btn2" id="roleNext">'+(me ? '唸完了，下一句' : '下一句')+' →</button>' +
       '</div>' +
@@ -1078,6 +1100,8 @@
     if (me){
       var rb = $('#roleRec');
       if (rb) rb.addEventListener('click', function(){ toggleRecord(rb, line); });
+      var sc = $('#roleScore');
+      if (sc) sc.addEventListener('click', function(){ openSpeak(l, r.dlg, r.i); });
     }
   }
 
@@ -1132,6 +1156,191 @@
       bindSpeakers($('#seg'));
       wireDialogue($('#seg'), l);
     });
+  }
+
+  /* ---------- 跟讀評分 ---------- */
+  var SPKKEY = 'ngs-speak-v1';
+  var SB = (function(){
+    try{ var o = JSON.parse(localStorage.getItem(SPKKEY) || 'null'); if (o && typeof o === 'object') return o; }catch(e){}
+    return {};
+  })();
+  function saveSpeak(){ try{ localStorage.setItem(SPKKEY, JSON.stringify(SB)); }catch(e){} }
+  function speakBest(l, di, li){ return SB[l.id+':'+di+':'+li] || 0; }
+  function setSpeakBest(l, di, li, score){
+    var k = l.id+':'+di+':'+li;
+    if (score > (SB[k] || 0)){ SB[k] = score; saveSpeak(); }
+  }
+
+  var IS_STANDALONE = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+                      || navigator.standalone === true;
+  function asrSupported(){
+    return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+  }
+
+  function toHira(s){
+    return String(s).replace(/[\u30a1-\u30f6]/g, function(c){
+      return String.fromCharCode(c.charCodeAt(0) - 0x60);
+    });
+  }
+  function cleanKana(s){
+    return toHira(String(s == null ? '' : s))
+      .replace(/[\s\u3000]/g, '')
+      .replace(/[、。，．,.！!？?「」『』（）()・…~～ー―-]/g, '');
+  }
+  function lcsTable(a, b){
+    var m = a.length, n = b.length, dp = [], i, j;
+    for (i = 0; i <= m; i++){ dp.push(new Array(n + 1)); for (j = 0; j <= n; j++) dp[i][j] = 0; }
+    for (i = 1; i <= m; i++){
+      for (j = 1; j <= n; j++){
+        dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);
+      }
+    }
+    return dp;
+  }
+  function similarity(target, heard){
+    var a = cleanKana(target).split(''), b = cleanKana(heard).split('');
+    if (!a.length || !b.length) return 0;
+    var dp = lcsTable(a, b);
+    /* 以「目標句對上了多少」計分：唸漏整段會明顯扣分，多唸一點不至於扣光 */
+    return Math.round(dp[a.length][b.length] / a.length * 100);
+  }
+  function markTarget(target, heard){
+    var a = cleanKana(target).split(''), b = cleanKana(heard).split('');
+    var dp = lcsTable(a, b), keep = {}, i = a.length, j = b.length;
+    while (i > 0 && j > 0){
+      if (a[i-1] === b[j-1]){ keep[i-1] = 1; i--; j--; }
+      else if (dp[i-1][j] >= dp[i][j-1]) i--;
+      else j--;
+    }
+    return a.map(function(ch, k){ return keep[k] ? esc(ch) : '<b class="miss">'+esc(ch)+'</b>'; }).join('');
+  }
+
+  var spkState = { rec: null };
+
+  function openSpeak(l, di, li){
+    var d = l.dialogues[di], line = d.lines[li];
+    var host = $('#seg'); if (!host) return;
+    stopAudio();
+    var best = speakBest(l, di, li);
+    var ok = asrSupported();
+
+    host.innerHTML =
+      '<div class="cardmeta">跟讀評分 · '+esc(d.scene)+' · 第 '+(li+1)+' 句</div>' +
+      '<div class="rolecard"><div class="rlabel">跟著唸這一句</div>' +
+        '<div class="rja">'+esc(line.ja)+'</div>' +
+        (line.kana ? '<div class="rkana">'+esc(line.kana)+'</div>' : '') +
+        '<div class="rzh">'+esc(line.zh)+'</div></div>' +
+      '<div class="cbtns">' +
+        '<button class="btn2" id="spkModel">▶ 示範</button>' +
+        (ok ? '<button class="btn2" id="spkRec">● 開始朗讀</button>'
+            : '<button class="btn2" disabled style="opacity:.45">此瀏覽器不支援收音</button>') +
+      '</div>' +
+      (best ? '<p class="secnote" style="text-align:center">這一句最高 '+best+' 分</p>' : '') +
+      '<div id="spkFb"></div>' +
+      (ok ? (IS_STANDALONE ? '<p class="secnote">你正在使用「加到主畫面」的版本；iPhone 在該模式不支援語音辨識，請改用 Safari 開啟網址。</p>' : '')
+          : '<p class="secnote">語音辨識需要 Chrome、Edge，或 iPhone 的 Safari（需開啟 Siri 與聽寫）。</p>') +
+      '<div class="cbtns" style="margin-top:10px"><button class="btn2" id="spkBack">回會話</button></div>';
+
+    $('#spkModel').addEventListener('click', function(){ speak(line.ja); });
+    $('#spkBack').addEventListener('click', function(){
+      if (spkState.rec){ try{ spkState.rec.stop(); }catch(e){} spkState.rec = null; }
+      stopAudio();
+      $('#seg').innerHTML = segDialogue(l);
+      bindSpeakers($('#seg'));
+      wireDialogue($('#seg'), l);
+    });
+    if (ok) $('#spkRec').addEventListener('click', function(){ startSpeak(l, di, li, line); });
+  }
+
+  function startSpeak(l, di, li, line){
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var btn = $('#spkRec');
+    if (spkState.rec){
+      try{ spkState.rec.stop(); }catch(e){}
+      spkState.rec = null;
+      if (btn){ btn.textContent = '● 開始朗讀'; btn.classList.remove('rec'); }
+      return;
+    }
+    stopAudio();
+    var rec;
+    try { rec = new SR(); } catch(e){ toast('無法啟動語音辨識'); return; }
+    rec.lang = 'ja-JP';
+    rec.interimResults = false;
+    rec.maxAlternatives = 3;
+    rec.continuous = false;
+
+    var settled = false;
+    function settle(data){
+      if (settled) return;
+      settled = true;
+      spkState.rec = null;
+      if (btn){ btn.textContent = '● 開始朗讀'; btn.classList.remove('rec'); }
+      renderSpeakResult(l, di, li, line, data || {});
+    }
+    rec.onresult = function(ev){
+      var alts = [], r = ev.results[0];
+      for (var i = 0; i < r.length; i++){ if (r[i].transcript) alts.push(r[i].transcript); }
+      settle({ alts: alts });
+    };
+    rec.onerror = function(ev){ settle({ error: ev.error }); };
+    rec.onend = function(){ settle({}); };
+
+    try {
+      rec.start();
+      spkState.rec = rec;
+      if (btn){ btn.textContent = '■ 停止'; btn.classList.add('rec'); }
+      var fb = $('#spkFb');
+      if (fb) fb.innerHTML = '<p class="secnote" style="text-align:center">正在聽……請照著上面的句子唸一次。</p>';
+    } catch(e){ settle({ error: 'start-failed' }); }
+  }
+
+  function renderSpeakResult(l, di, li, line, data){
+    var fb = $('#spkFb'); if (!fb) return;
+    var err = data.error;
+
+    if (err === 'not-allowed' || err === 'service-not-allowed'){
+      fb.innerHTML = '<div class="scorebox"><p class="verdict">無法使用麥克風或語音辨識</p>' +
+        '<p class="note">iPhone 請確認：設定 → Siri 與搜尋 已開啟，並允許 Safari 使用麥克風；如果你用的是「加到主畫面」的版本，請改用 Safari 開啟網址再試。</p></div>';
+      return;
+    }
+    if (err === 'start-failed'){
+      fb.innerHTML = '<div class="scorebox"><p class="verdict">未能啟動收音</p><p class="note">請再按一次「開始朗讀」。</p></div>';
+      return;
+    }
+    if (err === 'network'){
+      fb.innerHTML = '<div class="scorebox"><p class="verdict">語音辨識需要網路</p><p class="note">請檢查連線後再試。</p></div>';
+      return;
+    }
+    if (!data.alts || !data.alts.length || err === 'no-speech'){
+      fb.innerHTML = '<div class="scorebox"><p class="verdict">聽不清楚</p>' +
+        '<p class="note">靠近一點、在安靜的地方，按「開始朗讀」再唸一次（這次不計分）。</p></div>';
+      return;
+    }
+
+    var target = line.kana || line.ja;
+    var scored = data.alts.map(function(t){ return { text: t, score: similarity(target, t) }; })
+                          .sort(function(a, b){ return b.score - a.score; });
+    var top = scored[0];
+    var verdict = top.score >= 95 ? '很好，接近示範。'
+                : top.score >= 85 ? '不錯，有幾個音沒對上。'
+                : top.score >= 60 ? '再試一次，留意紅色的字。'
+                : '和句子差別較大，先聽示範再一次。';
+    setSpeakBest(l, di, li, top.score);
+
+    fb.innerHTML = '<div class="scorebox">' +
+        '<div class="num">'+top.score+'<small> 分</small></div>' +
+        '<p class="verdict">'+verdict+'</p>' +
+        '<div class="target">'+markTarget(target, top.text)+'</div>' +
+        '<p class="heard">系統聽到：'+esc(top.text)+'</p>' +
+        '<p class="note">紅字是沒對上的音。分數＝句子假名對上的比例（'+top.score+'%），不是考試成績，只反映系統聽到的內容。</p>' +
+      '</div>' +
+      '<div class="cbtns"><button class="btn2" id="spkAgain">再唸一次</button>' +
+      '<button class="btn2" id="spkModel2">▶ 示範</button></div>';
+
+    var again = $('#spkAgain');
+    if (again) again.addEventListener('click', function(){ startSpeak(l, di, li, line); });
+    var m2 = $('#spkModel2');
+    if (m2) m2.addEventListener('click', function(){ speak(line.ja); });
   }
 
   function segCulture(l){
