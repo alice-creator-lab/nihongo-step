@@ -258,6 +258,12 @@
   .scorebox .target b.miss{color:var(--shu); font-weight:400; text-decoration:underline; text-underline-offset:3px}
   .scorebox .heard{font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.7}
   .scorebox .note{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.7}
+  .dictbox{margin-top:14px; border:1px solid var(--line); border-radius:14px; background:var(--card); padding:10px 13px}
+  .dictbox summary{font-size:13.5px; color:var(--ink2); outline:none}
+  .dictbox[open] summary{margin-bottom:10px; color:var(--ink)}
+  .dictbox textarea{width:100%; font-family:var(--serif); font-size:16px; padding:11px 12px; border-radius:12px;
+    border:1px solid var(--line); background:#fffdf8; color:var(--ink); outline:none; resize:vertical}
+  .dictbox .note{font-size:12px; color:var(--muted); line-height:1.7; margin:8px 0}
 
   .lfoot{margin:22px 0 10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
   .btn2{appearance:none; border:1px solid var(--line); background:#fffdf8; color:var(--ink);
@@ -285,7 +291,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v6</span>
+    <span class="ver" id="verTag">v7</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1240,6 +1246,12 @@
       '<div id="spkFb"></div>' +
       (ok ? (IS_STANDALONE ? '<p class="secnote">你正在使用「加到主畫面」的版本；iPhone 在該模式不支援語音辨識，請改用 Safari 開啟網址。</p>' : '')
           : '<p class="secnote">語音辨識需要 Chrome、Edge，或 iPhone 的 Safari（需開啟 Siri 與聽寫）。</p>') +
+      '<details class="dictbox"><summary>用鍵盤聽寫評分（iPhone 適用）</summary>' +
+        '<p class="note">點下面的框，再按鍵盤右下角的麥克風圖示，照上面句子唸一次；文字出現後按「檢查」。需要已加入日文鍵盤（設定 → 一般 → 鍵盤 → 鍵盤 → 加入日文）。</p>' +
+        '<textarea id="dictIn" rows="3" placeholder="在這裡用聽寫輸入日文…"></textarea>' +
+        '<div class="row2"><button class="btn2" id="dictCheck">檢查</button>' +
+        '<button class="btn2" id="dictClear">清除</button></div>' +
+      '</details>' +
       '<div class="cbtns" style="margin-top:10px"><button class="btn2" id="spkBack">回會話</button></div>';
 
     $('#spkModel').addEventListener('click', function(){ speak(line.ja); });
@@ -1252,6 +1264,15 @@
     });
     if (ok) $('#spkRec').addEventListener('click', function(){ startSpeak(l, di, li, line); });
     $('#spkRecOnly').addEventListener('click', function(){ toggleRecOnly(this, $('#spkRecWrap'), line); });
+    var dc = $('#dictCheck');
+    if (dc) dc.addEventListener('click', function(){
+      var v = ($('#dictIn').value || '').trim();
+      if (!v){ toast('請先在框內輸入或聽寫'); return; }
+      paintScore(l, di, li, line, v, function(){ $('#dictIn').focus(); });
+    });
+    var dcl = $('#dictClear');
+    if (dcl) dcl.addEventListener('click', function(){ $('#dictIn').value = ''; $('#spkFb').innerHTML = ''; });
+
   }
 
   function toggleRecOnly(btn, wrap, line){
@@ -1367,25 +1388,31 @@
     var target = line.kana || line.ja;
     var scored = data.alts.map(function(t){ return { text: t, score: similarity(target, t) }; })
                           .sort(function(a, b){ return b.score - a.score; });
-    var top = scored[0];
-    var verdict = top.score >= 95 ? '很好，接近示範。'
-                : top.score >= 85 ? '不錯，有幾個音沒對上。'
-                : top.score >= 60 ? '再試一次，留意紅色的字。'
+    paintScore(l, di, li, line, scored[0].text, function(){ startSpeak(l, di, li, line); }, '系統聽到');
+  }
+
+  function paintScore(l, di, li, line, text, retry, sourceLabel){
+    var fb = $('#spkFb'); if (!fb) return;
+    var target = line.kana || line.ja;
+    var score = similarity(target, text);
+    var verdict = score >= 95 ? '很好，接近示範。'
+                : score >= 85 ? '不錯，有幾個音沒對上。'
+                : score >= 60 ? '再試一次，留意紅色的字。'
                 : '和句子差別較大，先聽示範再一次。';
-    setSpeakBest(l, di, li, top.score);
+    setSpeakBest(l, di, li, score);
 
     fb.innerHTML = '<div class="scorebox">' +
-        '<div class="num">'+top.score+'<small> 分</small></div>' +
+        '<div class="num">'+score+'<small> 分</small></div>' +
         '<p class="verdict">'+verdict+'</p>' +
-        '<div class="target">'+markTarget(target, top.text)+'</div>' +
-        '<p class="heard">系統聽到：'+esc(top.text)+'</p>' +
-        '<p class="note">紅字是沒對上的音。分數＝句子假名對上的比例（'+top.score+'%），不是考試成績，只反映系統聽到的內容。</p>' +
+        '<div class="target">'+markTarget(target, text)+'</div>' +
+        '<p class="heard">'+(sourceLabel || '你輸入的')+'：'+esc(text)+'</p>' +
+        '<p class="note">紅字是沒對上的音。分數＝句子假名對上的比例（'+score+'%），不是考試成績，只反映辨識到的內容。</p>' +
       '</div>' +
-      '<div class="cbtns"><button class="btn2" id="spkAgain">再唸一次</button>' +
+      '<div class="cbtns"><button class="btn2" id="spkAgain">再試一次</button>' +
       '<button class="btn2" id="spkModel2">▶ 示範</button></div>';
 
     var again = $('#spkAgain');
-    if (again) again.addEventListener('click', function(){ startSpeak(l, di, li, line); });
+    if (again) again.addEventListener('click', function(){ if (retry) retry(); });
     var m2 = $('#spkModel2');
     if (m2) m2.addEventListener('click', function(){ speak(line.ja); });
   }
