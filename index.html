@@ -285,7 +285,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v5</span>
+    <span class="ver" id="verTag">v6</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1232,9 +1232,10 @@
         '<div class="rzh">'+esc(line.zh)+'</div></div>' +
       '<div class="cbtns">' +
         '<button class="btn2" id="spkModel">▶ 示範</button>' +
-        (ok ? '<button class="btn2" id="spkRec">● 開始朗讀</button>'
-            : '<button class="btn2" disabled style="opacity:.45">此瀏覽器不支援收音</button>') +
+        (ok ? '<button class="btn2" id="spkRec">● 開始朗讀</button>' : '') +
+        '<button class="btn2" id="spkRecOnly">● 錄音對照</button>' +
       '</div>' +
+      '<div id="spkRecWrap"></div>' +
       (best ? '<p class="secnote" style="text-align:center">這一句最高 '+best+' 分</p>' : '') +
       '<div id="spkFb"></div>' +
       (ok ? (IS_STANDALONE ? '<p class="secnote">你正在使用「加到主畫面」的版本；iPhone 在該模式不支援語音辨識，請改用 Safari 開啟網址。</p>' : '')
@@ -1250,6 +1251,39 @@
       wireDialogue($('#seg'), l);
     });
     if (ok) $('#spkRec').addEventListener('click', function(){ startSpeak(l, di, li, line); });
+    $('#spkRecOnly').addEventListener('click', function(){ toggleRecOnly(this, $('#spkRecWrap'), line); });
+  }
+
+  function toggleRecOnly(btn, wrap, line){
+    if (recMr && recMr.state === 'recording'){ recMr.stop(); return; }
+    if (!navigator.mediaDevices || !window.MediaRecorder){ toast('此瀏覽器不支援錄音'); return; }
+    navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
+      var chunks = [];
+      var mr = new MediaRecorder(stream);
+      recMr = mr;
+      mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+      mr.onstop = function(){
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        if (recUrl) URL.revokeObjectURL(recUrl);
+        var type = (chunks[0] && chunks[0].type) || 'audio/webm';
+        recUrl = URL.createObjectURL(new Blob(chunks, { type:type }));
+        recMr = null;
+        btn.textContent = '● 錄音對照';
+        if (wrap){
+          wrap.innerHTML = '<div class="cbtns"><button class="btn2" id="spkMine">▶ 聽我的錄音</button>' +
+                           '<button class="btn2" id="spkModel3">▶ 再聽示範</button></div>';
+          $('#spkMine').addEventListener('click', function(){
+            stopAudio();
+            if (curAudio) curAudio.pause();
+            curAudio = new Audio(recUrl);
+            curAudio.play();
+          });
+          $('#spkModel3').addEventListener('click', function(){ speak(line.ja); });
+        }
+      };
+      mr.start();
+      btn.textContent = '■ 停止錄音';
+    }).catch(function(){ toast('無法取得麥克風權限'); });
   }
 
   function startSpeak(l, di, li, line){
@@ -1306,8 +1340,9 @@
     }
     if (err === 'service-not-allowed'){
       fb.innerHTML = '<div class="scorebox"><p class="verdict">語音辨識服務不可用</p>' +
-        '<p class="note">多數是 Siri 語言與日語不符：設定 → Siri → Language 改為 Japanese (Japan)；若你用「加到主畫面」的 App，請改用 Safari 開啟網址。另外 設定 → 一般 → 鍵盤 需加入日文鍵盤。</p>' +
-        '<p class="note"><a href="mic-test.html">開測試頁確認是哪一步失敗</a></p></div>';
+        '<p class="note">系統不讓網頁使用語音辨識。先試：設定 → 一般 → 鍵盤 → 開啟 Enable Dictation 並加入日文；再到 設定 → Siri → Language 改為 Japanese (Japan)。</p>' +
+        '<p class="note">暫時可用上面的「錄音對照」：自己唸一次，再與示範並排比較。</p>' +
+        '<p class="note"><a href="mic-test.html">開測試頁看錯誤代碼</a></p></div>';
       return;
     }
     if (err === 'language-not-supported'){
