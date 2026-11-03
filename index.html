@@ -100,10 +100,7 @@
     color:var(--ink2); font-family:var(--sans); font-size:13px; padding:8px 13px;
     border-radius:999px; display:inline-flex; align-items:center; white-space:nowrap; position:relative}
   .tab.on{background:var(--ink); color:#fffdf8; border-color:var(--ink)}
-  .tab .dot{position:absolute; top:-1px; right:-1px; width:5px; height:5px; border-radius:50%;
-    background:var(--shu); opacity:0}
-  .tab.seen .dot{opacity:1}
-  .tab.on .dot{background:#f0c9a8}
+  .tab.seen{background:#f7f0e2; border-color:#e0d3bd}
 
   .sec{padding-top:6px; animation:fade .25s ease}
   @keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
@@ -364,7 +361,7 @@
     var segs = TABS.map(function(t){
       var seen = (rec(lesson.id).segs || []).indexOf(t[0]) >= 0;
       return '<button class="tab'+(t[0]===tab?' on':'')+(seen?' seen':'')+'" data-tab="'+t[0]+'">' +
-             t[1]+'<span class="dot"></span></button>';
+             t[1]+'</button>';
     }).join('');
 
     app.innerHTML =
