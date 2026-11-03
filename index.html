@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>日語階梯 · nihongo-step</title>
+<meta name="description" content="依照初級 40 課編排，一步一步學日語。第一課：自我介紹。" />
+<meta name="theme-color" content="#f6f2ea" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<style>
+  :root{
+    --paper:#f6f2ea; --card:#fffdf8; --ink:#221e19; --ink2:#5d5549; --muted:#98907f;
+    --line:#e5dccb; --shu:#b03a2e; --ai:#31507a; --gold:#8c6a2c;
+    --serif:"Hiragino Mincho ProN","Yu Mincho","Songti TC","Noto Serif CJK TC",serif;
+    --sans:-apple-system,"PingFang TC","Hiragino Sans","Noto Sans CJK TC","Microsoft JhengHei",sans-serif;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0; padding:0}
+  body{
+    background:var(--paper);
+    background-image:radial-gradient(circle at 18% -8%, #fffbf2 0, rgba(255,251,242,0) 46%),
+                     radial-gradient(circle at 92% 2%, #f0e7d5 0, rgba(240,231,213,0) 38%);
+    background-attachment:fixed;
+    color:var(--ink); font-family:var(--sans);
+    font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 16px 40px}
+  .jp, .serif{font-family:var(--serif)}
+  a{color:inherit}
+
+  /* header */
+  .hdr{position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:10px;
+    padding:10px 16px calc(10px + env(safe-area-inset-top)) ;
+    padding-top:calc(10px + env(safe-area-inset-top));
+    background:rgba(246,242,234,.86); backdrop-filter:saturate(1.4) blur(12px);
+    -webkit-backdrop-filter:saturate(1.4) blur(12px); border-bottom:1px solid var(--line)}
+  .brand{display:flex; align-items:baseline; gap:7px; text-decoration:none; flex:1; min-width:0}
+  .brand .b1{font-family:var(--serif); font-size:15px; letter-spacing:.18em}
+  .brand .b2{font-size:12.5px; color:var(--muted); letter-spacing:.12em}
+  .hact{display:flex; align-items:center; gap:6px}
+  .chip{font-family:var(--sans); font-size:12px; color:var(--ink2); background:#fffdf8;
+    border:1px solid var(--line); border-radius:999px; padding:6px 11px; line-height:1}
+  .chip[aria-pressed="true"]{background:var(--ink); color:#fffdf8; border-color:var(--ink)}
+  .ver{font-size:10.5px; color:var(--muted); letter-spacing:.08em; padding-left:2px}
+
+  /* map */
+  .hero{margin-top:18px; padding:22px 20px 20px; border:1px solid var(--line); border-radius:22px;
+    background:linear-gradient(158deg,#fffdf8 0%,#f4ece0 100%);
+    box-shadow:inset 0 1px 0 #fff, 0 18px 40px -32px rgba(70,52,20,.7)}
+  .eyebrow{margin:0; font-size:11px; letter-spacing:.22em; color:var(--shu); text-transform:uppercase}
+  .hero h1{margin:10px 0 6px; font-size:24px; line-height:1.45; font-weight:600; letter-spacing:.01em}
+  .hero .sub{margin:0; font-size:13px; color:var(--ink2); line-height:1.8}
+  .bar{margin:16px 0 6px; height:6px; border-radius:99px; background:#e9e0ce; overflow:hidden}
+  .bar i{display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,var(--shu),#d5854f); transition:width .4s ease}
+  .hrow{display:flex; align-items:center; gap:12px; margin-top:14px; flex-wrap:wrap}
+  .cta{appearance:none; border:0; background:var(--shu); color:#fffdf8; font-family:var(--sans);
+    font-size:14.5px; padding:12px 22px; border-radius:999px; letter-spacing:.04em;
+    box-shadow:0 10px 22px -14px rgba(176,58,46,.9)}
+  .cta:active{transform:translateY(1px)}
+  .hint{font-size:12.5px; color:var(--muted)}
+
+  .book{margin-top:26px}
+  .bookhd{display:flex; align-items:baseline; gap:9px; padding:0 4px 9px; flex-wrap:wrap}
+  .bookhd .bn{font-size:12.5px; letter-spacing:.16em; color:var(--ink)}
+  .bookhd .meta{font-size:11.5px; color:var(--muted); letter-spacing:.02em}
+  .badge{font-size:11px; padding:2px 8px; border-radius:999px; border:1px solid var(--line);
+    background:#fffdf8; color:var(--ink2); line-height:1.5}
+  .badge.ai{color:var(--ai); border-color:#cdd8e6}
+  .list{border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--card)}
+  .lrow{display:flex; align-items:center; gap:12px; padding:13px 14px; text-decoration:none;
+    border-bottom:1px solid var(--line); min-height:52px}
+  .lrow:last-child{border-bottom:0}
+  .lrow .no{font-size:11.5px; color:var(--muted); width:24px; letter-spacing:.06em; font-variant-numeric:tabular-nums}
+  .lrow .ttl{flex:1; font-size:15px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .lrow .st{font-size:11.5px; color:var(--muted); white-space:nowrap}
+  .lrow.open{background:#fffefb}
+  .lrow.open .st{color:var(--shu)}
+  .lrow.open .ttl{font-weight:600}
+  .lrow.done .st{color:#3f7a4f}
+  .lrow.lock{opacity:.52}
+
+  .note{margin:22px 4px 0; font-size:11.5px; color:var(--muted); line-height:1.9}
+
+  /* lesson */
+  .lhead{padding:18px 2px 4px}
+  .back{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink2); text-decoration:none}
+  .lhead h1{margin:10px 0 0; font-size:26px; font-weight:600; letter-spacing:.01em; line-height:1.35}
+  .lhead h1 .k{display:block; margin-top:6px; font-family:var(--serif); font-size:13px; color:var(--muted); letter-spacing:.16em; font-weight:400}
+  .goal{margin:10px 0 0; font-size:13.5px; color:var(--ink2); line-height:1.85}
+
+  .tabs{position:sticky; top:calc(49px + env(safe-area-inset-top)); z-index:30;
+    display:flex; gap:5px; overflow-x:auto; scrollbar-width:none;
+    padding:9px 2px 9px; margin-top:6px;
+    background:linear-gradient(var(--paper) 62%, rgba(246,242,234,0))}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto; appearance:none; border:1px solid var(--line); background:#fffdf8;
+    color:var(--ink2); font-family:var(--sans); font-size:13px; padding:8px 13px;
+    border-radius:999px; display:inline-flex; align-items:center; white-space:nowrap; position:relative}
+  .tab.on{background:var(--ink); color:#fffdf8; border-color:var(--ink)}
+  .tab .dot{position:absolute; top:-1px; right:-1px; width:5px; height:5px; border-radius:50%;
+    background:var(--shu); opacity:0}
+  .tab.seen .dot{opacity:1}
+  .tab.on .dot{background:#f0c9a8}
+
+  .sec{padding-top:6px; animation:fade .25s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+  .secnote{font-size:12.5px; color:var(--muted); line-height:1.8; margin:2px 2px 12px}
+
+  .pat{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 16px 14px; margin-bottom:11px}
+  .pat .pja{font-family:var(--serif); font-size:19px; line-height:1.5; letter-spacing:.02em}
+  .pat .pzh{font-size:13px; color:var(--shu); margin-top:5px}
+  .pat .pnote{font-size:13px; color:var(--ink2); line-height:1.85; margin-top:9px}
+  .pat .ex{border-top:1px dashed var(--line); margin-top:12px; padding-top:10px}
+  .exrow{display:flex; gap:10px; align-items:flex-start; padding:2px 0}
+  .exrow .txt{flex:1; min-width:0}
+  .exrow .ja{font-family:var(--serif); font-size:16px; line-height:1.7}
+  .exrow .zh{font-size:12.5px; color:var(--muted); margin-top:2px}
+
+  .spk{flex:0 0 auto; width:30px; height:30px; border-radius:50%; border:1px solid var(--line);
+    background:#fffdf8; display:inline-flex; align-items:center; justify-content:center; color:var(--ink2);
+    padding:0; margin-top:2px}
+  .spk:active{background:#f1e9db}
+  .spk svg{width:15px; height:15px; fill:currentColor}
+  .spk.playing{background:var(--ink); color:#fffdf8; border-color:var(--ink)}
+
+  .vlist{border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--card)}
+  .vrow{display:flex; gap:12px; align-items:center; padding:11px 13px; border-bottom:1px solid var(--line)}
+  .vrow:last-child{border-bottom:0}
+  .vmain{flex:1; min-width:0}
+  .vtop{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap}
+  .vkanji{font-family:var(--serif); font-size:18px; line-height:1.4}
+  .vkana{font-size:12.5px; color:var(--ink2); letter-spacing:.02em}
+  .vbtm{display:flex; align-items:baseline; gap:8px; margin-top:2px; flex-wrap:wrap}
+  .vzh{font-size:13px; color:var(--ink2)}
+  .pos{font-size:10.5px; color:var(--muted); border:1px solid var(--line); border-radius:4px; padding:0 5px; line-height:1.6}
+
+  .gsec{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:11px}
+  .gsec h3{margin:0 0 10px; font-size:15.5px; font-weight:600; letter-spacing:.01em}
+  .gsec p{margin:0 0 9px; font-size:13.5px; color:var(--ink2); line-height:1.95}
+  .gsec .ex{border-top:1px dashed var(--line); margin-top:11px; padding-top:10px}
+
+  .eitem{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:15px 16px; margin-bottom:11px}
+  .eitem .qh{display:flex; gap:9px; align-items:baseline}
+  .eitem .n{font-size:11.5px; color:var(--shu); letter-spacing:.08em}
+  .eitem .q{flex:1; font-size:15.5px; line-height:1.75}
+  .eitem .hint{font-size:11.5px; color:var(--muted); margin:6px 0 0 24px}
+  .ansbtn{appearance:none; margin-top:11px; border:1px solid var(--line); background:#fffdf8; color:var(--ink2);
+    font-family:var(--sans); font-size:12.5px; padding:7px 14px; border-radius:999px}
+  .ans{display:none; margin-top:10px; padding:11px 13px; background:#f5efe3; border-left:3px solid var(--shu);
+    border-radius:0 10px 10px 0; font-family:var(--serif); font-size:15.5px; line-height:1.75}
+  .ans.on{display:block}
+  .eact{display:flex; gap:8px; margin:2px 2px 12px}
+
+  .dlg{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:11px}
+  .dlghd{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:4px}
+  .dlghd h3{margin:0; font-size:15px; font-weight:600; flex:1; min-width:140px}
+  .dlg .dnote{font-size:12.5px; color:var(--muted); line-height:1.8; margin:2px 0 8px}
+  .line{padding:10px 0; border-bottom:1px dashed var(--line)}
+  .line:last-child{border-bottom:0}
+  .line .who{font-size:11.5px; color:var(--shu); letter-spacing:.1em}
+  .linerow{display:flex; gap:10px; align-items:flex-start}
+  .linerow .txt{flex:1; min-width:0}
+  .line .ja{font-family:var(--serif); font-size:16.5px; line-height:1.75}
+  .line .zh{font-size:12.5px; color:var(--muted); margin-top:3px}
+  body.hidezh .zh{display:none}
+  .line.playing{background:#f7f0e2; border-radius:10px; box-shadow:0 0 0 10px #f7f0e2}
+
+  .cul{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 18px 12px}
+  .cul h3{margin:0 0 12px; font-family:var(--serif); font-size:17px; font-weight:600; line-height:1.5}
+  .cul p{margin:0 0 12px; font-size:14px; color:var(--ink2); line-height:2}
+
+  .lfoot{margin:22px 0 10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .btn2{appearance:none; border:1px solid var(--line); background:#fffdf8; color:var(--ink);
+    font-family:var(--sans); font-size:14px; padding:12px 20px; border-radius:999px}
+  .btn2.done{background:#eef4ec; border-color:#cfe0cd; color:#3f7a4f}
+  .nav2{display:flex; justify-content:space-between; gap:10px; margin-top:6px}
+
+  .toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); transform:translate(-50%,12px);
+    background:rgba(34,30,25,.94); color:#fffdf8; font-size:13px; padding:10px 16px; border-radius:999px;
+    opacity:0; pointer-events:none; transition:.22s ease; z-index:99; max-width:88vw; text-align:center}
+  .toast.on{opacity:1; transform:translate(-50%,0)}
+  .err{margin:40px 0; text-align:center; font-size:14px; color:var(--ink2); line-height:1.9}
+  @media (min-width:700px){
+    .hero h1{font-size:27px}
+    .lhead h1{font-size:29px}
+    .tabs{top:49px}
+  }
+</style>
+</head>
+<body>
+<header class="hdr">
+  <a class="brand" href="#/">
+    <span class="b1 jp">日本語階梯</span>
+    <span class="b2">nihongo-step</span>
+  </a>
+  <div class="hact">
+    <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
+    <span class="ver" id="verTag">v1</span>
+  </div>
+</header>
+<main class="wrap" id="app"><div class="err">載入中……</div></main>
+<div class="toast" id="toast"></div>
+<noscript><div class="wrap err">此應用需要 JavaScript。</div></noscript>
+
+<script>
+(function(){
+  'use strict';
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var app = $('#app');
+  var PKEY = 'ngs-progress-v1';
+  var SKEY = 'ngs-slow';
+
+  var P = loadProgress();
+  var course = null;
+  var lessons = {};           /* id -> lesson json */
+  var slow = localStorage.getItem(SKEY) === '1';
+  var TABS = [
+    ['patterns','句型'], ['vocab','單字'], ['grammar','文法'],
+    ['exercises','練習'], ['dialogue','會話'], ['culture','文化']
+  ];
+
+  var VOICE = { ja: null };
+  function pickVoice(){
+    if (!('speechSynthesis' in window)) return;
+    var vs = speechSynthesis.getVoices() || [];
+    VOICE.ja = vs.filter(function(v){ return /^ja/i.test(v.lang); })
+                 .sort(function(a,b){ return (/JP/i.test(b.lang)?1:0) - (/JP/i.test(a.lang)?1:0); })[0] || null;
+  }
+  if ('speechSynthesis' in window){
+    pickVoice();
+    speechSynthesis.onvoiceschanged = pickVoice;
+  }
+
+  function loadProgress(){
+    try{
+      var p = JSON.parse(localStorage.getItem(PKEY) || 'null');
+      if (p && typeof p === 'object' && p.lessons) return p;
+    }catch(e){}
+    return { v:1, lessons:{}, last:null };
+  }
+  function saveProgress(){
+    try{ localStorage.setItem(PKEY, JSON.stringify(P)); }catch(e){}
+  }
+  function rec(id){
+    if (!P.lessons[id]) P.lessons[id] = { done:false, segs:[] };
+    return P.lessons[id];
+  }
+
+  function toast(msg){
+    var t = $('#toast');
+    t.textContent = msg; t.classList.add('on');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ t.classList.remove('on'); }, 2000);
+  }
+
+  var playingEl = null;
+  function stopAudio(){
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    if (playingEl) playingEl.classList.remove('playing');
+    playingEl = null;
+    Array.prototype.forEach.call(document.querySelectorAll('.spk.playing'), function(b){ b.classList.remove('playing'); });
+  }
+  function utter(text, rate, onend){
+    if (!('speechSynthesis' in window)){ toast('此裝置不支援語音合成'); return null; }
+    var u = new SpeechSynthesisUtterance(String(text).replace(/[～~]/g, ''));
+    u.lang = 'ja-JP';
+    if (VOICE.ja) u.voice = VOICE.ja;
+    u.rate = rate || (slow ? 0.68 : 0.92);
+    u.pitch = 1;
+    if (onend) u.onend = onend;
+    speechSynthesis.speak(u);
+    return u;
+  }
+  function speak(text, btn, el){
+    stopAudio();
+    var u = utter(text);
+    if (!u) return;
+    if (btn){ btn.classList.add('playing'); playingEl = btn; u.onend = function(){ btn.classList.remove('playing'); }; }
+    if (el){ el.classList.add('playing'); playingEl = el; u.onend = function(){ el.classList.remove('playing'); }; }
+  }
+
+  function esc(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  var SPK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.5h3.2L12 5.4v13.2L6.7 14.5H3.5z"/><path d="M15.4 8.4a5 5 0 0 1 0 7.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M17.9 5.9a8.4 8.4 0 0 1 0 12.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+
+  function getJSON(path){
+    return fetch(path, { cache:'no-cache' }).then(function(r){
+      if (!r.ok) throw new Error(path + ' → ' + r.status);
+      return r.json();
+    });
+  }
+
+  /* ---------- map ---------- */
+  function availableLessons(){
+    var out = [];
+    course.books.forEach(function(b){ b.lessons.forEach(function(l){ if (l.available) out.push(l); }); });
+    return out;
+  }
+  function doneCount(){
+    return availableLessons().filter(function(l){ return (P.lessons[l.id]||{}).done; }).length;
+  }
+
+  function renderMap(){
+    var av = availableLessons();
+    var done = doneCount();
+    var pct = av.length ? Math.round(done / av.length * 100) : 0;
+    var resumeId = (P.last && av.some(function(l){ return l.id === P.last; })) ? P.last : (av[0] && av[0].id);
+    var resumeLabel = '開始第一課';
+
+    var books = course.books.map(function(b){
+      var rows = b.lessons.map(function(l){
+        var r = P.lessons[l.id] || {};
+        if (l.available){
+          var cls = 'lrow open' + (r.done ? ' done' : '');
+          var st = r.done ? '已完成 ✓' : '未完成';
+          return '<a class="'+cls+'" href="#/l/'+l.id+'">' +
+                   '<span class="no">'+String(l.no).padStart(2,'0')+'</span>' +
+                   '<span class="ttl">'+esc(l.title)+'</span>' +
+                   '<span class="st">'+st+'</span></a>';
+        }
+        return '<div class="lrow lock">' +
+                 '<span class="no">'+String(l.no).padStart(2,'0')+'</span>' +
+                 '<span class="ttl">'+esc(l.title)+'</span>' +
+                 '<span class="st">未開放</span></div>';
+      }).join('');
+      return '<section class="book">' +
+        '<div class="bookhd">' +
+          '<span class="bn">第 '+b.no+' 冊</span>' +
+          '<span class="badge ai">'+b.level+'</span>' +
+          '<span class="badge">'+esc(b.label)+'</span>' +
+          '<span class="meta">'+b.vocab+' 單字 · '+b.patterns+' 句型</span>' +
+        '</div>' +
+        '<div class="list">'+rows+'</div>' +
+      '</section>';
+    }).join('');
+
+    app.innerHTML =
+      '<section class="hero">' +
+        '<p class="eyebrow">共 '+av.length+' 課已開放 · 4 冊 40 課</p>' +
+        '<h1>從第一課開始，<br>一步一步學。</h1>' +
+        '<p class="sub">每課分六段：句型、單字、文法、練習、會話、文化。<br>進度只存在這部裝置，不會上傳。</p>' +
+        '<div class="bar"><i style="width:'+pct+'%"></i></div>' +
+        '<div class="hrow">' +
+          '<button class="cta" id="resume">'+ (done ? '繼續學習' : resumeLabel) +'</button>' +
+          '<span class="hint">已完成 '+done+' 課 · 可學 '+av.length+' 課</span>' +
+        '</div>' +
+      '</section>' +
+      books +
+      '<p class="note">課程順序參照初級綜合教材的 40 課編排；課名、例句、會話與練習均為自編內容，未採用原書文字與錄音。單字數與句型數為該教材公布之統計，僅作進度參考。</p>';
+
+    var rb = $('#resume');
+    if (rb) rb.addEventListener('click', function(){
+      location.hash = resumeId ? ('#/l/' + resumeId) : '#/';
+    });
+  }
+
+  /* ---------- lesson ---------- */
+  function renderLesson(lesson, tab){
+    var segs = TABS.map(function(t){
+      var seen = (rec(lesson.id).segs || []).indexOf(t[0]) >= 0;
+      return '<button class="tab'+(t[0]===tab?' on':'')+(seen?' seen':'')+'" data-tab="'+t[0]+'">' +
+             t[1]+'<span class="dot"></span></button>';
+    }).join('');
+
+    app.innerHTML =
+      '<div class="lhead">' +
+        '<a class="back" href="#/">← 課程地圖</a>' +
+        '<p class="eyebrow" style="margin-top:14px">第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+'</p>' +
+        '<h1>'+esc(lesson.title)+'<span class="k">'+esc(lesson.titleJa)+'</span></h1>' +
+        '<p class="goal">'+esc(lesson.goal)+'</p>' +
+      '</div>' +
+      '<nav class="tabs" id="tabs">'+segs+'</nav>' +
+      '<section class="sec" id="seg"></section>' +
+      '<div class="lfoot">' +
+        '<button class="btn2'+(rec(lesson.id).done?' done':'')+'" id="finish">' +
+          (rec(lesson.id).done ? '已完成 ✓（點擊取消）' : '標記本課完成') + '</button>' +
+      '</div>' +
+      '<div class="nav2">' +
+        '<a class="back" href="#/">回課程地圖</a>' +
+        '<a class="back" href="#/l/'+lesson.id+'/vocab">下一段：單字 →</a>' +
+      '</div>';
+
+    $('#tabs').addEventListener('click', function(e){
+      var b = e.target.closest('.tab'); if (!b) return;
+      location.hash = '#/l/' + lesson.id + '/' + b.dataset.tab;
+    });
+    $('#finish').addEventListener('click', function(){
+      var r = rec(lesson.id);
+      r.done = !r.done;
+      saveProgress();
+      this.classList.toggle('done', r.done);
+      this.textContent = r.done ? '已完成 ✓（點擊取消）' : '標記本課完成';
+      toast(r.done ? '已記錄：本課完成' : '已取消完成標記');
+      if (r.done) setTimeout(function(){ location.hash = '#/'; }, 620);
+    });
+
+    drawSeg(lesson, tab);
+  }
+
+  function markSeen(id, tab){
+    var r = rec(id);
+    if (r.segs.indexOf(tab) < 0){ r.segs.push(tab); saveProgress(); }
+    var b = $('.tab[data-tab="'+tab+'"]');
+    if (b) b.classList.add('seen');
+  }
+
+  function drawSeg(lesson, tab){
+    var host = $('#seg');
+    if (!host) return;
+    var html = '';
+    if (tab === 'patterns') html = segPatterns(lesson);
+    else if (tab === 'vocab') html = segVocab(lesson);
+    else if (tab === 'grammar') html = segGrammar(lesson);
+    else if (tab === 'exercises') html = segExercises(lesson);
+    else if (tab === 'dialogue') html = segDialogue(lesson);
+    else html = segCulture(lesson);
+
+    host.innerHTML = html;
+    markSeen(lesson.id, tab);
+    if (tab === 'exercises') wireExercises(host);
+    if (tab === 'dialogue') wireDialogue(host, lesson);
+    bindSpeakers(host);
+  }
+
+  function bindSpeakers(host){
+    host.addEventListener('click', function(e){
+      var b = e.target.closest('.spk[data-say]'); if (!b) return;
+      speak(b.getAttribute('data-say'), b);
+    });
+  }
+
+  function segPatterns(l){
+    var h = '<p class="secnote">先看句型，再聽例句。點右邊的喇叭可以聽示範發音。</p>';
+    l.patterns.forEach(function(p){
+      h += '<article class="pat"><div class="pja">'+esc(p.ja)+'</div>' +
+           '<div class="pzh">'+esc(p.zh)+'</div>' +
+           '<div class="pnote">'+esc(p.note)+'</div>';
+      if (p.ex && p.ex.length){
+        h += '<div class="ex">';
+        p.ex.forEach(function(x){
+          h += '<div class="exrow"><div class="txt">' +
+               '<div class="ja">'+esc(x.ja)+'</div>' +
+               '<div class="zh">'+esc(x.zh)+'</div></div>' +
+               '<button class="spk" data-say="'+esc(x.ja)+'" aria-label="播放例句">'+SPK+'</button></div>';
+        });
+        h += '</div>';
+      }
+      h += '</article>';
+    });
+    return h;
+  }
+
+  function segVocab(l){
+    var h = '<p class="secnote">共 '+l.vocab.length+' 個字詞。點一下單字右邊的喇叭聽發音；慢速可在右上角開啟。</p><div class="vlist">';
+    l.vocab.forEach(function(v){
+      var head = v.kanji ? '<span class="vkanji">'+esc(v.kanji)+'</span><span class="vkana">'+esc(v.kana)+'</span>'
+                         : '<span class="vkanji">'+esc(v.kana)+'</span>';
+      h += '<div class="vrow"><div class="vmain">' +
+             '<div class="vtop">'+head+'</div>' +
+             '<div class="vbtm"><span class="vzh">'+esc(v.zh)+'</span><span class="pos">'+esc(v.pos)+'</span></div>' +
+           '</div>' +
+           '<button class="spk" data-say="'+esc(v.kana)+'" aria-label="播放發音">'+SPK+'</button></div>';
+    });
+    h += '</div>';
+    return h;
+  }
+
+  function segGrammar(l){
+    var h = '<p class="secnote">文法說明可以當作課前預習，也可以做完練習後回來對照。</p>';
+    l.grammar.forEach(function(g){
+      h += '<section class="gsec"><h3>'+esc(g.h)+'</h3>';
+      (g.p||[]).forEach(function(p){ h += '<p>'+esc(p)+'</p>'; });
+      if (g.ex && g.ex.length){
+        h += '<div class="ex">';
+        g.ex.forEach(function(x){
+          h += '<div class="exrow"><div class="txt">' +
+               '<div class="ja">'+esc(x.ja)+'</div>' +
+               '<div class="zh">'+esc(x.zh)+'</div></div>' +
+               '<button class="spk" data-say="'+esc(x.ja)+'" aria-label="播放例句">'+SPK+'</button></div>';
+        });
+        h += '</div>';
+      }
+      h += '</section>';
+    });
+    return h;
+  }
+
+  function segExercises(l){
+    var h = '<p class="secnote">先自己作答，再按「顯示答案」核對。這一版只做對照，自動評分會在後續版本加入。</p>' +
+            '<div class="eact"><button class="btn2" id="showAll">顯示全部答案</button></div>';
+    l.exercises.forEach(function(e, i){
+      h += '<article class="eitem">' +
+             '<div class="qh"><span class="n">Q'+String(i+1).padStart(2,'0')+'</span><span class="q">'+esc(e.q)+'</span></div>' +
+             (e.hint ? '<div class="hint">提示：'+esc(e.hint)+'</div>' : '') +
+             '<button class="ansbtn" data-ans="'+i+'">顯示答案</button>' +
+             '<div class="ans" id="ans'+i+'">'+esc(e.a)+'</div>' +
+           '</article>';
+    });
+    return h;
+  }
+  function wireExercises(host){
+    host.addEventListener('click', function(e){
+      var b = e.target.closest('[data-ans]');
+      if (b){
+        var a = $('#ans' + b.dataset.ans);
+        if (!a) return;
+        a.classList.toggle('on');
+        b.textContent = a.classList.contains('on') ? '隱藏答案' : '顯示答案';
+        return;
+      }
+      if (e.target.id === 'showAll'){
+        var on = e.target.getAttribute('data-on') !== '1';
+        e.target.setAttribute('data-on', on ? '1' : '0');
+        Array.prototype.forEach.call(host.querySelectorAll('.ans'), function(x){ x.classList.toggle('on', on); });
+        Array.prototype.forEach.call(host.querySelectorAll('[data-ans]'), function(x){ x.textContent = on ? '隱藏答案' : '顯示答案'; });
+        e.target.textContent = on ? '隱藏全部答案' : '顯示全部答案';
+      }
+    });
+  }
+
+  function segDialogue(l){
+    var h = '<p class="secnote">播放時可同時隱藏中譯，練習只靠聽力理解。</p>';
+    l.dialogues.forEach(function(d, di){
+      h += '<article class="dlg" data-dlg="'+di+'">' +
+             '<div class="dlghd"><h3>'+esc(d.scene)+'</h3>' +
+               '<button class="btn2" data-play="'+di+'">▶ 播放整段</button>' +
+             '</div>' +
+             (d.note ? '<p class="dnote">'+esc(d.note)+'</p>' : '') +
+             '<div class="lines">';
+      d.lines.forEach(function(x, li){
+        h += '<div class="line" data-line="'+li+'"><div class="who">'+esc(x.who)+'</div>' +
+               '<div class="linerow"><div class="txt">' +
+                 '<div class="ja">'+esc(x.ja)+'</div><div class="zh">'+esc(x.zh)+'</div>' +
+               '</div>' +
+               '<button class="spk" data-say="'+esc(x.ja)+'" aria-label="播放這一句">'+SPK+'</button></div></div>';
+      });
+      h += '</div></article>';
+    });
+    h += '<div class="eact"><button class="btn2" id="zhToggle">隱藏中譯</button></div>';
+    return h;
+  }
+  function wireDialogue(host, lesson){
+    host.addEventListener('click', function(e){
+      var p = e.target.closest('[data-play]');
+      if (p){
+        var d = lesson.dialogues[+p.dataset.play];
+        var box = host.querySelector('[data-dlg="'+p.dataset.play+'"]');
+        stopAudio();
+        playLines(d.lines, box, 0);
+        return;
+      }
+      if (e.target.id === 'zhToggle'){
+        var hide = !document.body.classList.contains('hidezh');
+        document.body.classList.toggle('hidezh', hide);
+        e.target.textContent = hide ? '顯示中譯' : '隱藏中譯';
+      }
+    });
+  }
+  function playLines(lines, box, i){
+    if (i >= lines.length || !box){ return; }
+    var row = box.querySelector('.line[data-line="'+i+'"]');
+    if (row) row.classList.add('playing');
+    var u = utter(lines[i].ja, null, function(){
+      if (row) row.classList.remove('playing');
+      playLines(lines, box, i + 1);
+    });
+    if (!u){
+      if (row) row.classList.remove('playing');
+      return;
+    }
+  }
+
+  function segCulture(l){
+    var c = l.culture;
+    var h = '<article class="cul"><h3>'+esc(c.title)+'</h3>';
+    c.paras.forEach(function(p){ h += '<p>'+esc(p)+'</p>'; });
+    h += '</article><p class="secnote" style="margin-top:12px">六段都看過之後，回到最下面可以標記本課完成。</p>';
+    return h;
+  }
+
+  /* ---------- router ---------- */
+  function route(){
+    stopAudio();
+    var h = (location.hash || '#/').replace(/^#/, '');
+    var m = h.match(/^\/l\/(L\d{2})(?:\/([a-z]+))?/);
+    if (m && lessons[m[1]]){
+      var tab = m[2] && TABS.some(function(t){ return t[0] === m[2]; }) ? m[2] : 'patterns';
+      P.last = m[1]; saveProgress();
+      document.title = '第' + lessons[m[1]].no + '課 ' + lessons[m[1]].title + ' · 日語階梯';
+      renderLesson(lessons[m[1]], tab);
+      return;
+    }
+    document.title = '日語階梯 · nihongo-step';
+    renderMap();
+  }
+
+  function boot(){
+    getJSON('data/course.json').then(function(c){
+      course = c;
+      var ids = availableLessons().map(function(l){ return l.id; });
+      return Promise.all(ids.map(function(id){
+        return getJSON('data/lesson-' + id + '.json').then(function(j){ lessons[id] = j; })
+          .catch(function(e){ console.warn('lesson load failed', id, e); });
+      }));
+    }).then(function(){
+      route();
+    }).catch(function(e){
+      app.innerHTML = '<div class="err">課程資料載入失敗。<br><small>'+esc(e.message)+'</small></div>';
+    });
+
+    $('#slowBtn').setAttribute('aria-pressed', slow ? 'true' : 'false');
+    $('#slowBtn').addEventListener('click', function(){
+      slow = !slow;
+      localStorage.setItem(SKEY, slow ? '1' : '0');
+      this.setAttribute('aria-pressed', slow ? 'true' : 'false');
+      toast(slow ? '已開啟慢速發音（0.68 倍）' : '已恢復正常速度');
+    });
+    window.addEventListener('hashchange', route);
+  }
+
+  if ('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js', { updateViaCache:'none' }).then(function(reg){
+        reg.update();
+      }).catch(function(){});
+    });
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
