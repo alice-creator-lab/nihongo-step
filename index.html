@@ -71,13 +71,17 @@
   .badge.ai{color:var(--ai); border-color:#cdd8e6}
   .list{border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--card)}
   .lrow{display:flex; align-items:center; gap:12px; padding:13px 14px; text-decoration:none;
-    border-bottom:1px solid var(--line); min-height:52px}
+    border-bottom:1px solid var(--line); min-height:52px; position:relative}
   .lrow:last-child{border-bottom:0}
   .lrow .no{font-size:11.5px; color:var(--muted); width:24px; letter-spacing:.06em; font-variant-numeric:tabular-nums}
   .lrow .ttl{flex:1; font-size:15px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-  .lrow .st{font-size:11.5px; color:var(--muted); white-space:nowrap}
+  .lrow .lbar{position:absolute; left:14px; right:14px; bottom:0; height:2px; background:#ece3d2; overflow:hidden}
+  .lrow .lbar i{display:block; height:100%;
+    background:linear-gradient(90deg,var(--shu),#d5854f); transition:width .35s ease}
+  .lrow .st{font-size:12px; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums; letter-spacing:.02em}
+  .lrow.has .st{color:var(--shu)}
   .lrow.open{background:#fffefb}
-  .lrow.open .st{color:var(--shu)}
+  .lrow.open .st{color:var(--muted)}
   .lrow.open .ttl{font-weight:600}
   .lrow.done .st{color:#3f7a4f}
   .lrow.lock{opacity:.52}
@@ -301,11 +305,23 @@
   function doneCount(){
     return availableLessons().filter(function(l){ return (P.lessons[l.id]||{}).done; }).length;
   }
+  /* 每課進度＝已看段數 ÷ 六段；標記完成即 100% */
+  function lessonPct(id){
+    var r = P.lessons[id] || {};
+    if (r.done) return 100;
+    return Math.round(((r.segs || []).length / TABS.length) * 100);
+  }
+  function overallPct(){
+    var av = availableLessons();
+    if (!av.length) return 0;
+    var sum = av.reduce(function(s, l){ return s + lessonPct(l.id); }, 0);
+    return Math.round(sum / av.length);
+  }
 
   function renderMap(){
     var av = availableLessons();
     var done = doneCount();
-    var pct = av.length ? Math.round(done / av.length * 100) : 0;
+    var pct = overallPct();
     var resumeId = (P.last && av.some(function(l){ return l.id === P.last; })) ? P.last : (av[0] && av[0].id);
     var resumeLabel = '開始第一課';
 
@@ -313,12 +329,14 @@
       var rows = b.lessons.map(function(l){
         var r = P.lessons[l.id] || {};
         if (l.available){
-          var cls = 'lrow open' + (r.done ? ' done' : '');
-          var st = r.done ? '已完成 ✓' : '未完成';
+          var p = lessonPct(l.id);
+          var cls = 'lrow open' + (r.done ? ' done' : '') + (p > 0 && !r.done ? ' has' : '');
+          var st = r.done ? '100% ✓' : p + '%';
           return '<a class="'+cls+'" href="#/l/'+l.id+'">' +
                    '<span class="no">'+String(l.no).padStart(2,'0')+'</span>' +
                    '<span class="ttl">'+esc(l.title)+'</span>' +
-                   '<span class="st">'+st+'</span></a>';
+                   '<span class="st">'+st+'</span>' +
+                   '<span class="lbar" aria-hidden="true"><i style="width:'+p+'%"></i></span></a>';
         }
         return '<div class="lrow lock">' +
                  '<span class="no">'+String(l.no).padStart(2,'0')+'</span>' +
@@ -344,7 +362,7 @@
         '<div class="bar"><i style="width:'+pct+'%"></i></div>' +
         '<div class="hrow">' +
           '<button class="cta" id="resume">'+ (done ? '繼續學習' : resumeLabel) +'</button>' +
-          '<span class="hint">已完成 '+done+' 課 · 可學 '+av.length+' 課</span>' +
+          '<span class="hint">整體進度 '+pct+'% · 已完成 '+done+' 課</span>' +
         '</div>' +
       '</section>' +
       books +
@@ -367,7 +385,7 @@
     app.innerHTML =
       '<div class="lhead">' +
         '<a class="back" href="#/">← 課程地圖</a>' +
-        '<p class="eyebrow" style="margin-top:14px">第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+'</p>' +
+        '<p class="eyebrow" style="margin-top:14px">第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+' · 進度 '+lessonPct(lesson.id)+'%</p>' +
         '<h1>'+esc(lesson.title)+'<span class="k">'+esc(lesson.titleJa)+'</span></h1>' +
         '<p class="goal">'+esc(lesson.goal)+'</p>' +
       '</div>' +
