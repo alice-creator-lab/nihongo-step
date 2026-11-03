@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>手機內語音辨識測試 · 日語階梯</title>
+<meta name="theme-color" content="#f6f2ea" />
+<style>
+  :root{--paper:#f6f2ea;--card:#fffdf8;--ink:#221e19;--ink2:#5d5549;--muted:#98907f;--line:#e5dccb;--shu:#b03a2e;
+    --sans:-apple-system,"PingFang TC","Hiragino Sans","Noto Sans CJK TC",sans-serif;--serif:"Hiragino Mincho ProN","Songti TC",serif}
+  *{box-sizing:border-box}
+  body{margin:0 auto;max-width:640px;padding:20px 16px calc(24px + env(safe-area-inset-bottom));
+    background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7}
+  h1{font-size:19px;margin:0 0 4px}
+  p.sub{margin:0 0 16px;font-size:13px;color:var(--ink2)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+  .card h2{font-size:14px;margin:0 0 8px}
+  .big{font-family:var(--serif);font-size:20px;line-height:1.6}
+  .kana{font-size:13px;color:var(--muted)}
+  button{appearance:none;border:0;border-radius:999px;font-family:var(--sans);font-size:15px;padding:13px 22px;
+    background:var(--shu);color:#fffdf8;width:100%;margin-bottom:10px}
+  button.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+  button[disabled]{opacity:.45}
+  pre{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;font-size:12.5px;
+    white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,Menlo,monospace;margin:0}
+  .ok{color:#3f7a4f}.bad{color:var(--shu)}
+  .hint{font-size:12px;color:var(--muted);line-height:1.8;margin-top:10px}
+</style>
+</head>
+<body>
+<h1>手機內語音辨識測試</h1>
+<p class="sub">模型在手機瀏覽器內執行，音訊不會上傳。第一次要先下載模型（約 50MB），之後會存在快取。</p>
+
+<div class="card">
+  <h2>本句</h2>
+  <div class="big" id="targetJa">載入中…</div>
+  <div class="kana" id="targetKana"></div>
+</div>
+
+<div class="card">
+  <h2>狀態</h2>
+  <pre id="log">尚未開始。</pre>
+</div>
+
+<button id="load">載入模型並開始</button>
+<button id="stop" class="sec" disabled>停止收音</button>
+
+<div class="card">
+  <h2>辨識結果</h2>
+  <div class="big" id="said">（未收音）</div>
+  <div class="kana" id="score"></div>
+</div>
+
+<p class="hint">
+用 Safari 直接開啟網址（不要用加到主畫面的 App）。第一次載入要等下載與解壓，可能需要一分鐘以上；若畫面停住超過三分鐘，請回報。
+</p>
+
+<script src="https://cdn.jsdelivr.net/npm/vosk-browser@0.0.8/dist/vosk.js"></script>
+<script>
+(function(){
+  'use strict';
+  var logEl = document.getElementById('log');
+  var lines = [];
+  function log(s, cls){
+    lines.push(s);
+    logEl.innerHTML = lines.slice(-14).map(function(l){
+      return (/失敗|錯誤|error|Error/.test(l) ? '<span class="bad">' : /✓/.test(l) ? '<span class="ok">' : '<span>') +
+        l.replace(/[<>&]/g, function(c){ return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c]; }) + '</span>';
+    }).join('\n');
+  }
+  function stamp(label){
+    var t = performance.now();
+    return function(){ log(label + '：' + Math.round(performance.now() - t) + ' ms'); };
+  }
+
+  /* 句子：?d=0&l=2 選會話第 0 段的第 3 句，預設第一段第一句 */
+  var qs = new URLSearchParams(location.search);
+  var DI = parseInt(qs.get('d') || '0', 10), LI = parseInt(qs.get('l') || '0', 10);
+  var target = { ja:'あのう、初めまして。李です。', kana:'あのう、はじめまして。りです。' };
+
+  function toHira(s){ return String(s).replace(/[\u30a1-\u30f6]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-0x60); }); }
+  function clean(s){ return toHira(s || '').replace(/[\s\u3000]/g,'').replace(/[、。，．,.！!？?「」『』（）()・…~～ー―-]/g,''); }
+  function lcs(a, b){
+    var dp = [], i, j;
+    for (i = 0; i <= a.length; i++){ dp.push(new Array(b.length + 1).fill(0)); }
+    for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++){
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);
+    }
+    return dp;
+  }
+  function score(targetText, heard){
+    var a = clean(targetText).split(''), b = clean(heard).split('');
+    if (!a.length || !b.length) return 0;
+    return Math.round(lcs(a, b)[a.length][b.length] / a.length * 100);
+  }
+
+  fetch('data/lesson-L01.json').then(function(r){ return r.json(); }).then(function(l){
+    var line = l.dialogues[DI].lines[LI];
+    target = { ja: line.ja, kana: line.kana || line.ja };
+    document.getElementById('targetJa').textContent = line.ja;
+    document.getElementById('targetKana').textContent = line.kana || '';
+  }).catch(function(){ /* 用預設句 */ });
+
+  var model = null, recognizer = null, audioContext = null, stream = null, node = null;
+  var running = false, t0 = 0;
+
+  document.getElementById('load').addEventListener('click', function(){
+    var btn = this;
+    btn.disabled = true;
+    var doneDownload = stamp('模型下載＋解壓');
+
+    if (!window.Vosk){
+      log('失敗：Vosk 函式庫未載入（可能被封鎖或離線）');
+      btn.disabled = false;
+      return;
+    }
+    log('開始載入模型（約 50MB，首次較慢）…');
+    Vosk.createModel('models/vosk-ja.tar.gz').then(function(m){
+      model = m;
+      doneDownload();
+      log('✓ 模型已就緒');
+      startMic();
+    }).catch(function(e){
+      log('失敗：模型載入出錯 — ' + (e && e.message ? e.message : e));
+      btn.disabled = false;
+    });
+  });
+
+  function startMic(){
+    log('要求麥克風…');
+    navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true, channelCount:1, sampleRate:16000 } })
+      .then(function(s){
+        stream = s;
+        log('✓ 麥克風已取得');
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        recognizer = new model.KaldiRecognizer(audioContext.sampleRate);
+        recognizer.on('result', function(m){
+          var text = (m && m.result && m.result.text) || '';
+          log('辨識完成（' + Math.round(performance.now() - t0) + ' ms）：' + text);
+          showResult(text);
+        });
+        recognizer.on('partialresult', function(m){
+          var p = (m && m.result && m.result.partial) || '';
+          if (p) document.getElementById('said').textContent = p + '…';
+        });
+        node = audioContext.createScriptProcessor(4096, 1, 1);
+        node.onaudioprocess = function(ev){
+          if (!running) return;
+          try { recognizer.acceptWaveform(ev.inputBuffer); } catch(e){ log('失敗：acceptWaveform — ' + e); }
+        };
+        var src = audioContext.createMediaStreamSource(stream);
+        src.connect(node);
+        node.connect(audioContext.destination);
+
+        running = true;
+        t0 = performance.now();
+        log('開始收音：請照上面的句子唸一次');
+        document.getElementById('stop').disabled = false;
+        document.getElementById('said').textContent = '（收音中…）';
+      })
+      .catch(function(e){
+        log('失敗：麥克風 — ' + e.name + ' ' + (e.message || ''));
+      });
+  }
+
+  document.getElementById('stop').addEventListener('click', function(){
+    this.disabled = true;
+    running = false;
+    log('停止收音');
+    if (recognizer){
+      try { recognizer.retrieveFinalResult(); } catch(e){ log('取最終結果失敗：' + e); }
+    }
+    if (stream){ stream.getTracks().forEach(function(t){ t.stop(); }); stream = null; }
+    if (node){ try { node.disconnect(); } catch(e){} node = null; }
+    if (audioContext && audioContext.state !== 'closed'){ try { audioContext.close(); } catch(e){} }
+  });
+
+  function showResult(text){
+    document.getElementById('said').textContent = text || '（沒有辨識到內容）';
+    var s = score(target.kana, text);
+    document.getElementById('score').textContent = '與本句比對：' + s + ' 分（假名對上的比例）';
+  }
+})();
+</script>
+</body>
+</html>
