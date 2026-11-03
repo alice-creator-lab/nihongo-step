@@ -193,7 +193,8 @@
   .fcard .fa{font-size:19px; line-height:1.65; border-top:1px dashed var(--line); padding-top:12px;
     margin-top:6px; width:100%}
   .fcard .fa.hide{display:none}
-  .cbtns{display:flex; gap:10px; margin-top:14px}
+  .cbtns{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+  .cbtns .btn2{flex:1 1 44%; white-space:nowrap}
   .cbtns button{flex:1; padding:13px 10px; font-size:14.5px}
   .b-ok{background:#3f7a4f; border-color:#3f7a4f; color:#fff}
   .b-no{background:#fffdf8; border-color:#e0c3be; color:var(--shu)}
@@ -258,6 +259,7 @@
   .scorebox .target b.miss{color:var(--shu); font-weight:400; text-decoration:underline; text-underline-offset:3px}
   .scorebox .heard{font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.7}
   .scorebox .note{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.7}
+  .spkprog{font-size:12.5px; color:var(--ink2); text-align:center; min-height:18px; line-height:1.6}
   .dictbox{margin-top:14px; border:1px solid var(--line); border-radius:14px; background:var(--card); padding:10px 13px}
   .dictbox summary{font-size:13.5px; color:var(--ink2); outline:none}
   .dictbox[open] summary{margin-bottom:10px; color:var(--ink)}
@@ -291,7 +293,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v7</span>
+    <span class="ver" id="verTag">v8</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1239,13 +1241,14 @@
       '<div class="cbtns">' +
         '<button class="btn2" id="spkModel">▶ 示範</button>' +
         (ok ? '<button class="btn2" id="spkRec">● 開始朗讀</button>' : '') +
+        '<button class="btn2" id="spkAuto">● 自動辨識</button>' +
         '<button class="btn2" id="spkRecOnly">● 錄音對照</button>' +
       '</div>' +
+      '<div id="spkProg" class="spkprog"></div>' +
       '<div id="spkRecWrap"></div>' +
       (best ? '<p class="secnote" style="text-align:center">這一句最高 '+best+' 分</p>' : '') +
       '<div id="spkFb"></div>' +
-      (ok ? (IS_STANDALONE ? '<p class="secnote">你正在使用「加到主畫面」的版本；iPhone 在該模式不支援語音辨識，請改用 Safari 開啟網址。</p>' : '')
-          : '<p class="secnote">語音辨識需要 Chrome、Edge，或 iPhone 的 Safari（需開啟 Siri 與聽寫）。</p>') +
+      '<p class="secnote">「自動辨識」在手機瀏覽器內執行，第一次需下載約 40MB 模型；音訊不會上傳。</p>' +
       '<details class="dictbox"><summary>用鍵盤聽寫評分（iPhone 適用）</summary>' +
         '<p class="note">點下面的框，再按鍵盤右下角的麥克風圖示，照上面句子唸一次；文字出現後按「檢查」。需要已加入日文鍵盤（設定 → 一般 → 鍵盤 → 鍵盤 → 加入日文）。</p>' +
         '<textarea id="dictIn" rows="3" placeholder="在這裡用聽寫輸入日文…"></textarea>' +
@@ -1263,6 +1266,7 @@
       wireDialogue($('#seg'), l);
     });
     if (ok) $('#spkRec').addEventListener('click', function(){ startSpeak(l, di, li, line); });
+    $('#spkAuto').addEventListener('click', function(){ autoRead(l, di, li, line); });
     $('#spkRecOnly').addEventListener('click', function(){ toggleRecOnly(this, $('#spkRecWrap'), line); });
     var dc = $('#dictCheck');
     if (dc) dc.addEventListener('click', function(){
@@ -1273,6 +1277,94 @@
     var dcl = $('#dictClear');
     if (dcl) dcl.addEventListener('click', function(){ $('#dictIn').value = ''; $('#spkFb').innerHTML = ''; });
 
+  }
+
+  /* 手機內 Whisper 自動辨識：首次使用才下載模型，之後沿用同一個實例 */
+  var whisperP = null, whisperTr = null, whisperRec = null, whisperTimer = 0, whisperStream = null;
+
+  function spkProg(t){ var el = $('#spkProg'); if (el) el.textContent = t || ''; }
+
+  function loadWhisper(){
+    if (whisperTr) return Promise.resolve(whisperTr);
+    if (whisperP) return whisperP;
+    spkProg('首次載入辨識模型（約 40MB），可能要一至兩分鐘…');
+    whisperP = import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2').then(function(m){
+      m.env.allowLocalModels = false;
+      if (m.env.backends && m.env.backends.onnx && m.env.backends.onnx.wasm) m.env.backends.onnx.wasm.numThreads = 1;
+      return m.pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny', {
+        quantized: true,
+        progress_callback: function(pr){
+          if (pr && pr.status === 'progress' && pr.total) spkProg('下載模型 ' + Math.round(pr.loaded / pr.total * 100) + '%');
+        }
+      });
+    }).then(function(tr){ whisperTr = tr; spkProg(''); return tr; })
+      .catch(function(e){ whisperP = null; spkProg(''); throw e; });
+    return whisperP;
+  }
+
+  function blobToAudio(blob){
+    return blob.arrayBuffer().then(function(ab){
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      var ctx = new Ctx();
+      return ctx.decodeAudioData(ab).then(function(buf){
+        var frames = Math.max(1, Math.ceil(buf.duration * 16000));
+        var off = new OfflineAudioContext(1, frames, 16000);
+        var src = off.createBufferSource();
+        src.buffer = buf; src.connect(off.destination); src.start();
+        return off.startRendering().then(function(r){
+          try { ctx.close(); } catch(e){}
+          return r.getChannelData(0);
+        });
+      }, function(e){ try { ctx.close(); } catch(x){} throw e; });
+    });
+  }
+
+  function autoRead(l, di, li, line){
+    var btn = $('#spkAuto');
+    if (!btn) return;
+    if (whisperRec && whisperRec.state === 'recording'){ whisperRec.stop(); return; }
+    if (!navigator.mediaDevices || !window.MediaRecorder){ toast('此瀏覽器不支援錄音'); return; }
+    btn.disabled = true;
+    loadWhisper().then(function(){
+      spkProg('要求麥克風…');
+      return navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true, channelCount:1 } }).then(function(stream){
+        whisperStream = stream;
+        return new Promise(function(resolve, reject){
+          var chunks = [];
+          var mr = new MediaRecorder(stream);
+          whisperRec = mr;
+          mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+          mr.onerror = function(e){ reject((e && e.error) || new Error('錄音失敗')); };
+          mr.onstop = function(){
+            if (whisperStream){ whisperStream.getTracks().forEach(function(t){ t.stop(); }); whisperStream = null; }
+            whisperRec = null;
+            clearTimeout(whisperTimer);
+            resolve(new Blob(chunks, { type: mr.mimeType || 'audio/webm' }));
+          };
+          mr.start();
+          btn.disabled = false;
+          btn.textContent = '■ 停止並辨識';
+          spkProg('收音中：照句子唸一次，唸完按「停止並辨識」');
+          whisperTimer = setTimeout(function(){ if (mr.state === 'recording') mr.stop(); }, 9000);
+        });
+      });
+    }).then(function(blob){
+      if (btn){ btn.disabled = true; btn.textContent = '● 自動辨識'; }
+      spkProg('辨識中，請稍等…');
+      return blobToAudio(blob).then(function(audio){
+        return whisperTr(audio, { language: 'ja', task: 'transcribe' });
+      });
+    }).then(function(out){
+      var text = ((out && out.text) || '').trim();
+      if (btn) btn.disabled = false;
+      spkProg('');
+      if (!text){ toast('沒有辨識到聲音，再試一次'); return; }
+      paintScore(l, di, li, line, text, function(){ autoRead(l, di, li, line); }, '辨識結果');
+    }).catch(function(e){
+      if (btn){ btn.disabled = false; btn.textContent = '● 自動辨識'; }
+      spkProg('');
+      toast('自動辨識失敗：' + (e && e.message ? e.message : e));
+    });
   }
 
   function toggleRecOnly(btn, wrap, line){
