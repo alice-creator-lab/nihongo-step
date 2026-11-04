@@ -208,7 +208,7 @@ async def main():
     await pump(1.0)
     out["順序表 播放金額"] = await js("[window.__played.slice(-1)[0], document.querySelectorAll('.srow.playing').length]")
     # 量「播放全部」節奏：ひとつ 10 項連續播放 6 秒內播到第幾項、平均間隔
-    await js("(function(){try{window.__times=[]}catch(e){} return 1;})()")
+    await js("(function(){try{window.__times=[]; window.__played=[];}catch(e){} return 1;})()")
     await js("(function(){var s=[].find.call(document.querySelectorAll('.sgrp'),function(g){return g.textContent.indexOf('ひとつ')>=0;}); s.querySelector('.splay').click(); return 1;})()")
     await pump(6.0)
     out["ひとつ 6 秒內播段數"] = await js("window.__played.length")
