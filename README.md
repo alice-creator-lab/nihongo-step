@@ -62,6 +62,9 @@ node tools/validate.mjs
 ## 技術說明
 
 - 純前端，無建置步驟、無外部依賴；字體使用系統的日文與繁中字型。
-- 語音使用 `speechSynthesis`（`ja-JP`），聲音由裝置提供，因此不同手機的音色會有差異。
+- 發音優先用預製人聲：`tools/make_audio.py` 以 edge-tts（ja-JP-KeitaNeural／NanamiNeural）合成，音檔放在 `audio/`，索引在 `data/audio.json`（key 分 `d`會話、`v`單字、`p`句型例句、`g`文法例句、`l`聽力）。只有缺音檔時才退回 `speechSynthesis`。
+- 合成文字一律用漢字原句（人名先換假名）：只給假名時，助詞「は」會被讀成 ha。改動發音時不要退回「假名 + 裝置 TTS」的做法。
+- 「慢速」是把同一段人聲以 `playbackRate = 0.7` 播放，不是改用合成音。
+- 驗證人聲有無接上：`python3 -m http.server 8899` 後跑 `python3 tools/check_audio_cdp.py http://127.0.0.1:8899/`（文法總表、課內文法、聽力、對話、跟讀逐項檢查是否播 mp3、有沒有落到 TTS）。
 - Service Worker 採網路優先：有新版本時直接更新，離線時才回退到快取。
 - 進度鍵為 `ngs-progress-v1`，只記錄已完成課數與各段是否看過。
