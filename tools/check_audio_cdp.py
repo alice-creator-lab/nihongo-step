@@ -89,9 +89,9 @@ async def main():
             await pump(0.4)
         return None
 
-    INSTR = ("(function(){ window.__played=[]; window.__rates=[];"
+    INSTR = ("(function(){ window.__played=[]; window.__rates=[]; window.__cur=null;"
              "var p=HTMLMediaElement.prototype.play;"
-             "HTMLMediaElement.prototype.play=function(){window.__played.push(String(this.src||'').split('/audio/').pop());"
+             "HTMLMediaElement.prototype.play=function(){window.__cur=this; window.__played.push(String(this.src||'').split('/audio/').pop());"
              "window.__rates.push(this.playbackRate); return p.apply(this,arguments);};"
              "var s=window.speechSynthesis; if(s){var q=s.speak.bind(s); s.speak=function(u){window.__played.push('TTS:'+u.text); q(u);};}"
              "return 1; })()")
@@ -165,6 +165,36 @@ async def main():
     await pump(1.5)
     out["跟讀 示範"] = await js("[window.__played.slice(-1)[0], window.__rates.slice(-1)[0]]")
     out["跟讀 用機械聲"] = await js("window.__played.some(x=>x.indexOf('TTS:')===0)")
+
+    # 7) 詞語總表：播放全部
+    await visit("#/all/vocab", 2.5)
+    await wait_until("document.querySelectorAll('#alllist .arow').length")
+    await js(INSTR)
+    out["詞語總表 按鈕"] = await js("!!document.getElementById('allplay')")
+    await js("document.getElementById('allplay').click(); 1")
+    await pump(1.0)
+    out["詞語總表 開始播"] = await js("[window.__played.slice(-1)[0], document.getElementById('allplay').textContent, document.querySelectorAll('#alllist .arow.playing').length]")
+    await js("window.__cur && window.__cur.dispatchEvent(new Event('ended')); 1")
+    await pump(1.0)
+    out["詞語總表 續播"] = await js("window.__played.slice(-2)")
+    await js("document.getElementById('allplay').click(); 1")
+    await pump(0.6)
+    out["詞語總表 停止"] = await js("[document.getElementById('allplay').textContent, document.querySelectorAll('#alllist .arow.playing').length]")
+
+    # 8) 每課單字：播放全部
+    await visit("#/l/L01/vocab", 2.5)
+    await wait_until("document.querySelectorAll('#seg .vrow').length")
+    await js(INSTR)
+    out["課內單字 按鈕"] = await js("!!document.getElementById('vplayall')")
+    await js("document.getElementById('vplayall').click(); 1")
+    await pump(1.0)
+    out["課內單字 開始播"] = await js("[window.__played.slice(-1)[0], document.getElementById('vplayall').textContent, document.querySelectorAll('#seg .vrow.playing').length]")
+    await js("window.__cur && window.__cur.dispatchEvent(new Event('ended')); 1")
+    await pump(1.0)
+    out["課內單字 續播"] = await js("window.__played.slice(-2)")
+    await js("document.getElementById('vplayall').click(); 1")
+    await pump(0.6)
+    out["課內單字 停止"] = await js("[document.getElementById('vplayall').textContent, document.querySelectorAll('#seg .vrow.playing').length]")
 
     out["頁面錯誤"] = await js("(window.__errs||[]).length")
     print(json.dumps(out, ensure_ascii=False, indent=1))

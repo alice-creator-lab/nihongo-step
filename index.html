@@ -349,6 +349,12 @@
     -webkit-appearance:none; font-family:inherit}
   .search input:focus{border-color:var(--ink2)}
   .cnt{font-size:12px; color:var(--muted); margin:6px 0 2px}
+  .alltop{display:flex; align-items:center; justify-content:space-between; gap:10px}
+  .alltop .cnt{margin:6px 0}
+  .alltop .btn2{padding:8px 14px; font-size:13px; flex:0 0 auto}
+  .arow.playing, .vrow.playing{background:var(--sand2)}
+  .vplaybar{display:flex; align-items:center; gap:10px; margin:0 0 6px}
+  .vplaybar .btn2{padding:8px 14px; font-size:13px}
   .arow{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:1px solid var(--line)}
   .arow .ak{min-width:92px}
   .arow .ak b{display:block; font-size:15px; font-weight:500; font-family:"Hiragino Mincho ProN",serif}
@@ -376,7 +382,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v37</span>
+    <span class="ver" id="verTag">v38</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -521,6 +527,7 @@
   function stopAudio(){
     stopSequence();
     if (typeof stopSeq === 'function') stopSeq();
+    if (typeof stopAllPlay === 'function') stopAllPlay();
     if ('speechSynthesis' in window) speechSynthesis.cancel();
     if (typeof curAudio !== 'undefined' && curAudio){ curAudio.pause(); curAudio = null; }
     if (playingEl) playingEl.classList.remove('playing');
@@ -784,6 +791,7 @@
     host.dataset.spk = '1';
     host.addEventListener('click', function(e){
       var b = e.target.closest('.spk[data-say]'); if (!b) return;
+      if (ALLPLAY.on) stopAllPlay();
       var au = b.getAttribute('data-audio');
       if (au && playFile(au, null, b, slow ? 0.7 : 1)) return;
       speak(b.getAttribute('data-say'), b);
@@ -832,7 +840,9 @@
                 '<button data-dir="zh2jp" class="'+(cardDir==='zh2jp'?'on':'')+'">中→日</button>' +
               '</div>' +
               '<button class="btn2 pri" id="startCards">開始</button></div>' +
-            '<p class="secnote">共 '+l.vocab.length+' 個字詞。點單字右邊的喇叭聽發音；慢速可在右上角開啟。</p><div class="vlist">';
+            '<div class="vplaybar"><button class="btn2" id="vplayall">▶ 播放全部</button>' +
+              '<span class="cnt">共 '+l.vocab.length+' 個字詞</span></div>' +
+            '<p class="secnote">點單字右邊的喇叭聽發音；慢速可在右上角開啟。</p><div class="vlist">';
     l.vocab.forEach(function(v, vi){
       var head = v.kanji ? '<span class="vkanji">'+esc(v.kanji)+'</span><span class="vkana">'+esc(v.kana)+'</span>'
                          : '<span class="vkanji">'+esc(v.kana)+'</span>';
@@ -861,7 +871,16 @@
       });
     }
     var st = $('#startCards');
-    if (st) st.addEventListener('click', function(){ startCards(l, l.vocab); });
+    if (st) st.addEventListener('click', function(){ stopAudio(); startCards(l, l.vocab); });
+    var pa = $('#vplayall');
+    if (pa) pa.addEventListener('click', function(){
+      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+      var rows = host.querySelectorAll('.vrow');
+      var items = l.vocab.map(function(v, vi){
+        return { audio: audioFor(l.id, 'v' + vi), el: rows[vi] };
+      });
+      playAllQueued(items, this);
+    });
   }
 
   function startCards(l, pool){
@@ -1667,6 +1686,45 @@
     var rows = document.querySelectorAll('.srow.playing');
     for (var i = 0; i < rows.length; i++) rows[i].classList.remove('playing');
   }
+  /* ---------- 連續播放（詞語總表／每課單字） ---------- */
+  var ALLPLAY = { on:false, btn:null };
+  function stopAllPlay(){
+    if (!ALLPLAY) return;
+    ALLPLAY.on = false;
+    if (ALLPLAY.btn){
+      ALLPLAY.btn.textContent = '▶ 播放全部';
+      ALLPLAY.btn.classList.remove('onplay');
+      ALLPLAY.btn = null;
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.arow.playing, .vrow.playing'), function(r){
+      r.classList.remove('playing');
+    });
+  }
+  function playAllQueued(items, btn){
+    var list = items.filter(function(x){ return x && x.audio; });
+    if (!list.length){ toast('這批項目還沒有音檔'); return; }
+    stopAudio();
+    ALLPLAY.on = true;
+    ALLPLAY.btn = btn;
+    btn.classList.add('onplay');
+    btn.textContent = '■ 停止';
+    var i = 0;
+    function step(){
+      if (!ALLPLAY.on) return;
+      if (i >= list.length){ stopAllPlay(); return; }
+      var it = list[i];
+      if (it.el) it.el.classList.add('playing');
+      var ok = playFile(it.audio, function(){
+        if (it.el) it.el.classList.remove('playing');
+        if (!ALLPLAY.on) return;
+        i++;
+        step();
+      }, null, slow ? 0.7 : 1);
+      if (!ok){ if (it.el) it.el.classList.remove('playing'); stopAllPlay(); }
+    }
+    step();
+  }
+
   function playGroup(g, btn){
     var i = 0;
     SEQPLAY.on = true;
@@ -1742,15 +1800,18 @@
       '</div>' +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="' + (isVocab ? '搜尋假名、漢字或中文' : '搜尋文法標題或例句') + '"></div>' +
-      '<p class="cnt" id="allcnt"></p><div id="alllist"></div>';
+      '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
+        (isVocab ? '<button class="btn2" id="allplay">▶ 播放全部</button>' : '') +
+      '</div><div id="alllist"></div>';
 
-    var list = $('#alllist'), cnt = $('#allcnt');
+    var list = $('#alllist'), cnt = $('#allcnt'), curHit = [];
 
     function draw(q){
       q = (q || '').trim().toLowerCase();
       var hit = q ? items.filter(function(it){
         return it.search.indexOf(q) > -1;
       }) : items;
+      curHit = hit;
       cnt.textContent = q
         ? '找到 ' + hit.length + ' 項（共 ' + items.length + ' 項）'
         : '共 ' + items.length + ' 項 · 40 課';
@@ -1794,7 +1855,17 @@
 
     draw('');
     var q = $('#allq');
-    q.addEventListener('input', function(){ draw(this.value); });
+    q.addEventListener('input', function(){ if (ALLPLAY.on) stopAllPlay(); draw(this.value); });
+
+    var pa = $('#allplay');
+    if (pa) pa.addEventListener('click', function(){
+      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+      var rows = list.querySelectorAll('.arow');
+      var items2 = curHit.map(function(it, k){
+        return { audio: audioFor(it.id, 'v' + it.vi), el: rows[k] };
+      });
+      playAllQueued(items2, this);
+    });
   }
 
   function route(){
