@@ -312,6 +312,37 @@
     .lhead h1{font-size:29px}
     .tabs{top:49px}
   }
+  .tools{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px}
+  .tool{display:block; background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:13px 14px; text-decoration:none; color:var(--ink); -webkit-tap-highlight-color:transparent}
+  .tool:active{background:#fbf6ec}
+  .tool svg{width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.7;
+    stroke-linecap:round; stroke-linejoin:round; color:var(--shu)}
+  .tool b{display:block; margin-top:8px; font-size:14.5px; font-weight:600}
+  .tool span{display:block; margin-top:2px; font-size:11.5px; color:var(--muted)}
+  .search{position:sticky; top:0; z-index:6; background:var(--paper); padding:10px 0 8px; margin-top:6px}
+  .search input{width:100%; box-sizing:border-box; padding:11px 14px; font-size:15px; color:var(--ink);
+    background:var(--card); border:1px solid var(--line); border-radius:12px; outline:none;
+    -webkit-appearance:none; font-family:inherit}
+  .search input:focus{border-color:var(--ink2)}
+  .cnt{font-size:12px; color:var(--muted); margin:6px 0 2px}
+  .arow{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:1px solid var(--line)}
+  .arow .ak{min-width:92px}
+  .arow .ak b{display:block; font-size:15px; font-weight:500; font-family:"Hiragino Mincho ProN",serif}
+  .arow .ak span{display:block; font-size:12px; color:var(--muted)}
+  .arow .az{flex:1; min-width:0; font-size:13.5px; color:var(--ink2)}
+  .arow .al{font-size:11px; color:var(--muted); white-space:nowrap}
+  .arow .spk{width:34px; height:34px; flex:0 0 34px}
+  .gacc{border-bottom:1px solid var(--line); padding:11px 2px}
+  .gacc summary{display:flex; gap:8px; align-items:baseline; font-size:14.5px; font-weight:500;
+    cursor:pointer; list-style:none}
+  .gacc summary::-webkit-details-marker{display:none}
+  .gacc summary .gl{margin-left:auto; font-size:11px; color:var(--muted); white-space:nowrap}
+  .gacc p{font-size:13.5px; color:var(--ink2); line-height:1.85; margin:9px 0 0}
+  .gacc .gex{display:flex; gap:8px; align-items:flex-start; font-size:13.5px; margin-top:7px}
+  .gacc .gex .txt{flex:1}
+  .gacc .gex .zh{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+
 </style>
 </head>
 <body>
@@ -322,7 +353,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v22</span>
+    <span class="ver" id="verTag">v23</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -541,6 +572,17 @@
     var pct = overallPct();
     var resumeId = (P.last && av.some(function(l){ return l.id === P.last; })) ? P.last : (av[0] && av[0].id);
     var resumeLabel = '開始第一課';
+    var vocabSeen = {}, vocabTotal = 0, grammarTotal = 0;
+    av.forEach(function(l){
+      var j = lessons[l.id];
+      if (!j) return;
+      (j.vocab || []).forEach(function(v){
+        var sig = (v.kanji || '') + '|' + v.kana + '|' + v.zh;
+        if (vocabSeen[sig]) return;
+        vocabSeen[sig] = 1; vocabTotal++;
+      });
+      grammarTotal += (j.grammar || []).length;
+    });
 
     var books = course.books.map(function(b){
       var rows = b.lessons.map(function(l){
@@ -583,6 +625,16 @@
           (mistakeCount() ? '<button class="linkbtn" id="mkBtn">錯題簿（'+mistakeCount()+'）</button>' : '') +
         '</div>' +
       '</section>' +
+      '<div class="tools">' +
+        '<a class="tool" href="#/all/vocab">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v16H6.5A2.5 2.5 0 0 0 4 21z"/>' +
+          '<path d="M8 7.5h7M8 11h5"/></svg>' +
+          '<b>詞語總表</b><span>'+vocabTotal+' 個單字</span></a>' +
+        '<a class="tool" href="#/all/grammar">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 9.5-9.5a2.1 2.1 0 0 0-3-3L5 16z"/>' +
+          '<path d="M14 6.5l3 3"/><path d="M4.5 20.5l3.5-.7"/></svg>' +
+          '<b>文法總表</b><span>'+grammarTotal+' 節文法</span></a>' +
+      '</div>' +
       books +
       '<p class="note">課程順序參照初級綜合教材的 40 課編排；課名、例句、會話與練習均為自編內容，未採用原書文字與錄音。單字數與句型數為該教材公布之統計，僅作進度參考。</p>';
 
@@ -1483,9 +1535,99 @@
   });
 
   /* ---------- router ---------- */
+  /* ---------- 綜合頁：詞語總表／文法總表 ---------- */
+  function allVocabItems(){
+    var out = [], seen = {};
+    availableLessons().forEach(function(meta){
+      var l = lessons[meta.id]; if (!l || !l.vocab) return;
+      l.vocab.forEach(function(v){
+        var sig = (v.kanji || '') + '|' + v.kana + '|' + v.zh;
+        if (seen[sig]) return;
+        seen[sig] = 1;
+        out.push({ v: v, id: meta.id, no: meta.no, title: meta.title });
+      });
+    });
+    return out;
+  }
+  function allGrammarItems(){
+    var out = [];
+    availableLessons().forEach(function(meta){
+      var l = lessons[meta.id]; if (!l || !l.grammar) return;
+      l.grammar.forEach(function(g){ out.push({ g: g, id: meta.id, no: meta.no, title: meta.title }); });
+    });
+    return out;
+  }
+  function renderAll(kind){
+    var isVocab = kind === 'vocab';
+    var items = isVocab ? allVocabItems() : allGrammarItems();
+    document.title = (isVocab ? '詞語總表' : '文法總表') + ' · 日語階梯';
+    app.innerHTML =
+      '<div class="lhead">' +
+        '<a class="back" href="#/">← 課程地圖</a>' +
+        '<h1>' + (isVocab ? '詞語總表' : '文法總表') +
+          '<span class="k">' + (isVocab ? 'たんご' : 'ぶんぽう') + '</span></h1>' +
+        '<p class="goal">' + (isVocab
+          ? '第 1–40 課的全部單字，可依假名、漢字或中文搜尋；點喇叭聽讀音。'
+          : '第 1–40 課的全部文法，點標題展開說明與例句。') + '</p>' +
+      '</div>' +
+      '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
+        'placeholder="' + (isVocab ? '搜尋假名、漢字或中文' : '搜尋文法標題或例句') + '"></div>' +
+      '<p class="cnt" id="allcnt"></p><div id="alllist"></div>';
+
+    var list = $('#alllist'), cnt = $('#allcnt');
+
+    function draw(q){
+      q = (q || '').trim().toLowerCase();
+      var hit = q ? items.filter(function(it){
+        return it.search.indexOf(q) > -1;
+      }) : items;
+      cnt.textContent = q
+        ? '找到 ' + hit.length + ' 項（共 ' + items.length + ' 項）'
+        : '共 ' + items.length + ' 項 · 40 課';
+      if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
+      if (isVocab){
+        list.innerHTML = hit.map(function(it){
+          var v = it.v;
+          return '<div class="arow">' +
+            '<button class="spk" data-say="' + esc(v.kana) + '" aria-label="播放讀音">' + SPK + '</button>' +
+            '<div class="ak"><b>' + esc(v.kanji || v.kana) + '</b>' +
+              (v.kanji ? '<span>' + esc(v.kana) + '</span>' : '<span>' + esc(v.pos || '') + '</span>') + '</div>' +
+            '<div class="az">' + esc(v.zh) + '</div>' +
+            '<div class="al">' + it.id + '</div></div>';
+        }).join('');
+      } else {
+        list.innerHTML = hit.map(function(it){
+          var g = it.g;
+          var ps = (g.p || []).map(function(t){ return '<p>' + esc(t) + '</p>'; }).join('');
+          var ex = (g.ex || []).map(function(x){
+            return '<div class="gex"><button class="spk" data-say="' + esc(x.kana || x.ja) + '" aria-label="播放例句">' + SPK + '</button>' +
+              '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
+          }).join('');
+          return '<details class="gacc"><summary>' + esc(g.h) +
+            '<span class="gl">' + it.id + '</span></summary>' + ps + ex + '</details>';
+        }).join('');
+      }
+      bindSpeakers(list);
+    }
+
+    /* 先把可搜尋的文字串好，避免每次打字都重建 */
+    items.forEach(function(it){
+      it.search = isVocab
+        ? ((it.v.kanji || '') + ' ' + it.v.kana + ' ' + it.v.zh + ' ' + (it.v.pos || '') + ' ' + it.id).toLowerCase()
+        : (it.g.h + ' ' + (it.g.p || []).join(' ') + ' ' +
+           (it.g.ex || []).map(function(x){ return x.ja + ' ' + x.zh; }).join(' ') + ' ' + it.id).toLowerCase();
+    });
+
+    draw('');
+    var q = $('#allq');
+    q.addEventListener('input', function(){ draw(this.value); });
+  }
+
   function route(){
     stopAudio();
     var h = (location.hash || '#/').replace(/^#/, '');
+    var am = h.match(/^\/all\/(vocab|grammar)/);
+    if (am){ stopAudio(); renderAll(am[1]); return; }
     var m = h.match(/^\/l\/(L\d{2})(?:\/([a-z]+))?/);
     if (m && lessons[m[1]]){
       var tab = m[2] && TABS.some(function(t){ return t[0] === m[2]; }) ? m[2] : 'patterns';
