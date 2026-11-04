@@ -1,0 +1,588 @@
+{
+ "groups": [
+  {
+   "id": "num",
+   "title": "數字",
+   "note": "0–10、100、1000",
+   "items": [
+    {
+     "kanji": "〇",
+     "kana": "ゼロ",
+     "zh": "零",
+     "audio": "audio/seq/num-0.mp3"
+    },
+    {
+     "kanji": "一",
+     "kana": "いち",
+     "zh": "一",
+     "audio": "audio/seq/num-1.mp3"
+    },
+    {
+     "kanji": "二",
+     "kana": "に",
+     "zh": "二",
+     "audio": "audio/seq/num-2.mp3"
+    },
+    {
+     "kanji": "三",
+     "kana": "さん",
+     "zh": "三",
+     "audio": "audio/seq/num-3.mp3"
+    },
+    {
+     "kanji": "四",
+     "kana": "よん",
+     "zh": "四",
+     "audio": "audio/seq/num-4.mp3"
+    },
+    {
+     "kanji": "五",
+     "kana": "ご",
+     "zh": "五",
+     "audio": "audio/seq/num-5.mp3"
+    },
+    {
+     "kanji": "六",
+     "kana": "ろく",
+     "zh": "六",
+     "audio": "audio/seq/num-6.mp3"
+    },
+    {
+     "kanji": "七",
+     "kana": "なな",
+     "zh": "七",
+     "audio": "audio/seq/num-7.mp3"
+    },
+    {
+     "kanji": "八",
+     "kana": "はち",
+     "zh": "八",
+     "audio": "audio/seq/num-8.mp3"
+    },
+    {
+     "kanji": "九",
+     "kana": "きゅう",
+     "zh": "九",
+     "audio": "audio/seq/num-9.mp3"
+    },
+    {
+     "kanji": "十",
+     "kana": "じゅう",
+     "zh": "十",
+     "audio": "audio/seq/num-10.mp3"
+    },
+    {
+     "kanji": "百",
+     "kana": "ひゃく",
+     "zh": "一百",
+     "audio": "audio/seq/num-11.mp3"
+    },
+    {
+     "kanji": "千",
+     "kana": "せん",
+     "zh": "一千",
+     "audio": "audio/seq/num-12.mp3"
+    }
+   ]
+  },
+  {
+   "id": "month",
+   "title": "月份",
+   "note": "一月到十二月（四、七、九特殊讀音）",
+   "items": [
+    {
+     "kanji": "一月",
+     "kana": "いちがつ",
+     "zh": "一月",
+     "audio": "audio/seq/month-0.mp3"
+    },
+    {
+     "kanji": "二月",
+     "kana": "にがつ",
+     "zh": "二月",
+     "audio": "audio/seq/month-1.mp3"
+    },
+    {
+     "kanji": "三月",
+     "kana": "さんがつ",
+     "zh": "三月",
+     "audio": "audio/seq/month-2.mp3"
+    },
+    {
+     "kanji": "四月",
+     "kana": "しがつ",
+     "zh": "四月",
+     "audio": "audio/seq/month-3.mp3"
+    },
+    {
+     "kanji": "五月",
+     "kana": "ごがつ",
+     "zh": "五月",
+     "audio": "audio/seq/month-4.mp3"
+    },
+    {
+     "kanji": "六月",
+     "kana": "ろくがつ",
+     "zh": "六月",
+     "audio": "audio/seq/month-5.mp3"
+    },
+    {
+     "kanji": "七月",
+     "kana": "しちがつ",
+     "zh": "七月",
+     "audio": "audio/seq/month-6.mp3"
+    },
+    {
+     "kanji": "八月",
+     "kana": "はちがつ",
+     "zh": "八月",
+     "audio": "audio/seq/month-7.mp3"
+    },
+    {
+     "kanji": "九月",
+     "kana": "くがつ",
+     "zh": "九月",
+     "audio": "audio/seq/month-8.mp3"
+    },
+    {
+     "kanji": "十月",
+     "kana": "じゅうがつ",
+     "zh": "十月",
+     "audio": "audio/seq/month-9.mp3"
+    },
+    {
+     "kanji": "十一月",
+     "kana": "じゅういちがつ",
+     "zh": "十一月",
+     "audio": "audio/seq/month-10.mp3"
+    },
+    {
+     "kanji": "十二月",
+     "kana": "じゅうにがつ",
+     "zh": "十二月",
+     "audio": "audio/seq/month-11.mp3"
+    }
+   ]
+  },
+  {
+   "id": "day",
+   "title": "日期",
+   "note": "一號到十號用和語讀音；十四、二十、二十四另有讀法",
+   "items": [
+    {
+     "kanji": "一日",
+     "kana": "ついたち",
+     "zh": "一號",
+     "audio": "audio/seq/day-0.mp3"
+    },
+    {
+     "kanji": "二日",
+     "kana": "ふつか",
+     "zh": "二號",
+     "audio": "audio/seq/day-1.mp3"
+    },
+    {
+     "kanji": "三日",
+     "kana": "みっか",
+     "zh": "三號",
+     "audio": "audio/seq/day-2.mp3"
+    },
+    {
+     "kanji": "四日",
+     "kana": "よっか",
+     "zh": "四號",
+     "audio": "audio/seq/day-3.mp3"
+    },
+    {
+     "kanji": "五日",
+     "kana": "いつか",
+     "zh": "五號",
+     "audio": "audio/seq/day-4.mp3"
+    },
+    {
+     "kanji": "六日",
+     "kana": "むいか",
+     "zh": "六號",
+     "audio": "audio/seq/day-5.mp3"
+    },
+    {
+     "kanji": "七日",
+     "kana": "なのか",
+     "zh": "七號",
+     "audio": "audio/seq/day-6.mp3"
+    },
+    {
+     "kanji": "八日",
+     "kana": "ようか",
+     "zh": "八號",
+     "audio": "audio/seq/day-7.mp3"
+    },
+    {
+     "kanji": "九日",
+     "kana": "ここのか",
+     "zh": "九號",
+     "audio": "audio/seq/day-8.mp3"
+    },
+    {
+     "kanji": "十日",
+     "kana": "とおか",
+     "zh": "十號",
+     "audio": "audio/seq/day-9.mp3"
+    },
+    {
+     "kanji": "十四日",
+     "kana": "じゅうよっか",
+     "zh": "十四號",
+     "audio": "audio/seq/day-10.mp3"
+    },
+    {
+     "kanji": "二十日",
+     "kana": "はつか",
+     "zh": "二十號",
+     "audio": "audio/seq/day-11.mp3"
+    },
+    {
+     "kanji": "二十四日",
+     "kana": "にじゅうよっか",
+     "zh": "二十四號",
+     "audio": "audio/seq/day-12.mp3"
+    }
+   ]
+  },
+  {
+   "id": "week",
+   "title": "星期",
+   "note": "月、火、水、木、金、土、日",
+   "items": [
+    {
+     "kanji": "月曜日",
+     "kana": "げつようび",
+     "zh": "星期一",
+     "audio": "audio/seq/week-0.mp3"
+    },
+    {
+     "kanji": "火曜日",
+     "kana": "かようび",
+     "zh": "星期二",
+     "audio": "audio/seq/week-1.mp3"
+    },
+    {
+     "kanji": "水曜日",
+     "kana": "すいようび",
+     "zh": "星期三",
+     "audio": "audio/seq/week-2.mp3"
+    },
+    {
+     "kanji": "木曜日",
+     "kana": "もくようび",
+     "zh": "星期四",
+     "audio": "audio/seq/week-3.mp3"
+    },
+    {
+     "kanji": "金曜日",
+     "kana": "きんようび",
+     "zh": "星期五",
+     "audio": "audio/seq/week-4.mp3"
+    },
+    {
+     "kanji": "土曜日",
+     "kana": "どようび",
+     "zh": "星期六",
+     "audio": "audio/seq/week-5.mp3"
+    },
+    {
+     "kanji": "日曜日",
+     "kana": "にちようび",
+     "zh": "星期日",
+     "audio": "audio/seq/week-6.mp3"
+    }
+   ]
+  },
+  {
+   "id": "hour",
+   "title": "鐘點",
+   "note": "～點；四、七、九特殊讀音",
+   "items": [
+    {
+     "kanji": "一時",
+     "kana": "いちじ",
+     "zh": "一點",
+     "audio": "audio/seq/hour-0.mp3"
+    },
+    {
+     "kanji": "二時",
+     "kana": "にじ",
+     "zh": "兩點",
+     "audio": "audio/seq/hour-1.mp3"
+    },
+    {
+     "kanji": "三時",
+     "kana": "さんじ",
+     "zh": "三點",
+     "audio": "audio/seq/hour-2.mp3"
+    },
+    {
+     "kanji": "四時",
+     "kana": "よじ",
+     "zh": "四點",
+     "audio": "audio/seq/hour-3.mp3"
+    },
+    {
+     "kanji": "五時",
+     "kana": "ごじ",
+     "zh": "五點",
+     "audio": "audio/seq/hour-4.mp3"
+    },
+    {
+     "kanji": "六時",
+     "kana": "ろくじ",
+     "zh": "六點",
+     "audio": "audio/seq/hour-5.mp3"
+    },
+    {
+     "kanji": "七時",
+     "kana": "しちじ",
+     "zh": "七點",
+     "audio": "audio/seq/hour-6.mp3"
+    },
+    {
+     "kanji": "八時",
+     "kana": "はちじ",
+     "zh": "八點",
+     "audio": "audio/seq/hour-7.mp3"
+    },
+    {
+     "kanji": "九時",
+     "kana": "くじ",
+     "zh": "九點",
+     "audio": "audio/seq/hour-8.mp3"
+    },
+    {
+     "kanji": "十時",
+     "kana": "じゅうじ",
+     "zh": "十點",
+     "audio": "audio/seq/hour-9.mp3"
+    },
+    {
+     "kanji": "十一時",
+     "kana": "じゅういちじ",
+     "zh": "十一點",
+     "audio": "audio/seq/hour-10.mp3"
+    },
+    {
+     "kanji": "十二時",
+     "kana": "じゅうにじ",
+     "zh": "十二點",
+     "audio": "audio/seq/hour-11.mp3"
+    }
+   ]
+  },
+  {
+   "id": "minute",
+   "title": "分鐘",
+   "note": "～分；注意促音與半濁音",
+   "items": [
+    {
+     "kanji": "一分",
+     "kana": "いっぷん",
+     "zh": "一分鐘",
+     "audio": "audio/seq/minute-0.mp3"
+    },
+    {
+     "kanji": "二分",
+     "kana": "にふん",
+     "zh": "兩分鐘",
+     "audio": "audio/seq/minute-1.mp3"
+    },
+    {
+     "kanji": "三分",
+     "kana": "さんぷん",
+     "zh": "三分鐘",
+     "audio": "audio/seq/minute-2.mp3"
+    },
+    {
+     "kanji": "四分",
+     "kana": "よんぷん",
+     "zh": "四分鐘",
+     "audio": "audio/seq/minute-3.mp3"
+    },
+    {
+     "kanji": "五分",
+     "kana": "ごふん",
+     "zh": "五分鐘",
+     "audio": "audio/seq/minute-4.mp3"
+    },
+    {
+     "kanji": "六分",
+     "kana": "ろっぷん",
+     "zh": "六分鐘",
+     "audio": "audio/seq/minute-5.mp3"
+    },
+    {
+     "kanji": "七分",
+     "kana": "ななふん",
+     "zh": "七分鐘",
+     "audio": "audio/seq/minute-6.mp3"
+    },
+    {
+     "kanji": "八分",
+     "kana": "はっぷん",
+     "zh": "八分鐘",
+     "audio": "audio/seq/minute-7.mp3"
+    },
+    {
+     "kanji": "九分",
+     "kana": "きゅうふん",
+     "zh": "九分鐘",
+     "audio": "audio/seq/minute-8.mp3"
+    },
+    {
+     "kanji": "十分",
+     "kana": "じゅっぷん",
+     "zh": "十分鐘",
+     "audio": "audio/seq/minute-9.mp3"
+    }
+   ]
+  },
+  {
+   "id": "floor",
+   "title": "樓層",
+   "note": "～階；三、六、八、十有促音或濁音",
+   "items": [
+    {
+     "kanji": "一階",
+     "kana": "いっかい",
+     "zh": "一樓",
+     "audio": "audio/seq/floor-0.mp3"
+    },
+    {
+     "kanji": "二階",
+     "kana": "にかい",
+     "zh": "二樓",
+     "audio": "audio/seq/floor-1.mp3"
+    },
+    {
+     "kanji": "三階",
+     "kana": "さんがい",
+     "zh": "三樓",
+     "audio": "audio/seq/floor-2.mp3"
+    },
+    {
+     "kanji": "四階",
+     "kana": "よんかい",
+     "zh": "四樓",
+     "audio": "audio/seq/floor-3.mp3"
+    },
+    {
+     "kanji": "五階",
+     "kana": "ごかい",
+     "zh": "五樓",
+     "audio": "audio/seq/floor-4.mp3"
+    },
+    {
+     "kanji": "六階",
+     "kana": "ろっかい",
+     "zh": "六樓",
+     "audio": "audio/seq/floor-5.mp3"
+    },
+    {
+     "kanji": "七階",
+     "kana": "ななかい",
+     "zh": "七樓",
+     "audio": "audio/seq/floor-6.mp3"
+    },
+    {
+     "kanji": "八階",
+     "kana": "はっかい",
+     "zh": "八樓",
+     "audio": "audio/seq/floor-7.mp3"
+    },
+    {
+     "kanji": "九階",
+     "kana": "きゅうかい",
+     "zh": "九樓",
+     "audio": "audio/seq/floor-8.mp3"
+    },
+    {
+     "kanji": "十階",
+     "kana": "じゅっかい",
+     "zh": "十樓",
+     "audio": "audio/seq/floor-9.mp3"
+    },
+    {
+     "kanji": "地下",
+     "kana": "ちか",
+     "zh": "地下",
+     "audio": "audio/seq/floor-10.mp3"
+    }
+   ]
+  },
+  {
+   "id": "people",
+   "title": "人數",
+   "note": "～人；一人、二人用和語讀音",
+   "items": [
+    {
+     "kanji": "一人",
+     "kana": "ひとり",
+     "zh": "一個人",
+     "audio": "audio/seq/people-0.mp3"
+    },
+    {
+     "kanji": "二人",
+     "kana": "ふたり",
+     "zh": "兩個人",
+     "audio": "audio/seq/people-1.mp3"
+    },
+    {
+     "kanji": "三人",
+     "kana": "さんにん",
+     "zh": "三個人",
+     "audio": "audio/seq/people-2.mp3"
+    },
+    {
+     "kanji": "四人",
+     "kana": "よにん",
+     "zh": "四個人",
+     "audio": "audio/seq/people-3.mp3"
+    },
+    {
+     "kanji": "五人",
+     "kana": "ごにん",
+     "zh": "五個人",
+     "audio": "audio/seq/people-4.mp3"
+    },
+    {
+     "kanji": "六人",
+     "kana": "ろくにん",
+     "zh": "六個人",
+     "audio": "audio/seq/people-5.mp3"
+    },
+    {
+     "kanji": "七人",
+     "kana": "しちにん",
+     "zh": "七個人",
+     "audio": "audio/seq/people-6.mp3"
+    },
+    {
+     "kanji": "八人",
+     "kana": "はちにん",
+     "zh": "八個人",
+     "audio": "audio/seq/people-7.mp3"
+    },
+    {
+     "kanji": "九人",
+     "kana": "きゅうにん",
+     "zh": "九個人",
+     "audio": "audio/seq/people-8.mp3"
+    },
+    {
+     "kanji": "十人",
+     "kana": "じゅうにん",
+     "zh": "十個人",
+     "audio": "audio/seq/people-9.mp3"
+    }
+   ]
+  }
+ ]
+}
