@@ -354,9 +354,8 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <a class="chip" href="voices.html" title="選擇朗讀人聲">人聲</a>
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v30</span>
+    <span class="ver" id="verTag">v31</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -390,17 +389,10 @@
      所以兩者都要看，否則永遠認不出增強版。 */
   function voiceTag(v){ return ((v && v.name) || '') + ' ' + ((v && v.voiceURI) || ''); }
   function isEnhancedVoice(v){ return /enhanced|premium|neural|siri/i.test(voiceTag(v)); }
-  var VKEY = 'ngs-voice';
-  function savedVoiceURI(){ try{ return localStorage.getItem(VKEY) || ''; }catch(e){ return ''; } }
   function pickVoice(){
     if (!('speechSynthesis' in window)) return null;
     var vs = (speechSynthesis.getVoices() || []).filter(function(v){ return /^ja/i.test(v.lang); });
     if (!vs.length){ return VOICE.ja; }
-    var want = savedVoiceURI();
-    if (want){
-      var chosen = vs.filter(function(v){ return v.voiceURI === want; })[0];
-      if (chosen){ VOICE.ja = chosen; return chosen; }
-    }
     function rank(v){
       var n = voiceTag(v), s = 0;
       if (/enhanced/i.test(n)) s += 60;
@@ -535,7 +527,7 @@
     /* 只有真的見到「增強／優質」人聲才指定；否則交給系統用
        「設定 → 輔助使用 → 語音內容 → 聲音 → 日文」選定的人聲 */
     /* iOS 只會暴露 compact／super-compact；super-compact 明顯失真，寧可交回系統預設 */
-    if (v && /super-compact/i.test(voiceTag(v)) && !savedVoiceURI() && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
+    if (v && /super-compact/i.test(voiceTag(v)) && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
     if (v) u.voice = v;
     u.rate = rate || (slow ? 0.68 : 0.92);
     u.pitch = 1;
