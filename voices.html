@@ -35,6 +35,7 @@
   font-size:15px;padding:12px 20px;width:100%;margin-bottom:12px;font-family:var(--sans)">試聽：不指定聲音（系統預設）</button>
 <div id="list"></div>
 <p class="note" id="summary"></p>
+<p class="note"><b>「選用」會把該人聲寫入 App 的設定，之後所有朗讀都用它（包括課文、例句、聽力）。</b>再按一次取消，回到自動選擇。</p>
 <p class="note">判斷是否增強版要看 voiceURI（例如 com.apple.voice.enhanced.ja-JP.Kyoko），因為 iOS 的名字一樣寫「Kyoko」。
 若清單內全部都不是增強版，App 不會指定人聲，會沿用你在 設定 → 輔助使用 → 語音內容 → 聲音 → 日文 所選的那一個。</p>
 
@@ -60,20 +61,32 @@
   function render(){
     var all = window.speechSynthesis ? speechSynthesis.getVoices() : [];
     var ja = all.filter(function(v){ return /^ja/i.test(v.lang); });
-    var best = ja.slice().sort(function(a, b){ return rankName(b) - rankName(a); })[0];
+    var want = localStorage.getItem('ngs-voice') || '';
+    var chosen = want ? ja.filter(function(v){ return v.voiceURI === want; })[0] : null;
+    var best = chosen || ja.slice().sort(function(a, b){ return rankName(b) - rankName(a); })[0];
     summary.textContent = '全部聲音 ' + all.length + ' 個；日語 ' + ja.length + ' 個。'
       + (ja.some(enhanced) ? '清單內有增強人聲。' : '清單內沒有增強人聲。')
-      + (best ? '　App 會使用：' + best.name + (enhanced(best) ? '（增強）' : '（非增強 → 交回系統預設）') : '');
+      + (best ? '　App 會使用：' + best.name + (enhanced(best) ? '（增強）' : '（非增強）') + (chosen ? '（已選）' : '') : '');
     if (!ja.length){ list.innerHTML = '<div class="card note">目前沒有日語聲音。</div>'; return; }
     list.innerHTML = '<div class="card">' + ja.map(function(v, i){
-      return '<div class="v"><div class="n"><b>' + v.name + (enhanced(v) ? '（增強）' : '') + '</b>' +
+      var picked = localStorage.getItem('ngs-voice') === v.voiceURI;
+      return '<div class="v"><div class="n"><b>' + v.name + (enhanced(v) ? '（增強）' : '') + (picked ? ' · 已選' : '') + '</b>' +
         '<span>' + v.lang + ' · ' + (v.localService ? '本機' : '線上') + (v.default ? ' · 預設' : '') + '</span>' +
         '<span style="display:block;word-break:break-all;font-size:11px;color:var(--line)">' + (v.voiceURI || '') + '</span></div>' +
-        '<button data-i="' + i + '">試聽</button></div>';
+        '<button data-i="' + i + '">試聽</button>' +
+        '<button class="pick" data-uri="' + (v.voiceURI || '') + '">' + (picked ? '取消' : '選用') + '</button></div>';
     }).join('') + '</div>';
-    Array.prototype.forEach.call(list.querySelectorAll('button'), function(b){
+    Array.prototype.forEach.call(list.querySelectorAll('button[data-i]'), function(b){
       b.addEventListener('click', function(){
         speak(ja[+b.getAttribute('data-i')]);
+      });
+    });
+    Array.prototype.forEach.call(list.querySelectorAll('button.pick'), function(b){
+      b.addEventListener('click', function(){
+        var uri = b.getAttribute('data-uri');
+        if (localStorage.getItem('ngs-voice') === uri) localStorage.removeItem('ngs-voice');
+        else localStorage.setItem('ngs-voice', uri);
+        render();
       });
     });
   }

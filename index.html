@@ -317,6 +317,7 @@
     border-radius:12px; padding:8px 10px; text-decoration:none; color:var(--ink);
     -webkit-tap-highlight-color:transparent}
   .tool:active{background:#fbf6ec}
+  .btn2.onplay{background:var(--shu); border-color:var(--shu); color:#fffdf8}
   .tool svg{width:16px; height:16px; flex:0 0 16px; fill:none; stroke:currentColor; stroke-width:1.8;
     stroke-linecap:round; stroke-linejoin:round; color:var(--shu)}
   .tool b{display:block; font-size:12.5px; font-weight:600; line-height:1.3}
@@ -353,8 +354,9 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
+    <a class="chip" href="voices.html" title="選擇朗讀人聲">人聲</a>
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v24</span>
+    <span class="ver" id="verTag">v25</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -388,10 +390,17 @@
      所以兩者都要看，否則永遠認不出增強版。 */
   function voiceTag(v){ return ((v && v.name) || '') + ' ' + ((v && v.voiceURI) || ''); }
   function isEnhancedVoice(v){ return /enhanced|premium|neural|siri/i.test(voiceTag(v)); }
+  var VKEY = 'ngs-voice';
+  function savedVoiceURI(){ try{ return localStorage.getItem(VKEY) || ''; }catch(e){ return ''; } }
   function pickVoice(){
     if (!('speechSynthesis' in window)) return null;
     var vs = (speechSynthesis.getVoices() || []).filter(function(v){ return /^ja/i.test(v.lang); });
     if (!vs.length){ return VOICE.ja; }
+    var want = savedVoiceURI();
+    if (want){
+      var chosen = vs.filter(function(v){ return v.voiceURI === want; })[0];
+      if (chosen){ VOICE.ja = chosen; return chosen; }
+    }
     function rank(v){
       var n = voiceTag(v), s = 0;
       if (/enhanced/i.test(n)) s += 60;
@@ -495,11 +504,13 @@
 
   var playingEl = null;
   function stopAudio(){
+    stopSequence();
     if ('speechSynthesis' in window) speechSynthesis.cancel();
     if (typeof curAudio !== 'undefined' && curAudio){ curAudio.pause(); curAudio = null; }
     if (playingEl) playingEl.classList.remove('playing');
     playingEl = null;
     Array.prototype.forEach.call(document.querySelectorAll('.spk.playing'), function(b){ b.classList.remove('playing'); });
+    Array.prototype.forEach.call(document.querySelectorAll('.line.playing'), function(l){ l.classList.remove('playing'); });
   }
   function utter(text, rate, onend){
     if (!('speechSynthesis' in window)){ toast('此裝置不支援語音合成'); return null; }
@@ -510,7 +521,7 @@
     var v = VOICE.ja;
     /* 只有真的見到「增強／優質」人聲才指定；否則交給系統用
        「設定 → 輔助使用 → 語音內容 → 聲音 → 日文」選定的人聲 */
-    if (v && !isEnhancedVoice(v) && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
+    if (v && !isEnhancedVoice(v) && !savedVoiceURI() && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
     if (v) u.voice = v;
     u.rate = rate || (slow ? 0.68 : 0.92);
     u.pitch = 1;
@@ -1155,9 +1166,13 @@
     host.addEventListener('click', function(e){
       var p = e.target.closest('[data-play]');
       if (p){
+        if (PLAYSEQ.on && PLAYSEQ.btn === p){ stopAudio(); return; }   /* 再按一次＝停止 */
         var d = lesson.dialogues[+p.dataset.play];
         var box = host.querySelector('[data-dlg="'+p.dataset.play+'"]');
         stopAudio();
+        PLAYSEQ.on = true; PLAYSEQ.btn = p;
+        p.textContent = '■ 停止';
+        p.classList.add('onplay');
         playLines(d.lines, box, 0);
         return;
       }
@@ -1170,8 +1185,17 @@
       }
     });
   }
+  var PLAYSEQ = { on:false, btn:null };
+  function stopSequence(){
+    PLAYSEQ.on = false;
+    if (PLAYSEQ.btn){
+      PLAYSEQ.btn.textContent = '▶ 播放整段';
+      PLAYSEQ.btn.classList.remove('onplay');
+    }
+    PLAYSEQ.btn = null;
+  }
   function playLines(lines, box, i){
-    if (i >= lines.length || !box){ return; }
+    if (!PLAYSEQ.on || i >= lines.length || !box){ return; }
     var row = box.querySelector('.line[data-line="'+i+'"]');
     if (row) row.classList.add('playing');
     var u = utter(lines[i].kana || lines[i].ja, null, function(){
