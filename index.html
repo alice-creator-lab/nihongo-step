@@ -356,7 +356,7 @@
   <div class="hact">
     <a class="chip" href="voices.html" title="選擇朗讀人聲">人聲</a>
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v28</span>
+    <span class="ver" id="verTag">v29</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -514,6 +514,17 @@
     Array.prototype.forEach.call(document.querySelectorAll('.spk.playing'), function(b){ b.classList.remove('playing'); });
     Array.prototype.forEach.call(document.querySelectorAll('.line.playing'), function(l){ l.classList.remove('playing'); });
   }
+  /* 朗讀用的文字：用原句（有漢字）讓 TTS 判斷助詞「は＝わ」，
+     但人名先換成假名，避免「李」被讀成「すもも」 */
+  var SPEAK_NAMES = [[/田中/g, 'たなか'], [/鈴木/g, 'すずき'], [/佐藤/g, 'さとう'], [/山田/g, 'やまだ'],
+                     [/林/g, 'りん'], [/李/g, 'り'], [/王/g, 'おう']];
+  function ttsText(o){
+    var t = (o && (o.ja || o.kana)) || '';
+    if (typeof o === 'string') t = o;
+    SPEAK_NAMES.forEach(function(p){ t = t.replace(p[0], p[1]); });
+    return t;
+  }
+
   function utter(text, rate, onend){
     if (!('speechSynthesis' in window)){ toast('此裝置不支援語音合成'); return null; }
     var u = new SpeechSynthesisUtterance(String(text).replace(/[～~]/g, ''));
@@ -766,7 +777,7 @@
           h += '<div class="exrow"><div class="txt">' +
                '<div class="ja">'+esc(x.ja)+'</div>' +
                '<div class="zh">'+esc(x.zh)+'</div></div>' +
-               '<button class="spk" data-say="'+esc(x.kana || x.ja)+'"' +
+               '<button class="spk" data-say="'+esc(ttsText(x))+'"' +
                (au ? ' data-audio="'+esc(au)+'"' : '') + ' aria-label="播放例句">'+SPK+'</button></div>';
         });
         h += '</div>';
@@ -912,7 +923,7 @@
           h += '<div class="exrow"><div class="txt">' +
                '<div class="ja">'+esc(x.ja)+'</div>' +
                '<div class="zh">'+esc(x.zh)+'</div></div>' +
-               '<button class="spk" data-say="'+esc(x.kana || x.ja)+'" aria-label="播放例句">'+SPK+'</button></div>';
+               '<button class="spk" data-say="'+esc(ttsText(x))+'" aria-label="播放例句">'+SPK+'</button></div>';
         });
         h += '</div>';
       }
@@ -1158,7 +1169,7 @@
                  '<div class="ja">'+esc(x.ja)+'</div><div class="zh">'+esc(x.zh)+'</div>' +
                '</div>' +
                '<div class="lacts">' +
-                 '<button class="spk" data-say="'+esc(x.kana || x.ja)+'"' +
+                 '<button class="spk" data-say="'+esc(ttsText(x)) +'"' +
                    (audioFor(l.id, 'd'+di+'-l'+li) ? ' data-audio="'+esc(audioFor(l.id, 'd'+di+'-l'+li)) +'"' : '') +
                    ' aria-label="播放這一句">'+SPK+'</button>' +
                  '<button class="spk sm" data-speak="'+di+'-'+li+'" aria-label="跟讀評分">'+MIC+'</button>' +
@@ -1213,7 +1224,7 @@
       if (row) row.classList.remove('playing');
       playLines(lines, box, i + 1);
     })) return;
-    var u = utter(lines[i].kana || lines[i].ja, null, function(){
+    var u = utter(ttsText(lines[i]), null, function(){
       if (row) row.classList.remove('playing');
       playLines(lines, box, i + 1);
     });
@@ -1640,7 +1651,7 @@
           var g = it.g;
           var ps = (g.p || []).map(function(t){ return '<p>' + esc(t) + '</p>'; }).join('');
           var ex = (g.ex || []).map(function(x){
-            return '<div class="gex"><button class="spk" data-say="' + esc(x.kana || x.ja) + '" aria-label="播放例句">' + SPK + '</button>' +
+            return '<div class="gex"><button class="spk" data-say="' + esc(ttsText(x)) + '" aria-label="播放例句">' + SPK + '</button>' +
               '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
           }).join('');
           return '<details class="gacc"><summary>' + esc(g.h) +
