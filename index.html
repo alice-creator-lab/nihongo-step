@@ -356,7 +356,7 @@
   <div class="hact">
     <a class="chip" href="voices.html" title="選擇朗讀人聲">人聲</a>
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v29</span>
+    <span class="ver" id="verTag">v30</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1702,7 +1702,8 @@
     if (curAudio){ try{ curAudio.pause(); }catch(e){} curAudio = null; }
     if ('speechSynthesis' in window) speechSynthesis.cancel();
     try{
-      var a = new Audio(url);
+      /* 音檔加了版本查詢字串，避免瀏覽器沿用舊快取 */
+      var a = new Audio(url + (url.indexOf('?') < 0 ? '?' : '&') + 'v=' + (AUDIO.v || 1));
       curAudio = a;
       if (el) el.classList.add('playing');
       a.onended = function(){

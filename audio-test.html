@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>發音測試 · 日語階梯</title>
+<style>
+  :root{--paper:#fbf7f0;--ink:#2b2622;--ink2:#5b524a;--muted:#8a7f74;--shu:#b03a2e;--line:#e8dfd2}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC",sans-serif;
+       padding:20px 18px 60px;line-height:1.7}
+  h1{font-size:20px;margin:0 0 6px}
+  p{font-size:13.5px;color:var(--ink2);margin:0 0 14px}
+  .card{background:#fffdf8;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+  .lbl{font-size:12px;color:var(--muted);letter-spacing:.06em}
+  .txt{font-size:16px;margin:4px 0 10px}
+  button{width:100%;border:none;border-radius:12px;background:var(--shu);color:#fffdf8;
+         font-size:15px;padding:12px;font-family:inherit}
+  button:active{opacity:.85}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:10px}
+</style>
+</head>
+<body>
+<h1>發音測試：それは ha 定 wa？</h1>
+<p>同一句「あのう、それは辞書ですか」，三個版本。請逐個按，回答哪一個把「それは」讀成 <b>sore-wa</b>。</p>
+
+<div class="card">
+  <div class="lbl">A</div>
+  <div class="txt">純假名：あのう、それはじしょですか。</div>
+  <button data-f="audio/_test-a.mp3">播放 A</button>
+</div>
+
+<div class="card">
+  <div class="lbl">B</div>
+  <div class="txt">漢字原文：あのう、それは辞書ですか。</div>
+  <button data-f="audio/_test-b.mp3">播放 B</button>
+</div>
+
+<div class="card">
+  <div class="lbl">C</div>
+  <div class="txt">助詞改寫：あのう、それわ辞書ですか。</div>
+  <button data-f="audio/_test-c.mp3">播放 C</button>
+</div>
+
+<p class="hint">三個檔都是 Microsoft Nanami 神經語音即時生成，沒有經過 App 的播放邏輯，所以可以排除快取與 App 設定的影響。</p>
+
+<script>
+var cur=null;
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button[data-f]'); if(!b) return;
+  if(cur){cur.pause();cur=null;}
+  cur=new Audio(b.getAttribute('data-f')+'?t='+Date.now());
+  cur.play();
+});
+</script>
+</body>
+</html>
