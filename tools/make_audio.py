@@ -73,6 +73,17 @@ def main():
                 rel = f"audio/{lid}-{key}.mp3"
                 m[key] = rel
                 jobs.append(("ja-JP-NanamiNeural", tts_text(ex["ja"]), os.path.join(ROOT, rel)))
+        for gi, sec in enumerate(les.get("grammar", [])):
+            for ei, ex in enumerate(sec.get("ex", [])):
+                key = f"g{gi}-e{ei}"
+                rel = f"audio/{lid}-{key}.mp3"
+                m[key] = rel
+                jobs.append(("ja-JP-NanamiNeural", tts_text(ex["ja"]), os.path.join(ROOT, rel)))
+        for li, it in enumerate(les.get("listening", [])):
+            key = f"l{li}"
+            rel = f"audio/{lid}-{key}.mp3"
+            m[key] = rel
+            jobs.append(("ja-JP-NanamiNeural", tts_text(it["ja"]), os.path.join(ROOT, rel)))
 
     todo = [j for j in jobs if force or not (os.path.exists(j[2]) and os.path.getsize(j[2]) > 2000)]
     print(f"共 {len(jobs)} 段，待生成 {len(todo)} 段", flush=True)

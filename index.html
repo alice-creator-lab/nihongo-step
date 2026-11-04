@@ -376,7 +376,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v35</span>
+    <span class="ver" id="verTag">v36</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -777,7 +777,7 @@
     host.addEventListener('click', function(e){
       var b = e.target.closest('.spk[data-say]'); if (!b) return;
       var au = b.getAttribute('data-audio');
-      if (au && !slow){ if (playFile(au, null, b)) return; }
+      if (au && playFile(au, null, b, slow ? 0.7 : 1)) return;
       speak(b.getAttribute('data-say'), b);
     });
   }
@@ -937,16 +937,19 @@
 
   function segGrammar(l){
     var h = '<p class="secnote">文法說明可以當作課前預習，也可以做完練習後回來對照。</p>';
-    l.grammar.forEach(function(g){
+    l.grammar.forEach(function(g, gi){
       h += '<section class="gsec"><h3>'+esc(g.h)+'</h3>';
       (g.p||[]).forEach(function(p){ h += '<p>'+esc(p)+'</p>'; });
       if (g.ex && g.ex.length){
         h += '<div class="ex">';
-        g.ex.forEach(function(x){
+        g.ex.forEach(function(x, ei){
+          var au = audioFor(l.id, 'g' + gi + '-e' + ei);
           h += '<div class="exrow"><div class="txt">' +
                '<div class="ja">'+esc(x.ja)+'</div>' +
                '<div class="zh">'+esc(x.zh)+'</div></div>' +
-               '<button class="spk" data-say="'+esc(ttsText(x))+'" aria-label="播放例句">'+SPK+'</button></div>';
+               '<button class="spk" data-say="'+esc(ttsText(x))+'"' +
+               (au ? ' data-audio="'+esc(au)+'"' : '') +
+               ' aria-label="播放例句">'+SPK+'</button></div>';
         });
         h += '</div>';
       }
@@ -1019,10 +1022,16 @@
       '</div>' +
       '<p class="secnote" style="text-align:center">目前答對 '+s.ok+' 題</p>';
 
-    speak(item.kana || item.ja);
+    var lau = audioFor(l.id, 'l' + l.listening.indexOf(item));
+    function playItem(rate){
+      if (lau && playFile(lau, null, null, rate)) return;
+      speak(item.kana || item.ja);
+    }
 
-    $('#lplay').addEventListener('click', function(){ speak(item.kana || item.ja); });
-    $('#lslow').addEventListener('click', function(){ speakAt(item.kana || item.ja, 0.62); });
+    playItem(1);
+
+    $('#lplay').addEventListener('click', function(){ playItem(1); });
+    $('#lslow').addEventListener('click', function(){ playItem(0.65); });
 
     $('#lchoices').addEventListener('click', function(e){
       var b = e.target.closest('.choice'); if (!b || s.answered) return;
@@ -1044,7 +1053,7 @@
         addMistake({ key:l.id+':l:'+s.i, kind:'listen', prompt:item.ja, answer:item.choices[item.answer] });
         fb.className = 'fb bad';
         fb.innerHTML = '✗ 再聽一次<span class="corr">'+esc(item.ja)+'　'+esc(item.choices[item.answer])+'</span>';
-        speakAt(item.kana || item.ja, 0.8);
+        playItem(1);
       }
       var nw = $('#lnext');
       nw.innerHTML = '<div class="row2"><button class="btn2" id="lnextBtn">' +
@@ -1243,10 +1252,10 @@
     var row = box.querySelector('.line[data-line="'+i+'"]');
     if (row) row.classList.add('playing');
     var au = lines[i].audio;
-    if (au && !slow && playFile(au, function(){
+    if (au && playFile(au, function(){
       if (row) row.classList.remove('playing');
       playLines(lines, box, i + 1);
-    })) return;
+    }, null, slow ? 0.7 : 1)) return;
     var u = utter(ttsText(lines[i]), null, function(){
       if (row) row.classList.remove('playing');
       playLines(lines, box, i + 1);
@@ -1627,7 +1636,7 @@
     var out = [];
     availableLessons().forEach(function(meta){
       var l = lessons[meta.id]; if (!l || !l.grammar) return;
-      l.grammar.forEach(function(g){ out.push({ g: g, id: meta.id, no: meta.no, title: meta.title }); });
+      l.grammar.forEach(function(g, gi){ out.push({ g: g, gi: gi, id: meta.id, no: meta.no, title: meta.title }); });
     });
     return out;
   }
@@ -1754,8 +1763,10 @@
         list.innerHTML = hit.map(function(it){
           var g = it.g;
           var ps = (g.p || []).map(function(t){ return '<p>' + esc(t) + '</p>'; }).join('');
-          var ex = (g.ex || []).map(function(x){
-            return '<div class="gex"><button class="spk" data-say="' + esc(ttsText(x)) + '" aria-label="播放例句">' + SPK + '</button>' +
+          var ex = (g.ex || []).map(function(x, ei){
+            var au = audioFor(it.id, 'g' + it.gi + '-e' + ei);
+            return '<div class="gex"><button class="spk" data-say="' + esc(ttsText(x)) + '"' +
+              (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放例句">' + SPK + '</button>' +
               '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
           }).join('');
           return '<details class="gacc"><summary>' + esc(g.h) +
@@ -1802,13 +1813,15 @@
     var m = AUDIO[id];
     return (m && m[key]) || null;
   }
-  function playFile(url, onend, el){
+  function playFile(url, onend, el, rate){
     /* 不呼叫 stopAudio：連續播放時要保留 PLAYSEQ 狀態 */
     if (curAudio){ try{ curAudio.pause(); }catch(e){} curAudio = null; }
     if ('speechSynthesis' in window) speechSynthesis.cancel();
     try{
       /* 音檔加了版本查詢字串，避免瀏覽器沿用舊快取 */
       var a = new Audio(url + (url.indexOf('?') < 0 ? '?' : '&') + 'v=' + (AUDIO.v || 1));
+      /* 慢速改成放慢同一段人聲，不再改用機械合成音 */
+      a.playbackRate = (rate && rate > 0) ? rate : 1;
       curAudio = a;
       if (el) el.classList.add('playing');
       a.onended = function(){
