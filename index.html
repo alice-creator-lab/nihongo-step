@@ -322,7 +322,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v20</span>
+    <span class="ver" id="verTag">v21</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -340,6 +340,7 @@
   var PKEY = 'ngs-progress-v1';
   var SKEY = 'ngs-slow';
 
+  var SEGS = 6;               /* 六段；TABS 在這行之後才定義，所以另外留一個常數 */
   var P = loadProgress();
   var course = null;
   var lessons = {};           /* id -> lesson json */
@@ -385,7 +386,14 @@
   function loadProgress(){
     try{
       var p = JSON.parse(localStorage.getItem(PKEY) || 'null');
-      if (p && typeof p === 'object' && p.lessons) return p;
+      if (p && typeof p === 'object' && p.lessons){
+        /* 舊資料：六段都看過但未有 done 旗標的，統一補上，避免「已完成課數」與百分比不一致 */
+        Object.keys(p.lessons).forEach(function(id){
+          var r = p.lessons[id] || {};
+          if ((r.segs || []).length >= SEGS) r.done = true;
+        });
+        return p;
+      }
     }catch(e){}
     return { v:1, lessons:{}, last:null };
   }
@@ -507,13 +515,18 @@
     return out;
   }
   function doneCount(){
-    return availableLessons().filter(function(l){ return (P.lessons[l.id]||{}).done; }).length;
+    return availableLessons().filter(function(l){ return lessonPct(l.id) >= 100; }).length;
   }
   /* 每課進度＝已看段數 ÷ 六段；標記完成即 100% */
   function lessonPct(id){
     var r = P.lessons[id] || {};
     if (r.done) return 100;
     return Math.round(((r.segs || []).length / TABS.length) * 100);
+  }
+  /* 100% 一律寫「完成」，不再顯示百分比 */
+  function pctLabel(id){
+    var p = lessonPct(id);
+    return p >= 100 ? '完成 ✓' : '進度 ' + p + '%';
   }
   function overallPct(){
     var av = availableLessons();
@@ -534,8 +547,9 @@
         var r = P.lessons[l.id] || {};
         if (l.available){
           var p = lessonPct(l.id);
-          var cls = 'lrow open' + (r.done ? ' done' : '') + (p > 0 && !r.done ? ' has' : '');
-          var st = r.done ? '100% ✓' : p + '%';
+          var fin = p >= 100;
+          var cls = 'lrow open' + (fin ? ' done' : '') + (p > 0 && !fin ? ' has' : '');
+          var st = fin ? '完成 ✓' : p + '%';
           return '<a class="'+cls+'" href="#/l/'+l.id+'">' +
                    '<span class="no">'+String(l.no).padStart(2,'0')+'</span>' +
                    '<span class="ttl">'+esc(l.title)+'</span>' +
@@ -592,7 +606,7 @@
     app.innerHTML =
       '<div class="lhead">' +
         '<a class="back" href="#/">← 課程地圖</a>' +
-        '<p class="eyebrow" id="lprog" style="margin-top:14px">第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+' · 進度 '+lessonPct(lesson.id)+'%</p>' +
+        '<p class="eyebrow" id="lprog" style="margin-top:14px">第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+' · '+pctLabel(lesson.id)+'</p>' +
         '<h1>'+esc(lesson.title)+'<span class="k">'+esc(lesson.titleJa)+'</span></h1>' +
         '<p class="goal">'+esc(lesson.goal)+'</p>' +
       '</div>' +
@@ -613,6 +627,11 @@
     });
     $('#finish').addEventListener('click', function(){
       var r = rec(lesson.id);
+      /* 六段都看過就已經是完成，不允許取消，否則會與課程地圖的「完成」矛盾 */
+      if (r.done && (r.segs || []).length >= TABS.length){
+        toast('六段都已看過，完成狀態不能取消');
+        return;
+      }
       r.done = !r.done;
       saveProgress();
       this.classList.toggle('done', r.done);
@@ -626,7 +645,10 @@
 
   function markSeen(id, tab){
     var r = rec(id);
-    if (r.segs.indexOf(tab) < 0){ r.segs.push(tab); saveProgress(); }
+    if (r.segs.indexOf(tab) < 0){ r.segs.push(tab); }
+    /* 六段全部看過＝完成，與「標記本課完成」同一狀態，避免數字與百分比不一致 */
+    if (r.segs.length >= TABS.length) r.done = true;
+    saveProgress();
     var b = $('.tab[data-tab="'+tab+'"]');
     if (b) b.classList.add('seen');
   }
@@ -645,7 +667,9 @@
     host.innerHTML = html;
     markSeen(lesson.id, tab);
     var lp = $('#lprog');
-    if (lp) lp.textContent = '第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+' · 進度 '+lessonPct(lesson.id)+'%';
+    if (lp) lp.textContent = '第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+' · '+pctLabel(lesson.id);
+    var fb2 = $('#finish');
+    if (fb2 && rec(lesson.id).done){ fb2.classList.add('done'); fb2.textContent = '已完成 ✓（點擊取消）'; }
     bindSpeakers(host);
     if (tab === 'exercises') renderExerciseMode(lesson);
     if (tab === 'dialogue') wireDialogue(host, lesson);
