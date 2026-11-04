@@ -376,7 +376,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v34</span>
+    <span class="ver" id="verTag">v35</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1677,7 +1677,6 @@
       '<div class="lhead">' +
         '<a class="back" href="#/">← 課程地圖</a>' +
         '<h1>順序表<span class="k">じゅんじょ</span></h1>' +
-        '<p class="goal">數字、月份、日期、星期、鐘點、分鐘、樓層、人數，整組順序列出。按「播放全部」一次聽完，或按右邊喇叭逐個聽。</p>' +
       '</div><div id="seqhost"><p class="secnote">載入中…</p></div>';
     loadSeq(function(d){
       var host = document.getElementById('seqhost');
@@ -1685,7 +1684,7 @@
       if (!d || !d.groups){ host.innerHTML = '<p class="secnote">載入失敗，請重新整理。</p>'; return; }
       host.innerHTML = d.groups.map(function(g){
         return '<section class="sgrp">' +
-          '<div class="shead"><div><b>' + g.title + '</b><span>' + g.note + '</span></div>' +
+          '<div class="shead"><div><b>' + g.title + '</b></div>' +
             '<button class="btn2 splay" data-g="' + g.id + '">▶ 播放全部</button></div>' +
           '<div class="stable">' + g.items.map(function(it, i){
             return '<div class="srow" id="srow-' + g.id + '-' + i + '">' +
