@@ -803,14 +803,16 @@
               '</div>' +
               '<button class="btn2 pri" id="startCards">開始</button></div>' +
             '<p class="secnote">共 '+l.vocab.length+' 個字詞。點單字右邊的喇叭聽發音；慢速可在右上角開啟。</p><div class="vlist">';
-    l.vocab.forEach(function(v){
+    l.vocab.forEach(function(v, vi){
       var head = v.kanji ? '<span class="vkanji">'+esc(v.kanji)+'</span><span class="vkana">'+esc(v.kana)+'</span>'
                          : '<span class="vkanji">'+esc(v.kana)+'</span>';
       h += '<div class="vrow"><div class="vmain">' +
              '<div class="vtop">'+head+'</div>' +
              '<div class="vbtm"><span class="vzh">'+esc(v.zh)+'</span><span class="pos">'+esc(v.pos)+'</span></div>' +
            '</div>' +
-           '<button class="spk" data-say="'+esc(v.kana)+'" aria-label="播放發音">'+SPK+'</button></div>';
+           '<button class="spk" data-say="'+esc(v.kana)+'"' +
+             (audioFor(l.id,'v'+vi) ? ' data-audio="'+esc(audioFor(l.id,'v'+vi))+'"' : '') +
+             ' aria-label="播放發音">'+SPK+'</button></div>';
     });
     h += '</div>';
     return h;
@@ -849,7 +851,9 @@
     host.innerHTML =
       '<div class="cardmeta">第 '+(r.i+1)+' ／ '+r.deck.length+' 題 · '+(r.dir==='jp2zh'?'日→中':'中→日')+'</div>' +
       '<div class="fcard" id="fcard">' +
-        '<button class="spk cardspk" data-say="'+esc(v.kana)+'" aria-label="播放發音" style="position:absolute;margin:0;right:14px;top:14px">'+SPK+'</button>' +
+        '<button class="spk cardspk" data-say="'+esc(v.kana)+'"' +
+          (audioFor(l.id,'v'+l.vocab.indexOf(v)) ? ' data-audio="'+esc(audioFor(l.id,'v'+l.vocab.indexOf(v)))+'"' : '') +
+          ' aria-label="播放發音" style="position:absolute;margin:0;right:14px;top:14px">'+SPK+'</button>' +
         '<div class="fq">'+esc(front)+'</div>' +
         (sub ? '<div class="fsub">'+esc(sub)+'</div>' : '') +
         '<div class="fa hide" id="fback">'+esc(back)+'</div>' +
@@ -1591,7 +1595,7 @@
         var sig = (v.kanji || '') + '|' + v.kana + '|' + v.zh;
         if (seen[sig]) return;
         seen[sig] = 1;
-        out.push({ v: v, id: meta.id, no: meta.no, title: meta.title });
+        out.push({ v: v, id: meta.id, no: meta.no, title: meta.title, vi: l.vocab.indexOf(v) });
       });
     });
     return out;
@@ -1636,7 +1640,9 @@
         list.innerHTML = hit.map(function(it){
           var v = it.v;
           return '<div class="arow">' +
-            '<button class="spk" data-say="' + esc(v.kana) + '" aria-label="播放讀音">' + SPK + '</button>' +
+            '<button class="spk" data-say="' + esc(v.kana) + '"' +
+              (audioFor(it.id, 'v' + it.vi) ? ' data-audio="' + esc(audioFor(it.id, 'v' + it.vi)) + '"' : '') +
+              ' aria-label="播放讀音">' + SPK + '</button>' +
             '<div class="ak"><b>' + esc(v.kanji || v.kana) + '</b>' +
               (v.kanji ? '<span>' + esc(v.kana) + '</span>' : '<span>' + esc(v.pos || '') + '</span>') + '</div>' +
             '<div class="az">' + esc(v.zh) + '</div>' +

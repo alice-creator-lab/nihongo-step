@@ -61,6 +61,12 @@ def main():
                 rel = f"audio/{lid}-{key}.mp3"
                 m[key] = rel
                 jobs.append((voice_for(line.get("who")), tts_text(line["ja"]), os.path.join(ROOT, rel)))
+        for vi, v in enumerate(les.get("vocab", [])):
+            key = f"v{vi}"
+            rel = f"audio/{lid}-{key}.mp3"
+            m[key] = rel
+            # 單字用假名合成，避免漢字多讀音（例如 一日 ついたち／いちにち）
+            jobs.append(("ja-JP-NanamiNeural", v["kana"], os.path.join(ROOT, rel)))
         for pi, pat in enumerate(les.get("patterns", [])):
             for ei, ex in enumerate(pat.get("ex", [])):
                 key = f"p{pi}-e{ei}"
