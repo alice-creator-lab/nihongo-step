@@ -52,7 +52,7 @@
     box-shadow:inset 0 1px 0 #fff, 0 18px 40px -32px rgba(70,52,20,.7)}
   .eyebrow{margin:0; font-size:11px; letter-spacing:.22em; color:var(--shu); text-transform:uppercase}
   .hero h1{margin:10px 0 6px; font-size:24px; line-height:1.45; font-weight:600; letter-spacing:.01em}
-  .hero .sub{margin:0; font-size:13px; color:var(--ink2); line-height:1.8}
+  .hero .sub{margin:8px 0 0; font-size:13.5px; color:var(--ink2); line-height:1.8}
   .bar{margin:16px 0 6px; height:6px; border-radius:99px; background:#e9e0ce; overflow:hidden}
   .bar i{display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,var(--shu),#d5854f); transition:width .4s ease}
   .hrow{display:flex; align-items:center; gap:12px; margin-top:14px; flex-wrap:wrap}
@@ -322,7 +322,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v21</span>
+    <span class="ver" id="verTag">v22</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -575,7 +575,6 @@
     app.innerHTML =
       '<section class="hero">' +
         '<p class="eyebrow">共 '+av.length+' 課已開放 · 4 冊 40 課</p>' +
-        '<h1>從第一課開始，<br>一步一步學。</h1>' +
         '<p class="sub">每課分六段：句型、單字、文法、練習、會話、文化。<br>進度只存在這部裝置，不會上傳。</p>' +
         '<div class="bar"><i style="width:'+pct+'%"></i></div>' +
         '<div class="hrow">' +
