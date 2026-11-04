@@ -356,7 +356,7 @@
   <div class="hact">
     <a class="chip" href="voices.html" title="選擇朗讀人聲">人聲</a>
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v27</span>
+    <span class="ver" id="verTag">v28</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -747,6 +747,8 @@
     host.dataset.spk = '1';
     host.addEventListener('click', function(e){
       var b = e.target.closest('.spk[data-say]'); if (!b) return;
+      var au = b.getAttribute('data-audio');
+      if (au && !slow){ if (playFile(au, null, b)) return; }
       speak(b.getAttribute('data-say'), b);
     });
   }
@@ -759,11 +761,13 @@
            '<div class="pnote">'+esc(p.note)+'</div>';
       if (p.ex && p.ex.length){
         h += '<div class="ex">';
-        p.ex.forEach(function(x){
+        p.ex.forEach(function(x, ei){
+          var au = audioFor(l.id, 'p' + l.patterns.indexOf(p) + '-e' + ei);
           h += '<div class="exrow"><div class="txt">' +
                '<div class="ja">'+esc(x.ja)+'</div>' +
                '<div class="zh">'+esc(x.zh)+'</div></div>' +
-               '<button class="spk" data-say="'+esc(x.kana || x.ja)+'" aria-label="播放例句">'+SPK+'</button></div>';
+               '<button class="spk" data-say="'+esc(x.kana || x.ja)+'"' +
+               (au ? ' data-audio="'+esc(au)+'"' : '') + ' aria-label="播放例句">'+SPK+'</button></div>';
         });
         h += '</div>';
       }
@@ -1154,7 +1158,9 @@
                  '<div class="ja">'+esc(x.ja)+'</div><div class="zh">'+esc(x.zh)+'</div>' +
                '</div>' +
                '<div class="lacts">' +
-                 '<button class="spk" data-say="'+esc(x.kana || x.ja)+'" aria-label="播放這一句">'+SPK+'</button>' +
+                 '<button class="spk" data-say="'+esc(x.kana || x.ja)+'"' +
+                   (audioFor(l.id, 'd'+di+'-l'+li) ? ' data-audio="'+esc(audioFor(l.id, 'd'+di+'-l'+li)) +'"' : '') +
+                   ' aria-label="播放這一句">'+SPK+'</button>' +
                  '<button class="spk sm" data-speak="'+di+'-'+li+'" aria-label="跟讀評分">'+MIC+'</button>' +
                '</div></div></div>';
       });
@@ -1172,6 +1178,7 @@
         if (PLAYSEQ.on && PLAYSEQ.btn === p){ stopAudio(); return; }   /* 再按一次＝停止 */
         var d = lesson.dialogues[+p.dataset.play];
         var box = host.querySelector('[data-dlg="'+p.dataset.play+'"]');
+        d.lines.forEach(function(x, li){ x.audio = audioFor(lesson.id, 'd' + p.dataset.play + '-l' + li); });
         stopAudio();
         PLAYSEQ.on = true; PLAYSEQ.btn = p;
         p.textContent = '■ 停止';
@@ -1201,6 +1208,11 @@
     if (!PLAYSEQ.on || i >= lines.length || !box){ return; }
     var row = box.querySelector('.line[data-line="'+i+'"]');
     if (row) row.classList.add('playing');
+    var au = lines[i].audio;
+    if (au && !slow && playFile(au, function(){
+      if (row) row.classList.remove('playing');
+      playLines(lines, box, i + 1);
+    })) return;
     var u = utter(lines[i].kana || lines[i].ja, null, function(){
       if (row) row.classList.remove('playing');
       playLines(lines, box, i + 1);
@@ -1668,7 +1680,38 @@
     renderMap();
   }
 
+  /* ---------- 預先製作的人聲檔（data/audio.json 有記錄的句子優先用音檔） ---------- */
+  var AUDIO = {};
+  function audioFor(id, key){
+    var m = AUDIO[id];
+    return (m && m[key]) || null;
+  }
+  function playFile(url, onend, el){
+    /* 不呼叫 stopAudio：連續播放時要保留 PLAYSEQ 狀態 */
+    if (curAudio){ try{ curAudio.pause(); }catch(e){} curAudio = null; }
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    try{
+      var a = new Audio(url);
+      curAudio = a;
+      if (el) el.classList.add('playing');
+      a.onended = function(){
+        if (el) el.classList.remove('playing');
+        if (curAudio === a) curAudio = null;
+        if (onend) onend();
+      };
+      a.onerror = function(){
+        if (el) el.classList.remove('playing');
+        if (curAudio === a) curAudio = null;
+        if (onend) onend();
+      };
+      var pr = a.play();
+      if (pr && pr.catch) pr.catch(function(){});
+      return true;
+    }catch(e){ return false; }
+  }
+
   function boot(){
+    getJSON('data/audio.json').then(function(m){ AUDIO = m || {}; }).catch(function(){});
     getJSON('data/course.json').then(function(c){
       course = c;
       var ids = availableLessons().map(function(l){ return l.id; });
