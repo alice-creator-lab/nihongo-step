@@ -44,6 +44,29 @@ for (const book of course.books || []) {
 }
 if (total !== 40) errors.push(`全課程應為 40 課，實際 ${total}`);
 
+/* 全 40 課的漢字→假名詞庫：句子裡的漢字詞，讀音必須跟單字表一致 */
+const NAMES = { 李: 'り', 林: 'りん', 王: 'おう', 田中: 'たなか', 山田: 'やまだ', 佐藤: 'さとう', 鈴木: 'すずき' };
+const GLOSS = Object.assign({}, NAMES);
+for (const book of course.books || []) {
+  for (const meta of book.lessons.filter((l) => l.available)) {
+    try {
+      const les = JSON.parse(readFileSync(join(ROOT, `data/lesson-${meta.id}.json`), 'utf8'));
+      (les.vocab || []).forEach((v) => { if (v.kanji) GLOSS[v.kanji] = v.kana; });
+    } catch (e) { /* 缺檔由下面主迴圈報錯 */ }
+  }
+}
+
+/* 找出句子裡沒有任何單字表讀音可對照的漢字詞 */
+function checkGloss(rel, where, ja) {
+  if (!ja) return;
+  const runs = ja.match(/[\u4e00-\u9fff々]+/g) || [];
+  runs.forEach((run) => {
+    if (GLOSS[run]) return;
+    const covered = Object.keys(GLOSS).some((k) => k.length > 1 && run.indexOf(k) >= 0);
+    if (!covered) warn.push(`${rel} ${where} 的「${run}」不在任何一課單字表，讀音無法自動核對`);
+  });
+}
+
 for (const book of course.books || []) {
   for (const meta of book.lessons.filter((l) => l.available)) {
     const rel = `data/lesson-${meta.id}.json`;
@@ -84,17 +107,39 @@ for (const book of course.books || []) {
     }
     if ((les.vocab || []).length < 15) warn.push(`${rel} 單字只有 ${les.vocab.length} 個，初級每課通常 20 個以上`);
     /* 用單字表與人名表反查讀音：句子裡出現某個漢字詞，假名就要含它的讀音 */
-    const NAMES = { 李: 'り', 林: 'りん', 王: 'おう', 田中: 'たなか', 山田: 'やまだ', 佐藤: 'さとう', 鈴木: 'すずき' };
-    const pairs = {};
-    (les.vocab || []).forEach((v) => { if (v.kanji) pairs[v.kanji] = v.kana; });
-    Object.assign(pairs, NAMES);
+    const pairs = Object.assign({}, GLOSS);
+    /* 逐個漢字詞核對：先看整個詞是否在詞庫，否則只比對兩個字以上的詞，
+       避免「上手」中的「手」、「時間」中的「間」被單字讀音誤判 */
+    /* 連濁容錯：カード会社 → がいしゃ、十分 → じゅっぷん */
+    const VOICED = { か:'が', き:'ぎ', く:'ぐ', け:'げ', こ:'ご', さ:'ざ', し:'じ', す:'ず', せ:'ぜ', そ:'ぞ',
+                     た:'だ', ち:'ぢ', つ:'づ', て:'で', と:'ど', は:'ば', ひ:'び', ふ:'ぶ', へ:'べ', ほ:'ぼ' };
+    /* 同一個詞有兩種讀音（一日＝ついたち／いちにち、何＝なに／なん） */
+    const ALT = { 一日: ['いちにち', 'ついたち'], 何: ['なに', 'なん'], 上: ['うえ', 'あげ', 'あが'], 分: ['ふん', 'ぷん', 'ぶん'] };
+    function kanaHas(kana, reading, word) {
+      if (kana.indexOf(reading) >= 0) return true;
+      if ((ALT[word] || []).some((a) => kana.indexOf(a) >= 0)) return true;
+      const v = VOICED[reading[0]];
+      return !!v && kana.indexOf(v + reading.slice(1)) >= 0;
+    }
     function checkReadings(where, ja, kana) {
       if (!ja || !kana) return;
-      Object.keys(pairs).forEach((word) => {
-        if (!ja.includes(word)) return;
-        if (kana.indexOf(pairs[word]) < 0) {
-          errors.push(`${rel} ${where} 的假名疑似讀錯：「${word}」應讀「${pairs[word]}」，但 kana 是「${kana}」`);
+      const runs = ja.match(/[\u4e00-\u9fff々]+/g) || [];
+      runs.forEach((run) => {
+        /* 只核對兩個字以上的詞，或整個人名（單字漢字在複合詞中讀音常變） */
+        const nameKey = Object.keys(NAMES).find((n) => n === run);
+        const word = pairs[run] && (run.length >= 2 || nameKey) ? run : null;
+        if (word) {
+          if (!kanaHas(kana, pairs[word], word)) {
+            errors.push(`${rel} ${where} 的假名疑似讀錯：「${word}」應讀「${pairs[word]}」，但 kana 是「${kana}」`);
+          }
+          return;
         }
+        Object.keys(pairs).forEach((w) => {
+          if (w.length < 2 || run.indexOf(w) < 0) return;
+          if (!kanaHas(kana, pairs[w], w)) {
+            errors.push(`${rel} ${where} 的假名疑似讀錯：「${w}」應讀「${pairs[w]}」，但 kana 是「${kana}」`);
+          }
+        });
       });
     }
 
@@ -105,7 +150,7 @@ for (const book of course.books || []) {
       if (KANJI.test(kana) && !KANJI.test(ja)) errors.push(`${rel} ${where} 的 kana 含有漢字：${kana}`);
       if (kana === ja && KANJI.test(ja)) errors.push(`${rel} ${where} 的 kana 與 ja 相同，應改為假名讀音`);
     }
-    function both(where, x) { checkKana(where, x.ja, x.kana); checkReadings(where, x.ja, x.kana); }
+    function both(where, x) { checkKana(where, x.ja, x.kana); checkReadings(where, x.ja, x.kana); checkGloss(rel, where, x.ja); }
     (les.patterns || []).forEach((p, i) => (p.ex || []).forEach((x, j) => both(`patterns[${i}].ex[${j}]`, x)));
     (les.grammar || []).forEach((g, i) => (g.ex || []).forEach((x, j) => both(`grammar[${i}].ex[${j}]`, x)));
     (les.dialogues || []).forEach((d, i) => (d.lines || []).forEach((x, j) => both(`dialogues[${i}].lines[${j}]`, x)));
@@ -127,7 +172,9 @@ for (const book of course.books || []) {
 }
 
 function report() {
-  for (const w of warn) console.warn('提示：' + w);
+  const shown = warn.slice(0, 25);
+  for (const w of shown) console.warn('提示：' + w);
+  if (warn.length > shown.length) console.warn(`提示：另有 ${warn.length - shown.length} 項漢字不在單字表（不影響校驗）`);
   for (const e of errors) console.error('錯誤：' + e);
   console.log(errors.length ? `\n校驗失敗：${errors.length} 個錯誤` : `\n校驗通過：${ids.size} 課、${course.books.length} 冊`);
   return errors.length ? 1 : 0;
