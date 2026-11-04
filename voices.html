@@ -35,8 +35,8 @@
   font-size:15px;padding:12px 20px;width:100%;margin-bottom:12px;font-family:var(--sans)">試聽：不指定聲音（系統預設）</button>
 <div id="list"></div>
 <p class="note" id="summary"></p>
-<p class="note">如果清單內只有「Kyoko」而沒有「Kyoko (Enhanced)」，代表 Safari 沒有把增強人聲開放給網頁；此時「不指定聲音」會沿用你在
-設定 → 輔助使用 → 語音內容 → 聲音 → 日文 所選的人聲。</p>
+<p class="note">判斷是否增強版要看 voiceURI（例如 com.apple.voice.enhanced.ja-JP.Kyoko），因為 iOS 的名字一樣寫「Kyoko」。
+若清單內全部都不是增強版，App 不會指定人聲，會沿用你在 設定 → 輔助使用 → 語音內容 → 聲音 → 日文 所選的那一個。</p>
 
 <script>
 (function(){
@@ -44,15 +44,31 @@
   var list = document.getElementById('list');
   var summary = document.getElementById('summary');
 
+  /* 與 App 相同的判斷：名字＋voiceURI 一併看，iOS 的增強版差別在 voiceURI */
+  function tag(v){ return (v.name || '') + ' ' + (v.voiceURI || ''); }
+  function enhanced(v){ return /enhanced|premium|neural|siri/i.test(tag(v)); }
+  function rankName(v){
+    var n = tag(v), s = 0;
+    if (/enhanced/i.test(n)) s += 60;
+    if (/premium|neural|siri/i.test(n)) s += 50;
+    if (/Kyoko|O-ren|Oren|Hattori|Otoya/i.test(n)) s += 20;
+    if (/JP/i.test(v.lang)) s += 3;
+    if (!v.localService) s += 1;
+    return s;
+  }
+
   function render(){
     var all = window.speechSynthesis ? speechSynthesis.getVoices() : [];
     var ja = all.filter(function(v){ return /^ja/i.test(v.lang); });
+    var best = ja.slice().sort(function(a, b){ return rankName(b) - rankName(a); })[0];
     summary.textContent = '全部聲音 ' + all.length + ' 個；日語 ' + ja.length + ' 個。'
-      + (ja.some(function(v){ return /enhanced|premium/i.test(v.name); }) ? '清單內有增強人聲。' : '清單內沒有增強人聲。');
+      + (ja.some(enhanced) ? '清單內有增強人聲。' : '清單內沒有增強人聲。')
+      + (best ? '　App 會使用：' + best.name + (enhanced(best) ? '（增強）' : '（非增強 → 交回系統預設）') : '');
     if (!ja.length){ list.innerHTML = '<div class="card note">目前沒有日語聲音。</div>'; return; }
     list.innerHTML = '<div class="card">' + ja.map(function(v, i){
-      return '<div class="v"><div class="n"><b>' + v.name + '</b>' +
-        '<span>' + v.lang + ' · ' + (v.localService ? '本機' : '線上') + (v.default ? ' · 預設' : '') + '</span></div>' +
+      return '<div class="v"><div class="n"><b>' + v.name + (enhanced(v) ? '（增強）' : '') + '</b>' +
+        '<span>' + v.lang + ' · ' + (v.localService ? '本機' : '線上') + (v.default ? ' · 預設' : '') + '</span>' +
+        '<span style="display:block;word-break:break-all;font-size:11px;color:var(--line)">' + (v.voiceURI || '') + '</span></div>' +
         '<button data-i="' + i + '">試聽</button></div>';
     }).join('') + '</div>';
     Array.prototype.forEach.call(list.querySelectorAll('button'), function(b){

@@ -322,7 +322,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v19</span>
+    <span class="ver" id="verTag">v20</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -350,20 +350,30 @@
   ];
 
   var VOICE = { ja: null };
+  /* iOS 把「增強版」人聲的名字列成跟基本版一樣（都是 Kyoko），
+     差別在 voiceURI，例如 com.apple.voice.enhanced.ja-JP.Kyoko，
+     所以兩者都要看，否則永遠認不出增強版。 */
+  function voiceTag(v){ return ((v && v.name) || '') + ' ' + ((v && v.voiceURI) || ''); }
+  function isEnhancedVoice(v){ return /enhanced|premium|neural|siri/i.test(voiceTag(v)); }
   function pickVoice(){
-    if (!('speechSynthesis' in window)) return;
+    if (!('speechSynthesis' in window)) return null;
     var vs = (speechSynthesis.getVoices() || []).filter(function(v){ return /^ja/i.test(v.lang); });
-    if (!vs.length){ VOICE.ja = null; return; }
-    /* 優先已下載的增強／優質人聲，其次常見的日語女聲 */
+    if (!vs.length){ return VOICE.ja; }
     function rank(v){
-      var n = (v.name || ''), s = 0;
-      if (/enhanced|premium|neural|siri/i.test(n)) s += 40;
+      var n = voiceTag(v), s = 0;
+      if (/enhanced/i.test(n)) s += 60;
+      if (/premium|neural|siri/i.test(n)) s += 50;
       if (/Kyoko|O-ren|Oren|Hattori|Otoya/i.test(n)) s += 20;
       if (/JP/i.test(v.lang)) s += 3;
       if (!v.localService) s += 1;
       return s;
     }
-    VOICE.ja = vs.sort(function(a,b){ return rank(b) - rank(a); })[0];
+    var best = vs.slice().sort(function(a,b){ return rank(b) - rank(a); })[0];
+    VOICE.ja = best;
+    return best;
+  }
+  if (location.search.indexOf('dbg=1') >= 0){
+    window.__voice = { pick: pickVoice, isEnhanced: isEnhancedVoice, get: function(){ return VOICE.ja; } };
   }
   if ('speechSynthesis' in window){
     pickVoice();
@@ -400,13 +410,29 @@
   function saveMistakes(){
     try{ localStorage.setItem(MKEY, JSON.stringify(M)); }catch(e){}
   }
+  /* 同一題／同一個字只留一筆：先按 key，再按內容簽名（舊資料可能 key 不同） */
+  function mistakeSig(x){ return (x.kind||'') + '|' + (x.prompt||'') + '|' + (x.answer||'') + '|' + (x.sub||''); }
+  function dedupeMistakes(){
+    var byKey = {}, bySig = {}, out = [];
+    M.items.forEach(function(x){
+      var sig = mistakeSig(x);
+      var hit = byKey[x.key] || bySig[sig];
+      if (hit){ hit.n = (hit.n||1) + (x.n||1); hit.at = Math.max(hit.at||0, x.at||0); return; }
+      byKey[x.key] = x; bySig[sig] = x; out.push(x);
+    });
+    M.items = out;
+  }
+  dedupeMistakes();
+  saveMistakes();
   function addMistake(o){
-    var hit = M.items.filter(function(x){ return x.key === o.key; })[0];
+    var sig = mistakeSig(o);
+    var hit = M.items.filter(function(x){ return x.key === o.key || mistakeSig(x) === sig; })[0];
     if (hit){ hit.n = (hit.n||1) + 1; hit.at = Date.now(); }
     else {
       M.items.unshift({ key:o.key, kind:o.kind, prompt:o.prompt, answer:o.answer, sub:o.sub||'', at:Date.now(), n:1 });
       if (M.items.length > 120) M.items.length = 120;
     }
+    dedupeMistakes();
     saveMistakes();
   }
   function mistakeCount(){ return M.items.length; }
@@ -440,11 +466,11 @@
     var u = new SpeechSynthesisUtterance(String(text).replace(/[～~]/g, ''));
     u.lang = 'ja-JP';
     /* 聲音清單有時要等第一次互動才齊全 */
-    if (!VOICE.ja) pickVoice();
+    pickVoice();
     var v = VOICE.ja;
-    /* iOS Safari 不會列出「增強」人聲：只有在清單真的見到增強版才指定，
-       否則交給系統用「設定 → 輔助使用 → 聲音」選定的預設日語人聲 */
-    if (v && !/enhanced|premium|neural/i.test(v.name || '') && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
+    /* 只有真的見到「增強／優質」人聲才指定；否則交給系統用
+       「設定 → 輔助使用 → 語音內容 → 聲音 → 日文」選定的人聲 */
+    if (v && !isEnhancedVoice(v) && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
     if (v) u.voice = v;
     u.rate = rate || (slow ? 0.68 : 0.92);
     u.pitch = 1;
