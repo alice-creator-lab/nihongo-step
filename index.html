@@ -376,7 +376,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v36</span>
+    <span class="ver" id="verTag">v37</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -563,6 +563,14 @@
     if (!u) return;
     if (btn){ btn.classList.add('playing'); playingEl = btn; u.onend = function(){ btn.classList.remove('playing'); }; }
     if (el){ el.classList.add('playing'); playingEl = el; u.onend = function(){ el.classList.remove('playing'); }; }
+  }
+
+  /* 會話句子優先用預製人聲（漢字原句合成，助詞「は」讀 wa）；
+     沒有音檔才改用系統合成，且用漢字原句而非假名 */
+  function speakLine(l, di, li, btn){
+    var au = audioFor(l.id, 'd' + di + '-l' + li);
+    if (au && playFile(au, null, btn, slow ? 0.7 : 1)) return;
+    speak(ttsText(l.dialogues[di].lines[li]), btn);
   }
 
   function esc(s){
@@ -1357,7 +1365,7 @@
       '<p class="secnote">「自動辨識」在手機瀏覽器內執行，第一次需下載約 40MB 模型；音訊不會上傳。</p>' +
       '<div class="cbtns" style="margin-top:10px"><button class="btn2" id="spkBack">回會話</button></div>';
 
-    $('#spkModel').addEventListener('click', function(){ speak(line.kana || line.ja); });
+    $('#spkModel').addEventListener('click', function(){ speakLine(l, di, li, this); });
     $('#spkBack').addEventListener('click', function(){
       if (spkState.rec){ try{ spkState.rec.stop(); }catch(e){} spkState.rec = null; }
       stopAudio();
@@ -1566,7 +1574,7 @@
     var again = $('#spkAgain');
     if (again) again.addEventListener('click', function(){ if (retry) retry(); });
     var m2 = $('#spkModel2');
-    if (m2) m2.addEventListener('click', function(){ speak(line.kana || line.ja); });
+    if (m2) m2.addEventListener('click', function(){ speakLine(l, di, li, this); });
   }
 
   function segCulture(l){

@@ -155,6 +155,17 @@ async def main():
     out["對話 慢速"] = await js("[window.__played.slice(-1)[0], window.__rates.slice(-1)[0]]")
     await js("localStorage.removeItem('ngs-slow'); 1")
 
+    # 6) 跟讀：示範按鈕也要用會話人聲（假名文字交給系統合成會讀成 ha）
+    await visit("#/l/L01/dialogue", 2.5)
+    await wait_until("document.querySelector('[data-speak]')")
+    await js("document.querySelector('[data-speak]').click(); 1")
+    await wait_until("document.getElementById('spkModel')")
+    await js(INSTR)
+    await js("document.getElementById('spkModel').click(); 1")
+    await pump(1.5)
+    out["跟讀 示範"] = await js("[window.__played.slice(-1)[0], window.__rates.slice(-1)[0]]")
+    out["跟讀 用機械聲"] = await js("window.__played.some(x=>x.indexOf('TTS:')===0)")
+
     out["頁面錯誤"] = await js("(window.__errs||[]).length")
     print(json.dumps(out, ensure_ascii=False, indent=1))
     proc.terminate()
