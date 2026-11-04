@@ -92,6 +92,7 @@ async def main():
     INSTR = ("(function(){ window.__played=[]; window.__rates=[]; window.__cur=null;"
              "var p=HTMLMediaElement.prototype.play;"
              "HTMLMediaElement.prototype.play=function(){window.__cur=this; window.__played.push(String(this.src||'').split('/audio/').pop());"
+             "window.__times=window.__times||[]; window.__times.push(Date.now());"
              "window.__rates.push(this.playbackRate); return p.apply(this,arguments);};"
              "var s=window.speechSynthesis; if(s){var q=s.speak.bind(s); s.speak=function(u){window.__played.push('TTS:'+u.text); q(u);};}"
              "return 1; })()")
@@ -206,6 +207,14 @@ async def main():
     await js("(function(){var s=[].find.call(document.querySelectorAll('.sgrp'),function(g){return g.textContent.indexOf('百\u30fb千\u30fb萬')>=0;}); s.querySelector('.splay').click(); return 1;})()")
     await pump(1.0)
     out["順序表 播放金額"] = await js("[window.__played.slice(-1)[0], document.querySelectorAll('.srow.playing').length]")
+    # 量「播放全部」節奏：ひとつ 10 項連續播放 6 秒內播到第幾項、平均間隔
+    await js("(function(){try{window.__times=[]}catch(e){} return 1;})()")
+    await js("(function(){var s=[].find.call(document.querySelectorAll('.sgrp'),function(g){return g.textContent.indexOf('ひとつ')>=0;}); s.querySelector('.splay').click(); return 1;})()")
+    await pump(6.0)
+    out["ひとつ 6 秒內播段數"] = await js("window.__played.length")
+    out["ひとつ 平均間隔(秒)"] = await js("(function(){var t=window.__times; if(t.length<2) return null; var g=[]; for(var i=1;i<t.length;i++) g.push(t[i]-t[i-1]); return Math.round(g.reduce(function(a,b){return a+b},0)/g.length)/1000;})()")
+    await js("(function(){var s=[].find.call(document.querySelectorAll('.sgrp'),function(g){return g.textContent.indexOf('ひとつ')>=0;}); s.querySelector('.splay').click(); return 1;})()")
+    await pump(0.5)
 
     out["頁面錯誤"] = await js("(window.__errs||[]).length")
     print(json.dumps(out, ensure_ascii=False, indent=1))
