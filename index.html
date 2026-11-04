@@ -356,7 +356,7 @@
   <div class="hact">
     <a class="chip" href="voices.html" title="選擇朗讀人聲">人聲</a>
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v26</span>
+    <span class="ver" id="verTag">v27</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -405,6 +405,8 @@
       var n = voiceTag(v), s = 0;
       if (/enhanced/i.test(n)) s += 60;
       if (/premium|neural|siri/i.test(n)) s += 50;
+      if (/super-compact/i.test(n)) s -= 40;      /* iOS 的 super-compact 音質明顯較差 */
+      else if (/compact/i.test(n)) s += 12;
       if (/Kyoko|O-ren|Oren|Hattori|Otoya/i.test(n)) s += 20;
       if (/JP/i.test(v.lang)) s += 3;
       if (!v.localService) s += 1;
@@ -521,7 +523,8 @@
     var v = VOICE.ja;
     /* 只有真的見到「增強／優質」人聲才指定；否則交給系統用
        「設定 → 輔助使用 → 語音內容 → 聲音 → 日文」選定的人聲 */
-    if (v && !isEnhancedVoice(v) && !savedVoiceURI() && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
+    /* iOS 只會暴露 compact／super-compact；super-compact 明顯失真，寧可交回系統預設 */
+    if (v && /super-compact/i.test(voiceTag(v)) && !savedVoiceURI() && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
     if (v) u.voice = v;
     u.rate = rate || (slow ? 0.68 : 0.92);
     u.pitch = 1;
