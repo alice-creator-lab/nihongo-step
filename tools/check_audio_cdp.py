@@ -196,6 +196,17 @@ async def main():
     await pump(0.6)
     out["課內單字 停止"] = await js("[document.getElementById('vplayall').textContent, document.querySelectorAll('#seg .vrow.playing').length]")
 
+    # 9) 順序表：新分組與播放
+    await visit("#/seq", 3)
+    await wait_until("document.querySelectorAll('.sgrp').length")
+    out["順序表 分組數"] = await js("document.querySelectorAll('.sgrp').length")
+    out["順序表 ひとつ"] = await js("(function(){var s=[].find.call(document.querySelectorAll('.sgrp'),function(g){return g.textContent.indexOf('ひとつ')>=0;}); return s? s.querySelectorAll('.srow').length : -1;})()")
+    out["順序表 金額變音"] = await js("(function(){var s=[].find.call(document.querySelectorAll('.sgrp'),function(g){return g.textContent.indexOf('百\u30fb千\u30fb萬')>=0;}); return s? s.querySelectorAll('.srow').length : -1;})()")
+    await js(INSTR)
+    await js("(function(){var s=[].find.call(document.querySelectorAll('.sgrp'),function(g){return g.textContent.indexOf('百\u30fb千\u30fb萬')>=0;}); s.querySelector('.splay').click(); return 1;})()")
+    await pump(1.0)
+    out["順序表 播放金額"] = await js("[window.__played.slice(-1)[0], document.querySelectorAll('.srow.playing').length]")
+
     out["頁面錯誤"] = await js("(window.__errs||[]).length")
     print(json.dumps(out, ensure_ascii=False, indent=1))
     proc.terminate()
