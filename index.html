@@ -11,7 +11,8 @@
 <style>
   :root{
     --paper:#f6f2ea; --card:#fffdf8; --ink:#221e19; --ink2:#5d5549; --muted:#98907f;
-    --line:#e5dccb; --shu:#b03a2e; --ai:#31507a; --gold:#8c6a2c;
+    --line:#e0d3bc; --shu:#b03a2e; --ai:#31507a; --gold:#8c6a2c;
+    --sand:#f0e4d1; --sand2:#e6d7bf;   /* 次要按鈕底色（不用白） */
     --serif:"Hiragino Mincho ProN","Yu Mincho","Songti TC","Noto Serif CJK TC",serif;
     --sans:-apple-system,"PingFang TC","Hiragino Sans","Noto Sans CJK TC","Microsoft JhengHei",sans-serif;
   }
@@ -41,7 +42,7 @@
   .brand .b1{font-family:var(--serif); font-size:15px; letter-spacing:.18em}
   .brand .b2{font-size:12.5px; color:var(--muted); letter-spacing:.12em}
   .hact{display:flex; align-items:center; gap:6px}
-  .chip{font-family:var(--sans); font-size:12px; color:var(--ink2); background:#fffdf8;
+  .chip{font-family:var(--sans); font-size:12px; color:var(--ink2); background:var(--sand);
     border:1px solid var(--line); border-radius:999px; padding:6px 11px; line-height:1}
   .chip[aria-pressed="true"]{background:var(--ink); color:#fffdf8; border-color:var(--ink)}
   .ver{font-size:10.5px; color:var(--muted); letter-spacing:.08em; padding-left:2px}
@@ -122,9 +123,9 @@
   .exrow .zh{font-size:12.5px; color:var(--muted); margin-top:2px}
 
   .spk{flex:0 0 auto; width:30px; height:30px; border-radius:50%; border:1px solid var(--line);
-    background:#fffdf8; display:inline-flex; align-items:center; justify-content:center; color:var(--ink2);
+    background:var(--sand); display:inline-flex; align-items:center; justify-content:center; color:var(--ink2);
     padding:0; margin-top:2px}
-  .spk:active{background:#f1e9db}
+  .spk:active{background:var(--sand2)}
   .spk svg{width:15px; height:15px; fill:currentColor}
   .spk.playing{background:var(--ink); color:#fffdf8; border-color:var(--ink)}
 
@@ -149,7 +150,7 @@
   .eitem .n{font-size:11.5px; color:var(--shu); letter-spacing:.08em}
   .eitem .q{flex:1; font-size:15.5px; line-height:1.75}
   .eitem .hint{font-size:11.5px; color:var(--muted); margin:6px 0 0 24px}
-  .ansbtn{appearance:none; margin-top:11px; border:1px solid var(--line); background:#fffdf8; color:var(--ink2);
+  .ansbtn{appearance:none; margin-top:11px; border:1px solid var(--line); background:var(--sand); color:var(--ink2);
     font-family:var(--sans); font-size:12.5px; padding:7px 14px; border-radius:999px}
   .ans{display:none; margin-top:10px; padding:11px 13px; background:#f5efe3; border-left:3px solid var(--shu);
     border-radius:0 10px 10px 0; font-family:var(--serif); font-size:15.5px; line-height:1.75}
@@ -180,7 +181,7 @@
   .qinfo{flex:1; min-width:130px}
   .qinfo b{display:block; font-size:14px; font-weight:600}
   .qinfo span{font-size:11.5px; color:var(--muted)}
-  .seg2{display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:#fffdf8}
+  .seg2{display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--sand)}
   .seg2 button{appearance:none; border:0; background:transparent; font-family:var(--sans); font-size:12px;
     color:var(--ink2); padding:7px 11px}
   .seg2 button.on{background:var(--ink); color:#fffdf8}
@@ -297,8 +298,11 @@
   .dictbox .note{font-size:12px; color:var(--muted); line-height:1.7; margin:8px 0}
 
   .lfoot{margin:22px 0 10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-  .btn2{appearance:none; border:1px solid var(--line); background:#fffdf8; color:var(--ink);
+  .btn2{appearance:none; border:1px solid var(--line); background:var(--sand); color:var(--ink);
     font-family:var(--sans); font-size:14px; padding:12px 20px; border-radius:999px}
+  .btn2:active{background:var(--sand2)}
+  .btn2.pri{background:var(--shu); border-color:var(--shu); color:#fffdf8}
+  .btn2.pri:active{background:#98301f}
   .btn2.done{background:#eef4ec; border-color:#cfe0cd; color:#3f7a4f}
   .nav2{display:flex; justify-content:space-between; gap:10px; margin-top:6px}
 
@@ -313,11 +317,11 @@
     .tabs{top:49px}
   }
   .tools{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:11px}
-  .tool{display:flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--line);
+  .tool{display:flex; align-items:center; gap:8px; background:var(--sand); border:1px solid var(--line);
     border-radius:12px; padding:8px 10px; text-decoration:none; color:var(--ink);
     -webkit-tap-highlight-color:transparent}
-  .tool:active{background:#fbf6ec}
-  .btn2.onplay{background:var(--shu); border-color:var(--shu); color:#fffdf8}
+  .tool:active{background:var(--sand2)}
+  .btn2.onplay{background:var(--ink); border-color:var(--ink); color:#fffdf8}
   .tool svg{width:16px; height:16px; flex:0 0 16px; fill:none; stroke:currentColor; stroke-width:1.8;
     stroke-linecap:round; stroke-linejoin:round; color:var(--shu)}
   .tool b{display:block; font-size:12.5px; font-weight:600; line-height:1.3}
@@ -355,7 +359,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v31</span>
+    <span class="ver" id="verTag">v32</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -797,7 +801,7 @@
                 '<button data-dir="jp2zh" class="'+(cardDir==='jp2zh'?'on':'')+'">日→中</button>' +
                 '<button data-dir="zh2jp" class="'+(cardDir==='zh2jp'?'on':'')+'">中→日</button>' +
               '</div>' +
-              '<button class="btn2" id="startCards">開始</button></div>' +
+              '<button class="btn2 pri" id="startCards">開始</button></div>' +
             '<p class="secnote">共 '+l.vocab.length+' 個字詞。點單字右邊的喇叭聽發音；慢速可在右上角開啟。</p><div class="vlist">';
     l.vocab.forEach(function(v){
       var head = v.kanji ? '<span class="vkanji">'+esc(v.kanji)+'</span><span class="vkana">'+esc(v.kana)+'</span>'
@@ -851,7 +855,7 @@
         '<div class="fa hide" id="fback">'+esc(back)+'</div>' +
       '</div>' +
       '<div class="cbtns">' +
-        '<button class="btn2" id="reveal">看答案</button>' +
+        '<button class="btn2 pri" id="reveal">看答案</button>' +
         '<button class="btn2 b-ok" id="know" style="display:none">記得</button>' +
         '<button class="btn2 b-no" id="dunno" style="display:none">不記得</button>' +
       '</div>' +
@@ -1151,7 +1155,7 @@
     l.dialogues.forEach(function(d, di){
       h += '<article class="dlg" data-dlg="'+di+'">' +
              '<div class="dlghd"><h3>'+esc(d.scene)+'</h3>' +
-               '<button class="btn2" data-play="'+di+'">▶ 播放整段</button>' +
+               '<button class="btn2 pri" data-play="'+di+'">▶ 播放整段</button>' +
              '</div>' +
              (d.note ? '<p class="dnote">'+esc(d.note)+'</p>' : '') +
              '<div class="lines">';
@@ -1309,7 +1313,7 @@
       '<div class="cbtns">' +
         '<button class="btn2" id="spkModel">▶ 示範</button>' +
         (ok ? '<button class="btn2" id="spkRec">● 開始朗讀</button>' : '') +
-        '<button class="btn2" id="spkAuto">● 自動辨識</button>' +
+        '<button class="btn2 pri" id="spkAuto">● 自動辨識</button>' +
       '</div>' +
       '<div id="spkProg" class="spkprog"></div>' +
       (best ? '<p class="secnote" style="text-align:center">這一句最高 '+best+' 分</p>' : '') +
