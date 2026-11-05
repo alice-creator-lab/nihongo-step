@@ -65,6 +65,7 @@ node tools/validate.mjs
 - 發音優先用預製人聲：`tools/make_audio.py` 以 edge-tts（ja-JP-KeitaNeural／NanamiNeural）合成，音檔放在 `audio/`，索引在 `data/audio.json`（key 分 `d`會話、`v`單字、`p`句型例句、`g`文法例句、`l`聽力）。只有缺音檔時才退回 `speechSynthesis`。
 - 合成文字一律用漢字原句（人名先換假名）：只給假名時，助詞「は」會被讀成 ha。改動發音時不要退回「假名 + 裝置 TTS」的做法。
 - 「慢速」是把同一段人聲以 `playbackRate = 0.7` 播放，不是改用合成音。
+- 動詞表／形容詞表由 `tools/build_wordtables.py` 由各課單字自動生成 `data/wordtables.json`：動詞換算成原形＋ます形後分五段／一段／不規則，形容詞依 pos（い形／な形／形容動詞）分類。單字表的假名時而寫ます形、時而寫原形，改分類規則時兩個方向都要顧及。動詞原形音檔在 `audio/verb/`。
 - 順序表的音檔（`audio/seq/`）用 `tools/trim_seq_audio.py` 剪掉前後靜音：edge-tts 原始檔每段尾隨約 1.1 秒空白，剪完後每段約 0.7 秒，「播放全部」才會緊湊。重跑 `make_seq_audio.py --force` 後要再跑一次 `trim_seq_audio.py --force`，並把 `data/audio.json` 的 `v` 加一，令瀏覽器重抓音檔。
 - 驗證人聲有無接上：`python3 -m http.server 8899` 後跑 `python3 tools/check_audio_cdp.py http://127.0.0.1:8899/`（文法總表、課內文法、聽力、對話、跟讀逐項檢查是否播 mp3、有沒有落到 TTS）。
 - Service Worker 採網路優先：有新版本時直接更新，離線時才回退到快取。

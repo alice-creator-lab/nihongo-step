@@ -332,7 +332,7 @@
   .srow.playing .sk{color:var(--shu)}
   .seqlink{display:block; text-align:center; margin:14px 0 4px; font-size:12.5px; color:var(--ink2);
     background:var(--sand); border:1px solid var(--line); border-radius:12px; padding:10px}
-  .tools{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:11px}
+  .tools{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:11px}
   .tool{display:flex; align-items:center; gap:8px; background:var(--sand); border:1px solid var(--line);
     border-radius:12px; padding:8px 10px; text-decoration:none; color:var(--ink);
     -webkit-tap-highlight-color:transparent}
@@ -341,8 +341,10 @@
   .tool.wide{grid-column:1/-1}
   .tool svg{width:16px; height:16px; flex:0 0 16px; fill:none; stroke:currentColor; stroke-width:1.8;
     stroke-linecap:round; stroke-linejoin:round; color:var(--shu)}
-  .tool b{display:block; font-size:12.5px; font-weight:600; line-height:1.3}
-  .tool span{display:block; font-size:10.5px; color:var(--muted); line-height:1.3; margin-top:1px}
+  .tool b{display:block; font-size:12px; font-weight:600; line-height:1.3}
+  .tool span{display:block; font-size:10px; color:var(--muted); line-height:1.3; margin-top:1px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .tool > div{min-width:0}
   .search{position:sticky; top:0; z-index:6; background:var(--paper); padding:10px 0 8px; margin-top:6px}
   .search input{width:100%; box-sizing:border-box; padding:11px 14px; font-size:15px; color:var(--ink);
     background:var(--card); border:1px solid var(--line); border-radius:12px; outline:none;
@@ -360,6 +362,9 @@
     align-items:center; justify-content:center; -webkit-appearance:none; font-family:inherit; padding:0}
   .nbk.on{color:var(--shu); border-color:var(--shu)}
   .nbar{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0 0 10px}
+  .wth{display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:600;
+    color:var(--ink2); margin:18px 0 2px; padding-bottom:5px; border-bottom:1px solid var(--line)}
+  .wth span{font-size:11px; font-weight:400; color:var(--muted)}
   .nrow{display:flex; align-items:center; gap:10px; padding:10px 2px; border-bottom:1px solid var(--line)}
   .nrow .nk{min-width:88px}
   .nrow .nk b{display:block; font-size:15px; font-weight:500; font-family:"Hiragino Mincho ProN",serif}
@@ -396,7 +401,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v42</span>
+    <span class="ver" id="verTag">v43</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -545,7 +550,7 @@
     if (at >= 0) NB.items.splice(at, 1);
     else {
       NB.items.unshift({ id:item.id, vi:item.vi, kanji:item.kanji || '', kana:item.kana,
-                         zh:item.zh || '', pos:item.pos || '', at:Date.now() });
+                         zh:item.zh || '', pos:item.pos || '', audio:item.audio || '', at:Date.now() });
       if (NB.items.length > 300) NB.items.length = 300;
     }
     saveNB();
@@ -732,6 +737,13 @@
           '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v16H6.5A2.5 2.5 0 0 0 4 21z"/>' +
           '<path d="M8 7.5h7M8 11h5"/></svg>' +
           '<div><b>詞語總表</b><span>'+vocabTotal+' 字</span></div></a>' +
+        '<a class="tool" href="#/all/verbs">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3.5L6.5 13.5H11l-1.5 7L17 10h-4.5z"/></svg>' +
+          '<div><b>動詞表</b><span>'+(WT&&WT.verbs ? WT.verbs.total+' 動詞' : '動詞')+'</span></div></a>' +
+        '<a class="tool" href="#/all/adjs">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l1.7 4.8L18.5 10.5l-4.8 1.7L12 17l-1.7-4.8L5.5 10.5l4.8-1.7z"/>' +
+          '<path d="M18.5 16.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>' +
+          '<div><b>形容詞表</b><span>'+(WT&&WT.adjs ? WT.adjs.total+' 形容詞' : '形容詞')+'</span></div></a>' +
         '<a class="tool" href="#/all/grammar">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 9.5-9.5a2.1 2.1 0 0 0-3-3L5 16z"/>' +
           '<path d="M14 6.5l3 3"/><path d="M4.5 20.5l3.5-.7"/></svg>' +
@@ -743,7 +755,7 @@
         '<a class="tool" href="#/seq">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h14"/>' +
           '<path d="M9.5 4v4M9.5 10v4M9.5 16v4"/></svg>' +
-          '<div><b>順序表</b><span>數字・日期・量詞</span></div></a>' +
+          '<div><b>順序表</b><span>數量・日期</span></div></a>' +
       '</div>' +
       books +
       '<p class="note">課程順序參照初級綜合教材的 40 課編排；課名、例句、會話與練習均為自編內容，未採用原書文字與錄音。單字數與句型數為該教材公布之統計，僅作進度參考。</p>';
@@ -1941,6 +1953,99 @@
     });
   }
 
+  /* ---------- 動詞表／形容詞表 ---------- */
+  function renderWordTable(kind){
+    var isVerb = kind === 'verbs';
+    var title = isVerb ? '動詞表' : '形容詞表';
+    var data = WT && WT[kind];
+    document.title = title + ' · 日語階梯';
+    app.innerHTML =
+      '<div class="lhead">' +
+        '<a class="back" href="#/">← 課程地圖</a>' +
+        '<h1>' + title + '<span class="k">' + (isVerb ? 'どうし' : 'けいようし') + '</span></h1>' +
+        '<p class="goal">' + (isVerb
+          ? '第 1–40 課的動詞，按五段、一段、不規則分類；大字是原形，下面是ます形。'
+          : '第 1–40 課的形容詞，按い形容詞、な形容詞分類。') + '</p>' +
+      '</div>' +
+      '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
+        'placeholder="搜尋原形、假名或中文"></div>' +
+      '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
+        '<button class="btn2" id="allplay">▶ 播放全部</button></div>' +
+      '<div id="alllist"></div>';
+
+    var list = $('#alllist'), cnt = $('#allcnt');
+    if (!data){ list.innerHTML = '<p class="secnote">資料載入失敗，請重新整理。</p>'; return; }
+
+    var flat = [];
+    data.groups.forEach(function(g){
+      g.items.forEach(function(x){
+        flat.push({ x:x,
+          search:((x.kanji || '') + ' ' + x.kana + ' ' + (x.masu || '') + ' ' + x.zh + ' ' + x.id).toLowerCase() });
+      });
+    });
+
+    function rowHtml(x, k){
+      var parts = [];
+      if (x.kanji) parts.push(x.kana);
+      if (x.masu && x.masu !== x.kana) parts.push(x.masu);
+      if (!isVerb && x.group === 'na') parts.push('＋な');
+      return '<div class="arow">' +
+        '<button class="nbk' + (nbHas(x.id, x.kana) ? ' on' : '') + '" data-k="' + k + '" aria-label="加入練習本">' +
+          (nbHas(x.id, x.kana) ? '★' : '☆') + '</button>' +
+        '<button class="spk" data-say="' + esc(x.kana) + '"' +
+          (x.audio ? ' data-audio="' + esc(x.audio) + '"' : '') + ' aria-label="播放讀音">' + SPK + '</button>' +
+        '<div class="ak"><b>' + esc(x.kanji || x.kana) + '</b>' +
+          (parts.length ? '<span>' + esc(parts.join('　')) + '</span>' : '') + '</div>' +
+        '<div class="az">' + esc(x.zh) + '</div>' +
+        '<div class="al">' + esc(x.id) + '</div></div>';
+    }
+
+    var curHit = flat;
+    function draw(q){
+      q = (q || '').trim().toLowerCase();
+      var hit = q ? flat.filter(function(it){ return it.search.indexOf(q) > -1; }) : flat;
+      curHit = hit;
+      cnt.textContent = q
+        ? '找到 ' + hit.length + ' 項（共 ' + flat.length + ' 項）'
+        : '共 ' + data.total + ' 項 · ' + data.groups.length + ' 類';
+      if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
+      if (q){
+        list.innerHTML = hit.map(function(it, k){ return rowHtml(it.x, k); }).join('');
+      } else {
+        var h = '', k = 0;
+        data.groups.forEach(function(g){
+          if (!g.items.length) return;
+          h += '<h3 class="wth">' + esc(g.title) + '<span>' + g.items.length + ' 項</span></h3>';
+          h += g.items.map(function(x){ return rowHtml(x, k++); }).join('');
+        });
+        list.innerHTML = h;
+      }
+      bindSpeakers(list);
+    }
+
+    draw('');
+    var q = $('#allq');
+    q.addEventListener('input', function(){ if (ALLPLAY.on) stopAllPlay(); draw(this.value); });
+
+    list.addEventListener('click', function(e){
+      var b = e.target.closest('.nbk'); if (!b) return;
+      var it = curHit[+b.getAttribute('data-k')]; if (!it) return;
+      var x = it.x;
+      nbToggle({ id:x.id, vi:x.vi, kanji:x.kanji, kana:x.kana, zh:x.zh,
+                 pos: isVerb ? '動詞' : '形容詞', audio: x.audio }, b);
+    });
+
+    var pa = $('#allplay');
+    if (pa) pa.addEventListener('click', function(){
+      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+      var rows = list.querySelectorAll('.arow');
+      var items = curHit.map(function(it, k){
+        return { audio: it.x.audio, el: rows[k] };
+      });
+      playAllQueued(items, this);
+    });
+  }
+
   /* ---------- 練習本 ---------- */
   var noteRun = null;
   function renderNotebook(){
@@ -1965,7 +2070,7 @@
         if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
         var rows = document.querySelectorAll('#notebody .nrow');
         var items = NB.items.map(function(x, k){
-          return { audio: audioFor(x.id, 'v' + x.vi), el: rows[k] };
+          return { audio: x.audio || audioFor(x.id, 'v' + x.vi), el: rows[k] };
         });
         playAllQueued(items, this);
       });
@@ -1981,7 +2086,7 @@
       return;
     }
     body.innerHTML = NB.items.map(function(x, k){
-      var au = audioFor(x.id, 'v' + x.vi);
+      var au = x.audio || audioFor(x.id, 'v' + x.vi);
       return '<div class="nrow">' +
         '<div class="nk"><b>' + esc(x.kanji || x.kana) + '</b>' +
           '<span>' + esc(x.kanji ? x.kana : (x.pos || '')) + '</span></div>' +
@@ -2019,7 +2124,7 @@
     var front = r.dir === 'jp2zh' ? jp : x.zh;
     var sub = (r.dir === 'jp2zh' && x.kanji) ? x.kana : '';
     var back = r.dir === 'jp2zh' ? x.zh : (x.kanji ? x.kanji + '　' + x.kana : x.kana);
-    var au = audioFor(x.id, 'v' + x.vi);
+    var au = x.audio || audioFor(x.id, 'v' + x.vi);
 
     body.innerHTML =
       '<div class="cardmeta">練習本 · 第 ' + (r.i + 1) + ' ／ ' + r.deck.length + ' 題 · ' +
@@ -2086,6 +2191,8 @@
     if (h === '/note'){ stopAudio(); renderNotebook(); return; }
     var am = h.match(/^\/all\/(vocab|grammar)/);
     if (am){ stopAudio(); renderAll(am[1]); return; }
+    var wm = h.match(/^\/all\/(verbs|adjs)/);
+    if (wm){ stopAudio(); renderWordTable(wm[1]); return; }
     var m = h.match(/^\/l\/(L\d{2})(?:\/([a-z]+))?/);
     if (m && lessons[m[1]]){
       var tab = m[2] && TABS.some(function(t){ return t[0] === m[2]; }) ? m[2] : 'patterns';
@@ -2100,6 +2207,7 @@
 
   /* ---------- 預先製作的人聲檔（data/audio.json 有記錄的句子優先用音檔） ---------- */
   var AUDIO = {};
+  var WT = null;
   function audioFor(id, key){
     var m = AUDIO[id];
     return (m && m[key]) || null;
@@ -2133,6 +2241,7 @@
 
   function boot(){
     getJSON('data/audio.json').then(function(m){ AUDIO = m || {}; }).catch(function(){});
+    getJSON('data/wordtables.json').then(function(m){ WT = m || null; }).catch(function(){});
     getJSON('data/course.json').then(function(c){
       course = c;
       var ids = availableLessons().map(function(l){ return l.id; });
