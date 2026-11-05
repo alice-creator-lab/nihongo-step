@@ -363,8 +363,15 @@
   .nbk.on{color:var(--shu); border-color:var(--shu)}
   .nbar{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0 0 10px}
   .wth{display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:600;
-    color:var(--ink2); margin:18px 0 2px; padding-bottom:5px; border-bottom:1px solid var(--line)}
+    color:var(--ink2); margin:18px 0 2px; padding-bottom:5px; border-bottom:1px solid var(--line);
+    scroll-margin-top:104px}
   .wth span{font-size:11px; font-weight:400; color:var(--muted)}
+  .jumpbar{display:flex; gap:8px; overflow-x:auto; padding:2px 0 6px; -webkit-overflow-scrolling:touch}
+  .jump{flex:0 0 auto; border:1px solid var(--line); background:var(--card); color:var(--ink2);
+    border-radius:999px; padding:7px 13px; font-size:12.5px; font-family:inherit;
+    -webkit-appearance:none; white-space:nowrap}
+  .jump:active{background:var(--sand2)}
+  .jump b{font-weight:600; color:var(--shu); margin-left:4px}
   .nrow{display:flex; align-items:center; gap:10px; padding:10px 2px; border-bottom:1px solid var(--line)}
   .nrow .nk{min-width:88px}
   .nrow .nk b{display:block; font-size:15px; font-weight:500; font-family:"Hiragino Mincho ProN",serif}
@@ -401,7 +408,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v43</span>
+    <span class="ver" id="verTag">v44</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1969,12 +1976,26 @@
       '</div>' +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="搜尋原形、假名或中文"></div>' +
+      '<div class="jumpbar" id="wtjump"></div>' +
       '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
         '<button class="btn2" id="allplay">▶ 播放全部</button></div>' +
       '<div id="alllist"></div>';
 
     var list = $('#alllist'), cnt = $('#allcnt');
     if (!data){ list.innerHTML = '<p class="secnote">資料載入失敗，請重新整理。</p>'; return; }
+
+    /* 頂部快捷：跳到各分類（用手機寬度較短的標籤，讓三個都放得下） */
+    var SHORT = { godan:'五段', ichidan:'一段', irregular:'不規則', i:'い形', na:'な形' };
+    var jump = $('#wtjump');
+    jump.innerHTML = data.groups.filter(function(g){ return g.items.length; }).map(function(g){
+      return '<button class="jump" data-j="' + g.id + '">' + esc(SHORT[g.id] || g.title) +
+             '<b>' + g.items.length + '</b></button>';
+    }).join('');
+    jump.addEventListener('click', function(e){
+      var b = e.target.closest('.jump'); if (!b) return;
+      var h = document.getElementById('wt-g-' + b.getAttribute('data-j'));
+      if (h) h.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
 
     var flat = [];
     data.groups.forEach(function(g){
@@ -2005,6 +2026,7 @@
       q = (q || '').trim().toLowerCase();
       var hit = q ? flat.filter(function(it){ return it.search.indexOf(q) > -1; }) : flat;
       curHit = hit;
+      jump.style.display = q ? 'none' : '';
       cnt.textContent = q
         ? '找到 ' + hit.length + ' 項（共 ' + flat.length + ' 項）'
         : '共 ' + data.total + ' 項 · ' + data.groups.length + ' 類';
@@ -2015,7 +2037,8 @@
         var h = '', k = 0;
         data.groups.forEach(function(g){
           if (!g.items.length) return;
-          h += '<h3 class="wth">' + esc(g.title) + '<span>' + g.items.length + ' 項</span></h3>';
+          h += '<h3 class="wth" id="wt-g-' + g.id + '">' + esc(g.title) +
+               '<span>' + g.items.length + ' 項</span></h3>';
           h += g.items.map(function(x){ return rowHtml(x, k++); }).join('');
         });
         list.innerHTML = h;
