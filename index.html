@@ -365,7 +365,13 @@
   .wth{display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:600;
     color:var(--ink2); margin:18px 0 2px; padding-bottom:5px; border-bottom:1px solid var(--line);
     scroll-margin-top:104px}
-  .wth span{font-size:11px; font-weight:400; color:var(--muted)}
+  .wth .wtn{flex:1; min-width:0}
+  .wth .wtr{display:flex; align-items:center; gap:8px; flex:0 0 auto}
+  .wth em{font-style:normal; font-size:11px; font-weight:400; color:var(--muted)}
+  .gplay{border:1px solid var(--line); background:var(--card); color:var(--ink2); border-radius:999px;
+    padding:4px 11px; font-size:11.5px; font-family:inherit; -webkit-appearance:none; white-space:nowrap}
+  .gplay:active{background:var(--sand2)}
+  .gplay.onplay{background:var(--shu); border-color:var(--shu); color:#fff}
   .jumpbar{display:flex; gap:8px; overflow-x:auto; padding:2px 0 6px; -webkit-overflow-scrolling:touch}
   .jump{flex:0 0 auto; border:1px solid var(--line); background:var(--card); color:var(--ink2);
     border-radius:999px; padding:7px 13px; font-size:12.5px; font-family:inherit;
@@ -408,7 +414,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v45</span>
+    <span class="ver" id="verTag">v46</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1770,7 +1776,7 @@
     if (!ALLPLAY) return;
     ALLPLAY.on = false;
     if (ALLPLAY.btn){
-      ALLPLAY.btn.textContent = '▶ 播放全部';
+      ALLPLAY.btn.textContent = ALLPLAY.btn.getAttribute('data-label') || '▶ 播放全部';
       ALLPLAY.btn.classList.remove('onplay');
       ALLPLAY.btn = null;
     }
@@ -2053,8 +2059,11 @@
         var h = '', k = 0;
         data.groups.forEach(function(g){
           if (!g.items.length) return;
-          h += '<h3 class="wth" id="wt-g-' + g.id + '">' + esc(g.title) +
-               '<span>' + g.items.length + ' 項</span></h3>';
+          h += '<h3 class="wth" id="wt-g-' + g.id + '">' +
+                 '<span class="wtn">' + esc(g.title) + '</span>' +
+                 '<span class="wtr"><em>' + g.items.length + ' 項</em>' +
+                 '<button class="gplay" data-start="' + k + '" data-label="▶ 本組" ' +
+                   'aria-label="由本組開始播放">▶ 本組</button></span></h3>';
           h += g.items.map(function(x){ return rowHtml(x, k++); }).join('');
         });
         list.innerHTML = h;
@@ -2066,7 +2075,19 @@
     var q = $('#allq');
     q.addEventListener('input', function(){ if (ALLPLAY.on) stopAllPlay(); draw(this.value); });
 
+    function playFrom(n, btn){
+      if (ALLPLAY.on && ALLPLAY.btn === btn){ stopAllPlay(); stopAudio(); return; }
+      var rows = list.querySelectorAll('.arow'), items = [];
+      for (var j = n; j < rows.length; j++){
+        var hit = curHit[j]; if (!hit) break;
+        items.push({ audio: hit.x.audio, el: rows[j] });
+      }
+      playAllQueued(items, btn);
+    }
+
     list.addEventListener('click', function(e){
+      var gb = e.target.closest('.gplay');
+      if (gb){ playFrom(+gb.getAttribute('data-start'), gb); return; }
       var b = e.target.closest('.nbk'); if (!b) return;
       var it = curHit[+b.getAttribute('data-k')]; if (!it) return;
       var x = it.x;
