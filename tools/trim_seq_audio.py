@@ -50,8 +50,8 @@ def speech_bounds(path):
     return first * WIN / RATE, (last + 1) * WIN / RATE, len(x) / RATE
 
 
-def trim(path, force=False):
-    mark = os.path.join(MARKS, os.path.basename(path))
+def trim(path, force=False, marks=None):
+    mark = os.path.join(marks or MARKS, os.path.basename(path))
     if os.path.exists(mark) and not force:
         return "skip"
     b = speech_bounds(path)
@@ -79,12 +79,16 @@ def trim(path, force=False):
 
 
 def main():
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
     force = "--force" in sys.argv
-    os.makedirs(MARKS, exist_ok=True)
-    files = sorted(glob.glob(os.path.join(SEQ, "*.mp3")))
+    # 可指定其他目錄（例如 audio/verb）；預設 audio/seq
+    target = os.path.join(ROOT, args[0]) if args else SEQ
+    marks = os.path.join(target, ".trimmed")
+    os.makedirs(marks, exist_ok=True)
+    files = sorted(glob.glob(os.path.join(target, "*.mp3")))
     ok = skip = fail = 0
     for f in files:
-        res = trim(f, force)
+        res = trim(f, force, marks)
         if res == "skip":
             skip += 1
         elif res == "fail":

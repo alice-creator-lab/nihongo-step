@@ -408,7 +408,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v44</span>
+    <span class="ver" id="verTag">v45</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1778,6 +1778,17 @@
       r.classList.remove('playing');
     });
   }
+  /* 播放全部時，畫面跟著當前字詞走 */
+  function followRow(el){
+    if (!el || !el.getBoundingClientRect) return;
+    var r = el.getBoundingClientRect();
+    var vh = window.innerHeight || 640;
+    if (r.top < 96 || r.bottom > vh - 32){
+      try{ el.scrollIntoView({ behavior:'smooth', block:'center' }); }
+      catch(e){ el.scrollIntoView(); }
+    }
+  }
+
   function playAllQueued(items, btn){
     var list = items.filter(function(x){ return x && x.audio; });
     if (!list.length){ toast('這批項目還沒有音檔'); return; }
@@ -1791,7 +1802,12 @@
       if (!ALLPLAY.on) return;
       if (i >= list.length){ stopAllPlay(); return; }
       var it = list[i];
-      if (it.el) it.el.classList.add('playing');
+      if (it.el){ it.el.classList.add('playing'); followRow(it.el); }
+      /* 預載下一段，縮短段與段之間空白 */
+      var nx = list[i + 1];
+      if (nx && nx.audio){
+        try{ var pre = new Audio(nx.audio + '?v=' + auVer(nx.audio)); pre.preload = 'auto'; pre.load(); }catch(e){}
+      }
       var ok = playFile(it.audio, function(){
         if (it.el) it.el.classList.remove('playing');
         if (!ALLPLAY.on) return;
@@ -1813,11 +1829,11 @@
       if (!SEQPLAY.on) return;
       if (i >= g.items.length){ stopSeq(); return; }
       var row = document.getElementById('srow-' + g.id + '-' + i);
-      if (row) row.classList.add('playing');
+      if (row){ row.classList.add('playing'); followRow(row); }
       /* 先預載下一段，縮短段與段之間的空白 */
       var nxt = g.items[i + 1];
       if (nxt && nxt.audio){
-        try{ var pre = new Audio(nxt.audio + '?v=' + (AUDIO.v || 1)); pre.preload = 'auto'; pre.load(); }catch(e){}
+        try{ var pre = new Audio(nxt.audio + '?v=' + auVer(nxt.audio)); pre.preload = 'auto'; pre.load(); }catch(e){}
       }
       var ok = playFile(g.items[i].audio, function(){
         if (row) row.classList.remove('playing');
@@ -2235,13 +2251,18 @@
     var m = AUDIO[id];
     return (m && m[key]) || null;
   }
+  /* 動詞表／形容詞表有自己的音檔版本，避免為了它們把全部音檔重新下載 */
+  function auVer(url){
+    if (/audio\/(verb|adj)\//.test(url)) return 't1';
+    return AUDIO.v || 1;
+  }
   function playFile(url, onend, el, rate){
     /* 不呼叫 stopAudio：連續播放時要保留 PLAYSEQ 狀態 */
     if (curAudio){ try{ curAudio.pause(); }catch(e){} curAudio = null; }
     if ('speechSynthesis' in window) speechSynthesis.cancel();
     try{
       /* 音檔加了版本查詢字串，避免瀏覽器沿用舊快取 */
-      var a = new Audio(url + (url.indexOf('?') < 0 ? '?' : '&') + 'v=' + (AUDIO.v || 1));
+      var a = new Audio(url + (url.indexOf('?') < 0 ? '?' : '&') + 'v=' + auVer(url));
       /* 慢速改成放慢同一段人聲，不再改用機械合成音 */
       a.playbackRate = (rate && rate > 0) ? rate : 1;
       curAudio = a;

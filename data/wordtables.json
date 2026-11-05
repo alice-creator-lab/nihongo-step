@@ -2720,7 +2720,7 @@
       "kanji": "大きい",
       "kana": "おおきい",
       "zh": "大的",
-      "audio": "audio/L08-v0.mp3"
+      "audio": "audio/adj/L08-0.mp3"
      },
      {
       "id": "L08",
@@ -2729,7 +2729,7 @@
       "kanji": "小さい",
       "kana": "ちいさい",
       "zh": "小的",
-      "audio": "audio/L08-v1.mp3"
+      "audio": "audio/adj/L08-1.mp3"
      },
      {
       "id": "L08",
@@ -2738,7 +2738,7 @@
       "kanji": "広い",
       "kana": "ひろい",
       "zh": "寬闊的",
-      "audio": "audio/L08-v2.mp3"
+      "audio": "audio/adj/L08-2.mp3"
      },
      {
       "id": "L08",
@@ -2747,7 +2747,7 @@
       "kanji": "新しい",
       "kana": "あたらしい",
       "zh": "新的",
-      "audio": "audio/L08-v3.mp3"
+      "audio": "audio/adj/L08-3.mp3"
      },
      {
       "id": "L08",
@@ -2756,7 +2756,7 @@
       "kanji": "古い",
       "kana": "ふるい",
       "zh": "舊的、古老的",
-      "audio": "audio/L08-v4.mp3"
+      "audio": "audio/adj/L08-4.mp3"
      },
      {
       "id": "L08",
@@ -2765,7 +2765,7 @@
       "kanji": "高い",
       "kana": "たかい",
       "zh": "貴的、高的",
-      "audio": "audio/L08-v5.mp3"
+      "audio": "audio/adj/L08-5.mp3"
      },
      {
       "id": "L08",
@@ -2774,7 +2774,7 @@
       "kanji": "",
       "kana": "おいしい",
       "zh": "好吃的",
-      "audio": "audio/L08-v6.mp3"
+      "audio": "audio/adj/L08-6.mp3"
      },
      {
       "id": "L08",
@@ -2783,7 +2783,7 @@
       "kanji": "暑い",
       "kana": "あつい",
       "zh": "（天氣）熱的",
-      "audio": "audio/L08-v7.mp3"
+      "audio": "audio/adj/L08-7.mp3"
      },
      {
       "id": "L08",
@@ -2792,7 +2792,7 @@
       "kanji": "寒い",
       "kana": "さむい",
       "zh": "冷的",
-      "audio": "audio/L08-v8.mp3"
+      "audio": "audio/adj/L08-8.mp3"
      },
      {
       "id": "L08",
@@ -2801,7 +2801,7 @@
       "kanji": "面白い",
       "kana": "おもしろい",
       "zh": "有趣的",
-      "audio": "audio/L08-v9.mp3"
+      "audio": "audio/adj/L08-9.mp3"
      },
      {
       "id": "L08",
@@ -2810,7 +2810,7 @@
       "kanji": "難しい",
       "kana": "むずかしい",
       "zh": "難的",
-      "audio": "audio/L08-v10.mp3"
+      "audio": "audio/adj/L08-10.mp3"
      },
      {
       "id": "L08",
@@ -2819,7 +2819,7 @@
       "kanji": "楽しい",
       "kana": "たのしい",
       "zh": "快樂的、愉快的",
-      "audio": "audio/L08-v11.mp3"
+      "audio": "audio/adj/L08-11.mp3"
      },
      {
       "id": "L08",
@@ -2828,7 +2828,7 @@
       "kanji": "忙しい",
       "kana": "いそがしい",
       "zh": "忙的",
-      "audio": "audio/L08-v12.mp3"
+      "audio": "audio/adj/L08-12.mp3"
      },
      {
       "id": "L08",
@@ -2837,7 +2837,7 @@
       "kanji": "明るい",
       "kana": "あかるい",
       "zh": "明亮的、開朗的",
-      "audio": "audio/L08-v13.mp3"
+      "audio": "audio/adj/L08-13.mp3"
      },
      {
       "id": "L08",
@@ -2846,7 +2846,7 @@
       "kanji": "近い",
       "kana": "ちかい",
       "zh": "近的",
-      "audio": "audio/L08-v14.mp3"
+      "audio": "audio/adj/L08-14.mp3"
      },
      {
       "id": "L09",
@@ -2855,7 +2855,7 @@
       "kanji": "",
       "kana": "つまらない",
       "zh": "無聊的",
-      "audio": "audio/L09-v0.mp3"
+      "audio": "audio/adj/L09-0.mp3"
      },
      {
       "id": "L09",
@@ -2864,7 +2864,7 @@
       "kanji": "",
       "kana": "うるさい",
       "zh": "吵的",
-      "audio": "audio/L09-v1.mp3"
+      "audio": "audio/adj/L09-1.mp3"
      },
      {
       "id": "L09",
@@ -2873,7 +2873,7 @@
       "kanji": "優しい",
       "kana": "やさしい",
       "zh": "溫柔的、和善的",
-      "audio": "audio/L09-v2.mp3"
+      "audio": "audio/adj/L09-2.mp3"
      },
      {
       "id": "L09",
@@ -2882,7 +2882,7 @@
       "kanji": "甘い",
       "kana": "あまい",
       "zh": "甜的",
-      "audio": "audio/L09-v3.mp3"
+      "audio": "audio/adj/L09-3.mp3"
      },
      {
       "id": "L09",
@@ -2891,7 +2891,7 @@
       "kanji": "辛い",
       "kana": "からい",
       "zh": "辣的",
-      "audio": "audio/L09-v4.mp3"
+      "audio": "audio/adj/L09-4.mp3"
      },
      {
       "id": "L09",
@@ -2900,7 +2900,7 @@
       "kanji": "冷たい",
       "kana": "つめたい",
       "zh": "冰的、冷淡的",
-      "audio": "audio/L09-v5.mp3"
+      "audio": "audio/adj/L09-5.mp3"
      },
      {
       "id": "L09",
@@ -2909,7 +2909,7 @@
       "kanji": "暖かい",
       "kana": "あたたかい",
       "zh": "溫暖的",
-      "audio": "audio/L09-v6.mp3"
+      "audio": "audio/adj/L09-6.mp3"
      },
      {
       "id": "L09",
@@ -2918,7 +2918,7 @@
       "kanji": "涼しい",
       "kana": "すずしい",
       "zh": "涼爽的",
-      "audio": "audio/L09-v7.mp3"
+      "audio": "audio/adj/L09-7.mp3"
      },
      {
       "id": "L09",
@@ -2927,7 +2927,7 @@
       "kanji": "長い",
       "kana": "ながい",
       "zh": "長的",
-      "audio": "audio/L09-v8.mp3"
+      "audio": "audio/adj/L09-8.mp3"
      },
      {
       "id": "L09",
@@ -2936,7 +2936,7 @@
       "kanji": "短い",
       "kana": "みじかい",
       "zh": "短的",
-      "audio": "audio/L09-v9.mp3"
+      "audio": "audio/adj/L09-9.mp3"
      },
      {
       "id": "L09",
@@ -2945,7 +2945,7 @@
       "kanji": "早い",
       "kana": "はやい",
       "zh": "早的",
-      "audio": "audio/L09-v10.mp3"
+      "audio": "audio/adj/L09-10.mp3"
      },
      {
       "id": "L09",
@@ -2954,7 +2954,7 @@
       "kanji": "遅い",
       "kana": "おそい",
       "zh": "晚的、慢的",
-      "audio": "audio/L09-v11.mp3"
+      "audio": "audio/adj/L09-11.mp3"
      },
      {
       "id": "L09",
@@ -2963,7 +2963,7 @@
       "kanji": "楽しい",
       "kana": "たのしい",
       "zh": "愉快的",
-      "audio": "audio/L09-v12.mp3"
+      "audio": "audio/adj/L09-12.mp3"
      },
      {
       "id": "L14",
@@ -2972,7 +2972,7 @@
       "kanji": "",
       "kana": "さむい",
       "zh": "冷",
-      "audio": "audio/L14-v13.mp3"
+      "audio": "audio/adj/L14-13.mp3"
      },
      {
       "id": "L14",
@@ -2981,7 +2981,7 @@
       "kanji": "",
       "kana": "はやい",
       "zh": "早、快",
-      "audio": "audio/L14-v14.mp3"
+      "audio": "audio/adj/L14-14.mp3"
      },
      {
       "id": "L15",
@@ -2990,7 +2990,7 @@
       "kanji": "",
       "kana": "つめたい",
       "zh": "冰的、冷的",
-      "audio": "audio/L15-v24.mp3"
+      "audio": "audio/adj/L15-24.mp3"
      },
      {
       "id": "L18",
@@ -2999,7 +2999,7 @@
       "kanji": "難しい",
       "kana": "むずかしい",
       "zh": "難",
-      "audio": "audio/L18-v19.mp3"
+      "audio": "audio/adj/L18-19.mp3"
      },
      {
       "id": "L18",
@@ -3008,7 +3008,7 @@
       "kanji": "忙しい",
       "kana": "いそがしい",
       "zh": "忙",
-      "audio": "audio/L18-v22.mp3"
+      "audio": "audio/adj/L18-22.mp3"
      },
      {
       "id": "L19",
@@ -3017,7 +3017,7 @@
       "kanji": "痛い",
       "kana": "いたい",
       "zh": "痛",
-      "audio": "audio/L19-v3.mp3"
+      "audio": "audio/adj/L19-3.mp3"
      },
      {
       "id": "L19",
@@ -3026,7 +3026,7 @@
       "kanji": "眠い",
       "kana": "ねむい",
       "zh": "想睡",
-      "audio": "audio/L19-v14.mp3"
+      "audio": "audio/adj/L19-14.mp3"
      },
      {
       "id": "L36",
@@ -3035,7 +3035,7 @@
       "kanji": "",
       "kana": "おいしい",
       "zh": "好吃",
-      "audio": "audio/L36-v10.mp3"
+      "audio": "audio/adj/L36-10.mp3"
      },
      {
       "id": "L36",
@@ -3044,7 +3044,7 @@
       "kanji": "",
       "kana": "あまい",
       "zh": "甜",
-      "audio": "audio/L36-v11.mp3"
+      "audio": "audio/adj/L36-11.mp3"
      },
      {
       "id": "L36",
@@ -3053,7 +3053,7 @@
       "kanji": "",
       "kana": "からい",
       "zh": "辣、鹹",
-      "audio": "audio/L36-v12.mp3"
+      "audio": "audio/adj/L36-12.mp3"
      },
      {
       "id": "L36",
@@ -3062,7 +3062,7 @@
       "kanji": "",
       "kana": "やわらかい",
       "zh": "柔軟",
-      "audio": "audio/L36-v13.mp3"
+      "audio": "audio/adj/L36-13.mp3"
      },
      {
       "id": "L36",
@@ -3071,7 +3071,7 @@
       "kanji": "",
       "kana": "おもい",
       "zh": "重",
-      "audio": "audio/L36-v14.mp3"
+      "audio": "audio/adj/L36-14.mp3"
      }
     ]
    },
@@ -3086,7 +3086,7 @@
       "kanji": "静か",
       "kana": "しずか",
       "zh": "安靜的",
-      "audio": "audio/L08-v15.mp3"
+      "audio": "audio/adj/L08-15.mp3"
      },
      {
       "id": "L08",
@@ -3095,7 +3095,7 @@
       "kanji": "賑やか",
       "kana": "にぎやか",
       "zh": "熱鬧的",
-      "audio": "audio/L08-v16.mp3"
+      "audio": "audio/adj/L08-16.mp3"
      },
      {
       "id": "L08",
@@ -3104,7 +3104,7 @@
       "kanji": "綺麗",
       "kana": "きれい",
       "zh": "漂亮的、乾淨的",
-      "audio": "audio/L08-v17.mp3"
+      "audio": "audio/adj/L08-17.mp3"
      },
      {
       "id": "L08",
@@ -3113,7 +3113,7 @@
       "kanji": "便利",
       "kana": "べんり",
       "zh": "方便的",
-      "audio": "audio/L08-v18.mp3"
+      "audio": "audio/adj/L08-18.mp3"
      },
      {
       "id": "L08",
@@ -3122,7 +3122,7 @@
       "kanji": "有名",
       "kana": "ゆうめい",
       "zh": "有名的",
-      "audio": "audio/L08-v19.mp3"
+      "audio": "audio/adj/L08-19.mp3"
      },
      {
       "id": "L08",
@@ -3131,7 +3131,7 @@
       "kanji": "好き",
       "kana": "すき",
       "zh": "喜歡的",
-      "audio": "audio/L08-v20.mp3"
+      "audio": "audio/adj/L08-20.mp3"
      },
      {
       "id": "L08",
@@ -3140,7 +3140,7 @@
       "kanji": "嫌い",
       "kana": "きらい",
       "zh": "討厭的",
-      "audio": "audio/L08-v21.mp3"
+      "audio": "audio/adj/L08-21.mp3"
      },
      {
       "id": "L08",
@@ -3149,7 +3149,7 @@
       "kanji": "元気",
       "kana": "げんき",
       "zh": "有精神的、健康的",
-      "audio": "audio/L08-v22.mp3"
+      "audio": "audio/adj/L08-22.mp3"
      },
      {
       "id": "L09",
@@ -3158,7 +3158,7 @@
       "kanji": "親切",
       "kana": "しんせつ",
       "zh": "親切的",
-      "audio": "audio/L09-v13.mp3"
+      "audio": "audio/adj/L09-13.mp3"
      },
      {
       "id": "L09",
@@ -3167,7 +3167,7 @@
       "kanji": "大変",
       "kana": "たいへん",
       "zh": "辛苦的、嚴重的",
-      "audio": "audio/L09-v14.mp3"
+      "audio": "audio/adj/L09-14.mp3"
      },
      {
       "id": "L09",
@@ -3176,7 +3176,7 @@
       "kanji": "暇",
       "kana": "ひま",
       "zh": "空閒的",
-      "audio": "audio/L09-v15.mp3"
+      "audio": "audio/adj/L09-15.mp3"
      },
      {
       "id": "L09",
@@ -3185,7 +3185,7 @@
       "kanji": "上手",
       "kana": "じょうず",
       "zh": "擅長的",
-      "audio": "audio/L09-v16.mp3"
+      "audio": "audio/adj/L09-16.mp3"
      },
      {
       "id": "L09",
@@ -3194,7 +3194,7 @@
       "kanji": "下手",
       "kana": "へた",
       "zh": "不擅長的",
-      "audio": "audio/L09-v17.mp3"
+      "audio": "audio/adj/L09-17.mp3"
      },
      {
       "id": "L09",
@@ -3203,7 +3203,7 @@
       "kanji": "大丈夫",
       "kana": "だいじょうぶ",
       "zh": "沒問題、不要緊",
-      "audio": "audio/L09-v18.mp3"
+      "audio": "audio/adj/L09-18.mp3"
      },
      {
       "id": "L14",
@@ -3212,7 +3212,7 @@
       "kanji": "静か",
       "kana": "しずか",
       "zh": "安靜",
-      "audio": "audio/L14-v10.mp3"
+      "audio": "audio/adj/L14-10.mp3"
      },
      {
       "id": "L14",
@@ -3221,7 +3221,7 @@
       "kanji": "便利",
       "kana": "べんり",
       "zh": "方便",
-      "audio": "audio/L14-v11.mp3"
+      "audio": "audio/adj/L14-11.mp3"
      },
      {
       "id": "L14",
@@ -3230,7 +3230,7 @@
       "kanji": "大変",
       "kana": "たいへん",
       "zh": "辛苦、吃力",
-      "audio": "audio/L14-v12.mp3"
+      "audio": "audio/adj/L14-12.mp3"
      },
      {
       "id": "L15",
@@ -3239,7 +3239,7 @@
       "kanji": "暇",
       "kana": "ひま",
       "zh": "空閒的",
-      "audio": "audio/L15-v25.mp3"
+      "audio": "audio/adj/L15-25.mp3"
      },
      {
       "id": "L18",
@@ -3248,7 +3248,7 @@
       "kanji": "簡単",
       "kana": "かんたん",
       "zh": "簡單",
-      "audio": "audio/L18-v20.mp3"
+      "audio": "audio/adj/L18-20.mp3"
      },
      {
       "id": "L18",
@@ -3257,7 +3257,7 @@
       "kanji": "元気",
       "kana": "げんき",
       "zh": "有精神、健康",
-      "audio": "audio/L18-v21.mp3"
+      "audio": "audio/adj/L18-21.mp3"
      },
      {
       "id": "L18",
@@ -3266,7 +3266,7 @@
       "kanji": "暇",
       "kana": "ひま",
       "zh": "空閒",
-      "audio": "audio/L18-v23.mp3"
+      "audio": "audio/adj/L18-23.mp3"
      },
      {
       "id": "L19",
@@ -3275,7 +3275,7 @@
       "kanji": "大丈夫",
       "kana": "だいじょうぶ",
       "zh": "沒問題",
-      "audio": "audio/L19-v18.mp3"
+      "audio": "audio/adj/L19-18.mp3"
      },
      {
       "id": "L20",
@@ -3284,7 +3284,7 @@
       "kanji": "特別",
       "kana": "とくべつ",
       "zh": "特別",
-      "audio": "audio/L20-v21.mp3"
+      "audio": "audio/adj/L20-21.mp3"
      },
      {
       "id": "L30",
@@ -3293,7 +3293,7 @@
       "kanji": "有名",
       "kana": "ゆうめい",
       "zh": "有名",
-      "audio": "audio/L30-v19.mp3"
+      "audio": "audio/adj/L30-19.mp3"
      },
      {
       "id": "L30",
@@ -3302,7 +3302,7 @@
       "kanji": "元気",
       "kana": "げんき",
       "zh": "精神好、健康",
-      "audio": "audio/L30-v20.mp3"
+      "audio": "audio/adj/L30-20.mp3"
      },
      {
       "id": "L31",
@@ -3311,7 +3311,7 @@
       "kanji": "必要",
       "kana": "ひつよう",
       "zh": "必要",
-      "audio": "audio/L31-v15.mp3"
+      "audio": "audio/adj/L31-15.mp3"
      },
      {
       "id": "L31",
@@ -3320,7 +3320,7 @@
       "kanji": "大切",
       "kana": "たいせつ",
       "zh": "重要、珍貴",
-      "audio": "audio/L31-v16.mp3"
+      "audio": "audio/adj/L31-16.mp3"
      },
      {
       "id": "L31",
@@ -3329,7 +3329,7 @@
       "kanji": "無理",
       "kana": "むり",
       "zh": "勉強、難以做到",
-      "audio": "audio/L31-v17.mp3"
+      "audio": "audio/adj/L31-17.mp3"
      },
      {
       "id": "L31",
@@ -3338,7 +3338,7 @@
       "kanji": "心配",
       "kana": "しんぱい",
       "zh": "擔心",
-      "audio": "audio/L31-v18.mp3"
+      "audio": "audio/adj/L31-18.mp3"
      },
      {
       "id": "L32",
@@ -3347,7 +3347,7 @@
       "kanji": "残念",
       "kana": "ざんねん",
       "zh": "可惜、遺憾",
-      "audio": "audio/L32-v16.mp3"
+      "audio": "audio/adj/L32-16.mp3"
      },
      {
       "id": "L32",
@@ -3356,7 +3356,7 @@
       "kanji": "大変",
       "kana": "たいへん",
       "zh": "辛苦、嚴重",
-      "audio": "audio/L32-v17.mp3"
+      "audio": "audio/adj/L32-17.mp3"
      },
      {
       "id": "L32",
@@ -3365,7 +3365,7 @@
       "kanji": "不思議",
       "kana": "ふしぎ",
       "zh": "不可思議",
-      "audio": "audio/L32-v18.mp3"
+      "audio": "audio/adj/L32-18.mp3"
      },
      {
       "id": "L36",
@@ -3374,7 +3374,7 @@
       "kanji": "元気",
       "kana": "げんき",
       "zh": "有精神",
-      "audio": "audio/L36-v15.mp3"
+      "audio": "audio/adj/L36-15.mp3"
      },
      {
       "id": "L36",
@@ -3383,7 +3383,7 @@
       "kanji": "残念",
       "kana": "ざんねん",
       "zh": "可惜、遺憾",
-      "audio": "audio/L36-v16.mp3"
+      "audio": "audio/adj/L36-16.mp3"
      },
      {
       "id": "L36",
@@ -3392,7 +3392,7 @@
       "kanji": "大変",
       "kana": "たいへん",
       "zh": "辛苦、不得了",
-      "audio": "audio/L36-v17.mp3"
+      "audio": "audio/adj/L36-17.mp3"
      },
      {
       "id": "L36",
@@ -3401,7 +3401,7 @@
       "kanji": "丈夫",
       "kana": "じょうぶ",
       "zh": "結實、耐用",
-      "audio": "audio/L36-v18.mp3"
+      "audio": "audio/adj/L36-18.mp3"
      },
      {
       "id": "L37",
@@ -3410,7 +3410,7 @@
       "kanji": "有名",
       "kana": "ゆうめい",
       "zh": "有名的",
-      "audio": "audio/L37-v24.mp3"
+      "audio": "audio/adj/L37-24.mp3"
      },
      {
       "id": "L37",
@@ -3419,7 +3419,7 @@
       "kanji": "大切",
       "kana": "たいせつ",
       "zh": "重要的",
-      "audio": "audio/L37-v25.mp3"
+      "audio": "audio/adj/L37-25.mp3"
      }
     ]
    }

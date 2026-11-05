@@ -66,6 +66,8 @@ node tools/validate.mjs
 - 合成文字一律用漢字原句（人名先換假名）：只給假名時，助詞「は」會被讀成 ha。改動發音時不要退回「假名 + 裝置 TTS」的做法。
 - 「慢速」是把同一段人聲以 `playbackRate = 0.7` 播放，不是改用合成音。
 - 動詞表／形容詞表由 `tools/build_wordtables.py` 由各課單字自動生成 `data/wordtables.json`：動詞換算成原形＋ます形後分五段／一段／不規則，形容詞依 pos（い形／な形／形容動詞）分類。單字表的假名時而寫ます形、時而寫原形，改分類規則時兩個方向都要顧及。動詞原形音檔在 `audio/verb/`。
+- 動詞表／形容詞表的音檔（`audio/verb/`、`audio/adj/`）生成後同樣要跑 `tools/trim_seq_audio.py audio/verb`、`... audio/adj`，剪完每段約 0.6 秒，「播放全部」才會緊湊。這兩個目錄用獨立版本號 `auVer()`（`?v=t1`），不要為它們去 bump `audio.json` 的 `v`，否則全部 60MB 音檔都要重下。
+- 「播放全部」會用 `followRow()` 自動把當前播放的那一行捲到畫面中間（判斷只在跑出可視範圍時才捲，避免每 0.6 秒都動畫面）。
 - 順序表的音檔（`audio/seq/`）用 `tools/trim_seq_audio.py` 剪掉前後靜音：edge-tts 原始檔每段尾隨約 1.1 秒空白，剪完後每段約 0.7 秒，「播放全部」才會緊湊。重跑 `make_seq_audio.py --force` 後要再跑一次 `trim_seq_audio.py --force`，並把 `data/audio.json` 的 `v` 加一，令瀏覽器重抓音檔。
 - 驗證人聲有無接上：`python3 -m http.server 8899` 後跑 `python3 tools/check_audio_cdp.py http://127.0.0.1:8899/`（文法總表、課內文法、聽力、對話、跟讀逐項檢查是否播 mp3、有沒有落到 TTS）。
 - Service Worker 採網路優先：有新版本時直接更新，離線時才回退到快取。

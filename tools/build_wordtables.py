@@ -152,7 +152,7 @@ def main():
                     continue
                 adjs.append({"id": les["id"], "vi": vi, "group": t,
                              "kanji": kanji, "kana": kana, "zh": zh,
-                             "audio": "audio/%s-v%d.mp3" % (les["id"], vi)})
+                             "audio": "audio/adj/%s-%d.mp3" % (les["id"], vi)})
 
     # 去重（同一課同一個字只留一次；不同課重複的照留，方便對照）
     def uniq(items):
@@ -197,21 +197,26 @@ def main():
     if skipped:
         print("未分類：", len(skipped), skipped[:6])
 
-    # 動詞原形人聲
-    os.makedirs(os.path.join(ROOT, "audio/verb"), exist_ok=True)
+    # 動詞原形人聲、形容詞人聲（各自一套，方便剪靜音做「播放全部」）
     jobs = []
-    for v in verbs:
-        out = os.path.join(ROOT, v["audio"])
-        if force_audio or not (os.path.exists(out) and os.path.getsize(out) > 900):
-            jobs.append((v["masu"], v["jisho"], v["kana"], out))
-    print("動詞音檔：待生成 %d 段" % len(jobs), flush=True)
+    for x in verbs:
+        jobs.append((x["kana"], os.path.join(ROOT, x["audio"])))
+    for x in adjs:
+        jobs.append((x["kana"], os.path.join(ROOT, x["audio"])))
+    print("音檔：共 %d 段（動詞 %d、形容詞 %d）" % (len(jobs), len(verbs), len(adjs)), flush=True)
+    todo = [(txt, out) for txt, out in jobs
+            if force_audio or not (os.path.exists(out) and os.path.getsize(out) > 900)]
+    for txt, out in todo:
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+    print("待生成 %d 段" % len(todo), flush=True)
     fail = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as ex:
-        for (masu, jisho, kana, out), ok in zip(jobs, ex.map(lambda j: synth(j[1], j[3]), jobs)):
+        for ok in ex.map(lambda j: synth(j[0], j[1]), todo):
             if not ok:
                 fail += 1
-    if jobs:
-        print("動詞音檔完成：成功 %d，失敗 %d" % (len(jobs) - fail, fail))
+    if todo:
+        print("完成：成功 %d，失敗 %d" % (len(todo) - fail, fail))
+        print("記得剪靜音：python3 tools/trim_seq_audio.py audio/verb && python3 tools/trim_seq_audio.py audio/adj")
 
 
 if __name__ == "__main__":
