@@ -414,7 +414,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v46</span>
+    <span class="ver" id="verTag">v47</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2274,7 +2274,10 @@
   }
   /* 動詞表／形容詞表有自己的音檔版本，避免為了它們把全部音檔重新下載 */
   function auVer(url){
+    // 句子（會話・句型・文法・聽力）與動詞／形容詞表各自一套版本號，
+    // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
     if (/audio\/(verb|adj)\//.test(url)) return 't1';
+    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e3';
     return AUDIO.v || 1;
   }
   function playFile(url, onend, el, rate){
