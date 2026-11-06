@@ -72,6 +72,12 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 - 發音來源：預製 mp3（`kana/audio/n/`，以羅馬拼音命名，104 段），由 `python3 tools/make_kana_audio.py --force` 產生，再跑 `python3 tools/trim_seq_audio.py kana/audio/n --force --head 0.08 --tail 0.30` 剪靜音（剪後每段約 0.52 秒）。連續三次載入失敗才會 fallback 到 `speechSynthesis`。
 - 原本的 `audio/g/`（Google 語音）已移除：該批來自 Google 翻譯朗讀介面，沒有可轉散布的授權。現時只剩一套聲源（`audio/n/`），介面的聲源選擇已收起；日後接上商用授權引擎時，把新聲源放去 `kana/audio/<key>/` 再加返個 key 即可。
 
+## 五十音頁的手寫判定
+
+- 手寫模式（`kana/`）比對時**平假名與片假名要逐字相同**才算對；以前用 `toHira()` 兩邊轉平假名再比，隨機混合時寫「あ」也會當成「ア」答對。現在若只是寫錯字形種類，回饋會寫明「你寫了 ひらがな 的「あ」，這題要 カタカナ」。
+- 讀音模式（語音辨識）仍然用平假名正規化：聲音聽不出平／片假名，這屬於辨識限制，不算錯。
+- 自動測試掛鈎：`kana/?kdebug=1` 會掛上 `window.__kanaTest`（`setCurrent`／`pick`／`stats`），正常使用時不存在。
+
 ## 技術說明
 
 - 純前端，無建置步驟、無外部依賴；字體使用系統的日文與繁中字型。

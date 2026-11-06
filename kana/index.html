@@ -1295,7 +1295,12 @@
   }
   function checkPicked(ch){
     if(mode!=='write' || answered) return;
-    const ok = toHira(ch) === toHira(current.k);
+    /* 手寫要分平假名／片假名：以前用 toHira() 兩邊都轉平假名再比，
+       隨機混合時寫「あ」也會當成「ア」答對。這裡改成逐字完全相同才算對，
+       但若只是字形種類寫錯，回饋會講清楚是寫錯平／片假名。 */
+    const nfc = s => (s||'').normalize('NFC');
+    const ok = nfc(ch) === nfc(current.k);
+    const scriptSlip = !ok && toHira(ch) === toHira(current.k);
     answered = true;
     recogSeq++; clearTimeout(recogTimer);
     const sel = candsEl.querySelector('.cand.sel');
@@ -1307,8 +1312,11 @@
       showFeedback(fbWrite, true, '答對了！', scope==='wrong'?'<span class="alt">已移出錯題簿</span>':'', current.k);
     }else{
       stats.wrong++; stats.streak=0; addWrong(current);
+      const slip = scriptSlip
+        ? '<span class="alt">你寫了 '+typeName(current.type==='kata'?'hira':'kata')+' 的「'+ch+'」，這題要 '+typeName(current.type)+'。</span> '
+        : '';
       showFeedback(fbWrite, false, '',
-        '你選了 '+ch+' · 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
+        slip + '你選了 '+ch+' · 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
     }
     updateStats();
     writebarEl.style.display='none';
@@ -1799,7 +1807,19 @@
 
   /* 已併入日語階梯：Service Worker 交由上層（本站根目錄）統一處理，
      這裡不再註冊 /kana/sw.js，避免兩個 SW 爭同一個 scope。 */
-  if(false &&'serviceWorker' in navigator && location.protocol.startsWith('http') && !isNativeApp){
+  /* 自動測試用掛鈎：只在 ?kdebug=1 時存在，正常使用不受影響。
+     用來驗證「手寫要分平／片假名」這類無法靠點擊重現的判斷。 */
+  if(location.search.indexOf('kdebug=1') >= 0){
+    window.__kanaTest = {
+      all: ()=>[...ALL_KANA.values()],
+      setCurrent: o=>{ mode='write'; current=o; answered=false; },
+      pick: ch=>checkPicked(ch),
+      stats: ()=>({correct:stats.correct, wrong:stats.wrong}),
+      answered: ()=>answered
+    };
+  }
+
+  if(false && 'serviceWorker' in navigator && location.protocol.startsWith('http') && !isNativeApp){
     window.addEventListener('load', async ()=>{
       const had = !!navigator.serviceWorker.controller;
       try{
