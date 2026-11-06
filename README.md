@@ -62,6 +62,12 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 
 課程順序參照初級綜合教材《日本語GOGOGO》公布的 40 課文型表；課名、例句、會話、文法說明、練習題與文化專欄全部自行編寫，不採用原書文字、圖片或錄音。每冊的單字數與句型數（498／48、456／41、565／36、459／43）為該教材公布的統計，只作進度參考。
 
+## 五十音頁（由 kana-dojo 併入）
+
+- `kana/index.html` 是原本 Kana Dojo 的單檔練習頁（羅馬拼音／鍵盤輸入／手寫／讀音四種模式），連 `kana/kana-templates.json`（手寫辨識模板）一併放在本站；入口在地圖「第一冊」之上的五十音區塊。
+- 併入時做了三件事：header 加返回地圖箭頭；移除它自己的 manifest／圖示（`/kana/` 下會 404）；停用它原本的 `sw.js` 註冊（兩個 SW 爭同一個 scope），快取與更新交給根目錄 `sw.js`（已把 `kana/index.html`、`kana/kana-templates.json` 加入 `SHELL`）。
+- 更新方式：重新抓 kana-dojo 的 index.html／kana-templates.json 覆蓋，再套用上面三項改動。
+
 ## 技術說明
 
 - 純前端，無建置步驟、無外部依賴；字體使用系統的日文與繁中字型。

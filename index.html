@@ -71,6 +71,13 @@
     background:#fffdf8; color:var(--ink2); line-height:1.5}
   .badge.ai{color:var(--ai); border-color:#cdd8e6}
   .list{border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--card)}
+  .kanaentry{display:block; text-decoration:none; color:inherit}
+  .kanaentry .list{display:flex; align-items:center; gap:12px; padding:13px 14px}
+  .kanaentry .kbig{font-family:"Hiragino Mincho ProN",serif; font-size:21px; letter-spacing:.06em; color:var(--ink)}
+  .kanaentry .ktx{flex:1; min-width:0}
+  .kanaentry .ktx b{display:block; font-size:13.5px; font-weight:600}
+  .kanaentry .ktx span{display:block; font-size:11.5px; color:var(--muted); margin-top:2px}
+  .kanaentry .kgo{font-size:12px; color:var(--shu); flex:0 0 auto}
   .lrow{display:flex; align-items:center; gap:12px; padding:13px 14px; text-decoration:none;
     border-bottom:1px solid var(--line); min-height:52px; position:relative}
   .lrow:last-child{border-bottom:0}
@@ -414,7 +421,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v47</span>
+    <span class="ver" id="verTag">v48</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -770,6 +777,22 @@
           '<path d="M9.5 4v4M9.5 10v4M9.5 16v4"/></svg>' +
           '<div><b>順序表</b><span>數量・日期</span></div></a>' +
       '</div>' +
+      '<section class="book">' +
+        '<div class="bookhd">' +
+          '<span class="bn">五十音</span>' +
+          '<span class="badge ai">入門</span>' +
+          '<span class="badge">あ・ア</span>' +
+          '<span class="meta">平假名 · 片假名</span>' +
+        '</div>' +
+        '<a class="kanaentry" href="kana/">' +
+          '<div class="list">' +
+            '<span class="kbig">あ ア</span>' +
+            '<span class="ktx"><b>五十音練習</b>' +
+              '<span>羅馬拼音、聽寫、手寫、讀音四種練法；錯了自動收入錯題簿</span></span>' +
+            '<span class="kgo">開始 →</span>' +
+          '</div>' +
+        '</a>' +
+      '</section>' +
       books +
       '<p class="note">課程順序參照初級綜合教材的 40 課編排；課名、例句、會話與練習均為自編內容，未採用原書文字與錄音。單字數與句型數為該教材公布之統計，僅作進度參考。</p>';
 

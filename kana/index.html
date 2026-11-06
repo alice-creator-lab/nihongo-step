@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2c3e6b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="日語階梯">
+<title>五十音 · 日語階梯</title>
+
+<link rel="icon" type="image/png" sizes="192x192" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  .backhome{display:inline-flex; align-items:center; flex:0 0 auto;
+    text-decoration:none; color:var(--ink-soft); font-size:16px; line-height:1;
+    padding:8px 6px; margin-left:-4px}
+  .backhome span{display:none}
+  /* 加入返回地圖後 header 變窄：收細字級、按鈕不准換行 */
+  header .brand, header .hactions{flex-wrap:nowrap; min-width:0}
+  header .brand{gap:6px}
+  header .brand .jp{font-size:18px; white-space:nowrap}
+  header .brand .sub{font-size:10.5px; white-space:nowrap}
+  header .brand .ver{display:none}
+  header .reset{white-space:nowrap; padding:7px 10px; font-size:12px}
+  header .iconbtn{flex:0 0 auto}
+  @media (max-width:360px){
+    header .brand .sub{display:none}
+  }
+  .backhome:active{color:var(--ink)}
+  :root{
+    --washi:#f4efe6; --washi-2:#ece4d6; --ink:#26221d; --ink-soft:#6b6357;
+    --card:#fffdf8; --indigo:#2c3e6b; --indigo-2:#3a4f86; --vermilion:#c8402f;
+    --green:#2e8b57; --green-bg:#e6f5ec; --red:#d64541; --red-bg:#fbe9e8;
+    --line:#e4dccd; --shadow:0 10px 40px rgba(60,48,28,.12), 0 2px 8px rgba(60,48,28,.06);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0; font-family:"Noto Sans JP","Hiragino Sans","Microsoft JhengHei",-apple-system,BlinkMacSystemFont,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #efe6d3 0%, transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, #e9e1d1 0%, transparent 55%),
+      var(--washi);
+    min-height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    padding:calc(20px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
+  }
+  .app{width:100%; max-width:520px; display:flex; flex-direction:column; gap:14px; flex:0 0 auto;}
+
+  header{display:flex; align-items:center; justify-content:space-between; padding:0 4px;}
+  .brand{display:flex; align-items:baseline; gap:10px;}
+  .brand .jp{font-family:"Noto Serif JP",serif; font-weight:700; font-size:22px; letter-spacing:.06em;}
+  .brand .sub{font-size:12px; color:var(--ink-soft); letter-spacing:.14em; text-transform:uppercase;}
+  .brand .ver{font-size:10px; color:#c3b9a6; letter-spacing:.08em; align-self:center;}
+  .reset{border:1px solid var(--line); background:var(--card); color:var(--ink-soft);
+    font-size:12.5px; padding:8px 13px; border-radius:999px; cursor:pointer; transition:.18s; font-family:inherit;}
+  .reset:hover{color:var(--vermilion); border-color:#e2c5bc;}
+  .hactions{display:flex; align-items:center; gap:8px;}
+
+  /* 假名表（溫習） */
+  .chart{position:fixed; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; padding:14px;}
+  .chart[hidden]{display:none;}
+  .chart-bg{position:absolute; inset:0; background:rgba(38,34,29,.42);}
+  .chart-card{position:relative; width:min(560px,100%); max-height:86vh; background:var(--card);
+    border-radius:20px; box-shadow:0 24px 60px rgba(38,34,29,.3); display:flex; flex-direction:column; overflow:hidden;}
+  .chart-head{display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:13px 15px; border-bottom:1px solid var(--line);}
+  .chart-head h2{font-size:14.5px; letter-spacing:.1em; font-weight:700;}
+  .chart-head .sub{font-size:10.5px; color:#b6ac99; letter-spacing:.1em;}
+  .chart-close{border:1px solid var(--line); background:var(--card); color:var(--ink-soft); width:30px; height:30px;
+    border-radius:999px; cursor:pointer; font-size:14px; line-height:1;}
+  .chart-close:hover{color:var(--vermilion); border-color:#e2c5bc;}
+  .chart-tools{padding:9px 14px; display:flex; justify-content:center; border-bottom:1px solid var(--line);}
+  .chart-seg{display:flex; gap:5px; background:#f4eee2; border:1px solid var(--line); border-radius:999px; padding:3px;}
+  .chart-seg button{border:0; background:transparent; font-family:inherit; font-size:12px; letter-spacing:.04em;
+    padding:6px 15px; border-radius:999px; color:var(--ink-soft); cursor:pointer; transition:.15s;}
+  .chart-seg button.active{background:var(--card); color:var(--ink); font-weight:700; box-shadow:0 1px 4px rgba(60,48,28,.12);}
+  .chart-body{overflow:auto; padding:12px 14px 18px; -webkit-overflow-scrolling:touch;}
+  .chart-sec{margin-top:14px;}
+  .chart-sec:first-child{margin-top:2px;}
+  .chart-sec h3{font-size:11px; letter-spacing:.14em; color:var(--ink-soft); text-transform:uppercase; margin:0 0 7px 2px;}
+  .kgrid{display:grid; gap:6px;}
+  .kgrid.c5{grid-template-columns:repeat(5,1fr);}
+  .kgrid.c3{grid-template-columns:repeat(3,1fr);}
+  .kcell{display:flex; flex-direction:column; align-items:center; gap:1px; padding:6px 2px 5px;
+    border:1px solid var(--line); border-radius:10px; background:#fffefb; cursor:pointer; font-family:inherit;
+    transition:.12s; touch-action:manipulation;}
+  .kcell:active,.kcell:focus-visible{border-color:var(--indigo);}
+  .kcell b{font-family:"Noto Serif JP",serif; font-size:19px; font-weight:700; line-height:1.15; color:var(--ink);}
+  .kcell i{font-style:normal; font-family:"Noto Serif JP",serif; font-size:12px; line-height:1.1; color:#9b9280;}
+  .kcell span{font-size:9px; color:#c0b7a6; letter-spacing:.05em;}
+  .kcell.blank{visibility:hidden;}
+  .kcell.playing{border-color:var(--indigo); background:#eef1f8;}
+
+  .mode{display:flex; background:var(--indigo); border-radius:15px; padding:5px; gap:5px;}
+  .mode button{flex:1; border:0; background:transparent; color:#c7d0e8; font-family:inherit;
+    font-size:12.5px; font-weight:600; padding:11px 1px; border-radius:11px; cursor:pointer; transition:.18s; white-space:nowrap;
+    letter-spacing:.01em;}
+  .mode button.active{background:var(--card); color:var(--indigo); box-shadow:0 2px 10px rgba(0,0,0,.18);}
+
+  .modebar{display:flex; gap:8px; align-items:center;}
+  .seg{display:flex; background:var(--washi-2); border-radius:14px; padding:4px; gap:4px; flex:1;}
+  .seg button{flex:1; border:0; background:transparent; color:var(--ink-soft); font-family:inherit;
+    font-size:14px; font-weight:500; padding:9px 6px; border-radius:10px; cursor:pointer; transition:.18s; white-space:nowrap;}
+  .seg button.active{background:var(--card); color:var(--indigo); box-shadow:0 2px 8px rgba(60,48,28,.10); font-weight:700;}
+  #scopeSeg button{font-size:13.5px; padding:9px 3px;}
+  .badge{display:inline-block; min-width:17px; height:17px; line-height:17px; padding:0 5px; margin-left:4px;
+    border-radius:999px; background:var(--vermilion); color:#fff; font-size:11px; font-weight:700; vertical-align:2px;}
+  .badge[hidden]{display:none;}
+
+  /* ── 錯題簿管理（底部 sheet）*/
+  .sheet-wrap{position:fixed; inset:0; z-index:50;}
+  .sheet-wrap[hidden]{display:none;}
+  .sheet-bg{position:absolute; inset:0; background:rgba(38,34,29,.42);}
+  .sheet{position:absolute; left:50%; bottom:0; transform:translateX(-50%); width:100%; max-width:520px;
+    max-height:86vh; display:flex; flex-direction:column; background:var(--card);
+    border-radius:22px 22px 0 0; box-shadow:0 -12px 40px rgba(40,32,20,.28);
+    padding:18px 18px calc(16px + env(safe-area-inset-bottom)); animation:sheetIn .22s cubic-bezier(.2,.9,.3,1.1);}
+  @keyframes sheetIn{from{transform:translate(-50%,20px); opacity:.5;} to{transform:translate(-50%,0); opacity:1;}}
+  .sheet-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex:0 0 auto;}
+  .sheet-title{font-size:17px; font-weight:700; color:var(--indigo);}
+  .sheet-sub{font-size:12.5px; color:var(--ink-soft); margin-top:3px; font-variant-numeric:tabular-nums;}
+  .sheet-x{border:0; background:var(--washi-2); color:var(--ink-soft); width:32px; height:32px; border-radius:50%;
+    font-size:13px; cursor:pointer; flex:0 0 auto; line-height:1;}
+  .sheet-tools{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 10px; flex:0 0 auto;}
+  .sheet-tools .mini{padding:7px 11px; font-size:12.5px;}
+  .sheet-tools .mini.danger{color:var(--red); border-color:#eccfcb;}
+  .sheet-tools .mini.on{background:var(--indigo); border-color:var(--indigo); color:#fff;}
+  .sheet-list{overflow-y:auto; display:flex; flex-direction:column; gap:6px; min-height:64px; padding:2px;
+    -webkit-overflow-scrolling:touch;}
+  .sheet-empty{font-size:13px; color:var(--ink-soft); text-align:center; padding:22px 6px; line-height:1.6;}
+  .witem{display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--line);
+    border-radius:12px; background:#fffefb; cursor:pointer;}
+  .witem.off{opacity:.55;}
+  .wtick{width:26px; height:26px; flex:0 0 26px; border-radius:8px; border:1.5px solid var(--line); background:#fff;
+    color:transparent; font-size:14px; font-weight:700; cursor:pointer; display:grid; place-items:center; padding:0;}
+  .witem.on .wtick{background:var(--green); border-color:var(--green); color:#fff;}
+  .wkana{font-family:"Noto Serif JP",serif; font-size:24px; font-weight:700; line-height:1;}
+  .wrom{font-size:12.5px; color:var(--ink-soft); letter-spacing:.04em;}
+  .wtag{margin-left:auto; font-size:11px; color:#b6ac99; letter-spacing:.06em;}
+  .wdel{border:0; background:transparent; color:#c9bfae; font-size:13px; cursor:pointer; padding:5px 7px; border-radius:8px;}
+  .wdel:hover{color:var(--red); background:var(--red-bg);}
+  .sheet-add{margin-top:10px; border-top:1px dashed var(--line); padding-top:10px; display:flex; flex-direction:column;
+    gap:8px; flex:0 1 auto; min-height:0;}
+  .sheet-add[hidden]{display:none;}
+  .add-hint{font-size:12px; color:var(--ink-soft);}
+  .add-grid{display:grid; grid-template-columns:repeat(8,1fr); gap:6px; max-height:190px; overflow-y:auto; padding:2px;}
+  .add-grid button{border:1.5px solid var(--line); background:#fffefb; border-radius:9px; aspect-ratio:1/1;
+    font-family:"Noto Serif JP",serif; font-size:17px; font-weight:700; color:var(--ink); cursor:pointer; padding:0;}
+  .add-grid button:hover{border-color:var(--indigo);}
+  .sheet-foot{margin-top:14px; display:flex; gap:8px; flex:0 0 auto;}
+  .sheet-foot .btn-main{flex:1; min-height:48px;}
+  .sheet-foot .btn-main:disabled{opacity:.45; box-shadow:none; cursor:default;}
+
+  .card{background:var(--card); border-radius:26px; box-shadow:var(--shadow); padding:24px 20px 22px;
+    border:1px solid #f2ebdd; position:relative; overflow:hidden;}
+  .card::after{content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(120% 90% at 50% -20%, rgba(44,62,107,.05), transparent 55%);}
+  .panel{display:none; flex-direction:column; align-items:center; gap:6px; position:relative; z-index:1;}
+  .panel.active{display:flex;}
+  .type-label.hide{display:none;}
+  .empty{display:flex; flex-direction:column; align-items:center; gap:10px; padding:34px 10px 30px; text-align:center;}
+  .empty .ico{font-size:44px; line-height:1;}
+  .empty .t{font-size:17px; font-weight:700; color:var(--indigo);}
+  .empty .s{font-size:13.5px; color:var(--ink-soft); line-height:1.6; max-width:30ch;}
+  .empty .btn-main{min-height:46px; margin-top:8px;}
+
+  .type-label{font-size:12px; letter-spacing:.16em; color:var(--ink-soft); text-transform:uppercase; margin-top:2px;}
+  .kana{font-family:"Noto Serif JP","Hiragino Mincho ProN","Yu Mincho",serif; font-weight:700;
+    font-size:150px; line-height:1; color:var(--ink); user-select:none;
+    min-height:160px; display:flex; align-items:center;
+    animation:pop .28s cubic-bezier(.2,.9,.3,1.4);}
+  @keyframes pop{from{opacity:0; transform:scale(.8);} to{opacity:1; transform:scale(1);}}
+
+  .input-row{width:100%; margin-top:12px; display:flex; gap:10px;}
+  #answer{flex:1; min-width:0; font-family:inherit; font-size:20px; text-align:center;
+    padding:15px 14px; border-radius:15px; border:2px solid var(--line); background:#fffefb;
+    color:var(--ink); outline:none; transition:.18s; letter-spacing:.08em; font-weight:600;}
+  #answer::placeholder{color:#c3b9a6; font-weight:400; letter-spacing:.04em;}
+  #answer:focus{border-color:var(--indigo); box-shadow:0 0 0 4px rgba(44,62,107,.10);}
+  #answer.correct{border-color:var(--green); background:var(--green-bg); color:var(--green);}
+  #answer.wrong{border-color:var(--red); background:var(--red-bg); color:var(--red);}
+  .btn-main{border:0; border-radius:15px; padding:0 24px; font-family:inherit; font-size:16px; font-weight:700;
+    background:var(--indigo); color:#fff; cursor:pointer; transition:.18s; white-space:nowrap;
+    box-shadow:0 6px 18px rgba(44,62,107,.28);}
+  .btn-main:hover{background:var(--indigo-2);}
+  .btn-main.next{background:#4f4a42; box-shadow:0 6px 18px rgba(38,34,29,.22);}
+  .btn-main.next.err{background:var(--red); box-shadow:0 6px 18px rgba(214,69,65,.28);}
+
+  /* listen prompt */
+  .prompt-wrap{display:flex; flex-direction:column; align-items:center; gap:8px; padding:6px 0 2px;}
+  .listen-prompt{width:140px; height:140px; border-radius:50%; cursor:pointer;
+    background:linear-gradient(145deg,#eef1fb,#dfe6f7); border:2px solid #d5ddf2;
+    display:grid; place-items:center; box-shadow:0 10px 30px rgba(44,62,107,.18); transition:.2s;}
+  .listen-prompt:hover{transform:scale(1.03);}
+  .listen-prompt:active{transform:scale(.96);}
+  .listen-prompt .ico{font-size:58px; line-height:1; color:var(--indigo); display:grid; place-items:center;}
+  .listen-prompt .ico svg{width:1em; height:1em; display:block;}
+  .listen-prompt.playing{animation:ring .8s ease-out;}
+  @keyframes ring{0%{box-shadow:0 0 0 0 rgba(44,62,107,.30);} 100%{box-shadow:0 0 0 22px rgba(44,62,107,0);}}
+  .prompt-hint{font-size:13.5px; color:var(--ink-soft);}
+  .prompt-hint b{color:var(--indigo);}
+
+  /* 拼音提示（可選） */
+  .prompt-romaji{display:none; font-size:17px; font-weight:800; letter-spacing:.08em;
+    color:var(--indigo); line-height:1.2; user-select:none;}
+  .prompt-romaji.on{display:block; animation:romIn .18s ease-out;}
+  .prompt-romaji .alt{font-size:12px; font-weight:600; letter-spacing:.02em; color:var(--ink-soft); opacity:.85; margin-left:6px;}
+  @keyframes romIn{from{opacity:0; transform:translateY(-3px);} to{opacity:1; transform:none;}}
+
+  .pad{width:100%; margin-top:14px; display:grid; grid-template-columns:repeat(6,1fr); gap:8px;}
+  .pad button{aspect-ratio:1/1; border:1.5px solid var(--line); background:#fffefb; border-radius:12px;
+    font-family:"Noto Serif JP",serif; font-size:23px; font-weight:700; color:var(--ink); cursor:pointer; transition:.13s; padding:0;}
+  .pad button:hover{border-color:var(--indigo);}
+  .pad button:active{transform:scale(.93);}
+  .pad button:disabled{cursor:default;}
+  .pad button.right{background:var(--green-bg); border-color:var(--green); color:var(--green);}
+  .pad button.wrongtap{background:var(--red-bg); border-color:var(--red); color:var(--red);}
+  .pad button.reveal{box-shadow:0 0 0 2.5px var(--green) inset; border-color:var(--green);}
+  .pad button.dim{opacity:.4;}
+  .pad button.long{font-size:16.5px; letter-spacing:-.03em;}
+  .pad-label{grid-column:1/-1; font-size:12px; letter-spacing:.12em; color:var(--ink-soft); margin:6px 0 -2px; text-align:left;}
+  .pad-sublabel{grid-column:1/-1; font-size:10.5px; letter-spacing:.14em; color:#b6ac99; margin:2px 0 -3px; text-align:left;}
+
+  /* 聽聲：選字 draft + 濁點／拗音小字 */
+  .draft-row{display:flex; align-items:center; gap:9px; margin-top:10px; min-height:34px; width:100%;}
+  .draft-label{font-size:11px; letter-spacing:.12em; color:#b6ac99;}
+  .draft-kana{font-family:"Noto Serif JP",serif; font-size:25px; font-weight:700; color:var(--indigo); line-height:1; margin-right:auto;}
+  .draft-kana.empty{color:#d3cabb; font-weight:500;}
+  .marks{display:flex; gap:8px; justify-content:center; margin-top:10px; flex-wrap:wrap;}
+  .marks[hidden]{display:none;}
+  .marks button{min-width:50px; height:42px; border:1.5px solid var(--line); background:#fffefb; border-radius:11px;
+    font-family:"Noto Serif JP",serif; font-size:19px; font-weight:700; color:var(--ink); cursor:pointer; transition:.13s; padding:0 6px;}
+  .marks button:hover{border-color:var(--indigo);}
+  .marks button:active{transform:scale(.94);}
+  .marks button:disabled{opacity:.4; cursor:default;}
+  #listenCheckBtn{padding:0 16px; min-height:42px; font-size:15px; flex:0 0 auto;}
+  #listenCheckBtn:disabled{opacity:.45; box-shadow:none; cursor:default;}
+
+  /* 聽聲：答案／重讀／慢放 貼住檢查掣，不使捲到鍵盤尾至見到 */
+  .listen-ctl{display:flex; align-items:center; gap:8px; margin-top:8px; width:100%; flex-wrap:wrap;}
+  .listen-ctl .feedback{margin-top:0; min-height:32px; flex:1 1 140px; justify-content:flex-start; text-align:left; gap:6px; font-size:14px;}
+  .listen-ctl .feedback .answer-txt{font-size:17px;}
+  .ctlbtn{border:1.5px solid var(--line); background:#fffefb; color:var(--ink-soft); font-family:inherit;
+    font-size:13.5px; font-weight:700; letter-spacing:.04em; padding:0 12px; min-height:34px; border-radius:11px;
+    cursor:pointer; transition:.13s; flex:0 0 auto;}
+  .ctlbtn:hover{border-color:var(--indigo); color:var(--indigo);}
+  .ctlbtn:active{transform:scale(.94);}
+  .ctlbtn.playing{border-color:var(--indigo); color:var(--indigo);}
+  #writeNextBtn{width:100%; margin-top:12px; min-height:46px;}
+
+  /* write pad */
+  .paper-wrap{width:100%; max-width:320px; margin-top:12px; border:1.5px solid var(--line); border-radius:16px; overflow:hidden; background-color:#fffefb;
+    background-image:linear-gradient(to right,transparent calc(50% - .5px),#e8e0d0 calc(50% - .5px),#e8e0d0 calc(50% + .5px),transparent calc(50% + .5px)),
+                     linear-gradient(to bottom,transparent calc(50% - .5px),#e8e0d0 calc(50% - .5px),#e8e0d0 calc(50% + .5px),transparent calc(50% + .5px));}
+  #paper{display:block; width:100%; aspect-ratio:1/1; touch-action:none; cursor:crosshair;}
+  .writebar{width:100%; max-width:320px; display:flex; gap:8px; margin-top:12px;}
+  .mini{border:1px solid var(--line); background:var(--card); color:var(--ink-soft); font-family:inherit;
+    font-size:14px; padding:11px 14px; border-radius:12px; cursor:pointer; transition:.18s;}
+  .mini:hover{color:var(--vermilion); border-color:#e2c5bc;}
+  #revealBtn{flex:1; min-height:46px;}
+  .reveal{width:100%; text-align:center; font-size:14px; color:var(--ink-soft); margin-top:12px; display:none;}
+  .reveal.show{display:block;}
+  .reveal b{font-family:"Noto Serif JP",serif; font-size:32px; color:var(--ink); margin:0 6px;}
+  .speak-row{display:flex; gap:8px; width:100%; max-width:320px; margin-top:6px; align-items:stretch;}
+  .micbtn{display:flex; align-items:center; justify-content:center; gap:8px; flex:1;}
+  .micbtn svg{width:19px; height:19px;}
+  .micbtn.rec{background:var(--red); box-shadow:0 6px 18px rgba(214,69,65,.3); animation:pulse 1.1s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.72;}}
+  .micbtn:disabled{opacity:.45; cursor:default; box-shadow:none;}
+  .speak-row .ctlbtn{min-width:78px;}
+  .speak-note{font-size:11.5px; color:#b6ac99; text-align:center; margin-top:10px; line-height:1.5; max-width:330px;}
+  .speak-tip{font-size:11px; color:#c3b9a6; text-align:center; margin-top:14px; line-height:1.6; max-width:330px;}
+
+  .scorebar{width:100%; max-width:320px; display:none; gap:8px; margin-top:10px;}
+  .scorebar.show{display:flex;}
+  .score{flex:1; border-radius:13px; padding:13px 0; font-family:inherit; font-size:16px; font-weight:700; cursor:pointer;}
+  .score.ok{background:var(--green-bg); color:var(--green); border:1.5px solid var(--green);}
+  .score.no{background:var(--red-bg); color:var(--red); border:1.5px solid var(--red);}
+
+  .cands{width:100%; max-width:320px; display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;
+    align-items:center; justify-content:center; min-height:0;}
+  .cands .lbl{font-size:11px; color:#b6ac99; letter-spacing:.12em; margin-right:2px;}
+  .cands .hint{font-size:12px; color:var(--ink-soft); text-align:center;}
+  .cand{border:1.5px solid var(--line); background:#fffefb; border-radius:11px; min-width:46px; height:46px;
+    touch-action:manipulation;
+    font-family:"Noto Serif JP",serif; font-size:21px; font-weight:700; color:var(--ink); cursor:pointer;
+    padding:0 9px; transition:.13s;}
+  .cand:hover{border-color:var(--indigo);}
+  .cand:active{transform:scale(.94);}
+  .cand.right{border-color:var(--green); color:var(--green); background:var(--green-bg);}
+  .cand.wrongtap{border-color:var(--red); color:var(--red); background:var(--red-bg);}
+  .cand.sel{border-color:var(--indigo); color:var(--indigo); background:#eef1f8; box-shadow:0 0 0 2px rgba(44,62,107,.16);}
+
+  .feedback{width:100%; margin-top:14px; min-height:40px; display:flex; align-items:center; justify-content:center;
+    gap:9px; font-size:15px; font-weight:600; text-align:center; flex-wrap:wrap;
+    opacity:0; transition:opacity .2s;}
+  .feedback.show{opacity:1;}
+  .feedback .dot{width:9px;height:9px;border-radius:50%;}
+  .feedback.ok{color:var(--green);} .feedback.ok .dot{background:var(--green);}
+  .feedback.no{color:var(--red);} .feedback.no .dot{background:var(--red);}
+  .feedback .answer-txt{font-weight:700; letter-spacing:.05em; font-family:"Noto Serif JP",serif; font-size:18px;}
+  .feedback .alt{color:var(--ink-soft); font-weight:400; font-size:13px;}
+  .speak{border:1px solid var(--line); background:var(--card); border-radius:9px; width:34px;height:34px;
+    display:grid;place-items:center; cursor:pointer; color:var(--indigo); font-size:15px;}
+  .speak svg{width:17px; height:17px; display:block;}
+  .speak.slow{font-size:12px; font-weight:700; font-family:inherit; letter-spacing:.02em;}
+
+  .slowbtn{border:1px solid var(--line); background:var(--card); color:var(--ink-soft); font-family:inherit;
+    font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; cursor:pointer;
+    transition:.18s; white-space:nowrap; margin-left:auto;}
+  .slowbtn.on{background:var(--indigo); border-color:var(--indigo); color:#fff; box-shadow:0 3px 10px rgba(44,62,107,.20);}
+
+  .voicerow{display:flex; align-items:center; gap:6px; padding:0 4px; flex-wrap:wrap; row-gap:6px;}
+  #romajiBtn{margin-left:0;}
+  .ghostbtn{border:1px solid var(--line); background:transparent; color:#b6ac99; font-family:inherit;
+    font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:999px; cursor:pointer; margin-left:6px;
+    transition:.18s; vertical-align:middle;}
+  .ghostbtn.on{background:var(--green-bg); border-color:var(--green); color:var(--green);}
+  .voicerow .vl{font-size:11px; color:#b6ac99; letter-spacing:.14em; margin-right:2px;}
+  .vbtn{border:1px solid var(--line); background:transparent; color:var(--ink-soft); font-family:inherit;
+    font-size:12px; font-weight:500; padding:5px 11px; border-radius:999px; cursor:pointer; transition:.18s;}
+  .vbtn.active{background:var(--indigo); border-color:var(--indigo); color:#fff; font-weight:700;}
+
+  /* 音量／靜音 */
+  .iconbtn{display:grid; place-items:center; width:36px; height:36px; padding:0; border:1px solid var(--line);
+    background:var(--card); border-radius:999px; color:var(--ink-soft); cursor:pointer; transition:.15s; flex:0 0 auto;}
+  .iconbtn:hover{color:var(--indigo); border-color:var(--indigo);}
+  .iconbtn svg{width:17px; height:17px; display:block;}
+  .iconbtn .ico-off{display:none;}
+  .iconbtn.muted{color:var(--red); border-color:var(--red);}
+  .iconbtn.muted .ico-on{display:none;}
+  .iconbtn.muted .ico-off{display:block;}
+
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; background:var(--card);
+    border-radius:18px; padding:14px 8px; box-shadow:0 4px 18px rgba(60,48,28,.06); border:1px solid #f2ebdd;}
+  .stat{display:flex; flex-direction:column; align-items:center; gap:3px; position:relative;}
+  .stat + .stat::before{content:""; position:absolute; left:0; top:14%; height:72%; width:1px; background:var(--line);}
+  .stat .n{font-size:22px; font-weight:700; color:var(--indigo); font-variant-numeric:tabular-nums; line-height:1;}
+  .stat .n.g{color:var(--green);} .stat .n.r{color:var(--red);} .stat .n.v{color:var(--vermilion);}
+  .stat .l{font-size:11px; color:var(--ink-soft); letter-spacing:.04em;}
+
+  footer{text-align:center; font-size:11.5px; color:#b6ac99; padding-top:2px; letter-spacing:.03em;}
+
+  @media (max-width:400px){
+    .kana{font-size:118px; min-height:128px;}
+    .btn-main{padding:0 18px; font-size:15px;}
+    .brand .jp{font-size:19px;}
+    .pad{grid-template-columns:repeat(5,1fr); gap:7px;}
+    .pad button{font-size:21px;}
+    .listen-prompt{width:120px;height:120px;}
+    .listen-prompt .ico{font-size:50px;}
+    .mode button{font-size:12px; padding:10px 3px;}
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v26</span></div>
+      <div class="hactions">
+        <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+        </button>
+        <button class="reset" id="resetBtn" title="重設統計">↺ 重設</button>
+        <button class="iconbtn" id="muteBtn" aria-pressed="false" title="靜音">
+          <svg class="ico-on" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+          <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor" stroke="none"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="mode" id="modeSeg">
+      <button data-mode="read" class="active" title="看字 → 輸入羅馬拼音">羅馬拼音</button>
+      <button data-mode="listen" title="聽發音 → 用鍵盤輸入假名">鍵盤輸入</button>
+      <button data-mode="write" title="聽發音 → 手寫">手寫</button>
+      <button data-mode="speak" title="看字 → 讀出聲音，語音評分">讀音</button>
+    </div>
+
+    <div class="modebar">
+      <div class="seg" id="scopeSeg">
+        <button data-scope="hira" class="active">平假名</button>
+        <button data-scope="kata">片假名</button>
+        <button data-scope="both">隨機混合</button>
+        <button data-scope="wrong">錯題簿<span class="badge" id="wrongBadge" hidden>0</span></button>
+      </div>
+    </div>
+
+    <div class="voicerow">
+      <span class="vl">語音</span>
+      <button class="vbtn" data-voice="g">Google</button>
+      <button class="vbtn" data-voice="n">Nanami</button>
+      <button class="slowbtn" id="slowBtn" title="慢速讀音">慢讀</button>
+      <button class="slowbtn" id="romajiBtn" title="在喇叭下面顯示拼音">拼音</button>
+    </div>
+
+    <div class="voicerow">
+      <span class="vl" title="加入練習的字類">字類</span>
+      <button class="vbtn" data-extra="daku" title="が ざ だ ば 等">濁音</button>
+      <button class="vbtn" data-extra="hand" title="ぱ ぴ ぷ ぺ ぽ">半濁音</button>
+      <button class="vbtn" data-extra="youon" title="きゃ しゃ ちゃ 等">拗音</button>
+    </div>
+
+    <div class="card">
+      <!-- READ PANEL -->
+      <div class="panel active" id="readPanel">
+        <div class="type-label" id="typeLabel">ひらがな</div>
+        <div class="kana" id="kana">あ</div>
+        <div class="input-row">
+          <input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="none"
+                 autocorrect="off" spellcheck="false" placeholder="輸入羅馬字拼音…">
+          <button class="btn-main" id="checkBtn">檢查</button>
+        </div>
+        <div class="feedback" id="fbRead"></div>
+      </div>
+
+      <!-- LISTEN PANEL -->
+      <div class="panel" id="listenPanel">
+        <div class="type-label hide" id="listenType"></div>
+        <div class="prompt-wrap">
+          <button class="listen-prompt" id="listenPrompt" title="按再聽一次"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span></button>
+          <div class="prompt-romaji" id="listenRomaji"></div>
+          <div class="prompt-hint">聽發音 → 選回正確的<b>假名</b></div>
+        </div>
+        <div class="draft-row">
+          <span class="draft-label">你選了</span>
+          <span class="draft-kana empty" id="draftKana">—</span>
+          <button class="btn-main" id="listenCheckBtn" disabled>檢查</button>
+        </div>
+        <div class="listen-ctl">
+          <div class="feedback" id="fbListen"></div>
+          <button class="ctlbtn" id="replayBtn" title="再聽一次">重讀</button>
+          <button class="ctlbtn" id="slowListenBtn" title="慢速再聽">慢放</button>
+        </div>
+        <div class="marks" id="marks" hidden></div>
+        <div class="pad" id="pad"></div>
+      </div>
+
+      <!-- WRITE PANEL -->
+      <div class="panel" id="writePanel">
+        <div class="type-label hide" id="writeType"></div>
+        <div class="prompt-wrap">
+          <button class="listen-prompt" id="writePrompt" title="按再聽一次"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span></button>
+          <div class="prompt-romaji" id="writeRomaji"></div>
+          <div class="prompt-hint">聽發音 → <b>手寫</b>在格子中 <button class="ghostbtn" id="recogBtn">辨識</button></div>
+        </div>
+        <div class="paper-wrap"><canvas id="paper"></canvas></div>
+        <div class="cands" id="cands"></div>
+        <div class="writebar">
+          <button class="mini" id="undoBtn">撤銷</button>
+          <button class="mini" id="clearBtn">清除</button>
+          <button class="btn-main" id="revealBtn">看答案</button>
+        </div>
+        <div class="reveal" id="reveal"></div>
+        <div class="scorebar" id="scorebar">
+          <button class="score ok" id="okBtn">✓ 對</button>
+          <button class="score no" id="noBtn">✗ 錯</button>
+        </div>
+        <button class="btn-main" id="writeNextBtn" hidden>下一題 →</button>
+        <div class="feedback" id="fbWrite"></div>
+      </div>
+
+      <!-- SPEAK PANEL（讀音評分） -->
+      <div class="panel" id="speakPanel">
+        <div class="type-label hide" id="speakType"></div>
+        <div class="kana" id="speakKana">あ</div>
+        <div class="speak-row">
+          <button class="btn-main micbtn" id="micBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8.5 21h7"/></svg>
+            <span id="micLabel">錄音</span>
+          </button>
+          <button class="ctlbtn" id="speakReplay">示範</button>
+        </div>
+        <div class="speak-note" id="speakNote"></div>
+        <div class="speak-tip">iPhone／iPad 的 Safari 不支援語音辨識，請改用 Chrome 開啟本頁；使用 Safari 時錄音鍵會顯示為灰色。</div>
+        <div class="feedback" id="fbSpeak"></div>
+        <button class="btn-main" id="speakNextBtn" hidden>下一題 →</button>
+      </div>
+
+      <!-- 錯題簿空狀態 -->
+      <div class="panel" id="emptyPanel">
+        <div class="empty">
+          <div class="ico"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M9 7h7"/></svg></div>
+          <div class="t" id="emptyTitle">錯題簿目前是空的</div>
+          <div class="s" id="emptySub">答錯的字會自動記錄（不會重複）；也可以自行加入字。</div>
+          <button class="btn-main" id="emptyBtn">去練習</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="n v" id="statStreak">0</span><span class="l">連對</span></div>
+      <div class="stat"><span class="n g" id="statCorrect">0</span><span class="l">答對</span></div>
+      <div class="stat"><span class="n r" id="statWrong">0</span><span class="l">答錯</span></div>
+      <div class="stat"><span class="n" id="statAcc">—</span><span class="l">正確率</span></div>
+    </div>
+
+    <footer>語音 Google／Nanami · 手寫辨識：本機筆順比對（模板 KanjiVG, CC BY-SA） · <span id="build">web-dev</span></footer>
+  </div>
+
+  <!-- 錯題簿管理 sheet -->
+  <div class="sheet-wrap" id="wrongSheet" hidden>
+    <div class="sheet-bg" id="sheetBg"></div>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-head">
+        <div>
+          <div class="sheet-title" id="sheetTitle">錯題簿</div>
+          <div class="sheet-sub" id="sheetSub">0 個字</div>
+        </div>
+        <button class="sheet-x" id="sheetClose" aria-label="關閉">✕</button>
+      </div>
+      <div class="sheet-tools">
+        <button class="mini" id="selAllBtn">全選</button>
+        <button class="mini" id="selNoneBtn">全不選</button>
+        <button class="mini" id="addModeBtn">＋ 加入字</button>
+        <button class="mini danger" id="clearAllBtn">清空</button>
+      </div>
+      <div class="sheet-list" id="sheetList"></div>
+      <div class="sheet-add" id="sheetAdd" hidden>
+        <div class="add-hint">按字加入錯題簿</div>
+        <div class="add-grid" id="addGrid"></div>
+      </div>
+      <div class="sheet-foot">
+        <button class="btn-main" id="startPracticeBtn">開始練習</button>
+      </div>
+    </div>
+  </div>
+
+<div class="chart" id="chart" hidden>
+  <div class="chart-bg" id="chartBg"></div>
+  <div class="chart-card" role="dialog" aria-modal="true" aria-label="假名表">
+    <div class="chart-head">
+      <div>
+        <h2>五十音表</h2>
+        <div class="sub">按字聽發音</div>
+      </div>
+      <button class="chart-close" id="chartClose" aria-label="關閉">✕</button>
+    </div>
+    <div class="chart-tools">
+      <div class="chart-seg" id="chartSeg">
+        <button type="button" data-script="hira" class="active">平假名</button>
+        <button type="button" data-script="kata">片假名</button>
+      </div>
+    </div>
+    <div class="chart-body" id="chartBody"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ── 50音資料 ──────────────────────────────────────────────
+  const HIRA = [
+    ['あ','a'],['い','i'],['う','u'],['え','e'],['お','o'],
+    ['か','ka'],['き','ki'],['く','ku'],['け','ke'],['こ','ko'],
+    ['さ','sa'],['し','shi','si'],['す','su'],['せ','se'],['そ','so'],
+    ['た','ta'],['ち','chi','ti'],['つ','tsu','tu'],['て','te'],['と','to'],
+    ['な','na'],['に','ni'],['ぬ','nu'],['ね','ne'],['の','no'],
+    ['は','ha'],['ひ','hi'],['ふ','fu','hu'],['へ','he'],['ほ','ho'],
+    ['ま','ma'],['み','mi'],['む','mu'],['め','me'],['も','mo'],
+    ['や','ya'],['ゆ','yu'],['よ','yo'],
+    ['ら','ra'],['り','ri'],['る','ru'],['れ','re'],['ろ','ro'],
+    ['わ','wa'],['を','wo','o'],['ん','n','nn']
+  ];
+  const KATA = [
+    ['ア','a'],['イ','i'],['ウ','u'],['エ','e'],['オ','o'],
+    ['カ','ka'],['キ','ki'],['ク','ku'],['ケ','ke'],['コ','ko'],
+    ['サ','sa'],['シ','shi','si'],['ス','su'],['セ','se'],['ソ','so'],
+    ['タ','ta'],['チ','chi','ti'],['ツ','tsu','tu'],['テ','te'],['ト','to'],
+    ['ナ','na'],['ニ','ni'],['ヌ','nu'],['ネ','ne'],['ノ','no'],
+    ['ハ','ha'],['ヒ','hi'],['フ','fu','hu'],['ヘ','he'],['ホ','ho'],
+    ['マ','ma'],['ミ','mi'],['ム','mu'],['メ','me'],['モ','mo'],
+    ['ヤ','ya'],['ユ','yu'],['ヨ','yo'],
+    ['ラ','ra'],['リ','ri'],['ル','ru'],['レ','re'],['ロ','ro'],
+    ['ワ','wa'],['ヲ','wo','o'],['ン','n','nn']
+  ];
+  const packHira = HIRA.map(([k,...r])=>({k,r,type:'hira',cls:'basic'}));
+  const packKata = KATA.map(([k,...r])=>({k,r,type:'kata',cls:'basic'}));
+
+  // ── 濁音・半濁音・拗音（可選加入練習）──────────────────────
+  const DAKU_HIRA = [
+    ['が','ga'],['ぎ','gi'],['ぐ','gu'],['げ','ge'],['ご','go'],
+    ['ざ','za'],['じ','ji'],['ず','zu'],['ぜ','ze'],['ぞ','zo'],
+    ['だ','da'],['ぢ','di','ji'],['づ','du','zu'],['で','de'],['ど','do'],
+    ['ば','ba'],['び','bi'],['ぶ','bu'],['べ','be'],['ぼ','bo']
+  ];
+  const DAKU_KATA = [
+    ['ガ','ga'],['ギ','gi'],['グ','gu'],['ゲ','ge'],['ゴ','go'],
+    ['ザ','za'],['ジ','ji'],['ズ','zu'],['ゼ','ze'],['ゾ','zo'],
+    ['ダ','da'],['ヂ','di','ji'],['ヅ','du','zu'],['デ','de'],['ド','do'],
+    ['バ','ba'],['ビ','bi'],['ブ','bu'],['ベ','be'],['ボ','bo']
+  ];
+  const HAND_HIRA = [['ぱ','pa'],['ぴ','pi'],['ぷ','pu'],['ぺ','pe'],['ぽ','po']];
+  const HAND_KATA = [['パ','pa'],['ピ','pi'],['プ','pu'],['ペ','pe'],['ポ','po']];
+  const YOUON_HIRA = [
+    ['きゃ','kya'],['きゅ','kyu'],['きょ','kyo'],
+    ['しゃ','sha','sya'],['しゅ','shu','syu'],['しょ','sho','syo'],
+    ['ちゃ','cha','tya'],['ちゅ','chu','tyu'],['ちょ','cho','tyo'],
+    ['にゃ','nya'],['にゅ','nyu'],['にょ','nyo'],
+    ['ひゃ','hya'],['ひゅ','hyu'],['ひょ','hyo'],
+    ['みゃ','mya'],['みゅ','myu'],['みょ','myo'],
+    ['りゃ','rya'],['りゅ','ryu'],['りょ','ryo'],
+    ['ぎゃ','gya'],['ぎゅ','gyu'],['ぎょ','gyo'],
+    ['じゃ','ja','zya'],['じゅ','ju','zyu'],['じょ','jo','zyo'],
+    ['びゃ','bya'],['びゅ','byu'],['びょ','byo'],
+    ['ぴゃ','pya'],['ぴゅ','pyu'],['ぴょ','pyo']
+  ];
+  const YOUON_KATA = [
+    ['キャ','kya'],['キュ','kyu'],['キョ','kyo'],
+    ['シャ','sha','sya'],['シュ','shu','syu'],['ショ','sho','syo'],
+    ['チャ','cha','tya'],['チュ','chu','tyu'],['チョ','cho','tyo'],
+    ['ニャ','nya'],['ニュ','nyu'],['ニョ','nyo'],
+    ['ヒャ','hya'],['ヒュ','hyu'],['ヒョ','hyo'],
+    ['ミャ','mya'],['ミュ','myu'],['ミョ','myo'],
+    ['リャ','rya'],['リュ','ryu'],['リョ','ryo'],
+    ['ギャ','gya'],['ギュ','gyu'],['ギョ','gyo'],
+    ['ジャ','ja','zya'],['ジュ','ju','zyu'],['ジョ','jo','zyo'],
+    ['ビャ','bya'],['ビュ','byu'],['ビョ','byo'],
+    ['ピャ','pya'],['ピュ','pyu'],['ピョ','pyo']
+  ];
+  const packDakuHira = DAKU_HIRA.map(([k,...r])=>({k,r,type:'hira',cls:'daku'}));
+  const packDakuKata = DAKU_KATA.map(([k,...r])=>({k,r,type:'kata',cls:'daku'}));
+  const packHandHira = HAND_HIRA.map(([k,...r])=>({k,r,type:'hira',cls:'hand'}));
+  const packHandKata = HAND_KATA.map(([k,...r])=>({k,r,type:'kata',cls:'hand'}));
+  const packYouonHira = YOUON_HIRA.map(([k,...r])=>({k,r,type:'hira',cls:'youon'}));
+  const packYouonKata = YOUON_KATA.map(([k,...r])=>({k,r,type:'kata',cls:'youon'}));
+  const ALL_PACKS = [packHira,packKata,packDakuHira,packDakuKata,
+                     packHandHira,packHandKata,packYouonHira,packYouonKata];
+  const ALL_KANA = new Map(ALL_PACKS.flat().map(o=>[o.k,o]));
+  const EXTRA_LABEL = { daku:'濁音', hand:'半濁音', youon:'拗音' };
+
+  // 清音 + 濁點／半濁點／拗音小字 → 合成假名（聽聲模式用，不使列晒全部）
+  const COMPOSE = new Map();
+  (function(){
+    const add = (list, mark) => list.forEach(([k]) => { COMPOSE.set(k.normalize('NFD')[0] + mark, k); });
+    add(DAKU_HIRA,'゛'); add(DAKU_KATA,'゛');
+    add(HAND_HIRA,'゜'); add(HAND_KATA,'゜');
+    YOUON_HIRA.concat(YOUON_KATA).forEach(([k]) => { COMPOSE.set(k[0] + k[1], k); });
+  })();
+  const MARK_DEFS = [
+    { m:'゛', cls:'daku' }, { m:'゜', cls:'hand' },
+    { m:'ゃ', cls:'youon', k:'ャ' }, { m:'ゅ', cls:'youon', k:'ュ' }, { m:'ょ', cls:'youon', k:'ョ' }
+  ];
+
+  // kana -> 標準讀音（用嚟核對聽聲模式）
+  const ROMAJI = {};
+  const BY_ROMAJI = {};
+  ALL_KANA.forEach(o=>{ ROMAJI[o.k] = o.r[0]; if(!BY_ROMAJI[o.r[0]]) BY_ROMAJI[o.r[0]] = o.k; });
+
+  const SPEAK_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+
+  // ── 元素 ──────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const modeSeg=$('modeSeg'), scopeSeg=$('scopeSeg');
+  const readPanel=$('readPanel'), listenPanel=$('listenPanel');
+  const kanaEl=$('kana'), typeEl=$('typeLabel'), inputEl=$('answer'), checkBtn=$('checkBtn'), fbRead=$('fbRead');
+  const padEl=$('pad'), listenPrompt=$('listenPrompt'), fbListen=$('fbListen');
+  const listenRomaji=$('listenRomaji'), writeRomaji=$('writeRomaji');
+  const writePanel=$('writePanel'), writePrompt=$('writePrompt'), fbWrite=$('fbWrite');
+  const paper=$('paper'), revealEl=$('reveal'), scorebar=$('scorebar'), revealBtn=$('revealBtn');
+  const candsEl=$('cands');
+  const writebarEl=document.querySelector('.writebar');
+  const emptyPanel=$('emptyPanel'), listenType=$('listenType'), writeType=$('writeType');
+  const speakPanel=$('speakPanel'), speakKana=$('speakKana'), speakType=$('speakType');
+  const micBtn=$('micBtn'), micLabel=$('micLabel'), speakReplay=$('speakReplay');
+  const fbSpeak=$('fbSpeak'), speakNote=$('speakNote'), speakNextBtn=$('speakNextBtn');
+  const emptyTitle=$('emptyTitle'), emptySub=$('emptySub'), emptyBtn=$('emptyBtn');
+  const writeNextBtn=$('writeNextBtn');
+  const draftKana=$('draftKana'), marksEl=$('marks'), listenCheckBtn=$('listenCheckBtn');
+  const replayBtn=$('replayBtn'), slowListenBtn=$('slowListenBtn');
+  const wrongBadge=$('wrongBadge');
+  const sheetEl=$('wrongSheet'), sheetList=$('sheetList'), sheetAdd=$('sheetAdd'), addGrid=$('addGrid');
+  const startPracticeBtn=$('startPracticeBtn'), sheetSub=$('sheetSub'), addModeBtn=$('addModeBtn');
+
+  // ── 狀態 ──────────────────────────────────────────────────
+  let mode = localStorage.getItem('kanaMode') || 'read';   // 'read' | 'listen' | 'write' | 'speak'
+  if(['read','listen','write','speak'].indexOf(mode) < 0) mode = 'read';
+  let scope = localStorage.getItem('kanaScope') || 'hira';  // 'hira' | 'kata' | 'both' | 'wrong'
+  let wrongBook = loadWrongBook();   // 錯題簿：假名 key，不會重覆
+  let wrongSel = loadWrongSel();     // 邊字要練（null = 未設定過 → 全部）
+  if(wrongSel === null) wrongSel = wrongBook.slice();
+  let extrasOn = loadExtras();       // 'daku' | 'hand' | 'youon' 邊類加練
+  let pool = [], current = null, answered = false, lastK = null;
+  let stats = {correct:0, wrong:0, streak:0};
+  let padButtons = [];
+  let draft = '';                    // 聽聲模式：而家選了的字（未提交）
+  let revealed=false, strokes=[], curStroke=null, drawing=false, ctx=null;
+  let inkT0=0, recogTimer=null, recogSeq=0, cands=[];
+  let autoRecog = localStorage.getItem('kanaRecog') !== '0';
+  let silentStart = false;   // 錯題簿 sheet 開住、未正式開始練習 → 不好發聲
+  let muted = localStorage.getItem('kanaMute') === '1';
+
+  // ── 工具 ──────────────────────────────────────────────────
+  const norm = s => (s||'').toLowerCase().replace(/[\s\-'’丶]/g,'').trim();
+  const toHira = s => (s||'').replace(/[\u30a1-\u30f6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+
+  // ── 錯題簿（localStorage 保存，同一個字不會重覆）──────────────
+  function loadWrongBook(){
+    try{
+      const a = JSON.parse(localStorage.getItem('kanaWrong') || '[]');
+      return Array.isArray(a) ? a.filter(k=>typeof k==='string' && ALL_KANA.has(k)) : [];
+    }catch(e){ return []; }
+  }
+  function loadWrongSel(){
+    try{
+      const a = JSON.parse(localStorage.getItem('kanaWrongSel') || 'null');
+      if(!Array.isArray(a)) return null;
+      return a.filter(k=>typeof k==='string' && ALL_KANA.has(k));
+    }catch(e){ return null; }
+  }
+  function saveWrongBook(){
+    try{ localStorage.setItem('kanaWrong', JSON.stringify(wrongBook)); }catch(e){}
+    updateWrongBadge();
+  }
+  function saveWrongSel(){
+    try{ localStorage.setItem('kanaWrongSel', JSON.stringify(wrongSel)); }catch(e){}
+  }
+  function addWrong(o){
+    if(!o || wrongBook.includes(o.k)) return;
+    wrongBook.push(o.k);
+    if(!wrongSel.includes(o.k)) wrongSel.push(o.k);   // 新錯字自動 tick
+    saveWrongBook(); saveWrongSel();
+  }
+  function dropWrong(o){
+    if(!o) return;
+    const i = wrongBook.indexOf(o.k);
+    if(i>=0){ wrongBook.splice(i,1); saveWrongBook(); }
+    const j = wrongSel.indexOf(o.k);
+    if(j>=0){ wrongSel.splice(j,1); saveWrongSel(); }
+  }
+  function practiceCount(){ return wrongBook.filter(k=>wrongSel.includes(k)).length; }
+
+  // ── 加練字類（濁音／半濁音／拗音）────────────────────────
+  function loadExtras(){
+    try{
+      const a = JSON.parse(localStorage.getItem('kanaExtras') || '[]');
+      return Array.isArray(a) ? a.filter(k=>k in EXTRA_LABEL) : [];
+    }catch(e){ return []; }
+  }
+  const hasExtra = c => extrasOn.indexOf(c) >= 0;
+  // 練習題庫用：按用戶選的字類
+  function packsFor(type){
+    const out = [ type==='hira' ? packHira : packKata ];
+    if(hasExtra('daku'))  out.push(type==='hira' ? packDakuHira : packDakuKata);
+    if(hasExtra('hand'))  out.push(type==='hira' ? packHandHira : packHandKata);
+    if(hasExtra('youon')) out.push(type==='hira' ? packYouonHira : packYouonKata);
+    return out;
+  }
+  // 鍵盤用：只出清音（濁音／半濁音／拗音用「清音 + 符號」組合，不使列晒）
+  function updateWrongBadge(){
+    const n = wrongBook.length;
+    wrongBadge.textContent = n;
+    wrongBadge.hidden = n === 0;
+  }
+
+  function buildPool(){
+    if(scope==='hira') pool = packsFor('hira').flat();
+    else if(scope==='kata') pool = packsFor('kata').flat();
+    else if(scope==='wrong') pool = wrongBook.filter(k=>wrongSel.includes(k)).map(k=>ALL_KANA.get(k)).filter(Boolean);
+    else pool = packsFor('hira').flat().concat(packsFor('kata').flat());
+  }
+  function pickNext(){
+    let c;
+    if(pool.length===1) c=pool[0];
+    else { do{ c=pool[(Math.random()*pool.length)|0]; } while(c.k===lastK); }
+    lastK=c.k; return c;
+  }
+
+  function renderRomaji(){
+    const html = current
+      ? current.r[0] + (current.r.length > 1
+          ? '<span class="alt">'+current.r.slice(1).join(' / ')+'</span>' : '')
+      : '';
+    [listenRomaji, writeRomaji].forEach(el=>{
+      el.innerHTML = html;
+      el.classList.toggle('on', romajiHint);
+    });
+  }
+
+  // ── 語音：優先用內建高質錄音，載入不到先用瀏覽器 TTS ──────
+  const player = new Audio();
+  player.preload = 'auto';
+  const SILENT = 'data:audio/wav;base64,UklGRnQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVAAAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==';
+  let audioOk = true, unlocked = false;
+  let slowMode = localStorage.getItem('kanaSlow') === '1';
+  let romajiHint = localStorage.getItem('kanaRomaji') === '1';
+  let voiceMode = localStorage.getItem('kanaVoice') || 'g';   // 'g'（Google）| 'n'（Nanami）
+  if(voiceMode!=='g' && voiceMode!=='n'){                     // 舊版「系統」選項已移除
+    voiceMode='g'; try{ localStorage.setItem('kanaVoice','g'); }catch(e){}
+  }
+  const VOICE_DIR = { g:'audio/g/', n:'audio/n/' };
+
+  function ttsFallback(kana){
+    if(muted || !('speechSynthesis' in window)) return;
+    try{
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(kana);
+      u.lang='ja-JP'; u.rate=(slowMode?0.6:0.8); u.pitch=1;
+      const v = speechSynthesis.getVoices().find(x=>/ja|japan/i.test(x.lang));
+      if(v) u.voice=v;
+      window.speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  function playElement(url, rate, kana){
+    try{ player.pause(); }catch(e){}
+    player.src = url;
+    try{
+      player.preservesPitch = true;
+      player.mozPreservesPitch = true;
+      player.webkitPreservesPitch = true;
+    }catch(e){}
+    player.playbackRate = rate;
+    try{ player.volume = 1; }catch(e){}
+    const p = player.play();
+    if(p && p.catch) p.catch(err=>{
+      const n = err && err.name;
+      if(n === 'AbortError') return;   // 被下一次播放打斷，屬正常
+      ttsFallback(kana);               // 真正播不到先用 TTS
+    });
+  }
+  // 開住錯題簿管理清單／五十音表時，練習一律暫停（不出聲、不自動出題）
+  function overlayOpen(){ return !sheetEl.hidden || !chartEl.hidden; }
+  function stopAudioNow(){
+    try{ player.pause(); player.currentTime = 0; }catch(e){}
+    try{ if('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){}
+    document.querySelectorAll('.playing').forEach(el=>el.classList.remove('playing'));
+  }
+  function speak(kana, forceSlow, fromOverlay){
+    if(muted) return;                       // 靜音：全站不出聲
+    if(!fromOverlay && overlayOpen()) return;   // 清單／假名表開住時，練習唔出聲
+    const slow = forceSlow===undefined ? slowMode : !!forceSlow;
+    const rom = ROMAJI[kana];
+    if(!audioOk || !rom){ ttsFallback(kana); return; }
+    playElement(VOICE_DIR[voiceMode] + rom + '.mp3', slow ? 0.7 : 1, kana);
+  }
+  // 檔案載入失敗（404／斷網）→ 之後全部用 TTS
+  player.addEventListener('error', ()=>{ audioOk = false; });
+  // iOS/Safari：第一次用戶手勢要「解鎖」音效
+  function unlockAudio(){
+    if(unlocked) return; unlocked = true;
+    try{
+      const a = new Audio(SILENT);
+      a.muted = true;
+      const p = a.play();
+      const done = ()=>{ try{ a.pause(); }catch(e){} };
+      if(p && p.then) p.then(done).catch(()=>{});
+    }catch(e){}
+  }
+  document.addEventListener('pointerdown', unlockAudio, {once:true, passive:true});
+  document.addEventListener('keydown', unlockAudio, {once:true});
+  function playPrompt(){
+    if(!current || mode==='read') return;
+    if(overlayOpen()) return;               // 有覆蓋層：唔播提示音
+    const btn = mode==='write' ? writePrompt : (mode==='speak' ? speakReplay : listenPrompt);
+    btn.classList.remove('playing'); void btn.offsetWidth; btn.classList.add('playing');
+    speak(current.k);
+  }
+
+  // ── 建立假名鍵盤 ──────────────────────────────────────────
+  // ── 建立假名鍵盤（只出清音，每次出題打亂次序，不跟 aiueo）──
+  function shuffleArr(a){
+    const arr=a.slice();
+    for(let i=arr.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; const t=arr[i]; arr[i]=arr[j]; arr[j]=t; }
+    return arr;
+  }
+  function buildPad(){
+    padEl.innerHTML=''; padButtons=[];
+    const groups=[];
+    if(scope==='hira') groups.push(['ひらがな', packHira]);
+    else if(scope==='kata') groups.push(['カタカナ', packKata]);
+    else {
+      // 隨機混合／錯題簿：有邊種字就出邊種鍵盤
+      const hasH = scope==='both' || pool.some(o=>o.type==='hira');
+      const hasK = scope==='both' || pool.some(o=>o.type==='kata');
+      if(hasH) groups.push(['ひらがな', packHira]);
+      if(hasK) groups.push(['カタカナ', packKata]);
+    }
+    const showLabel = groups.length > 1;
+    groups.forEach(([label,arr])=>{
+      if(showLabel){
+        const l=document.createElement('div'); l.className='pad-label'; l.textContent=label; padEl.appendChild(l);
+      }
+      shuffleArr(arr).forEach(o=>{
+        const b=document.createElement('button'); b.textContent=o.k; b.dataset.ch=o.k;
+        b.addEventListener('click',()=>padTap(o.k));
+        padEl.appendChild(b); padButtons.push({el:b, ch:o.k});
+      });
+    });
+  }
+  function btnFor(ch){ return padButtons.find(p=>p.ch===ch); }
+
+  // ── 聽聲：清音 + 濁點／半濁點／小字 組合 ──────────────────
+  // 用 draft 本身的假名決定用平假名定片假名的小字（きゃ / キャ）
+  function marksFor(s){
+    const cls = new Set(pool.map(o=>o.cls));
+    const kata = s ? /[\u30a1-\u30f6]/.test(s[0])
+                   : (scope==='kata' || (!pool.some(o=>o.type==='hira') && pool.some(o=>o.type==='kata')));
+    return MARK_DEFS
+      .filter(x=>hasExtra(x.cls) || cls.has(x.cls))
+      .map(x=>({ m: (kata && x.k) ? x.k : x.m, cls:x.cls }));
+  }
+  function buildMarks(){
+    const list = mode==='listen' ? marksFor(draft) : [];
+    marksEl.innerHTML='';
+    marksEl.hidden = list.length===0;
+    list.forEach(x=>{
+      const b=document.createElement('button');
+      b.type='button'; b.textContent=x.m; b.dataset.mark=x.m;
+      b.title = EXTRA_LABEL[x.cls] + '（先選清音，再按此鍵）';
+      b.addEventListener('click', ()=>markTap(x.m));
+      marksEl.appendChild(b);
+    });
+  }
+  function canExtend(s){
+    return marksFor(s).some(x=>COMPOSE.has(s + x.m));
+  }
+  function resetDraft(){
+    draft='';
+    draftKana.textContent='—'; draftKana.classList.add('empty');
+    listenCheckBtn.textContent='檢查'; listenCheckBtn.className='btn-main';
+    listenCheckBtn.disabled=true;
+  }
+  function setDraft(s){
+    draft=s;
+    draftKana.textContent = s || '—';
+    draftKana.classList.toggle('empty', !s);
+    listenCheckBtn.disabled = !s;
+    buildMarks();
+    if(s && !canExtend(s)) submitListen();   // 加不到符號 → 即刻當答案
+  }
+  function padTap(ch){
+    if(mode!=='listen') return;
+    if(answered){ newQuestion(); return; }
+    setDraft(ch);
+  }
+  function markTap(m){
+    if(mode!=='listen' || answered || !draft) return;
+    const cand = COMPOSE.get(draft + m);
+    if(!cand) return;
+    setDraft(cand);
+  }
+
+  // ── 出題 ──────────────────────────────────────────────────
+  function clearFeedback(){
+    fbRead.className='feedback'; fbRead.innerHTML='';
+    fbListen.className='feedback'; fbListen.innerHTML='';
+    fbWrite.className='feedback'; fbWrite.innerHTML='';
+  }
+  const typeName = t => t==='hira' ? 'ひらがな' : 'カタカナ';
+  const MODE_LABEL = { read:'羅馬拼音', listen:'鍵盤輸入', write:'手寫', speak:'讀音評分' };
+  // 隨機混合（或題庫本身兩種字都有）→ 出題要標明係平假名定片假名
+  // 錯題簿裡面平／片假名混住，聽聲／手寫都看不到字形，所以一律標明
+  function showTypeHint(){
+    return true;      // 每個模式、每個字庫範圍都標明 ひらがな／カタカナ
+  }
+  function newQuestion(silent){
+    answered=false; clearFeedback();
+    if(scope==='wrong') buildPool();          // 錯題簿答對會少了字，每次重新計
+    if(!pool.length){                          // 錯題簿空／未選字 → 空狀態
+      current=null; lastK=null; renderRomaji();
+      [readPanel,listenPanel,writePanel,speakPanel].forEach(p=>p.classList.remove('active'));
+      emptyPanel.classList.add('active');
+      const nothing = !wrongBook.length;
+      emptyTitle.textContent = nothing ? '錯題簿目前是空的' : '尚未選擇練習字';
+      emptySub.textContent = nothing
+        ? '答錯的字會自動記錄（不會重複）；也可以自行加入字。'
+        : '錯題簿有 ' + wrongBook.length + ' 個字，但一個都沒有勾選。按「管理錯題簿」選回想練的字。';
+      emptyBtn.textContent = nothing ? '去練習' : '管理錯題簿';
+      emptyBtn.dataset.act = nothing ? 'practice' : 'manage';
+      updateWrongBadge();
+      return;
+    }
+    emptyPanel.classList.remove('active');
+    current=pickNext(); renderRomaji();
+    const hint = showTypeHint();
+
+    if(mode==='read'){
+      readPanel.classList.add('active'); listenPanel.classList.remove('active'); writePanel.classList.remove('active'); speakPanel.classList.remove('active');
+      kanaEl.textContent=current.k;
+      kanaEl.style.animation='none'; void kanaEl.offsetWidth; kanaEl.style.animation='';
+      typeEl.textContent = typeName(current.type);
+      inputEl.value=''; inputEl.className=''; inputEl.disabled=false;
+      checkBtn.textContent='檢查'; checkBtn.className='btn-main';
+      inputEl.focus({preventScroll:true});
+    }else if(mode==='listen'){
+      listenPanel.classList.add('active'); readPanel.classList.remove('active'); writePanel.classList.remove('active'); speakPanel.classList.remove('active');
+      listenType.textContent = typeName(current.type);
+      listenType.classList.toggle('hide', !hint);
+      resetDraft(); buildPad(); buildMarks();
+      if(!silent) setTimeout(playPrompt, 120);
+    }else if(mode==='speak'){
+      speakPanel.classList.add('active'); readPanel.classList.remove('active'); listenPanel.classList.remove('active'); writePanel.classList.remove('active');
+      speakType.textContent = typeName(current.type);
+      speakType.classList.toggle('hide', !hint);
+      speakKana.textContent = current.k;
+      speakKana.style.animation='none'; void speakKana.offsetWidth; speakKana.style.animation='';
+      resetSpeak();                 // 讀音模式不自動示範，用戶不識先按「示範」
+    }else{
+      writePanel.classList.add('active'); readPanel.classList.remove('active'); listenPanel.classList.remove('active'); speakPanel.classList.remove('active');
+      writeType.textContent = typeName(current.type);
+      writeType.classList.toggle('hide', !hint);
+      resetInk();
+      if(!silent) setTimeout(playPrompt, 120);
+    }
+  }
+
+  // ── 看字模式：核對羅馬字 ──────────────────────────────────
+  function checkRead(){
+    if(answered) return;
+    const val=norm(inputEl.value);
+    if(!val){ inputEl.focus(); return; }
+    const ok = current.r.map(norm).includes(val);
+    answered=true; inputEl.disabled=true;
+
+    if(ok){
+      stats.correct++; stats.streak++;
+      if(scope==='wrong') dropWrong(current);
+      inputEl.classList.add('correct');
+      showFeedback(fbRead, true, '答對了！', scope==='wrong'?'<span class="alt">已移出錯題簿</span>':'');
+      updateStats();
+      checkBtn.textContent='下一題 →'; checkBtn.className='btn-main next'; checkBtn.focus({preventScroll:true});
+    }else{
+      stats.wrong++; stats.streak=0;
+      addWrong(current);
+      inputEl.classList.add('wrong');
+      const primary=current.r[0], alts=current.r.slice(1);
+      let msg='正確答案：<span class="answer-txt">'+primary+'</span>';
+      if(alts.length) msg+=' <span class="alt">（亦可 '+alts.join(' / ')+'）</span>';
+      showFeedback(fbRead, false, '', msg, current.k);
+      updateStats();
+      checkBtn.textContent='下一題 →'; checkBtn.className='btn-main next err'; checkBtn.focus({preventScroll:true});
+    }
+  }
+
+  // ── 聽聲模式：核對假名（答完等用戶按「下一條」）──────────
+  function submitListen(){
+    if(mode!=='listen' || answered || !draft) return;
+    answered=true;
+    padButtons.forEach(p=>{ if(p.ch!==draft && p.ch!==current.k) p.el.classList.add('dim'); });
+
+    const ok = draft === current.k;
+    const tb = btnFor(draft); if(tb) tb.el.classList.add(ok?'right':'wrongtap');
+    listenCheckBtn.textContent='下一題 →';
+    listenCheckBtn.className = 'btn-main next' + (ok ? '' : ' err');
+
+    if(ok){
+      stats.correct++; stats.streak++;
+      if(scope==='wrong') dropWrong(current);
+      showFeedback(fbListen, true, '答對了！', scope==='wrong'?'<span class="alt">已移出錯題簿</span>':'');
+      updateStats();
+    }else{
+      stats.wrong++; stats.streak=0;
+      addWrong(current);
+      const rb = btnFor(current.k); if(rb) rb.el.classList.add('reveal');
+      const picked = '<span class="alt">你選了 '+draft+' · </span>';
+      showFeedback(fbListen, false, '', picked+'正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
+      updateStats();
+    }
+  }
+
+  // ── 手寫模式：自己對答案 ──────────────────────────────────
+  function fitCanvas(){
+    const w = paper.getBoundingClientRect().width || 300;
+    const dpr = Math.min(window.devicePixelRatio||1, 2);
+    paper.width = Math.round(w*dpr); paper.height = Math.round(w*dpr);
+    ctx = paper.getContext('2d');
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.lineWidth=7; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#26221d';
+    redraw();
+  }
+  function redraw(){
+    if(!ctx) return;
+    const w = paper.getBoundingClientRect().width || 300;
+    ctx.clearRect(0,0,w,w);
+    strokes.forEach(s=>{
+      ctx.beginPath();
+      s.forEach((p,i)=> i ? ctx.lineTo(p[0],p[1]) : ctx.moveTo(p[0],p[1]));
+      if(s.length===1) ctx.lineTo(s[0][0]+.1, s[0][1]);
+      ctx.stroke();
+    });
+  }
+  function resetInk(){
+    strokes=[]; drawing=false; curStroke=null; revealed=false; inkT0=0;
+    clearTimeout(recogTimer); recogSeq++; cands=[];
+    candsEl.innerHTML='';
+    revealEl.className='reveal'; revealEl.innerHTML='';
+    scorebar.classList.remove('show');
+    writeNextBtn.hidden=true;
+    writebarEl.style.display='';
+    revealBtn.textContent='看答案'; revealBtn.className='btn-main';
+    fitCanvas();
+  }
+  function showAnswer(){
+    const alts=current.r.slice(1);
+    revealEl.innerHTML='正確答案：<b>'+current.k+'</b><span class="alt">'+current.r[0]+
+      (alts.length?' / '+alts.join(' / '):'')+'</span>';
+    revealEl.classList.add('show');
+  }
+  function doReveal(){
+    if(mode!=='write' || revealed || answered) return;
+    revealed=true;
+    recogSeq++; clearTimeout(recogTimer);
+    writebarEl.style.display='none';
+    candsEl.innerHTML='';
+    showAnswer();
+    scorebar.classList.add('show');
+    speak(current.k);
+  }
+  function scoreWrite(ok){
+    if(mode!=='write' || !revealed || answered) return;
+    answered=true;
+    if(ok){ stats.correct++; stats.streak++;
+      if(scope==='wrong') dropWrong(current);
+      showFeedback(fbWrite, true, '答對了！', scope==='wrong'?'<span class="alt">已移出錯題簿</span>':'', current.k); }
+    else { stats.wrong++; stats.streak=0; addWrong(current);
+      showFeedback(fbWrite, false, '', '下一題再來 <span class="alt">· '+current.r[0]+'</span>', current.k); }
+    updateStats();
+    showWriteNext(ok);
+  }
+  function showWriteNext(ok){
+    writeNextBtn.hidden = false;
+    writeNextBtn.className = 'btn-main next' + (ok ? '' : ' err');
+    writeNextBtn.textContent = '下一題 →';
+  }
+  // ── 手寫辨識：本機筆順比對（KanjiVG 模板 + DTW）──────────
+  let TPL = null, TPL_N = 16, TPL_SQ = null, lastUnsure = false;
+  // 逐軸壓縮版本：手寫字長闊比例同模板不同（寫得扁／寫得窄）時照樣對得上
+  function squashSet(set){
+    const out = {};
+    Object.keys(set).forEach(k=>{
+      const flat = set[k].flat();
+      let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+      flat.forEach(p=>{ if(p[0]<minX)minX=p[0]; if(p[0]>maxX)maxX=p[0]; if(p[1]<minY)minY=p[1]; if(p[1]>maxY)maxY=p[1]; });
+      const w=Math.max(maxX-minX,1e-6), h=Math.max(maxY-minY,1e-6);
+      const cx=(minX+maxX)/2, cy=(minY+maxY)/2;
+      out[k] = set[k].map(s=>s.map(([x,y])=>[(x-cx)/w, (y-cy)/h]));
+    });
+    return out;
+  }
+  const tplReady = fetch('kana-templates.json?v=5')
+    .then(r=>r.json())
+    .then(j=>{ TPL = j.tpl; TPL_N = j.n || 16; TPL_SQ = squashSet(TPL); })
+    .catch(()=>{ TPL = null; TPL_SQ = null; });
+
+  function clearCands(msg){
+    candsEl.innerHTML = msg ? '<span class="hint">'+msg+'</span>' : '';
+  }
+  function scheduleRecog(){
+    clearTimeout(recogTimer);
+    if(answered || mode!=='write' || overlayOpen()) return;
+    if(!autoRecog){ clearCands('自動辨識已關閉 · 按「看答案」自行核對'); return; }
+    recogTimer = setTimeout(recognize, 900);
+  }
+  // 等弧長重取樣成固定點數
+  function resampleN(pts, n){
+    if(pts.length < 2) return Array.from({length:n}, ()=>[pts[0][0], pts[0][1]]);
+    const d = [0];
+    for(let i=1;i<pts.length;i++) d.push(d[i-1] + Math.hypot(pts[i][0]-pts[i-1][0], pts[i][1]-pts[i-1][1]));
+    const total = d[d.length-1];
+    if(!total) return Array.from({length:n}, ()=>[pts[0][0], pts[0][1]]);
+    const out = [];
+    let j = 0;
+    for(let k=0;k<n;k++){
+      const tgt = total * k / (n-1);
+      while(j < d.length-2 && d[j+1] < tgt) j++;
+      const seg = d[j+1]-d[j];
+      const t = seg ? (tgt-d[j])/seg : 0;
+      out.push([pts[j][0] + (pts[j+1][0]-pts[j][0])*t,
+                pts[j][1] + (pts[j+1][1]-pts[j][1])*t]);
+    }
+    return out;
+  }
+  // 動態時間規整（banded）
+  function dtw(a, b, band){
+    const n = a.length, m = b.length;
+    const INF = 1e9;
+    const D = new Float64Array((n+1)*(m+1)).fill(INF);
+    const W = m+1;
+    D[0] = 0;
+    for(let i=1;i<=n;i++){
+      const lo = Math.max(1, i-(band+Math.abs(n-m)));
+      const hi = Math.min(m, i+(band+Math.abs(n-m)));
+      for(let j=lo;j<=hi;j++){
+        const cost = Math.hypot(a[i-1][0]-b[j-1][0], a[i-1][1]-b[j-1][1]);
+        const p = D[(i-1)*W+j], q = D[i*W+j-1], r = D[(i-1)*W+j-1];
+        D[i*W+j] = cost + Math.min(p, q, r);
+      }
+    }
+    return D[n*W+m] / Math.max(n, m);
+  }
+  function strokeDist(a, b){
+    const a2 = resampleN(a, TPL_N), b2 = resampleN(b, TPL_N);
+    const rev = b2.slice().reverse();
+    return Math.min(dtw(a2, b2, 3), dtw(a2, rev, 3));
+  }
+  function scoreKana(user, tpl){
+    const nu = user.length, nt = tpl.length;
+    const pen = Math.abs(nu-nt) * 0.45;
+    if(nu === nt){
+      let d = 0;
+      for(let i=0;i<nu;i++) d += strokeDist(user[i], tpl[i]);
+      return d/nu + pen;
+    }
+    let d = 0, cnt = 0, i = 0, j = 0;
+    while(i<nu && j<nt){
+      if(nu-i > nt-j) i++;
+      else if(nu-i < nt-j) j++;
+      else { d += strokeDist(user[i], tpl[j]); cnt++; i++; j++; }
+    }
+    return (cnt ? d/cnt : 3) + pen;
+  }
+  // 正規化成單位方格（保持長寬比、置中）
+  function normalizeInk(){
+    const flat = strokes.flat();
+    let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+    flat.forEach(p=>{
+      if(p[0]<minX) minX=p[0]; if(p[0]>maxX) maxX=p[0];
+      if(p[1]<minY) minY=p[1]; if(p[1]>maxY) maxY=p[1];
+    });
+    const side = Math.max(maxX-minX, maxY-minY, 1);
+    const cx = (minX+maxX)/2, cy = (minY+maxY)/2;
+    return strokes.map(s=>s.map(([x,y])=>[(x-cx)/side, (y-cy)/side]));
+  }
+  // 逐軸壓縮（手寫字比例同模板不同都用得）
+  function normalizeInkSquash(){
+    const flat = strokes.flat();
+    let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+    flat.forEach(p=>{
+      if(p[0]<minX) minX=p[0]; if(p[0]>maxX) maxX=p[0];
+      if(p[1]<minY) minY=p[1]; if(p[1]>maxY) maxY=p[1];
+    });
+    const w = Math.max(maxX-minX, 1), h = Math.max(maxY-minY, 1);
+    const cx = (minX+maxX)/2, cy = (minY+maxY)/2;
+    return strokes.map(s=>s.map(([x,y])=>[(x-cx)/w, (y-cy)/h]));
+  }
+  function localRank(){
+    if(!TPL) return [];
+    const un = normalizeInk();
+    const unS = TPL_SQ ? normalizeInkSquash() : null;
+    const scored = [];
+    pool.forEach(o=>{
+      const t = TPL[o.k];
+      if(!t) return;
+      let d = scoreKana(un, t);
+      if(unS && TPL_SQ[o.k]) d = Math.min(d, scoreKana(unS, TPL_SQ[o.k]));
+      scored.push([d, o.k]);
+    });
+    scored.sort((a,b)=>a[0]-b[0]);
+    if(!scored.length) return [];
+    const best = scored[0][0];
+    lastUnsure = best > 0.78;                        // 差距大 → 照出候選，但標明「不確定」
+    const win = lastUnsure ? best*1.22 + 0.02 : best*1.6 + 0.03;
+    return scored.filter(x=>x[0] <= win).slice(0, lastUnsure ? 4 : 6).map(x=>x[1]);
+  }
+  async function recognize(){
+    if(mode!=='write' || answered || !strokes.length) return;
+    const seq = ++recogSeq;
+    if(!TPL){ clearCands('辨識模板載入中…'); return; }
+    if(!TPL[current.k]){ clearCands('這個字尚無筆順範本 · 按「看答案」自行核對'); return; }
+    clearCands('辨識中…');
+    await new Promise(r=>requestAnimationFrame(r));
+    const list = localRank();
+    if(seq !== recogSeq || answered) return;
+    cands = list;
+    if(!cands.length){ clearCands('辨識不到，請寫大一點、清楚一點？'); return; }
+    renderCands();
+  }
+  function renderCands(){
+    candsEl.innerHTML = '';
+    const lbl = document.createElement('span');
+    lbl.className='lbl'; lbl.textContent = lastUnsure ? '不確定，請選回正確的' : '辨識到';
+    candsEl.appendChild(lbl);
+    cands.slice(0,8).forEach(ch=>{
+      const b = document.createElement('button');
+      b.className='cand'; b.textContent=ch;
+      const fire = ()=>pickCand(ch, b);
+      b.addEventListener('pointerup', fire);
+      b.addEventListener('click', fire);
+      candsEl.appendChild(b);
+    });
+  }
+  function pickCand(ch, btn){
+    // 選一次就當確定：即刻判對錯，不使再按掣
+    if(mode!=='write' || answered || revealed) return;
+    clearTimeout(recogTimer); recogSeq++; cands=[];
+    if(btn) btn.classList.add('sel');
+    checkPicked(ch);
+  }
+  function checkPicked(ch){
+    if(mode!=='write' || answered) return;
+    const ok = toHira(ch) === toHira(current.k);
+    answered = true;
+    recogSeq++; clearTimeout(recogTimer);
+    const sel = candsEl.querySelector('.cand.sel');
+    if(sel){ sel.classList.remove('sel'); sel.classList.add(ok?'right':'wrongtap'); }
+    candsEl.querySelectorAll('.cand').forEach(b=>{ b.disabled=true; });
+    if(ok){
+      stats.correct++; stats.streak++;
+      if(scope==='wrong') dropWrong(current);
+      showFeedback(fbWrite, true, '答對了！', scope==='wrong'?'<span class="alt">已移出錯題簿</span>':'', current.k);
+    }else{
+      stats.wrong++; stats.streak=0; addWrong(current);
+      showFeedback(fbWrite, false, '',
+        '你選了 '+ch+' · 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
+    }
+    updateStats();
+    writebarEl.style.display='none';
+    showAnswer();
+    scorebar.classList.remove('show');
+    showWriteNext(ok);
+  }
+
+  const inkPos = e => {
+    const r=paper.getBoundingClientRect();
+    return [e.clientX-r.left, e.clientY-r.top, Math.round(performance.now()-inkT0)];
+  };
+  paper.addEventListener('pointerdown', e=>{
+    if(mode!=='write' || answered) return;
+    e.preventDefault();
+    try{ paper.setPointerCapture(e.pointerId); }catch(_){}
+    if(!strokes.length) inkT0 = performance.now();
+    // 一落筆就收起舊候選，避免半個字的錯誤結果干擾
+    clearTimeout(recogTimer); recogSeq++; cands=[];
+    if(candsEl.childElementCount) clearCands('');
+    drawing=true; curStroke=[inkPos(e)]; strokes.push(curStroke); redraw();
+  });
+  paper.addEventListener('pointermove', e=>{
+    if(!drawing) return;
+    curStroke.push(inkPos(e)); redraw();
+  });
+  ['pointerup','pointercancel'].forEach(t=>paper.addEventListener(t, ()=>{
+    if(!drawing) return;
+    drawing=false; curStroke=null; scheduleRecog();
+  }));
+  window.addEventListener('resize', ()=>{ if(mode==='write') fitCanvas(); });
+
+  // ── 共用 feedback ─────────────────────────────────────────
+  function showFeedback(el, ok, head, detailHtml, speakKana){
+    el.className='feedback show '+(ok?'ok':'no');
+    // 聽聲模式自己有「重讀／慢放」掣，不需要 feedback 內置的喇叭掣
+    const withSpeak = el.id !== 'fbListen' && el.id !== 'fbSpeak';
+    el.innerHTML =
+      '<span class="dot"></span>' +
+      (head?'<span>'+head+'</span>':'') +
+      (detailHtml?'<span>'+detailHtml+'</span>':'') +
+      (withSpeak
+        ? '<button class="speak" data-sp="1" title="聽讀音">'+SPEAK_SVG+'</button>' +
+          '<button class="speak slow" data-sp="2" title="慢速讀音">慢</button>'
+        : '');
+    if(withSpeak){
+      el.querySelectorAll('.speak').forEach(b=>{
+        b.onclick = ()=> speak(speakKana||current.k, b.dataset.sp==='2');
+      });
+    }
+  }
+  function updateStats(){
+    $('statStreak').textContent=stats.streak;
+    $('statCorrect').textContent=stats.correct;
+    $('statWrong').textContent=stats.wrong;
+    const t=stats.correct+stats.wrong;
+    $('statAcc').textContent = t? Math.round(stats.correct/t*100)+'%':'—';
+  }
+
+  // ── 切換控制 ──────────────────────────────────────────────
+  function setMode(m){
+    stopSpeak();
+    mode=m; localStorage.setItem('kanaMode',m);
+    [...modeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.mode===m));
+    newQuestion();
+  }
+  function setScope(s){
+    scope=s; localStorage.setItem('kanaScope',s);
+    [...scopeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.scope===s));
+    buildPool(); buildPad(); updateWrongBadge();
+    if(s==='wrong'){                    // 錯題簿 → 只開管理清單：不出題、不發聲
+      silentStart=true; openSheet(); return;
+    }
+    newQuestion();
+  }
+  // 由 sheet「開始練習」入練習：不好再彈返個 sheet
+  function startWrongPractice(){
+    scope='wrong'; localStorage.setItem('kanaScope','wrong');
+    [...scopeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.scope==='wrong'));
+    buildPool(); buildPad(); updateWrongBadge(); newQuestion();
+  }
+
+  // ── 讀音模式：Web Speech 語音識別評分 ─────────────────────
+  const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const SRClass = IS_IOS ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
+  let srObj = null, srListening = false, srTimer = null, srChanged = false;
+  function stopSpeak(){
+    clearTimeout(srTimer);
+    const r = srObj; srObj = null;
+    if(r){ try{ r.onresult=null; r.onerror=null; r.onend=null; r.abort(); }catch(e){} }
+    srListening = false;
+    micBtn.classList.remove('rec');
+    micLabel.textContent = '錄音';
+  }
+  function resetSpeak(){
+    fbSpeak.className='feedback'; fbSpeak.innerHTML='';
+    speakNextBtn.hidden = true;
+    stopSpeak();
+    micBtn.disabled = !SRClass;
+    speakNote.textContent = SRClass
+      ? '按「錄音」，讀出上面的字（一次即可）'
+      : '此瀏覽器不支援語音辨識，請改用 Chrome 開啟；或按「示範」自行對照。';
+  }
+  function startSpeak(){
+    if(mode!=='speak' || !current) return;
+    if(!SRClass){ speakNote.textContent='此瀏覽器不支援語音辨識，請按「示範」自行對照。'; return; }
+    if(answered){ newQuestion(); return; }
+    if(srListening) return;
+    srListening = true;
+    micBtn.classList.add('rec'); micLabel.textContent='辨識中…';
+    fbSpeak.className='feedback'; fbSpeak.innerHTML='';
+    speakNote.textContent = '請讀出上面的字…';
+    const r = new SRClass();
+    r.lang='ja-JP'; r.interimResults=false; r.maxAlternatives=5; r.continuous=false;
+    r.onresult = ev => {
+      const alts = [];
+      try{ const res = ev.results[0]; for(let i=0;i<res.length;i++) alts.push(res[i].transcript); }catch(e){}
+      stopSpeak();
+      judgeSpeak(alts);
+    };
+    r.onerror = ev => {
+      const err = (ev && ev.error) || '';
+      stopSpeak();
+      if(err==='not-allowed' || err==='service-not-allowed') speakNote.textContent='需要使用麥克風：請在瀏覽器中允許收音後再試。';
+      else if(err==='no-speech') speakNote.textContent='沒有聽到聲音，請再按一次「錄音」。';
+      else if(err==='network') speakNote.textContent='語音服務無法連線（需要網路），請按「示範」自行對照。';
+      else speakNote.textContent='辨識發生錯誤（'+err+'），再試一次。';
+    };
+    r.onend = ()=>{ if(srObj===r) stopSpeak(); };
+    srObj = r;
+    try{ r.start(); }catch(e){ stopSpeak(); speakNote.textContent='無法啟動語音辨識，請再試一次。'; return; }
+    srTimer = setTimeout(()=>{ try{ r.stop(); }catch(e){} }, 8000);
+  }
+  function judgeSpeak(alts){
+    if(mode!=='speak' || !current) return;
+    const target = toHira(current.k);
+    const clean = s => toHira((s||'').replace(/[\s、。．.,!?！？「」『』・…~\-—]/g,''));
+    const list = (alts||[]).map(clean).filter(Boolean);
+    const hit = list.some(a=>a===target) || list.some(a=>a.includes(target));
+    if(hit){
+      answered = true;
+      stats.correct++; stats.streak++;
+      if(scope==='wrong') dropWrong(current);
+      showFeedback(fbSpeak, true, '答對了！', scope==='wrong'?'<span class="alt">已移出錯題簿</span>':'', current.k);
+      updateStats();
+      speakNextBtn.hidden=false; speakNextBtn.className='btn-main next'; speakNextBtn.textContent='下一題 →';
+      speakNote.textContent = list[0] ? '（聽到：'+list[0]+'）' : '';
+      return;
+    }
+    const other = list.find(a=>a.length<=4);
+    if(other){
+      answered = true;
+      stats.wrong++; stats.streak=0; addWrong(current);
+      showFeedback(fbSpeak, false, '', '你讀了「'+other+'」· 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
+      updateStats();
+      speakNextBtn.hidden=false; speakNextBtn.className='btn-main next err'; speakNextBtn.textContent='下一題 →';
+      speakNote.textContent='';
+      return;
+    }
+    speakNote.textContent = '聽不清楚（無法辨識這個音）— 請再按「錄音」試一次。';
+  }
+  micBtn.addEventListener('click', startSpeak);
+  speakReplay.addEventListener('click', ()=>{ if(mode==='speak' && current) speak(current.k); });
+  speakNextBtn.addEventListener('click', ()=>{ if(answered) newQuestion(); });
+
+  // ── 事件 ──────────────────────────────────────────────────
+  modeSeg.addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) setMode(b.dataset.mode); });
+  scopeSeg.addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) setScope(b.dataset.scope); });
+  checkBtn.addEventListener('click', ()=>{ if(answered) newQuestion(); else checkRead(); });
+  listenCheckBtn.addEventListener('click', ()=>{
+    if(mode!=='listen') return;
+    if(answered){ newQuestion(); return; }
+    submitListen();
+  });
+  inputEl.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); if(answered) newQuestion(); else checkRead(); } });
+  listenPrompt.addEventListener('click', playPrompt);
+  replayBtn.addEventListener('click', ()=>{ if(mode==='listen') playPrompt(); });
+  slowListenBtn.addEventListener('click', ()=>{ if(mode==='listen' && current) speak(current.k, true); });
+  writePrompt.addEventListener('click', playPrompt);
+  revealBtn.addEventListener('click', doReveal);
+  $('undoBtn').addEventListener('click', ()=>{
+    if(answered) return;
+    if(strokes.length){ strokes.pop(); redraw(); scheduleRecog(); }
+  });
+  $('clearBtn').addEventListener('click', ()=>{
+    if(answered) return;
+    strokes=[]; inkT0=0; cands=[]; clearCands(''); redraw();
+  });
+  $('okBtn').addEventListener('click', ()=>scoreWrite(true));
+  $('noBtn').addEventListener('click', ()=>scoreWrite(false));
+  writeNextBtn.addEventListener('click', ()=>{ if(answered) newQuestion(); });
+  document.addEventListener('keydown', e=>{
+    if(!sheetEl.hidden) return;               // 管理 sheet 開住時不好觸發練習快捷鍵
+    if(mode==='write' && e.key==='Enter' && !answered && !revealed){ e.preventDefault(); doReveal(); return; }
+    if(answered && e.key==='Enter'){ e.preventDefault(); newQuestion(); }
+  });
+  $('resetBtn').addEventListener('click', ()=>{
+    stats={correct:0,wrong:0,streak:0}; updateStats(); newQuestion();
+  });
+  // ── 錯題簿：管理 sheet ────────────────────────────────────
+  function syncWrongView(){          // 改完錯題簿即刻反映返練習畫面
+    updateWrongBadge();
+    if(scope==='wrong'){ buildPool(); buildPad(); newQuestion(); }
+  }
+  function closeAddPicker(){
+    sheetAdd.hidden=true;
+    addModeBtn.classList.remove('on');
+    addModeBtn.textContent='＋ 加入字';
+  }
+  function openSheet(){
+    closeAddPicker();
+    stopAudioNow();                          // 入清單即停聲
+    sheetEl.hidden=false;
+    document.body.style.overflow='hidden';
+    renderSheet();
+  }
+  function closeSheet(){
+    sheetEl.hidden=true;
+    document.body.style.overflow='';
+    if(silentStart){ silentStart=false; newQuestion(true); }   // 不發聲，只補返個畫面
+  }
+  function renderSheet(){
+    sheetSub.textContent = wrongBook.length + ' 個字 · 已勾選 ' + practiceCount() + ' 個';
+    sheetList.innerHTML='';
+    if(!wrongBook.length){
+      const em=document.createElement('div');
+      em.className='sheet-empty';
+      em.textContent='還沒有錯題。答錯會自動加入；也可以按「＋ 加入字」自行選擇。';
+      sheetList.appendChild(em);
+    }
+    wrongBook.forEach(k=>{
+      const o=ALL_KANA.get(k); if(!o) return;
+      const on=wrongSel.includes(k);
+      const row=document.createElement('div');
+      row.className='witem '+(on?'on':'off');
+      row.dataset.k=k;
+      row.innerHTML=
+        '<button class="wtick" data-act="tick" aria-pressed="'+(on?'true':'false')+'">✓</button>'+
+        '<span class="wkana">'+o.k+'</span>'+
+        '<span class="wrom">'+o.r.join(' / ')+'</span>'+
+        '<span class="wtag">'+typeName(o.type)+(EXTRA_LABEL[o.cls]?' · '+EXTRA_LABEL[o.cls]:'')+'</span>'+
+        '<button class="wdel" data-act="del" title="刪除">✕</button>';
+      sheetList.appendChild(row);
+    });
+    const n=practiceCount();
+    sheetSub.textContent = wrongBook.length + ' 個字 · 已勾選 ' + n + ' 個 · 用「' + MODE_LABEL[mode] + '」練';
+    startPracticeBtn.textContent = n ? '開始練習（'+n+'）' : '開始練習';
+    startPracticeBtn.disabled = !n;
+  }
+  function renderAddPicker(){
+    addGrid.innerHTML='';
+    ALL_KANA.forEach(o=>{
+      if(wrongBook.includes(o.k)) return;
+      const b=document.createElement('button');
+      b.type='button'; b.dataset.k=o.k; b.textContent=o.k; b.title=o.r.join(' / ');
+      addGrid.appendChild(b);
+    });
+  }
+
+  $('sheetClose').addEventListener('click', closeSheet);
+  $('sheetBg').addEventListener('click', closeSheet);
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !sheetEl.hidden) closeSheet(); });
+
+  sheetList.addEventListener('click', e=>{
+    const row=e.target.closest('.witem'); if(!row) return;
+    const k=row.dataset.k;
+    if(e.target.closest('[data-act="del"]')){
+      const i=wrongBook.indexOf(k); if(i<0) return;
+      wrongBook.splice(i,1);
+      const j=wrongSel.indexOf(k); if(j>=0) wrongSel.splice(j,1);
+      saveWrongBook(); saveWrongSel(); syncWrongView(); renderSheet(); renderAddPicker();
+      return;
+    }
+    const j=wrongSel.indexOf(k);
+    if(j>=0) wrongSel.splice(j,1); else wrongSel.push(k);
+    saveWrongSel(); syncWrongView(); renderSheet();
+  });
+  addGrid.addEventListener('click', e=>{
+    const b=e.target.closest('button[data-k]'); if(!b) return;
+    const k=b.dataset.k;
+    if(!wrongBook.includes(k)) wrongBook.push(k);
+    if(!wrongSel.includes(k)) wrongSel.push(k);
+    saveWrongBook(); saveWrongSel(); syncWrongView(); renderSheet(); renderAddPicker();
+  });
+  $('selAllBtn').addEventListener('click', ()=>{
+    wrongSel=wrongBook.slice(); saveWrongSel(); syncWrongView(); renderSheet();
+  });
+  $('selNoneBtn').addEventListener('click', ()=>{
+    wrongSel=[]; saveWrongSel(); syncWrongView(); renderSheet();
+  });
+  addModeBtn.addEventListener('click', ()=>{
+    if(sheetAdd.hidden){
+      sheetAdd.hidden=false; addModeBtn.classList.add('on'); addModeBtn.textContent='收起';
+      renderAddPicker();
+    }else closeAddPicker();
+  });
+  $('clearAllBtn').addEventListener('click', ()=>{
+    if(!wrongBook.length) return;
+    if(!confirm('清空錯題簿（'+wrongBook.length+' 個字）？')) return;
+    wrongBook=[]; wrongSel=[];
+    saveWrongBook(); saveWrongSel(); syncWrongView(); renderSheet(); renderAddPicker();
+  });
+  startPracticeBtn.addEventListener('click', ()=>{
+    if(!practiceCount()) return;
+    silentStart=false;
+    closeSheet();
+    startWrongPractice();
+  });
+  emptyBtn.addEventListener('click', ()=>{
+    if(emptyBtn.dataset.act==='manage') openSheet();
+    else setScope('both');
+  });
+  const slowBtn = $('slowBtn');
+  function applySlow(){
+    slowBtn.classList.toggle('on', slowMode);
+    slowBtn.textContent = slowMode ? '慢讀 ✓' : '慢讀';
+  }
+  slowBtn.addEventListener('click', ()=>{
+    slowMode = !slowMode;
+    localStorage.setItem('kanaSlow', slowMode?'1':'0');
+    applySlow();
+    if(current) speak(current.k);
+  });
+
+  // ── 靜音（全站：真人音檔 + TTS）────────────────────────
+  const muteBtn=$('muteBtn');
+  function applyMute(){
+    muteBtn.classList.toggle('muted', muted);
+    muteBtn.setAttribute('aria-pressed', muted?'true':'false');
+    muteBtn.title = muted ? '取消靜音' : '靜音';
+    try{ player.muted = muted; }catch(e){}
+  }
+  window.__kanaAudio = ()=>({ muted, paused:player.paused, t:+player.currentTime.toFixed(2),
+    url:(player.src||'').split('/kana-dojo-dev/').pop() });
+  muteBtn.addEventListener('click', ()=>{
+    muted = !muted;
+    try{ localStorage.setItem('kanaMute', muted?'1':'0'); }catch(e){}
+    applyMute();
+    if(muted){
+      try{ player.pause(); }catch(e){}
+      try{ window.speechSynthesis && window.speechSynthesis.cancel(); }catch(e){}
+      document.querySelectorAll('.playing').forEach(b=>b.classList.remove('playing'));
+    }else if(current && mode!=='read'){ speak(current.k); }
+  });
+
+  const romajiBtn = $('romajiBtn');
+  function applyRomaji(){
+    romajiBtn.classList.toggle('on', romajiHint);
+    romajiBtn.textContent = romajiHint ? '拼音 ✓' : '拼音';
+    renderRomaji();
+  }
+  romajiBtn.addEventListener('click', ()=>{
+    romajiHint = !romajiHint;
+    localStorage.setItem('kanaRomaji', romajiHint?'1':'0');
+    applyRomaji();
+  });
+
+  const recogBtn = $('recogBtn');
+  function applyRecog(){
+    recogBtn.classList.toggle('on', autoRecog);
+    recogBtn.textContent = autoRecog ? '辨識 開' : '辨識 關';
+  }
+  recogBtn.addEventListener('click', ()=>{
+    autoRecog = !autoRecog;
+    localStorage.setItem('kanaRecog', autoRecog?'1':'0');
+    applyRecog();
+    if(!autoRecog){ recogSeq++; clearTimeout(recogTimer); clearCands('自動辨識已關閉 · 按「看答案」自行核對'); }
+    else if(strokes.length) scheduleRecog();
+  });
+
+  const voiceBtns = [...document.querySelectorAll('.vbtn[data-voice]')];
+  function applyVoice(){
+    voiceBtns.forEach(b=>b.classList.toggle('active', b.dataset.voice===voiceMode));
+  }
+  voiceBtns.forEach(b=>b.addEventListener('click', ()=>{
+    voiceMode = b.dataset.voice;
+    localStorage.setItem('kanaVoice', voiceMode);
+    applyVoice();
+    if(current) speak(current.k);
+  }));
+
+  // 加練字類：濁音／半濁音／拗音
+  const extraBtns = [...document.querySelectorAll('[data-extra]')];
+  function applyExtras(){
+    extraBtns.forEach(b=>b.classList.toggle('active', hasExtra(b.dataset.extra)));
+  }
+  extraBtns.forEach(b=>b.addEventListener('click', ()=>{
+    const c=b.dataset.extra;
+    const i=extrasOn.indexOf(c);
+    if(i>=0) extrasOn.splice(i,1); else extrasOn.push(c);
+    try{ localStorage.setItem('kanaExtras', JSON.stringify(extrasOn)); }catch(e){}
+    applyExtras();
+    buildPool(); buildPad(); newQuestion();
+  }));
+
+  // ── 初始化 ────────────────────────────────────────────────
+  if(!['read','listen','write'].includes(mode)) mode='read';
+  if(!['hira','kata','both','wrong'].includes(scope)) scope='hira';
+  [...modeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  [...scopeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.scope===scope));
+  if('speechSynthesis' in window){ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>{}; }
+  buildPool(); buildPad(); updateStats(); updateWrongBadge();
+  if(scope==='wrong'){ silentStart=true; openSheet(); }   // 錯題簿：先看清單，不出題不發聲
+  else newQuestion();
+  applySlow(); applyVoice(); applyRecog(); applyRomaji(); applyExtras(); applyMute();
+
+  // ── Service Worker（網頁版離線用；app 內建資源時自動略過）─────
+  const isNativeApp = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  // ── 假名表（溫習用）────────────────────────────────────
+  const chartEl=$('chart'), chartBody=$('chartBody'), chartBtn=$('chartBtn'), chartClose=$('chartClose'), chartBg=$('chartBg');
+  const toKata = s => (s||'').replace(/[\u3041-\u3096]/g, c=>String.fromCharCode(c.charCodeAt(0)+0x60));
+  const CHART_ROWS = [
+    ['a','i','u','e','o'], ['ka','ki','ku','ke','ko'], ['sa','shi','su','se','so'],
+    ['ta','chi','tsu','te','to'], ['na','ni','nu','ne','no'], ['ha','hi','fu','he','ho'],
+    ['ma','mi','mu','me','mo'], ['ya','','yu','','yo'], ['ra','ri','ru','re','ro'],
+    ['wa','','','','wo'], ['n','','','','']
+  ];
+  const CHART_DAKU = [
+    ['ga','gi','gu','ge','go'], ['za','ji','zu','ze','zo'], ['da','di','du','de','do'], ['ba','bi','bu','be','bo']
+  ];
+  const CHART_HAND = [['pa','pi','pu','pe','po']];
+  const CHART_YOUON = [
+    ['kya','kyu','kyo'], ['sha','shu','sho'], ['cha','chu','cho'], ['nya','nyu','nyo'],
+    ['hya','hyu','hyo'], ['mya','myu','myo'], ['rya','ryu','ryo'], ['gya','gyu','gyo'],
+    ['ja','ju','jo'], ['bya','byu','byo'], ['pya','pyu','pyo']
+  ];
+  function chartCell(rom){
+    if(!rom) return '<span class="kcell blank"></span>';
+    const k = BY_ROMAJI[rom];
+    if(!k) return '<span class="kcell blank"></span>';
+    const glyph = chartScript==='kata' ? toKata(k) : k;
+    return '<button class="kcell" data-k="'+k+'" type="button"><b>'+glyph+'</b><span>'+rom+'</span></button>';
+  }
+  function chartSection(title, rows, cols){
+    let html = '<div class="chart-sec"><h3>'+title+'</h3><div class="kgrid c'+cols+'">';
+    rows.forEach(r=>{ r.forEach(rom=>{ html += chartCell(rom); }); });
+    html += '</div></div>';
+    return html;
+  }
+  let chartScript = localStorage.getItem('kanaChartScript') === 'kata' ? 'kata' : 'hira';
+  const chartSeg = $('chartSeg');
+  function applyChartScript(){
+    [...chartSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.script===chartScript));
+    chartBody.querySelectorAll('.kcell[data-k]').forEach(c=>{
+      c.querySelector('b').textContent = chartScript==='kata' ? toKata(c.dataset.k) : c.dataset.k;
+    });
+  }
+  chartSeg.addEventListener('click', e=>{
+    const b = e.target.closest('button[data-script]'); if(!b) return;
+    chartScript = b.dataset.script;
+    try{ localStorage.setItem('kanaChartScript', chartScript); }catch(_){}
+    applyChartScript();
+  });
+  let chartBuilt = false;
+  function buildChart(){
+    if(chartBuilt) return;
+    chartBuilt = true;
+    chartBody.innerHTML =
+      chartSection('清音', CHART_ROWS, 5) +
+      chartSection('濁音', CHART_DAKU, 5) +
+      chartSection('半濁音', CHART_HAND, 5) +
+      chartSection('拗音', CHART_YOUON, 3);
+  }
+  function openChart(){
+    stopAudioNow();                          // 入假名表即停聲
+    buildChart();
+    applyChartScript();
+    chartEl.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeChart(){
+    chartEl.hidden = true;
+    document.body.style.overflow = '';
+    chartBody.querySelectorAll('.kcell.playing').forEach(b=>b.classList.remove('playing'));
+  }
+  chartBtn.addEventListener('click', openChart);
+  chartClose.addEventListener('click', closeChart);
+  chartBg.addEventListener('click', closeChart);
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !chartEl.hidden) closeChart(); });
+  chartBody.addEventListener('click', e=>{
+    const c = e.target.closest('.kcell'); if(!c || !c.dataset.k) return;
+    chartBody.querySelectorAll('.kcell.playing').forEach(b=>b.classList.remove('playing'));
+    c.classList.add('playing');
+    setTimeout(()=>c.classList.remove('playing'), 500);
+    speak(c.dataset.k, undefined, true);     // 假名表自己撳字可以有聲
+  });
+
+  /* 已併入日語階梯：Service Worker 交由上層（本站根目錄）統一處理，
+     這裡不再註冊 /kana/sw.js，避免兩個 SW 爭同一個 scope。 */
+  if(false &&'serviceWorker' in navigator && location.protocol.startsWith('http') && !isNativeApp){
+    window.addEventListener('load', async ()=>{
+      const had = !!navigator.serviceWorker.controller;
+      try{
+        const reg = await navigator.serviceWorker.register('sw.js', {updateViaCache:'none'});
+        reg.update().catch(()=>{});
+        if(had){
+          navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+            if(location.__reloaded) return;
+            location.__reloaded = true;
+            location.reload();          // 有新版本接手 → 即時換新版
+          });
+        }
+      }catch(e){}
+    });
+  }
+})();
+</script>
+</body>
+</html>
