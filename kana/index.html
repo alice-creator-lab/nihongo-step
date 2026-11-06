@@ -1799,7 +1799,7 @@
   }
   function stopChartSeq(){
     if(!chartSeq) return;
-    clearTimeout(chartSeq.timer);
+    clearTimeout(chartSeq.timer); clearInterval(chartSeq.timer);
     chartSeq = null;
     chartPlayBtn.textContent = '▶ 播放全部';
     chartPlayBtn.classList.remove('stop');
@@ -1813,9 +1813,33 @@
     chartBody.querySelectorAll('.kcell.playing').forEach(b=>b.classList.remove('playing'));
     c.classList.add('playing');
     try{ c.scrollIntoView({block:'center', behavior:'smooth'}); }catch(e){ c.scrollIntoView(); }
-    playElement(VOICE_DIR[voiceMode] + chartCellAudio(c.dataset.k), 1, c.dataset.k);
-    // 保險：若 ended 事件沒來（播放失敗／被系統中斷），1.3 秒後照樣去下一格
-    chartSeq.timer = setTimeout(nextChartStep, 1300);
+    const url = VOICE_DIR[voiceMode] + chartCellAudio(c.dataset.k);
+    const ready = chartBlobs.get(url);
+    if(ready){
+      playElement(ready, 1, c.dataset.k);          // 已預抓：即時由記憶體播放
+    }else if(chartPending.has(url)){
+      // 仲抓緊：等佢到（最多 3 秒）才播，避免用網絡 URL 播放時卡住／漏聲
+      const want = c.dataset.k;
+      let fired = false;
+      const go = ()=>{ if(fired) return; fired = true; if(!chartSeq) return;
+        playElement(chartBlobs.get(url) || url, 1, want); };
+      chartPending.get(url).then(go);
+      setTimeout(go, 3000);
+    }else{
+      playElement(url, 1, c.dataset.k);
+    }
+    /* 保險：只有真的「開始播」之後才計時；播完由 ended 接手。
+       之前固定 1.3 秒就跳下一格，慢機／未下載完時那一格會被切走，聽起來就是「無聲」。 */
+    const started = Date.now();
+    chartSeq.timer = setInterval(()=>{
+      if(!chartSeq) return;
+      if(!player.paused && player.currentTime > 0.02 && !player.ended){
+        // 正在播：只要沒超過 6 秒就不理它
+        if(Date.now() - started > 6000) nextChartStep();
+        return;
+      }
+      if(Date.now() - started > 4000) nextChartStep();   // 4 秒仍未播，跳過
+    }, 400);
   }
   player.addEventListener('ended', ()=>{ if(chartSeq) nextChartStep(); });
   chartPlayBtn.addEventListener('click', ()=>{
@@ -1828,10 +1852,37 @@
     nextChartStep();
   });
 
+  /* 開表時把 104 個發音檔預先抓成 blob（每個約 4KB，總共 400KB 以內）。
+     逐個格用網絡即時播放時，慢網絡下 play() 會趕不上換格，結果就是「有啲字無聲」；
+     改為全部由記憶體 blob 播放，就唔會漏。 */
+  const chartBlobs = new Map();            // url -> blob: URL
+  const chartPending = new Map();          // url -> Promise（仲抓緊）
+  let chartPrefetched = false;
+  function prefetchChartAudio(){
+    if(chartPrefetched) return;
+    chartPrefetched = true;
+    const files = [...new Set([...chartBody.querySelectorAll('.kcell[data-k]')]
+      .map(c => VOICE_DIR[voiceMode] + chartCellAudio(c.dataset.k)))];
+    let i = 0;
+    const run = ()=>{
+      if(i >= files.length) return;
+      const url = files[i++];
+      if(chartBlobs.has(url)){ setTimeout(run, 0); return; }
+      const pr = fetch(url)
+        .then(r => r.ok ? r.blob() : Promise.reject())
+        .then(b => { const u = URL.createObjectURL(b); chartBlobs.set(url, u); return u; })
+        .catch(()=>null)
+        .then(v => { chartPending.delete(url); setTimeout(run, 20); return v; });
+      chartPending.set(url, pr);
+    };
+    run(); run(); run(); run(); run(); run();   // 六條並行，其餘排隊
+  }
+
   function openChart(){
     stopAudioNow();                          // 入假名表即停聲
     buildChart();
     applyChartScript();
+    prefetchChartAudio();
     chartEl.hidden = false;
     document.body.style.overflow = 'hidden';
   }
@@ -1865,6 +1916,7 @@
       all: ()=>[...ALL_KANA.values()],
       setCurrent: o=>{ mode='write'; current=o; answered=false; },
       pick: ch=>checkPicked(ch),
+      seq: ()=>chartSeq ? {i:chartSeq.i, n:chartSeq.cells.length, paused:player.paused, t:Math.round(player.currentTime*100)/100, src:(player.currentSrc||'').slice(-20)} : null,
       stats: ()=>({correct:stats.correct, wrong:stats.wrong}),
       answered: ()=>answered
     };
