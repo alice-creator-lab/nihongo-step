@@ -788,7 +788,7 @@
   const player = new Audio();
   player.preload = 'auto';
   const SILENT = 'data:audio/wav;base64,UklGRnQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVAAAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==';
-  let audioOk = true, unlocked = false;
+  let audioOk = true, unlocked = false, audioFails = 0;
   let slowMode = localStorage.getItem('kanaSlow') === '1';
   let romajiHint = localStorage.getItem('kanaRomaji') === '1';
   let voiceMode = localStorage.getItem('kanaVoice') || 'g';   // 'g'（Google）| 'n'（Nanami）
@@ -840,8 +840,10 @@
     if(!audioOk || !rom){ ttsFallback(kana); return; }
     playElement(VOICE_DIR[voiceMode] + rom + '.mp3', slow ? 0.7 : 1, kana);
   }
-  // 檔案載入失敗（404／斷網）→ 之後全部用 TTS
-  player.addEventListener('error', ()=>{ audioOk = false; });
+  // 檔案載入失敗：連續三次才判定「音檔不可用」並轉用 TTS。
+  // 單次失敗（換源、斷線一瞬）不應該令整頁之後都變機械聲。
+  player.addEventListener('error', ()=>{ audioFails++; if(audioFails >= 3) audioOk = false; });
+  player.addEventListener('playing', ()=>{ audioFails = 0; });
   // iOS/Safari：第一次用戶手勢要「解鎖」音效
   function unlockAudio(){
     if(unlocked) return; unlocked = true;

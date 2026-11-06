@@ -68,7 +68,8 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 
 - `kana/index.html` 是原本 Kana Dojo 的單檔練習頁（羅馬拼音／鍵盤輸入／手寫／讀音四種模式），連 `kana/kana-templates.json`（手寫辨識模板）一併放在本站；入口在地圖「第一階段」之上的五十音區塊。
 - 併入時做了三件事：header 加返回地圖箭頭；移除它自己的 manifest／圖示（`/kana/` 下會 404）；停用它原本的 `sw.js` 註冊（兩個 SW 爭同一個 scope），快取與更新交給根目錄 `sw.js`（已把 `kana/index.html`、`kana/kana-templates.json` 加入 `SHELL`）。
-- 更新方式：重新抓 kana-dojo 的 index.html／kana-templates.json 覆蓋，再套用上面三項改動。
+- 更新方式：重新抓 kana-dojo 的 index.html、kana-templates.json **以及 `audio/g/`、`audio/n/` 兩個發音目錄**（各 104 個 mp3，合共 1.6MB），再套用上面三項改動。漏了 audio 目錄會整頁退用瀏覽器 TTS，聽起來會斷斷續續（2026-11 就係漏咗呢兩個目錄）。
+- 發音來源：假名頁不是用 TTS，而是預製 mp3（`audio/g/`＝Google 聲、`audio/n/`＝Nanami 聲），以羅馬拼音命名。連續三次載入失敗才會 fallback 到 `speechSynthesis`。
 
 ## 技術說明
 
