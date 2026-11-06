@@ -361,7 +361,7 @@
   .alltop{display:flex; align-items:center; justify-content:space-between; gap:10px}
   .alltop .cnt{margin:6px 0}
   .alltop .btn2{padding:8px 14px; font-size:13px; flex:0 0 auto}
-  .arow.playing, .vrow.playing{background:var(--sand2)}
+  .arow.playing, .vrow.playing, .exrow.playing{background:var(--sand2)}
   .vplaybar{display:flex; align-items:center; gap:10px; margin:0 0 6px}
   .vplaybar .btn2{padding:8px 14px; font-size:13px}
   .nbk{width:34px; height:34px; flex:0 0 34px; border-radius:50%; border:1px solid var(--line);
@@ -420,7 +420,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v51</span>
+    <span class="ver" id="verTag">v52</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -880,6 +880,7 @@
     if (tab === 'exercises') renderExerciseMode(lesson);
     if (tab === 'dialogue') wireDialogue(host, lesson);
     if (tab === 'vocab'){ cardRun = null; wireVocab(host, lesson); }
+    if (tab === 'patterns') wirePatterns(host, lesson);
   }
 
   function bindSpeakers(host){
@@ -895,7 +896,10 @@
   }
 
   function segPatterns(l){
-    var h = '<p class="secnote">先看句型，再聽例句。點右邊的喇叭可以聽示範發音。</p>';
+    var nex = l.patterns.reduce(function(s, p){ return s + ((p.ex || []).length); }, 0);
+    var h = '<div class="vplaybar"><button class="btn2" id="pplayall">▶ 播放全部</button>' +
+              '<span class="cnt">共 '+nex+' 句例句</span></div>' +
+            '<p class="secnote">先看句型，再聽例句。點右邊的喇叭可以聽示範發音。</p>';
     l.patterns.forEach(function(p){
       h += '<article class="pat"><div class="pja">'+esc(p.ja)+'</div>' +
            '<div class="pzh">'+esc(p.zh)+'</div>' +
@@ -982,6 +986,22 @@
       var rows = host.querySelectorAll('.vrow');
       var items = l.vocab.map(function(v, vi){
         return { audio: audioFor(l.id, 'v' + vi), el: rows[vi] };
+      });
+      playAllQueued(items, this);
+    });
+  }
+
+  function wirePatterns(host, l){
+    var pa = $('#pplayall');
+    if (!pa) return;
+    pa.addEventListener('click', function(){
+      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+      var rows = host.querySelectorAll('.exrow');
+      var items = [], n = 0;
+      l.patterns.forEach(function(p, pi){
+        (p.ex || []).forEach(function(x, ei){
+          items.push({ audio: audioFor(l.id, 'p' + pi + '-e' + ei), el: rows[n++] });
+        });
       });
       playAllQueued(items, this);
     });
@@ -1798,7 +1818,7 @@
       ALLPLAY.btn.classList.remove('onplay');
       ALLPLAY.btn = null;
     }
-    Array.prototype.forEach.call(document.querySelectorAll('.arow.playing, .vrow.playing'), function(r){
+    Array.prototype.forEach.call(document.querySelectorAll('.arow.playing, .vrow.playing, .exrow.playing'), function(r){
       r.classList.remove('playing');
     });
   }

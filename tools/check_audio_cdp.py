@@ -125,6 +125,19 @@ async def main():
     out["課內文法 播放"] = await js("window.__played.slice(-1)")
     out["課內文法 用機械聲"] = await js("window.__played.some(x=>x.indexOf('TTS:')===0)")
 
+    # 2b) 句型：播放全部（順序播完全課例句）
+    await visit("#/l/L01/patterns", 2.5)
+    await wait_until("document.getElementById('pplayall')")
+    await js(INSTR)
+    out["句型 播放全部 按鈕"] = await js("document.getElementById('pplayall').textContent + '|' + document.querySelector('.vplaybar .cnt').textContent")
+    await js("document.getElementById('pplayall').click(); 1")
+    await pump(3.5)
+    out["句型 播放全部 起播"] = await js("window.__played.slice(-1)")
+    out["句型 播放全部 狀態"] = await js("document.getElementById('pplayall').textContent")
+    await js("document.getElementById('pplayall').click(); 1")
+    await pump(0.8)
+    out["句型 播放全部 可停止"] = await js("document.getElementById('pplayall').textContent")
+
     # 3) 聽力
     await visit("#/l/L01/exercises", 2.5)
     await js("(function(){var b=[].find.call(document.querySelectorAll('button'),function(x){return x.textContent.indexOf('聽力')>=0;}); if(b){b.click(); return 1;} return 0;})()")

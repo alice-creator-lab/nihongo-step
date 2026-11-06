@@ -79,6 +79,7 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 - 已移除「慢速」功能（v51）：header 的慢速鍵、聽力頁的慢速重播、全域 `ngs-slow` 設定全部刪除，播放一律原速。`playFile(url,onend,el)` 仍保留選用的 `rate` 參數供連播使用，但 UI 不再提供慢速入口。
 - 動詞表／形容詞表由 `tools/build_wordtables.py` 由各課單字自動生成 `data/wordtables.json`：動詞換算成原形＋ます形後分五段／一段／不規則，形容詞依 pos（い形／な形／形容動詞）分類。單字表的假名時而寫ます形、時而寫原形，改分類規則時兩個方向都要顧及。動詞原形音檔在 `audio/verb/`。
 - 動詞表／形容詞表的音檔（`audio/verb/`、`audio/adj/`）生成後同樣要跑 `tools/trim_seq_audio.py audio/verb`、`... audio/adj`，剪完每段約 0.6 秒，「播放全部」才會緊湊。這兩個目錄用獨立版本號 `auVer()`（`?v=t1`），不要為它們去 bump `audio.json` 的 `v`，否則全部 60MB 音檔都要重下。
+- 「播放全部」在課內單字、句型（v52）、詞語總表、練習本、動詞表、形容詞表都有；句型頁會把全課例句依序播完，正在播的那一行會反白。
 - 「播放全部」會用 `followRow()` 自動把當前播放的那一行捲到畫面中間（判斷只在跑出可視範圍時才捲，避免每 0.6 秒都動畫面）。
 - 順序表的音檔（`audio/seq/`）用 `tools/trim_seq_audio.py` 剪掉前後靜音：edge-tts 原始檔每段尾隨約 1.1 秒空白，剪完後每段約 0.7 秒，「播放全部」才會緊湊。重跑 `make_seq_audio.py --force` 後要再跑一次 `trim_seq_audio.py --force`，並把 `data/audio.json` 的 `v` 加一，令瀏覽器重抓音檔。
 - 音檔版本分三組，改一組不用重下 60MB：動詞／形容詞表 `?v=t1`、句子（會話／句型／文法／聽力）`?v=e2`、單字跟 `data/audio.json` 的 `v`。`make_audio.py --force-ex` 只重出句子；跑完把 `audio.json` 的 `v` 調回去，否則單字音檔會被迫重下。
