@@ -421,7 +421,7 @@
   </a>
   <div class="hact">
     <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v48</span>
+    <span class="ver" id="verTag">v49</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -732,7 +732,7 @@
       }).join('');
       return '<section class="book">' +
         '<div class="bookhd">' +
-          '<span class="bn">第 '+b.no+' 冊</span>' +
+          '<span class="bn">第 '+b.no+' 階段</span>' +
           '<span class="badge ai">'+b.level+'</span>' +
           '<span class="badge">'+esc(b.label)+'</span>' +
           '<span class="meta">'+b.vocab+' 單字 · '+b.patterns+' 句型</span>' +
@@ -743,7 +743,7 @@
 
     app.innerHTML =
       '<section class="hero">' +
-        '<p class="eyebrow">共 '+av.length+' 課已開放 · 4 冊 40 課</p>' +
+        '<p class="eyebrow">共 '+av.length+' 課已開放 · 4 階段 40 課</p>' +
         '<p class="sub">每課分六段：句型、單字、文法、練習、會話、文化。<br>進度只存在這部裝置，不會上傳。</p>' +
         '<div class="bar"><i style="width:'+pct+'%"></i></div>' +
         '<div class="hrow">' +
@@ -815,7 +815,7 @@
     app.innerHTML =
       '<div class="lhead">' +
         '<a class="back" href="#/">← 課程地圖</a>' +
-        '<p class="eyebrow" id="lprog" style="margin-top:14px">第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+' · '+pctLabel(lesson.id)+'</p>' +
+        '<p class="eyebrow" id="lprog" style="margin-top:14px">第 '+lesson.book+' 階段 · 第 '+lesson.no+' 課 · '+lesson.level+' · '+pctLabel(lesson.id)+'</p>' +
         '<h1>'+esc(lesson.title)+'<span class="k">'+esc(lesson.titleJa)+'</span></h1>' +
         '<p class="goal">'+esc(lesson.goal)+'</p>' +
       '</div>' +
@@ -876,7 +876,7 @@
     host.innerHTML = html;
     markSeen(lesson.id, tab);
     var lp = $('#lprog');
-    if (lp) lp.textContent = '第 '+lesson.book+' 冊 · 第 '+lesson.no+' 課 · '+lesson.level+' · '+pctLabel(lesson.id);
+    if (lp) lp.textContent = '第 '+lesson.book+' 階段 · 第 '+lesson.no+' 課 · '+lesson.level+' · '+pctLabel(lesson.id);
     var fb2 = $('#finish');
     if (fb2 && rec(lesson.id).done){ fb2.classList.add('done'); fb2.textContent = '已完成 ✓（點擊取消）'; }
     bindSpeakers(host);
