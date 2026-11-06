@@ -60,12 +60,14 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 
 ## 內容來源
 
-課程順序參照初級綜合教材《日本語GOGOGO》公布的 40 課文型表；課名、例句、會話、文法說明、練習題與文化專欄全部自行編寫，不採用原書文字、圖片或錄音。每階段的單字數與句型數（498／48、456／41、565／36、459／43）為該教材公布的統計，只作進度參考。
+40 課依 JLPT N5→N4 的能力順序自行編排：由自我介紹、指示代名詞、時間與購物，推進到條件、被動、授受、使役與敬語。課名、例句、會話、文法說明、練習題與文化專欄全部自行編寫。
+
+每階段的單字數與句型數（263／60、258／60、257／60、259／60）由課文自動統計，改動課文後執行 `python3 tools/update_counts.py` 更新；`--check` 可驗證 `course.json` 是否與資料一致。
 
 ## 五十音頁（由 kana-dojo 併入）
 
 - `kana/index.html` 是原本 Kana Dojo 的單檔練習頁（羅馬拼音／鍵盤輸入／手寫／讀音四種模式），連 `kana/kana-templates.json`（手寫辨識模板）一併放在本站；入口在地圖「第一階段」之上的五十音區塊。
-- 併入時做了三件事：header 加返回地圖箭頭；移除它自己的 manifest／圖示（`/kana/` 下會 404）；停用它原本的 `sw.js` 註階段（兩個 SW 爭同一個 scope），快取與更新交給根目錄 `sw.js`（已把 `kana/index.html`、`kana/kana-templates.json` 加入 `SHELL`）。
+- 併入時做了三件事：header 加返回地圖箭頭；移除它自己的 manifest／圖示（`/kana/` 下會 404）；停用它原本的 `sw.js` 註冊（兩個 SW 爭同一個 scope），快取與更新交給根目錄 `sw.js`（已把 `kana/index.html`、`kana/kana-templates.json` 加入 `SHELL`）。
 - 更新方式：重新抓 kana-dojo 的 index.html／kana-templates.json 覆蓋，再套用上面三項改動。
 
 ## 技術說明

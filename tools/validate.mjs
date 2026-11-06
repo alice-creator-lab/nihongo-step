@@ -33,7 +33,7 @@ const ids = new Set();
 
 for (const book of course.books || []) {
   if (!Array.isArray(book.lessons) || book.lessons.length !== 10) {
-    errors.push(`第 ${book.no} 冊應有 10 課，實際 ${(book.lessons || []).length}`);
+    errors.push(`第 ${book.no} 階段應有 10 課，實際 ${(book.lessons || []).length}`);
   }
   for (const l of book.lessons || []) {
     total++;
@@ -175,8 +175,23 @@ function report() {
   const shown = warn.slice(0, 25);
   for (const w of shown) console.warn('提示：' + w);
   if (warn.length > shown.length) console.warn(`提示：另有 ${warn.length - shown.length} 項漢字不在單字表（不影響校驗）`);
+  // 每階段的單字數／句型數必須與課文一致（改課文後跑 tools/update_counts.py）
+  for (const b of course.books) {
+    let v = 0;
+    let p = 0;
+    for (const l of b.lessons) {
+      const d = readJSON(`data/lesson-${l.id}.json`);
+      if (!d) continue;
+      v += (d.vocab || []).length;
+      p += (d.patterns || []).length;
+    }
+    if (b.vocab !== v || b.patterns !== p) {
+      errors.push(`第 ${b.no} 階段登記 ${b.vocab} 單字／${b.patterns} 句型，課文實為 ${v}／${p}；請執行 python3 tools/update_counts.py`);
+    }
+  }
+
   for (const e of errors) console.error('錯誤：' + e);
-  console.log(errors.length ? `\n校驗失敗：${errors.length} 個錯誤` : `\n校驗通過：${ids.size} 課、${course.books.length} 冊`);
+  console.log(errors.length ? `\n校驗失敗：${errors.length} 個錯誤` : `\n校驗通過：${ids.size} 課、${course.books.length} 階段`);
   return errors.length ? 1 : 0;
 }
 

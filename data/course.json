@@ -2,14 +2,14 @@
   "app": "nihongo-step",
   "title": "日語階梯",
   "updated": "2026-11-03",
-  "note": "課程順序參考初級綜合教材的 40 課編排；課名、說明與練習均為自編內容。每階段單字數與句型數為該教材公布之統計，用作進度參考。",
+  "note": "40 課依 N5→N4 分級自編排列；課名、說明與練習均為自編內容。單字數與句型數由本課程資料自動統計（tools/update_counts.py），僅作進度參考。",
   "books": [
     {
       "no": 1,
       "level": "N5",
       "label": "初級Ⅰ",
-      "vocab": 498,
-      "patterns": 48,
+      "vocab": 263,
+      "patterns": 60,
       "lessons": [
         {
           "id": "L01",
@@ -77,8 +77,8 @@
       "no": 2,
       "level": "N5",
       "label": "初級Ⅱ",
-      "vocab": 456,
-      "patterns": 41,
+      "vocab": 258,
+      "patterns": 60,
       "lessons": [
         {
           "id": "L11",
@@ -146,8 +146,8 @@
       "no": 3,
       "level": "N4",
       "label": "進階Ⅰ",
-      "vocab": 565,
-      "patterns": 36,
+      "vocab": 257,
+      "patterns": 60,
       "lessons": [
         {
           "id": "L21",
@@ -215,8 +215,8 @@
       "no": 4,
       "level": "N4",
       "label": "進階Ⅱ",
-      "vocab": 459,
-      "patterns": 43,
+      "vocab": 259,
+      "patterns": 60,
       "lessons": [
         {
           "id": "L31",
