@@ -831,11 +831,16 @@
     try{ if('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){}
     document.querySelectorAll('.playing').forEach(el=>el.classList.remove('playing'));
   }
-  function speak(kana, forceSlow, fromOverlay){
+  function speak(kana, forceSlow, fromOverlay, fileOverride){
     if(muted) return;                       // 靜音：全站不出聲
     if(!fromOverlay && overlayOpen()) return;   // 清單／假名表開住時，練習唔出聲
     const slow = forceSlow===undefined ? slowMode : !!forceSlow;
     const rom = ROMAJI[kana];
+    if(fileOverride){                        // 假名表用嘅專用音檔（例如「を」讀 wo）
+      if(!audioOk){ ttsFallback(kana); return; }
+      playElement(VOICE_DIR[voiceMode] + fileOverride + '.mp3', slow ? 0.7 : 1, kana);
+      return;
+    }
     if(!audioOk || !rom){ ttsFallback(kana); return; }
     playElement(VOICE_DIR[voiceMode] + rom + '.mp3', slow ? 0.7 : 1, kana);
   }
@@ -1804,7 +1809,8 @@
        之前是閃 500ms，連按同一個字時上一個 timer 會提早清掉，看起來就像「有時有、有時無」。 */
     chartBody.querySelectorAll('.kcell.playing').forEach(b=>b.classList.remove('playing'));
     c.classList.add('playing');
-    speak(c.dataset.k, undefined, true);     // 假名表自己撳字可以有聲
+    /* 表上「を」要讀 wo（歷史讀音）；句子／練習裡的助詞 を 仍然讀 o，用另一個檔。 */
+    speak(c.dataset.k, undefined, true, c.dataset.k === 'を' ? 'wo-chart' : null);
   });
 
   /* 已併入日語階梯：Service Worker 交由上層（本站根目錄）統一處理，

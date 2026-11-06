@@ -47,6 +47,12 @@ def kana_pairs():
 # 「どー」用正常寫法合成時，edge-tts 會加一層明顯氣聲（2–4kHz 能量 17%，跟「で」相近），
 # 聽起來像 de；改成「どぉ」後高頻佔比降到 1%。「ん」沒有母音，正常語速只有 0.12 秒，
 # 用「んー」＋慢 35% 才有完整鼻音。
+# 假名表專用、不屬於表格本身的額外音檔：表上「を」要讀 wo（歷史讀音），
+# 但句子／練習裡的助詞 を 讀 o，所以分開兩個檔。
+EXTRA = {
+    "wo-chart": "うぉ",
+}
+
 OVERRIDES = {
     "do": ("どぉ", None),
     "n": ("んー", "-35%"),
@@ -156,6 +162,19 @@ def main():
             failed.append(rom)
         if n % 20 == 0 or n == len(jobs):
             print("  %d/%d" % (n, len(jobs)), flush=True)
+    ex_ok = ex_fail = 0
+    for name, text in EXTRA.items():
+        path = os.path.join(target, name + ".mp3")
+        if not force and os.path.exists(path) and os.path.getsize(path) > 1500:
+            continue
+        if synth(voice, text, path, rate):
+            ex_ok += 1
+        else:
+            ex_fail += 1
+            failed.append(name)
+    if EXTRA:
+        print("額外音檔：成功 %d，失敗 %d" % (ex_ok, ex_fail), flush=True)
+
     print("完成：成功 %d，失敗 %d" % (ok, fail), flush=True)
     if failed:
         print("失敗：", " ".join(failed), flush=True)
