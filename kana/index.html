@@ -865,6 +865,7 @@
   }
   document.addEventListener('pointerdown', unlockAudio, {once:true, passive:true});
   document.addEventListener('keydown', unlockAudio, {once:true});
+  let promptTimer = null;                   // 出題後的提示音計時器
   function playPrompt(){
     if(!current || mode==='read') return;
     if(overlayOpen()) return;               // 有覆蓋層：唔播提示音
@@ -1004,7 +1005,7 @@
       listenType.textContent = typeName(current.type);
       listenType.classList.toggle('hide', !hint);
       resetDraft(); buildPad(); buildMarks();
-      if(!silent) setTimeout(playPrompt, 120);
+      if(!silent){ clearTimeout(promptTimer); promptTimer = setTimeout(playPrompt, 120); }
     }else if(mode==='speak'){
       speakPanel.classList.add('active'); readPanel.classList.remove('active'); listenPanel.classList.remove('active'); writePanel.classList.remove('active');
       speakType.textContent = typeName(current.type);
@@ -1017,7 +1018,7 @@
       writeType.textContent = typeName(current.type);
       writeType.classList.toggle('hide', !hint);
       resetInk();
-      if(!silent) setTimeout(playPrompt, 120);
+      if(!silent){ clearTimeout(promptTimer); promptTimer = setTimeout(playPrompt, 120); }
     }
   }
 
@@ -1389,6 +1390,8 @@
   // ── 切換控制 ──────────────────────────────────────────────
   function setMode(m){
     stopSpeak();
+    clearTimeout(promptTimer);              // 取消上一個模式排住的提示音
+    stopAudioNow();                         // 切模式即靜音：羅馬拼音是「看字打拼音」，不該發聲
     mode=m; localStorage.setItem('kanaMode',m);
     [...modeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.mode===m));
     newQuestion();
