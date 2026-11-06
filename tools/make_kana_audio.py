@@ -48,8 +48,9 @@ def kana_pairs():
 # 聽起來像 de；改成「どぉ」後高頻佔比降到 1%。「ん」沒有母音，正常語速只有 0.12 秒，
 # 用「んー」＋慢 35% 才有完整鼻音。
 OVERRIDES = {
-    "do": ("どぉ", "-20%"),
+    "do": ("どぉ", None),
     "n": ("んー", "-35%"),
+    "wo": ("をぉ", None),
 }
 
 
@@ -109,7 +110,7 @@ def main():
     force = "--force" in sys.argv
     voice = "ja-JP-NanamiNeural"
     outdir = "kana/audio/n"
-    rate = "-20%"      # 單音節用正常語速會太短（あ 只有 0.11 秒），預設慢 20%
+    rate = None        # 預設語速；靠「ー」把母音拉長，避免拖慢後被重新編碼失真
     suffix = "ー"      # 加長音符讓母音有正常長度；「を」會忽略，靠 stretch() 補
     for i, a in enumerate(sys.argv):
         if a == "--voice" and i + 1 < len(sys.argv):
@@ -149,7 +150,6 @@ def main():
     for n, (kana, rom, path) in enumerate(jobs, 1):
         text, r = OVERRIDES.get(rom, (kana + suffix, rate))
         if synth(voice, text, path, r):
-            stretch(path)
             ok += 1
         else:
             fail += 1

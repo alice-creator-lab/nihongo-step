@@ -15,7 +15,8 @@ SEQ = os.path.join(ROOT, "audio/seq")
 MARKS = os.path.join(SEQ, ".trimmed")
 HEAD = 0.06     # 發聲起點前保留
 TAIL = 0.10     # 發聲結束後保留
-QSCALE = "4"    # libmp3lame VBR 品質：4＝預設，0＝最高（五十音用 0，避免二次壓縮變機械聲）
+QSCALE = "4"    # libmp3lame VBR 品質：4＝預設，0＝最高
+COPY = False    # True＝不重新編碼，只複製音框（-c copy）；五十音用，確保輸出同 edge-tts 原檔格式
 MIN_GAP = 0.02  # 少於這個長度就當已在範圍內
 RATE = 16000
 WIN = 160       # 10ms
@@ -65,12 +66,18 @@ def trim(path, force=False, marks=None):
         open(mark, "w").close()
         return "skip"
     tmp = path + ".tmp.mp3"
-    # 結尾加 30ms 淡出：直接切在母音上會有「啪」一聲，聽起來就是機械聲
-    dur = max(0.05, e - s)
-    fade = "afade=t=in:st=0:d=0.005,afade=t=out:st=%.3f:d=0.030" % max(0.0, dur - 0.030)
-    r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", path,
-                        "-ss", "%.3f" % s, "-to", "%.3f" % e, "-af", fade,
-                        "-c:a", "libmp3lame", "-q:a", QSCALE, "-ar", "24000", "-ac", "1", tmp],
+    if COPY:
+        # 無損剪接：直接複製音框，不重新編碼（輸出格式與 edge-tts 原檔完全相同，48kbps CBR）
+        cmd = ["ffmpeg", "-v", "error", "-y", "-i", path,
+               "-ss", "%.3f" % s, "-to", "%.3f" % e, "-c", "copy", tmp]
+    else:
+        # 結尾加 30ms 淡出：直接切在母音上會有「啪」一聲，聽起來就是機械聲
+        dur = max(0.05, e - s)
+        fade = "afade=t=in:st=0:d=0.005,afade=t=out:st=%.3f:d=0.030" % max(0.0, dur - 0.030)
+        cmd = ["ffmpeg", "-v", "error", "-y", "-i", path,
+               "-ss", "%.3f" % s, "-to", "%.3f" % e, "-af", fade,
+               "-c:a", "libmp3lame", "-q:a", QSCALE, "-ar", "24000", "-ac", "1", tmp]
+    r = subprocess.run(cmd,
                        capture_output=True, text=True)
     if r.returncode != 0 or not os.path.exists(tmp) or os.path.getsize(tmp) < 1000:
         if os.path.exists(tmp):
@@ -83,9 +90,10 @@ def trim(path, force=False, marks=None):
 
 
 def main():
-    global HEAD, TAIL, QSCALE
+    global HEAD, TAIL, QSCALE, COPY
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     force = "--force" in sys.argv
+    COPY = "--copy" in sys.argv
     # 可調整前後留白：五十音只有一個音節，尾巴留長一點才不會聽起來被切斷
     for i, a in enumerate(sys.argv):
         if a == "--head" and i + 1 < len(sys.argv):
