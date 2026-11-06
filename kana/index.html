@@ -95,7 +95,8 @@
   .kcell i{font-style:normal; font-family:"Noto Serif JP",serif; font-size:12px; line-height:1.1; color:#9b9280;}
   .kcell span{font-size:9px; color:#c0b7a6; letter-spacing:.05em;}
   .kcell.blank{visibility:hidden;}
-  .kcell.playing{border-color:var(--indigo); background:#eef1f8;}
+  .kcell.playing{border-color:var(--indigo); background:#d5dff3; box-shadow:0 0 0 2px rgba(44,62,107,.6);}
+  .kcell.playing b{color:var(--indigo);}
 
   .mode{display:flex; background:var(--indigo); border-radius:15px; padding:5px; gap:5px;}
   .mode button{flex:1; border:0; background:transparent; color:#c7d0e8; font-family:inherit;
@@ -1799,9 +1800,10 @@
   document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !chartEl.hidden) closeChart(); });
   chartBody.addEventListener('click', e=>{
     const c = e.target.closest('.kcell'); if(!c || !c.dataset.k) return;
+    /* 藍框改為「記住揀咗邊個字」：一直亮住直到揀另一個字或關閉假名表。
+       之前是閃 500ms，連按同一個字時上一個 timer 會提早清掉，看起來就像「有時有、有時無」。 */
     chartBody.querySelectorAll('.kcell.playing').forEach(b=>b.classList.remove('playing'));
     c.classList.add('playing');
-    setTimeout(()=>c.classList.remove('playing'), 500);
     speak(c.dataset.k, undefined, true);     // 假名表自己撳字可以有聲
   });
 
