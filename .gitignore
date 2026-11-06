@@ -2,3 +2,5 @@ node_modules/
 .DS_Store
 audio/seq/.trimmed/
 __pycache__/
+models/
+*.tar.gz
