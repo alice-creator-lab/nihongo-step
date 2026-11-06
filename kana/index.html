@@ -393,9 +393,7 @@
     </div>
 
     <div class="voicerow">
-      <span class="vl">語音</span>
-      <button class="vbtn" data-voice="g">Google</button>
-      <button class="vbtn" data-voice="n">Nanami</button>
+      <span class="vl">發音</span>
       <button class="slowbtn" id="slowBtn" title="慢速讀音">慢讀</button>
       <button class="slowbtn" id="romajiBtn" title="在喇叭下面顯示拼音">拼音</button>
     </div>
@@ -791,11 +789,11 @@
   let audioOk = true, unlocked = false, audioFails = 0;
   let slowMode = localStorage.getItem('kanaSlow') === '1';
   let romajiHint = localStorage.getItem('kanaRomaji') === '1';
-  let voiceMode = localStorage.getItem('kanaVoice') || 'g';   // 'g'（Google）| 'n'（Nanami）
-  if(voiceMode!=='g' && voiceMode!=='n'){                     // 舊版「系統」選項已移除
-    voiceMode='g'; try{ localStorage.setItem('kanaVoice','g'); }catch(e){}
-  }
-  const VOICE_DIR = { g:'audio/g/', n:'audio/n/' };
+  /* 目前只有一套預製發音（audio/n/，edge-tts 過渡版）；
+     日後換成有商用授權的引擎時，把新聲源放去 audio/<key>/ 再加返個 key 就得。 */
+  let voiceMode = 'n';
+  try{ localStorage.removeItem('kanaVoice'); }catch(e){}
+  const VOICE_DIR = { n:'audio/n/' };
 
   function ttsFallback(kana){
     if(muted || !('speechSynthesis' in window)) return;

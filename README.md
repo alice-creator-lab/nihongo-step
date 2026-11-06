@@ -68,8 +68,9 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 
 - `kana/index.html` 是原本 Kana Dojo 的單檔練習頁（羅馬拼音／鍵盤輸入／手寫／讀音四種模式），連 `kana/kana-templates.json`（手寫辨識模板）一併放在本站；入口在地圖「第一階段」之上的五十音區塊。
 - 併入時做了三件事：header 加返回地圖箭頭；移除它自己的 manifest／圖示（`/kana/` 下會 404）；停用它原本的 `sw.js` 註冊（兩個 SW 爭同一個 scope），快取與更新交給根目錄 `sw.js`（已把 `kana/index.html`、`kana/kana-templates.json` 加入 `SHELL`）。
-- 更新方式：重新抓 kana-dojo 的 index.html、kana-templates.json **以及 `audio/g/`、`audio/n/` 兩個發音目錄**（各 104 個 mp3，合共 1.6MB），再套用上面三項改動。漏了 audio 目錄會整頁退用瀏覽器 TTS，聽起來會斷斷續續（2026-11 就係漏咗呢兩個目錄）。
-- 發音來源：假名頁不是用 TTS，而是預製 mp3（`audio/g/`＝Google 聲、`audio/n/`＝Nanami 聲），以羅馬拼音命名。連續三次載入失敗才會 fallback 到 `speechSynthesis`。
+- 更新方式：重新抓 kana-dojo 的 index.html、kana-templates.json，再套用上面三項改動。發音不用搬 kana-dojo 的 `audio/`（那批沒有授權），改用本站的 `tools/make_kana_audio.py` 自己生成到 `kana/audio/n/`。
+- 發音來源：預製 mp3（`kana/audio/n/`，以羅馬拼音命名，104 段），由 `python3 tools/make_kana_audio.py --force` 產生，再跑 `python3 tools/trim_seq_audio.py kana/audio/n --force --head 0.08 --tail 0.30` 剪靜音（剪後每段約 0.52 秒）。連續三次載入失敗才會 fallback 到 `speechSynthesis`。
+- 原本的 `audio/g/`（Google 語音）已移除：該批來自 Google 翻譯朗讀介面，沒有可轉散布的授權。現時只剩一套聲源（`audio/n/`），介面的聲源選擇已收起；日後接上商用授權引擎時，把新聲源放去 `kana/audio/<key>/` 再加返個 key 即可。
 
 ## 技術說明
 

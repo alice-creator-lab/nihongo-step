@@ -79,8 +79,15 @@ def trim(path, force=False, marks=None):
 
 
 def main():
+    global HEAD, TAIL
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     force = "--force" in sys.argv
+    # 可調整前後留白：五十音只有一個音節，尾巴留長一點才不會聽起來被切斷
+    for i, a in enumerate(sys.argv):
+        if a == "--head" and i + 1 < len(sys.argv):
+            HEAD = float(sys.argv[i + 1])
+        if a == "--tail" and i + 1 < len(sys.argv):
+            TAIL = float(sys.argv[i + 1])
     # 可指定其他目錄（例如 audio/verb）；預設 audio/seq
     target = os.path.join(ROOT, args[0]) if args else SEQ
     marks = os.path.join(target, ".trimmed")
