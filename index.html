@@ -420,8 +420,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <button class="chip" id="slowBtn" aria-pressed="false" title="以較慢速度播放示範語音">慢速</button>
-    <span class="ver" id="verTag">v50</span>
+    <span class="ver" id="verTag">v51</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -437,13 +436,11 @@
   var $ = function(s, r){ return (r||document).querySelector(s); };
   var app = $('#app');
   var PKEY = 'ngs-progress-v1';
-  var SKEY = 'ngs-slow';
 
   var SEGS = 6;               /* 六段；TABS 在這行之後才定義，所以另外留一個常數 */
   var P = loadProgress();
   var course = null;
   var lessons = {};           /* id -> lesson json */
-  var slow = localStorage.getItem(SKEY) === '1';
   var TABS = [
     ['patterns','句型'], ['vocab','單字'], ['grammar','文法'],
     ['exercises','練習'], ['dialogue','會話'], ['culture','文化']
@@ -630,7 +627,7 @@
     /* iOS 只會暴露 compact／super-compact；super-compact 明顯失真，寧可交回系統預設 */
     if (v && /super-compact/i.test(voiceTag(v)) && /iPhone|iPad|iPod/.test(navigator.userAgent)) v = null;
     if (v) u.voice = v;
-    u.rate = rate || (slow ? 0.68 : 0.92);
+    u.rate = rate || 0.92;
     u.pitch = 1;
     if (onend) u.onend = onend;
     speechSynthesis.speak(u);
@@ -648,7 +645,7 @@
      沒有音檔才改用系統合成，且用漢字原句而非假名 */
   function speakLine(l, di, li, btn){
     var au = audioFor(l.id, 'd' + di + '-l' + li);
-    if (au && playFile(au, null, btn, slow ? 0.7 : 1)) return;
+    if (au && playFile(au, null, btn)) return;
     speak(ttsText(l.dialogues[di].lines[li]), btn);
   }
 
@@ -892,7 +889,7 @@
       var b = e.target.closest('.spk[data-say]'); if (!b) return;
       if (ALLPLAY.on) stopAllPlay();
       var au = b.getAttribute('data-audio');
-      if (au && playFile(au, null, b, slow ? 0.7 : 1)) return;
+      if (au && playFile(au, null, b)) return;
       speak(b.getAttribute('data-say'), b);
     });
   }
@@ -941,7 +938,7 @@
               '<button class="btn2 pri" id="startCards">開始</button></div>' +
             '<div class="vplaybar"><button class="btn2" id="vplayall">▶ 播放全部</button>' +
               '<span class="cnt">共 '+l.vocab.length+' 個字詞</span></div>' +
-            '<p class="secnote">點單字右邊的喇叭聽發音；慢速可在右上角開啟。</p><div class="vlist">';
+            '<p class="secnote">點單字右邊的喇叭聽發音。</p><div class="vlist">';
     l.vocab.forEach(function(v, vi){
       var head = v.kanji ? '<span class="vkanji">'+esc(v.kanji)+'</span><span class="vkana">'+esc(v.kana)+'</span>'
                          : '<span class="vkanji">'+esc(v.kana)+'</span>';
@@ -1148,7 +1145,6 @@
         '<div class="qnum">第 '+(s.i+1)+' 題 · 共 '+s.deck.length+' 題</div>' +
         '<div class="row2" style="margin:8px 0 0">' +
           '<button class="cta" id="lplay">▶ 播放</button>' +
-          '<button class="btn2" id="lslow">慢速</button>' +
         '</div>' +
         '<p class="secnote" style="margin:14px 0 8px">你聽到的是哪一句的意思？</p>' +
         '<div id="lchoices">'+choices+'</div>' +
@@ -1157,15 +1153,14 @@
       '<p class="secnote" style="text-align:center">目前答對 '+s.ok+' 題</p>';
 
     var lau = audioFor(l.id, 'l' + l.listening.indexOf(item));
-    function playItem(rate){
-      if (lau && playFile(lau, null, null, rate)) return;
+    function playItem(){
+      if (lau && playFile(lau, null, null)) return;
       speak(item.kana || item.ja);
     }
 
-    playItem(1);
+    playItem();
 
-    $('#lplay').addEventListener('click', function(){ playItem(1); });
-    $('#lslow').addEventListener('click', function(){ playItem(0.65); });
+    $('#lplay').addEventListener('click', function(){ playItem(); });
 
     $('#lchoices').addEventListener('click', function(e){
       var b = e.target.closest('.choice'); if (!b || s.answered) return;
@@ -1389,7 +1384,7 @@
     if (au && playFile(au, function(){
       if (row) row.classList.remove('playing');
       playLines(lines, box, i + 1);
-    }, null, slow ? 0.7 : 1)) return;
+    })) return;
     var u = utter(ttsText(lines[i]), null, function(){
       if (row) row.classList.remove('playing');
       playLines(lines, box, i + 1);
@@ -1842,7 +1837,7 @@
         if (!ALLPLAY.on) return;
         i++;
         step();
-      }, null, slow ? 0.7 : 1);
+      });
       if (!ok){ if (it.el) it.el.classList.remove('playing'); stopAllPlay(); }
     }
     step();
@@ -2310,7 +2305,7 @@
     try{
       /* 音檔加了版本查詢字串，避免瀏覽器沿用舊快取 */
       var a = new Audio(url + (url.indexOf('?') < 0 ? '?' : '&') + 'v=' + auVer(url));
-      /* 慢速改成放慢同一段人聲，不再改用機械合成音 */
+      /* 一律原速播放預製人聲 */
       a.playbackRate = (rate && rate > 0) ? rate : 1;
       curAudio = a;
       if (el) el.classList.add('playing');
@@ -2346,13 +2341,6 @@
       app.innerHTML = '<div class="err">課程資料載入失敗。<br><small>'+esc(e.message)+'</small></div>';
     });
 
-    $('#slowBtn').setAttribute('aria-pressed', slow ? 'true' : 'false');
-    $('#slowBtn').addEventListener('click', function(){
-      slow = !slow;
-      localStorage.setItem(SKEY, slow ? '1' : '0');
-      this.setAttribute('aria-pressed', slow ? 'true' : 'false');
-      toast(slow ? '已開啟慢速發音（0.68 倍）' : '已恢復正常速度');
-    });
     window.addEventListener('hashchange', route);
   }
 

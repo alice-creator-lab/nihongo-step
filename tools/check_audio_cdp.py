@@ -125,7 +125,7 @@ async def main():
     out["課內文法 播放"] = await js("window.__played.slice(-1)")
     out["課內文法 用機械聲"] = await js("window.__played.some(x=>x.indexOf('TTS:')===0)")
 
-    # 3) 聽力（正常 + 慢速）
+    # 3) 聽力
     await visit("#/l/L01/exercises", 2.5)
     await js("(function(){var b=[].find.call(document.querySelectorAll('button'),function(x){return x.textContent.indexOf('聽力')>=0;}); if(b){b.click(); return 1;} return 0;})()")
     await wait_until("document.getElementById('lplay')")
@@ -133,9 +133,7 @@ async def main():
     await js("document.getElementById('lplay').click(); 1")
     await pump(1.2)
     out["聽力 播放"] = await js("[window.__played.slice(-1)[0], window.__rates.slice(-1)[0]]")
-    await js("(function(){window.__played=[]; window.__rates=[]; document.getElementById('lslow').click(); return 1;})()")
-    await pump(1.2)
-    out["聽力 慢速"] = await js("[window.__played.slice(-1)[0], window.__rates.slice(-1)[0]]")
+    out["聽力 已無慢速鍵"] = await js("!document.getElementById('lslow')")
 
     # 4) 對話整段（正常）
     await visit("#/l/L01/dialogue", 2.5)
@@ -145,16 +143,9 @@ async def main():
     await pump(1.5)
     out["對話 播放"] = await js("window.__played.slice(-1)")
 
-    # 5) 對話整段（慢速：改放慢人聲，不用機械聲）
-    await js("localStorage.setItem('ngs-slow','1'); location.hash='#/l/L01/dialogue'; 1")
-    await call("Page.reload", {}, sid)
-    await asyncio.sleep(3)
-    await wait_until("document.querySelector('[data-play]')")
-    await js(INSTR)
-    await js("document.querySelector('[data-play]').click(); 1")
-    await pump(1.5)
-    out["對話 慢速"] = await js("[window.__played.slice(-1)[0], window.__rates.slice(-1)[0]]")
-    await js("localStorage.removeItem('ngs-slow'); 1")
+    # 5) 全域已無慢速：header 不應再有慢速鍵，播放一律原速
+    out["header 無慢速鍵"] = await js("!document.getElementById('slowBtn')")
+    out["播放速度全為 1"] = await js("window.__rates.every(r => r === 1)")
 
     # 6) 跟讀：示範按鈕也要用會話人聲（假名文字交給系統合成會讀成 ha）
     await visit("#/l/L01/dialogue", 2.5)
