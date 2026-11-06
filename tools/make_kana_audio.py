@@ -43,6 +43,16 @@ def kana_pairs():
     return seen
 
 
+# 個別假名的合成文字／語速覆寫。
+# 「どー」用正常寫法合成時，edge-tts 會加一層明顯氣聲（2–4kHz 能量 17%，跟「で」相近），
+# 聽起來像 de；改成「どぉ」後高頻佔比降到 1%。「ん」沒有母音，正常語速只有 0.12 秒，
+# 用「んー」＋慢 35% 才有完整鼻音。
+OVERRIDES = {
+    "do": ("どぉ", "-20%"),
+    "n": ("んー", "-35%"),
+}
+
+
 def voiced_seconds(path):
     """回傳實際發聲長度（秒）：低於峰值 8% 的框架視為靜音。"""
     import array as _array
@@ -137,7 +147,8 @@ def main():
     ok = fail = 0
     failed = []
     for n, (kana, rom, path) in enumerate(jobs, 1):
-        if synth(voice, kana + suffix, path, rate):
+        text, r = OVERRIDES.get(rom, (kana + suffix, rate))
+        if synth(voice, text, path, r):
             stretch(path)
             ok += 1
         else:
