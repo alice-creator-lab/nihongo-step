@@ -276,10 +276,19 @@
   .scorebox .keywrap summary::before{content:'▸ '}
   .scorebox .keywrap[open] summary::before{content:'▾ '}
   .scorebox .note{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.7}
-  /* 階段測驗 */
-  .exbtn{font-size:11.5px; padding:5px 11px; border-radius:999px; border:1px solid var(--line);
-    background:#fffdf8; color:var(--shu); text-decoration:none; line-height:1.5; flex:0 0 auto}
-  .exbtn.off{color:var(--muted)}
+  /* 階段末尾的測驗入口：獨立一欄，與課堂列表隔開 */
+  .exrow{display:flex; align-items:center; gap:12px; margin:16px 0 4px; padding:13px 15px;
+    border:1px dashed var(--shu); border-radius:14px; background:#fff8f2; text-decoration:none; color:inherit}
+  .exrow .ic{width:26px; height:26px; flex:0 0 26px; border-radius:8px; background:var(--shu); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:15px}
+  .exrow .tx{flex:1; min-width:0}
+  .exrow .tx b{display:block; font-size:14px; font-weight:600; color:var(--ink)}
+  .exrow .tx i{display:block; font-style:normal; font-size:11.5px; color:var(--muted); margin-top:3px; line-height:1.5}
+  .exrow .sc{font-size:12.5px; font-weight:600; color:var(--shu); white-space:nowrap}
+  .exrow.off{border-color:var(--line); background:#faf7f1}
+  .exrow.off .ic{background:var(--line); color:var(--muted)}
+  .exrow.off .tx b{color:var(--muted); font-weight:500}
+  .exrow.off .sc{color:var(--muted); font-weight:400}
   .exhd{margin-top:6px}
   .exhd h1{margin:8px 0 6px; font-size:23px; font-weight:600; line-height:1.4}
   .exhd h1 span{display:inline-block; margin-left:9px; font-size:12px; color:var(--muted); letter-spacing:.08em; font-weight:400}
@@ -483,7 +492,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v99</span>
+    <span class="ver" id="verTag">v100</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -754,6 +763,19 @@
     return Math.round(sum / av.length);
   }
 
+  /* 階段末尾的測驗入口：獨立一欄，與課堂列表隔開 */
+  function examRow(b){
+    var best = EXAM_READY[b.no] ? examBest(b.no) : null;
+    var inner =
+      '<span class="ic">✎</span>' +
+      '<span class="tx"><b>第 ' + b.no + ' 階段測驗</b>' +
+        '<i>四選一 · 交卷後看解析</i></span>' +
+      '<span class="sc">' + (best ? '最高 ' + best.best + ' ／ ' + best.total : (EXAM_READY[b.no] ? '未做' : '準備中')) + '</span>';
+    return EXAM_READY[b.no]
+      ? '<a class="exrow" href="#/exam/' + b.no + '">' + inner + '</a>'
+      : '<div class="exrow off">' + inner + '</div>';
+  }
+
   function renderMap(){
     var av = availableLessons();
     var done = doneCount();
@@ -797,11 +819,9 @@
           '<span class="badge ai">'+b.level+'</span>' +
           '<span class="badge">'+esc(b.label)+'</span>' +
           '<span class="meta">'+b.vocab+' 單字 · '+b.patterns+' 句型</span>' +
-          (EXAM_READY[b.no]
-            ? '<a class="exbtn" href="#/exam/'+b.no+'">' + (examBest(b.no) ? '測驗 '+examBest(b.no).best+'／'+examBest(b.no).total : '階段測驗') + '</a>'
-            : '<span class="exbtn off">測驗 · 準備中</span>') +
         '</div>' +
         '<div class="list">'+rows+'</div>' +
+        examRow(b) +
       '</section>';
     }).join('');
 
