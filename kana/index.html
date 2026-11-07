@@ -286,7 +286,7 @@
   .micbtn:disabled{opacity:.45; cursor:default; box-shadow:none;}
   .speak-row .ctlbtn{min-width:78px;}
   .speak-note{font-size:11.5px; color:#b6ac99; text-align:center; margin-top:10px; line-height:1.5; max-width:330px;}
-  .speak-tip{font-size:11px; color:#c3b9a6; text-align:center; margin-top:14px; line-height:1.6; max-width:330px;}
+  .speak-tip{font-size:12px; color:#8b8172; text-align:center; margin-top:14px; line-height:1.6; max-width:330px;}
 
   /* 手寫模式：收細寫字格、把喇叭與提示收成一行，讓題目與回饋同屏可見 */
   body.m-write .card{padding:16px 16px 14px;}
@@ -415,7 +415,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v34</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v35</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -432,7 +432,7 @@
       <button data-mode="read" class="active" title="看字 → 輸入羅馬拼音">羅馬拼音</button>
       <button data-mode="listen" title="聽發音 → 從假名表選字">聽音選字</button>
       <button data-mode="write" title="聽發音 → 手寫">手寫</button>
-      <button data-mode="speak" title="看字 → 用日文鍵盤打讀音（可用鍵盤語音輸入）">鍵盤輸入</button>
+      <button data-mode="speak" title="看字 → 用日文鍵盤打讀音">鍵盤輸入</button>
     </div>
 
     <div class="modebar">
@@ -514,7 +514,7 @@
         <button class="btn-main" id="writeNextBtn" hidden>下一題 →</button>
       </div>
 
-      <!-- SPEAK PANEL（鍵盤輸入：看字打讀音，用日文鍵盤或其語音聽寫） -->
+      <!-- SPEAK PANEL（鍵盤輸入：看字打讀音） -->
       <div class="panel" id="speakPanel">
         <div class="type-label hide" id="speakType"></div>
         <div class="kana" id="speakKana">あ</div>
@@ -527,7 +527,7 @@
           <button class="ctlbtn" id="speakReplay">示範</button>
         </div>
         <div class="speak-note" id="speakNote"></div>
-        <div class="speak-tip">用日文鍵盤輸入這個字的讀音（例：ぬ）。想用語音，可按鍵盤上的麥克風圖示，由系統聽寫轉成假名。</div>
+        <div class="speak-tip">用日文鍵盤輸入這個字的讀音（例：ぬ）。</div>
         <div class="feedback" id="fbSpeak"></div>
       </div>
 
@@ -1493,8 +1493,8 @@
   }
 
   // ── 鍵盤輸入模式：看字打讀音 ───────────────────────────────
-  // 不再自建語音辨識：直接用日文鍵盤打假名；要語音就按鍵盤上的麥克風，
-  // 由系統聽寫轉成假名（iOS／Android 內建），網站不收音、不下載模型。
+  // 不再自建語音辨識：直接用日文鍵盤打假名。單字假名用系統聽寫常常認不到，
+  // 所以介面唔會叫用戶用語音，網站亦不收音、不下載模型。
   // 判定只認五十音表上有的音：「ねぇ」「目」「2」這類一律不當答案。
   const escH = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const kanaOnly = s => toHira(s||'').replace(/[^\u3041-\u3096]/g,'');
