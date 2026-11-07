@@ -145,6 +145,8 @@
   .vbtm{display:flex; align-items:baseline; gap:8px; margin-top:2px; flex-wrap:wrap}
   .vzh{font-size:13px; color:var(--ink2)}
   .pos{font-size:10.5px; color:var(--muted); border:1px solid var(--line); border-radius:4px; padding:0 5px; line-height:1.6}
+  /* 總表與練習本：讀音只跟在有漢字的詞後面；詞性固定與中文同一行，不再輪流佔副行 */
+  .arow .az, .nrow .nz{display:flex; align-items:baseline; gap:7px; flex-wrap:wrap}
 
   .gsec{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:11px}
   .gsec h3{margin:0 0 10px; font-size:15.5px; font-weight:600; letter-spacing:.01em}
@@ -496,7 +498,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v108</span>
+    <span class="ver" id="verTag">v109</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2087,8 +2089,9 @@
               (audioFor(it.id, 'v' + it.vi) ? ' data-audio="' + esc(audioFor(it.id, 'v' + it.vi)) + '"' : '') +
               ' aria-label="播放讀音">' + SPK + '</button>' +
             '<div class="ak"><b>' + esc(v.kanji || v.kana) + '</b>' +
-              (v.kanji ? '<span>' + esc(v.kana) + '</span>' : '<span>' + esc(v.pos || '') + '</span>') + '</div>' +
-            '<div class="az">' + esc(v.zh) + '</div>' +
+              (v.kanji ? '<span>' + esc(v.kana) + '</span>' : '') + '</div>' +
+            '<div class="az"><span class="vzh">' + esc(v.zh) + '</span>' +
+              (v.pos ? '<span class="pos">' + esc(v.pos) + '</span>' : '') + '</div>' +
             '<div class="al">' + it.id + '</div></div>';
         }).join('');
       } else {
@@ -2305,8 +2308,9 @@
       var au = x.audio || audioFor(x.id, 'v' + x.vi);
       return '<div class="nrow">' +
         '<div class="nk"><b>' + esc(x.kanji || x.kana) + '</b>' +
-          '<span>' + esc(x.kanji ? x.kana : (x.pos || '')) + '</span></div>' +
-        '<div class="nz">' + esc(x.zh) + '</div>' +
+          (x.kanji ? '<span>' + esc(x.kana) + '</span>' : '') + '</div>' +
+        '<div class="nz"><span class="vzh">' + esc(x.zh) + '</span>' +
+          (x.pos ? '<span class="pos">' + esc(x.pos) + '</span>' : '') + '</div>' +
         '<div class="nl">' + esc(x.id) + '</div>' +
         '<button class="spk" data-say="' + esc(x.kana) + '"' +
           (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放發音">' + SPK + '</button>' +

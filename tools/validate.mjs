@@ -87,6 +87,11 @@ for (const book of course.books || []) {
     });
     (les.vocab || []).forEach((v, i) => {
       if (!v.kana || !v.zh || !v.pos) errors.push(`${rel} vocab[${i}] 需要 kana、zh、pos`);
+      /* 詞性只用固定 8 類，避免同義標籤（い形／形容動詞／動詞（他動詞）…）再次混入；
+         新增寫法請先用 tools/normalize_pos.py 的對照表收斂。 */
+      if (v.pos && !['名詞', '動詞', 'い形容詞', 'な形容詞', '副詞', '代名詞', '連體詞', '其他'].includes(v.pos)) {
+        errors.push(`${rel} vocab[${i}] 詞性「${v.pos}」不在固定 8 類之內`);
+      }
     });
     (les.grammar || []).forEach((g, i) => {
       if (!g.h || !Array.isArray(g.p) || !g.p.length) errors.push(`${rel} grammar[${i}] 需要 h 與 p`);

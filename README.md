@@ -36,8 +36,13 @@ manifest.webmanifest  主畫面安裝設定
 icons/                應用程式圖示
 tools/validate.mjs    內容校驗腳本
 tools/validate-exam.mjs  階段測驗題目校驗（四個選項、選項不重複、音檔存在）
+tools/normalize_pos.py 詞性對照：把新增標籤收斂成固定 8 類（預設只顯示統計）
 data/exam-1..4.json   第 1–4 階段測驗題目（各 28 題）
 ```
+
+單字詞性只用八類：名詞、動詞、い形容詞、な形容詞、副詞、代名詞、連體詞、其他
+（寒暄、感嘆、接尾、疑問詞歸入「其他」）。`tools/validate.mjs` 會擋下其他寫法。
+列表一律「主行：詞＋（有漢字時的）假名；副行：中文＋詞性」，讀音與詞性不會輪流佔同一位置。
 
 ## 本機預覽
 
