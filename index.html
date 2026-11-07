@@ -420,7 +420,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v93</span>
+    <span class="ver" id="verTag">v94</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -824,7 +824,13 @@
       '</div>' +
       '<div class="nav2">' +
         '<a class="back" href="#/">回課程地圖</a>' +
-        '<a class="back" href="#/l/'+lesson.id+'/vocab">下一段：單字 →</a>' +
+        (function(){
+          var idx = -1;
+          TABS.forEach(function(t, i){ if (t[0] === tab) idx = i; });
+          var nx = idx >= 0 ? TABS[idx + 1] : null;
+          if (nx) return '<a class="back" id="nextSeg" href="#/l/'+lesson.id+'/'+nx[0]+'">下一段：'+nx[1]+' →</a>';
+          return '<a class="back" href="#/">本課完結 · 回課程地圖 →</a>';
+        })() +
       '</div>';
 
     $('#tabs').addEventListener('click', function(e){
@@ -1616,6 +1622,9 @@
           if (whisperStream){ whisperStream.getTracks().forEach(function(t){ t.stop(); }); whisperStream = null; }
           whisperRec = null;
           clearTimeout(whisperTimer);
+          /* 不論是自己按停還是靜音自動停，按鈕都要即刻反映「已停止」 */
+          if (btn){ btn.disabled = true; btn.textContent = '辨識中…'; }
+          spkProg('收音完畢，辨識中，請稍等…');
           resolve(new Blob(chunks, { type: mr.mimeType || 'audio/webm' }));
         };
         mr.start();
