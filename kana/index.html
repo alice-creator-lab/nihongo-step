@@ -378,7 +378,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v27</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v28</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -1491,7 +1491,7 @@
     speakInput.value=''; speakInput.className=''; speakInput.disabled=false;
     speakCheck.textContent='檢查'; speakCheck.className='btn-main';
     speakNote.textContent = '';
-    speakInput.focus({preventScroll:true});       // 一入題就彈鍵盤，可直接用鍵盤上的麥克風聽寫
+    // 不自動聚焦：iOS 會即刻彈出鍵盤，蓋住題目；要打字就按輸入框
   }
   function checkSpeak(){
     if(mode!=='speak' || !current || answered) return;

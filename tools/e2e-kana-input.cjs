@@ -32,6 +32,8 @@ const URL = process.argv[2];
 
   let s = await state();
   check('入題時輸入框清空、按鈕是「檢查」', s.val === '' && s.checkLabel === '檢查', JSON.stringify(s));
+  const focused = await page.evaluate(() => document.activeElement && document.activeElement.id);
+  check('入題不自動聚焦（鍵盤不會自己彈出）', focused !== 'speakInput', 'activeElement=' + focused);
 
   // 打表外的字 → 不判錯
   const before = s;
@@ -55,6 +57,8 @@ const URL = process.argv[2];
   await page.waitForTimeout(300);
   s = await state();
   check('下一題清空輸入框', s.val === '' && s.fbText === '' && s.checkLabel === '檢查', JSON.stringify(s));
+  const focused2 = await page.evaluate(() => document.activeElement && document.activeElement.id);
+  check('下一題亦不自動聚焦', focused2 !== 'speakInput', 'activeElement=' + focused2);
 
   // 打對 → 判對
   const k = s.kana;
