@@ -1494,7 +1494,17 @@
   let srAttempt = 0, srGotResult = false, srLastErr = '';
   const DEBUG = /[?&]kdebug=1/.test(location.search);
   const srLogArr = [];
-  function srLog(s){ if(!DEBUG) return; srLogArr.push(Date.now()%100000 + ':' + s); window.__kanaSR = srLogArr.slice(); }
+  let srDebugEl = null;
+  function srLog(s){
+    if(!DEBUG) return;
+    srLogArr.push(s); window.__kanaSR = srLogArr.slice();
+    if(!srDebugEl){
+      srDebugEl = document.createElement('div');
+      srDebugEl.style.cssText = 'font-size:11px;color:#8a7f6a;line-height:1.5;word-break:break-all;margin-top:6px;';
+      (document.getElementById('speakPanel') || document.body).appendChild(srDebugEl);
+    }
+    srDebugEl.textContent = '診斷：' + srLogArr.join(' · ');
+  }
   function startSpeak(){
     if(mode!=='speak' || !current) return;
     if(!SRClass){ speakNote.textContent = srReason(); return; }
