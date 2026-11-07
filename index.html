@@ -224,8 +224,14 @@
   .chips{display:flex; flex-wrap:wrap; gap:7px; justify-content:center; margin:12px 0}
   .chips span{font-family:var(--serif); font-size:14px; border:1px solid var(--line); border-radius:999px;
     padding:4px 11px; background:#fffdf8}
-  .linkbtn{appearance:none; border:0; background:transparent; color:var(--shu); font-family:var(--sans);
-    font-size:12.5px; padding:0; text-decoration:underline; text-underline-offset:3px}
+  /* 錯題簿：硃紅細邊膠囊，只在有錯題時出現 */
+  .mkpill{appearance:none; display:inline-flex; align-items:center; gap:5px;
+    border:1px solid rgba(176,58,46,.42); background:transparent; color:var(--shu);
+    font-family:var(--sans); font-size:12.5px; font-weight:600; letter-spacing:.02em;
+    padding:9px 14px; border-radius:999px; -webkit-tap-highlight-color:transparent;
+    margin-left:auto}   /* 窄螢幕換行時靠右，與卡片右邊對齊 */
+  .mkpill b{font-weight:600; font-variant-numeric:tabular-nums}
+  .mkpill:active{background:rgba(176,58,46,.08)}
   .sheet{position:fixed; inset:0; background:rgba(34,30,25,.42); z-index:60; display:none; align-items:flex-end}
   .sheet.on{display:flex}
   .sheetbox{background:var(--paper); width:100%; max-width:760px; margin:0 auto; border-radius:20px 20px 0 0;
@@ -491,7 +497,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v106</span>
+    <span class="ver" id="verTag">v107</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -831,7 +837,7 @@
         '<div class="hrow">' +
           '<button class="cta" id="resume">'+ (done ? '繼續學習' : resumeLabel) +'</button>' +
           '<span class="hint">整體進度 '+pct+'% · 已完成 '+done+' 課</span>' +
-          (mistakeCount() ? '<button class="linkbtn" id="mkBtn">錯題簿（'+mistakeCount()+'）</button>' : '') +
+          (mistakeCount() ? '<button class="mkpill" id="mkBtn">錯題簿 <b>'+mistakeCount()+'</b></button>' : '') +
         '</div>' +
       '</section>' +
       '<div class="tools">' +
