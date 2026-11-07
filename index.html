@@ -420,7 +420,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v79</span>
+    <span class="ver" id="verTag">v80</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1438,9 +1438,6 @@
 
   var IS_STANDALONE = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
                       || navigator.standalone === true;
-  function asrSupported(){
-    return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
-  }
 
   function toHira(s){
     return String(s).replace(/[\u30a1-\u30f6]/g, function(c){
@@ -1480,15 +1477,12 @@
     return a.map(function(ch, k){ return keep[k] ? esc(ch) : '<b class="miss">'+esc(ch)+'</b>'; }).join('');
   }
 
-  var spkState = { rec: null };
 
   function openSpeak(l, di, li){
     var d = l.dialogues[di], line = d.lines[li];
     var host = $('#seg'); if (!host) return;
     stopAudio();
     var best = speakBest(l, di, li);
-    var ok = asrSupported();
-
     host.innerHTML =
       '<div class="cardmeta">跟讀評分 · '+esc(d.scene)+' · 第 '+(li+1)+' 句</div>' +
       '<div class="rolecard"><div class="rlabel">跟著唸這一句</div>' +
@@ -1497,7 +1491,6 @@
         '<div class="rzh">'+esc(line.zh)+'</div></div>' +
       '<div class="cbtns">' +
         '<button class="btn2" id="spkModel">▶ 示範</button>' +
-        (ok ? '<button class="btn2" id="spkRec">● 開始朗讀</button>' : '') +
         '<button class="btn2 pri" id="spkAuto">● 自動辨識</button>' +
       '</div>' +
       '<div id="spkProg" class="spkprog"></div>' +
@@ -1508,13 +1501,11 @@
 
     $('#spkModel').addEventListener('click', function(){ speakLine(l, di, li, this); });
     $('#spkBack').addEventListener('click', function(){
-      if (spkState.rec){ try{ spkState.rec.stop(); }catch(e){} spkState.rec = null; }
       stopAudio();
       $('#seg').innerHTML = segDialogue(l);
       bindSpeakers($('#seg'));
       wireDialogue($('#seg'), l);
     });
-    if (ok) $('#spkRec').addEventListener('click', function(){ startSpeak(l, di, li, line); });
     $('#spkAuto').addEventListener('click', function(){ autoRead(l, di, li, line); });
     
 
@@ -1606,90 +1597,6 @@
       spkProg('');
       toast('自動辨識失敗：' + (e && e.message ? e.message : e));
     });
-  }
-
-  function startSpeak(l, di, li, line){
-    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    var btn = $('#spkRec');
-    if (spkState.rec){
-      try{ spkState.rec.stop(); }catch(e){}
-      spkState.rec = null;
-      if (btn){ btn.textContent = '● 開始朗讀'; btn.classList.remove('rec'); }
-      return;
-    }
-    stopAudio();
-    var rec;
-    try { rec = new SR(); } catch(e){ toast('無法啟動語音辨識'); return; }
-    rec.lang = 'ja-JP';
-    rec.interimResults = false;
-    rec.maxAlternatives = 3;
-    rec.continuous = false;
-
-    var settled = false;
-    function settle(data){
-      if (settled) return;
-      settled = true;
-      spkState.rec = null;
-      if (btn){ btn.textContent = '● 開始朗讀'; btn.classList.remove('rec'); }
-      renderSpeakResult(l, di, li, line, data || {});
-    }
-    rec.onresult = function(ev){
-      var alts = [], r = ev.results[0];
-      for (var i = 0; i < r.length; i++){ if (r[i].transcript) alts.push(r[i].transcript); }
-      settle({ alts: alts });
-    };
-    rec.onerror = function(ev){ settle({ error: ev.error }); };
-    rec.onend = function(){ settle({}); };
-
-    try {
-      rec.start();
-      spkState.rec = rec;
-      if (btn){ btn.textContent = '■ 停止'; btn.classList.add('rec'); }
-      var fb = $('#spkFb');
-      if (fb) fb.innerHTML = '<p class="secnote" style="text-align:center">正在聽……請照著上面的句子唸一次。</p>';
-    } catch(e){ settle({ error: 'start-failed' }); }
-  }
-
-  function renderSpeakResult(l, di, li, line, data){
-    var fb = $('#spkFb'); if (!fb) return;
-    var err = data.error;
-
-    if (err === 'not-allowed'){
-      fb.innerHTML = '<div class="scorebox"><p class="verdict">麥克風或辨識權限被拒</p>' +
-        '<p class="note">Safari 網址列左邊「aA」或「大小」→ 網站設定 → 麥克風 → 允許；或 設定 → Safari → 麥克風 → 詢問。改完要重新載入頁面。</p>' +
-        '<p class="note"><a href="mic-test.html">開測試頁確認是哪一步失敗</a></p></div>';
-      return;
-    }
-    if (err === 'service-not-allowed'){
-      fb.innerHTML = '<div class="scorebox"><p class="verdict">語音辨識服務不可用</p>' +
-        '<p class="note">系統不讓網頁使用語音辨識。先試：設定 → 一般 → 鍵盤 → 開啟 Enable Dictation 並加入日文；再到 設定 → Siri → Language 改為 Japanese (Japan)。</p>' +
-        '<p class="note">暫時可用上面的「錄音對照」：自己唸一次，再與示範並排比較。</p>' +
-        '<p class="note"><a href="mic-test.html">開測試頁看錯誤代碼</a></p></div>';
-      return;
-    }
-    if (err === 'language-not-supported'){
-      fb.innerHTML = '<div class="scorebox"><p class="verdict">這個系統不支援日語辨識</p>' +
-        '<p class="note">請到 設定 → 一般 → 鍵盤 → 鍵盤 → 加入日文鍵盤，然後重新載入頁面。</p></div>';
-      return;
-    }
-    if (err === 'start-failed'){
-      fb.innerHTML = '<div class="scorebox"><p class="verdict">未能啟動收音</p><p class="note">請再按一次「開始朗讀」。</p></div>';
-      return;
-    }
-    if (err === 'network'){
-      fb.innerHTML = '<div class="scorebox"><p class="verdict">語音辨識需要網路</p><p class="note">請檢查連線後再試。</p></div>';
-      return;
-    }
-    if (!data.alts || !data.alts.length || err === 'no-speech'){
-      fb.innerHTML = '<div class="scorebox"><p class="verdict">聽不清楚</p>' +
-        '<p class="note">靠近一點、在安靜的地方，按「開始朗讀」再唸一次（這次不計分）。</p></div>';
-      return;
-    }
-
-    var target = line.kana || line.ja;
-    var scored = data.alts.map(function(t){ return { text: t, score: similarity(target, t) }; })
-                          .sort(function(a, b){ return b.score - a.score; });
-    paintScore(l, di, li, line, scored[0].text, function(){ startSpeak(l, di, li, line); }, '系統聽到');
   }
 
   function paintScore(l, di, li, line, text, retry, sourceLabel){

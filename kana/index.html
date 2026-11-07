@@ -1485,7 +1485,7 @@
   function resetSpeak(){
     fbSpeak.className='feedback'; fbSpeak.innerHTML='';
     speakNextBtn.hidden = true;
-    srMisses = 0; srAllowSkip = false;
+    srMisses = 0; srAllowSkip = false; srRetried = false;
     stopSpeak();
     const canRec = !!(navigator.mediaDevices && window.MediaRecorder);
     micBtn.disabled = !(SRClass || canRec);
@@ -1569,6 +1569,27 @@
     if(wRec && wRec.state==='recording'){ try{ wRec.stop(); }catch(e){} }
     if(wStream){ try{ wStream.getTracks().forEach(t=>t.stop()); }catch(e){} wStream=null; }
   }
+  // 短促的單音要先整理：去靜音、正規化音量、前後補 0.3 秒，否則模型容易亂聽
+  function prepAudio(a){
+    const n = a.length;
+    let peak = 0;
+    for(let i=0;i<n;i++){ const v = a[i] < 0 ? -a[i] : a[i]; if(v > peak) peak = v; }
+    if(peak < 1e-4) return a;
+    const thr = peak * 0.06;
+    let s = 0, e = n - 1;
+    while(s < n && Math.abs(a[s]) < thr) s++;
+    while(e > s && Math.abs(a[e]) < thr) e--;
+    if(e <= s) return a;
+    const pad = Math.round(0.30 * 16000);
+    const len = Math.max((e - s + 1) + pad * 2, 16000);      // 至少 1 秒
+    const out = new Float32Array(len);
+    const gain = Math.min(4, 0.9 / peak);
+    for(let i=s;i<=e;i++){
+      const v = a[i] * gain;
+      out[pad + (i - s)] = v > 1 ? 1 : (v < -1 ? -1 : v);
+    }
+    return out;
+  }
   function whisperStart(){
     if(mode!=='speak' || !current) return;
     if(answered){ newQuestion(); return; }
@@ -1600,7 +1621,7 @@
       .then(blob=>{
         micLabel.textContent='辨識中…';
         speakNote.textContent='辨識中，請稍等…';
-        return load.then(tr=>blobToAudio16k(blob).then(audio=>tr(audio, {language:'ja', task:'transcribe'})));
+        return load.then(tr=>blobToAudio16k(blob).then(audio=>tr(prepAudio(audio), {language:'ja', task:'transcribe'})));
       })
       .then(out=>{
         const text = ((out && out.text) || '').trim();
@@ -1688,10 +1709,10 @@
     srTimer = setTimeout(()=>{ srIntentionalAbort = true; try{ r.stop(); }catch(e){} }, 9000);
   }
   // ── 讀音模式只看聲音 ────────────────────────────────────────
-  // 五十音一題只有一個音（清音／濁音／半濁音／拗音），所以只核對
-  // 辨識結果的第一個音節：多出嚟的音（例：讀 そ 辨識成「そう」）不理會。
-  // 漢字、符號（例：目、(笑)）不算答案，也不會顯示，只當作「聽不清楚」。
-  let srMisses = 0, srAllowSkip = false;
+  // 五十音一題只有一個音（清音／濁音／半濁音／拗音），所以只核對辨識結果的
+  // 第一個音節，而且必須是五十音表上有的音：「ねぇ」「目」「(笑)」這類
+  // 一律不顯示、不判錯，只當作「聽不清楚」。
+  let srMisses = 0, srAllowSkip = false, srRetried = false;
   const kanaOnly = s => toHira(s||'').replace(/[^\u3041-\u3096]/g,'');
   // 取第一個音節：小字（ゃゅょゎぁぃぅぇぉ）跟前一個假名合成一個音
   const firstUnit = s => {
@@ -1699,15 +1720,14 @@
     if(!k) return '';
     return (/[ゃゅょゎぁぃぅぇぉ]/.test(k[1] || '')) ? k.slice(0,2) : k[0];
   };
+  const inTable = k => !!ROMAJI[k];            // 五十音表上有的音才接受
   const normRom = s => (s||'').toLowerCase().replace(/wo/g,'o').replace(/zi/g,'ji').replace(/([aeiou])\1+/g,'$1');
   function judgeSpeak(alts){
     if(mode!=='speak' || !current) return;
     const targetKana = toHira(current.k);
     const targetRom = normRom(ROMAJI[targetKana] || ROMAJI[current.k] || '');
-    const heard = (alts||[]).map(firstUnit).filter(Boolean);
-    const hit = targetRom
-      ? heard.find(h => h===targetKana || normRom(ROMAJI[h])===targetRom)
-      : heard.find(h => h===targetKana);
+    const heard = (alts||[]).map(firstUnit).filter(inTable);
+    const hit = heard.find(h => h===targetKana || (targetRom && normRom(ROMAJI[h])===targetRom));
     if(hit){
       answered = true;
       stats.correct++; stats.streak++;
@@ -1718,25 +1738,30 @@
       speakNote.textContent = '（聽到：'+hit+'）';
       return;
     }
-    const other = heard[0];
-    if(other){
+    if(heard.length){
+      // 聽到表上有的音，但跟正解不同：辨識偶爾會聽錯，先給一次機會再判錯
+      if(!srRetried){
+        srRetried = true;
+        speakNote.textContent = '剛才辨識成「'+heard[0]+'」，請再按「錄音」讀一次確認。';
+        return;
+      }
       answered = true;
       stats.wrong++; stats.streak=0; addWrong(current);
-      showFeedback(fbSpeak, false, '', '你讀了「'+other+'」· 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
+      showFeedback(fbSpeak, false, '', '你讀了「'+heard[0]+'」· 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
       updateStats();
       speakNextBtn.hidden=false; speakNextBtn.className='btn-main next err'; speakNextBtn.textContent='下一題 →';
       speakNote.textContent='';
       return;
     }
-    // 全部結果都不是假名（漢字／雜訊）：不計分、不判錯，請再錄；
+    // 全部結果都不是五十音表上的音（ねぇ、漢字、雜訊）：不計分、不判錯；
     // 連續兩次都這樣就讓用戶直接跳過，免得卡死
     srMisses++;
     if(srMisses >= 2){
       srAllowSkip = true;
       speakNextBtn.hidden=false; speakNextBtn.className='btn-main next'; speakNextBtn.textContent='跳過 →';
-      speakNote.textContent = '辨識不到假名（可能是雜訊）— 可以按「示範」對照，或按「跳過」。';
+      speakNote.textContent = '聽不清楚 — 可以按「示範」對照，或按「跳過」。';
     }else{
-      speakNote.textContent = '聽不清楚（辨識不到假名）— 請再按「錄音」讀一次。';
+      speakNote.textContent = '聽不清楚 — 請再按「錄音」讀一次。';
     }
   }
   micBtn.addEventListener('click', startSpeak);
