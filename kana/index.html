@@ -1492,6 +1492,9 @@
       : srReason();
   }
   let srAttempt = 0, srGotResult = false, srLastErr = '';
+  const DEBUG = /[?&]kdebug=1/.test(location.search);
+  const srLogArr = [];
+  function srLog(s){ if(!DEBUG) return; srLogArr.push(Date.now()%100000 + ':' + s); window.__kanaSR = srLogArr.slice(); }
   function startSpeak(){
     if(mode!=='speak' || !current) return;
     if(!SRClass){ speakNote.textContent = srReason(); return; }
@@ -1508,17 +1511,14 @@
     micBtn.classList.add('rec'); micLabel.textContent='辨識中…';
     fbSpeak.className='feedback'; fbSpeak.innerHTML='';
     speakNote.textContent = srAttempt ? '再聽一次，請讀出上面的字…' : '請讀出上面的字…';
-    // iOS 要先用 getUserMedia 拿到麥克風授權；放開咪後等 350ms 才開辨識，太密會即 abort
-    const warm = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
-      ? navigator.mediaDevices.getUserMedia({audio:true})
-          .then(s=>{ s.getTracks().forEach(t=>t.stop()); }).catch(()=>{})
-      : Promise.resolve();
-    warm.then(()=>{ setTimeout(()=>{ if(srListening) beginRecognition(); }, 350); });
+    // 一定在同一個點擊事件內 start()：iOS 只要離開手勢就會「開咪但收唔到聲」
+    // （唔再先 call getUserMedia／加 setTimeout，兩者在 Safari 上都會令擷取變空）
+    beginRecognition();
   }
   function beginRecognition(){
     const r = new SRClass();
-    // continuous + interimResults：iOS 預設聽 1 秒就收工，未開口就「跳走」；開 continuous 由我們自己收
-    try{ r.lang='ja-JP'; r.interimResults=true; r.maxAlternatives=5; r.continuous=true; }catch(e){}
+    // Safari 只支援單次辨識：continuous / interimResults 開住會收唔到結果，維持 false
+    try{ r.lang='ja-JP'; r.interimResults=false; r.maxAlternatives=5; r.continuous=false; }catch(e){}
     r.onresult = ev => {
       const alts = [], finals = [];
       try{
@@ -1532,14 +1532,17 @@
         return;
       }
       srGotResult = true;
+      srLog('result:'+alts.join('|'));
       srIntentionalAbort = true;
       stopSpeak();
       judgeSpeak(finals.concat(alts));
     };
     r.onerror = ev => {
       srLastErr = (ev && ev.error) || '';
+      srLog('error:'+srLastErr);
     };
     r.onend = ()=>{
+      srLog('end');
       if(srObj!==r) return;
       const err = srLastErr, got = srGotResult;
       stopSpeak();
@@ -1549,13 +1552,14 @@
         return;
       }
       if(err==='not-allowed' || err==='service-not-allowed') speakNote.textContent='需要使用麥克風：請在設定 → Safari 允許「麥克風」，或按「示範」對照。';
-      else if(err==='no-speech' || !err) speakNote.textContent='沒有聽到聲音，請按「錄音」再讀一次。';
+      else if(err==='no-speech' || !err) speakNote.textContent='沒有聽到聲音：請確認「設定 → Siri 與搜尋 → 聽寫」已開啟，靠近麥克風再按「錄音」。';
       else if(err==='network') speakNote.textContent='語音辨識需要連網（Apple 語音服務），請檢查網絡後再試。';
       else if(err==='aborted') speakNote.textContent='錄音被系統中斷（可能係 Siri／其他 App 搶咗麥克風），請再按一次「錄音」。';
       else if(err==='audio-capture') speakNote.textContent='接收不到麥克風聲音，請檢查麥克風權限。';
       else speakNote.textContent='辨識發生錯誤（'+err+'），請再試一次。';
     };
     srObj = r;
+    if(DEBUG){ r.onstart = ()=>srLog('start'); }
     try{ r.start(); }catch(e){ stopSpeak(); speakNote.textContent='無法啟動語音辨識，請再試一次。'; return; }
     srTimer = setTimeout(()=>{ srIntentionalAbort = true; try{ r.stop(); }catch(e){} }, 9000);
   }
