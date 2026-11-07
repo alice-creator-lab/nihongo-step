@@ -420,7 +420,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v90</span>
+    <span class="ver" id="verTag">v91</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1642,6 +1642,7 @@
         '<p class="verdict">'+verdict+'</p>' +
         '<div class="target">'+markTarget(target, text)+'</div>' +
         '<p class="heard">'+(sourceLabel || '你輸入的')+'：'+esc(text)+'</p>' +
+        (cleanKana(text) !== toHira(text).replace(/[\s\u3000]/g,'') ? '<p class="heard">統一後（實際比對）：'+esc(cleanKana(text))+'</p>' : '') +
         '<p class="note">紅字是沒對上的音。評分前已把兩邊統一成平假名比對（片假名轉平假名、漢字換讀音、長音符略去）。分數＝句子假名對上的比例（'+score+'%），只反映辨識到的內容。</p>' +
       '</div>' +
       '<div class="cbtns"><button class="btn2" id="spkAgain">再試一次</button>' +
