@@ -322,6 +322,8 @@
 
   .voicerow{display:flex; align-items:center; gap:6px; padding:0 4px; flex-wrap:wrap; row-gap:6px;}
   #romajiBtn{margin-left:0;}
+  .poolhint{font-size:12px; color:var(--ink-soft); padding:0 16px 10px; letter-spacing:.02em; line-height:1.5;}
+  .poolhint b{color:var(--indigo); font-weight:600;}
   .ghostbtn{border:1px solid var(--line); background:transparent; color:#b6ac99; font-family:inherit;
     font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:999px; cursor:pointer; margin-left:6px;
     transition:.18s; vertical-align:middle;}
@@ -408,6 +410,7 @@
       <button class="vbtn" data-extra="hand" title="ぱ ぴ ぷ ぺ ぽ">半濁音</button>
       <button class="vbtn" data-extra="youon" title="きゃ しゃ ちゃ 等">拗音</button>
     </div>
+    <div class="poolhint" id="poolHint"></div>
 
     <div class="card">
       <!-- READ PANEL -->
@@ -503,7 +506,7 @@
       <div class="stat"><span class="n" id="statAcc">—</span><span class="l">正確率</span></div>
     </div>
 
-    <footer>語音 Google／Nanami · 手寫辨識：本機筆順比對（模板 KanjiVG, CC BY-SA） · <span id="build">web-dev</span></footer>
+    <footer>語音：Microsoft Nanami（預製 mp3） · 手寫辨識：本機筆順比對（模板 KanjiVG, CC BY-SA） · <span id="build">web-dev</span></footer>
   </div>
 
   <!-- 錯題簿管理 sheet -->
@@ -763,11 +766,29 @@
     wrongBadge.hidden = n === 0;
   }
 
+  const poolHintEl = $('poolHint');
+  function updatePoolHint(){
+    if(!poolHintEl) return;
+    if(scope==='wrong'){ poolHintEl.innerHTML=''; return; }
+    const n = pool.length;
+    const cnt = {base:0, daku:0, hand:0, youon:0};
+    pool.forEach(o => { const c = o.cls; if(c==='daku'||c==='hand'||c==='youon') cnt[c]++; else cnt.base++; });
+    const parts = [];
+    if(cnt.base) parts.push('清音 '+cnt.base);
+    if(cnt.daku) parts.push('濁音 '+cnt.daku);
+    if(cnt.hand) parts.push('半濁音 '+cnt.hand);
+    if(cnt.youon) parts.push('拗音 '+cnt.youon);
+    const extra = (cnt.daku||cnt.hand||cnt.youon)
+      ? '（' + parts.join('・') + '）'
+      : '（只有清音；按上面「字類」可加入濁音／半濁音／拗音）';
+    poolHintEl.innerHTML = '題庫 <b>' + n + '</b> 字' + extra;
+  }
   function buildPool(){
     if(scope==='hira') pool = packsFor('hira').flat();
     else if(scope==='kata') pool = packsFor('kata').flat();
     else if(scope==='wrong') pool = wrongBook.filter(k=>wrongSel.includes(k)).map(k=>ALL_KANA.get(k)).filter(Boolean);
     else pool = packsFor('hira').flat().concat(packsFor('kata').flat());
+    updatePoolHint();
   }
   function pickNext(){
     let c;
@@ -1919,6 +1940,8 @@
       all: ()=>[...ALL_KANA.values()],
       setCurrent: o=>{ mode='write'; current=o; answered=false; },
       pick: ch=>checkPicked(ch),
+      pool: ()=>pool.map(o=>o.k),
+      extras: ()=>extrasOn.slice(),
       seq: ()=>chartSeq ? {i:chartSeq.i, n:chartSeq.cells.length, paused:player.paused, t:Math.round(player.currentTime*100)/100, src:(player.currentSrc||'').slice(-20)} : null,
       stats: ()=>({correct:stats.correct, wrong:stats.wrong}),
       answered: ()=>answered
