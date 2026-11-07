@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>語音辨識診斷</title>
+<style>
+  body{font-family:-apple-system,"Helvetica Neue",sans-serif;background:#f7f4ec;color:#2b2620;margin:0;padding:20px;line-height:1.6}
+  h1{font-size:18px;margin:0 0 4px}
+  p.note{font-size:13px;color:#7a7266;margin:0 0 18px}
+  .card{background:#fff;border:1px solid #e2dbcd;border-radius:14px;padding:14px;margin-bottom:14px}
+  .card h2{font-size:15px;margin:0 0 8px}
+  button{font:inherit;font-size:15px;padding:12px 18px;border-radius:12px;border:1px solid #cbbf9f;background:#fbf8f1;width:100%}
+  .out{margin-top:10px;font-size:13px;white-space:pre-wrap;word-break:break-all;color:#4a4438}
+  .ok{color:#1f7a3d}
+  .bad{color:#a33}
+</style>
+</head>
+<body>
+<h1>語音辨識診斷</h1>
+<p class="note">順序按 A → B → C，每個按完讀一個字（例：あ），然後截圖。</p>
+
+<div class="card">
+  <h2>A：最基本（同主程式跟讀一樣）</h2>
+  <button data-v="a">A 開始辨識</button>
+  <div class="out" id="out-a">未試</div>
+</div>
+
+<div class="card">
+  <h2>B：先停掉播放中的音效，再辨識</h2>
+  <button data-v="b">B 開始辨識</button>
+  <div class="out" id="out-b">未試</div>
+</div>
+
+<div class="card">
+  <h2>C：先 speechSynthesis.cancel()，再辨識</h2>
+  <button data-v="c">C 開始辨識</button>
+  <div class="out" id="out-c">未試</div>
+</div>
+
+<script>
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+function log(k, s, cls){
+  const el = document.getElementById('out-'+k);
+  el.textContent = s;
+  el.className = 'out ' + (cls||'');
+}
+function run(k){
+  if(!SR){ log(k, '此瀏覽器沒有 SpeechRecognition API', 'bad'); return; }
+  log(k, '啟動中…');
+  const evs = [];
+  const rec = new SR();
+  rec.lang = 'ja-JP';
+  rec.interimResults = false;
+  rec.maxAlternatives = 3;
+  rec.continuous = false;
+  rec.onstart = ()=>evs.push('start');
+  rec.onresult = ev=>{
+    const r = ev.results[0]; const a = [];
+    for(let i=0;i<r.length;i++) a.push(r[i].transcript);
+    evs.push('result');
+    log(k, '成功：' + a.join(' / ') + '\n事件：' + evs.join(' · '), 'ok');
+  };
+  rec.onerror = ev=>{ evs.push('error:'+ev.error); log(k, '錯誤：' + ev.error + '\n事件：' + evs.join(' · '), 'bad'); };
+  rec.onend = ()=>{ evs.push('end'); setTimeout(()=>{ const el=document.getElementById('out-'+k); if(el.textContent.indexOf('成功')<0 && el.textContent.indexOf('錯誤')<0) log(k, '結束但冇結果\n事件：' + evs.join(' · ')); }, 50); };
+  try{ rec.start(); }catch(e){ log(k, 'start() 失敗：' + e.message, 'bad'); return; }
+  setTimeout(()=>{ try{ rec.stop(); }catch(e){} }, 9000);
+}
+document.querySelectorAll('button[data-v]').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    const k = b.dataset.v;
+    if(k==='b'){
+      const p = document.getElementById('probe');
+      try{ p.pause(); p.currentTime = 0; }catch(e){}
+    }
+    if(k==='c'){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+    run(k);
+  });
+});
+</script>
+<audio id="probe" preload="none"></audio>
+</body>
+</html>
