@@ -1459,9 +1459,21 @@
   }
 
   // ── 讀音模式：Web Speech 語音識別評分 ─────────────────────
-  const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  const UA = navigator.userAgent;
+  const IS_IOS = /iPad|iPhone|iPod/.test(UA) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const SRClass = IS_IOS ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
+  const IS_IOS_CHROME = IS_IOS && /CriOS/.test(UA);          // iOS 版 Chrome（WebKit 但冇語音辨識）
+  const IS_IOS_HOME = IS_IOS && (navigator.standalone === true);
+  // 一律用功能偵測，不再因為「係 iOS」就直接關掉：新版 Safari 本身支援語音辨識
+  const SRClass = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+  // 不支援時，講清楚原因（唔好只叫人「改用 Chrome」，iOS 版 Chrome 一樣唔得）
+  function srReason(){
+    if(SRClass) return '';
+    if(IS_IOS_CHROME) return 'iOS 版 Chrome 不支援網頁語音辨識；請用 Safari 開啟本頁。';
+    if(IS_IOS_HOME) return '由主畫面開啟的網頁不能錄音；請用 Safari 分頁開啟本頁。';
+    if(IS_IOS) return '此 iPhone／iPad 的瀏覽器未開放語音辨識；請用 Safari，或按「示範」自行對照。';
+    return '此瀏覽器不支援語音辨識；請按「示範」自行對照。';
+  }
   let srObj = null, srListening = false, srTimer = null, srChanged = false;
   function stopSpeak(){
     clearTimeout(srTimer);
@@ -1478,11 +1490,11 @@
     micBtn.disabled = !SRClass;
     speakNote.textContent = SRClass
       ? '按「錄音」，讀出上面的字（一次即可）'
-      : '此瀏覽器不支援語音辨識，請改用 Chrome 開啟；或按「示範」自行對照。';
+      : srReason();
   }
   function startSpeak(){
     if(mode!=='speak' || !current) return;
-    if(!SRClass){ speakNote.textContent='此瀏覽器不支援語音辨識，請按「示範」自行對照。'; return; }
+    if(!SRClass){ speakNote.textContent = srReason(); return; }
     if(answered){ newQuestion(); return; }
     if(srListening) return;
     srListening = true;
