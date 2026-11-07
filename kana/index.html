@@ -269,6 +269,8 @@
     -webkit-tap-highlight-color:transparent;}
   html{-webkit-text-size-adjust:100%;}
   body{overscroll-behavior-y:contain;}
+  /* 全站不准縮放：只留上下左右捲動，禁雙擊與雙指縮放 */
+  html, body{touch-action:pan-x pan-y;}
   .writebar{width:100%; max-width:320px; display:flex; gap:8px; margin-top:12px;}
   .mini{border:1px solid var(--line); background:var(--card); color:var(--ink-soft); font-family:inherit;
     font-size:14px; padding:11px 14px; border-radius:12px; cursor:pointer; transition:.18s;}
@@ -1390,16 +1392,16 @@
   /* iOS Safari 攔不住 <meta user-scalable=no>，要自己擋：
      - 雙指縮放（gesturestart/change）
      - 連按兩下放大
-     - 長按選字／放大鏡
-     只在手寫模式生效，其他模式保持正常閱讀與縮放。 */
+     - 長按選字／放大鏡（只有手寫模式才攔，其他模式仍可選字複製）
+     縮放封鎖是全站生效。 */
+  // 全站禁止縮放（不限手寫模式）
   ['gesturestart','gesturechange','gestureend'].forEach(t=>
-    document.addEventListener(t, e=>{ if(mode==='write') e.preventDefault(); }, {passive:false}));
+    document.addEventListener(t, e=>e.preventDefault(), {passive:false}));
   document.addEventListener('selectstart', e=>{ if(mode==='write') e.preventDefault(); });
   paper.addEventListener('contextmenu', e=>e.preventDefault());
   let lastTapAt = 0;
   document.addEventListener('touchend', e=>{
-    if(mode!=='write') return;                       // 手寫模式：整個畫面都不准雙擊放大
-    const now = Date.now();
+    const now = Date.now();                          // 全站：不准雙擊放大
     if(now - lastTapAt < 320) e.preventDefault();
     lastTapAt = now;
   }, {passive:false});
