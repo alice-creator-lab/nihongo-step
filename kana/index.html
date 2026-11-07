@@ -515,7 +515,7 @@
       <div class="stat"><span class="n" id="statAcc">—</span><span class="l">正確率</span></div>
     </div>
 
-    <footer>語音：Microsoft Nanami（預製 mp3） · 手寫辨識：本機筆順比對（模板 KanjiVG, CC BY-SA） · <span id="build">web-dev</span></footer>
+    <footer>語音：Microsoft Nanami（預製 mp3） · 手寫辨識：本機筆順比對（模板 KanjiVG, CC BY-SA） · 漢字讀音：KANJIDIC2（EDRDG, CC BY-SA） · <span id="build">web-dev</span></footer>
   </div>
 
   <!-- 錯題簿管理 sheet -->
@@ -1508,6 +1508,7 @@
   }
   function startSpeak(){
     if(mode!=='speak' || !current) return;
+    ensureKread();                     // 先開始抓讀音表，辨識完就有得用
     if(answered){ newQuestion(); return; }
     // 系統語音服務不可用（例如這部 iPhone 一直回 service-not-allowed）就走本機 Whisper
     if(srBlocked || !SRClass){ whisperStart(); return; }
@@ -1686,27 +1687,63 @@
     try{ r.start(); }catch(e){ stopSpeak(); speakNote.textContent='無法啟動語音辨識，請再試一次。'; return; }
     srTimer = setTimeout(()=>{ srIntentionalAbort = true; try{ r.stop(); }catch(e){} }, 9000);
   }
+  // ── 漢字讀音表：語音辨識常把單音寫成漢字（例：讀 め 卻辨識成「目」）。
+  //    五十音只看聲音，所以先把漢字化成讀音再比對，避免誤判答錯。
+  const KANJI_RE = /[\u3400-\u4dbf\u4e00-\u9fff\u3005\u3006]/;
+  let KREAD = null, kreadReady = null;
+  function ensureKread(){
+    if(!kreadReady){
+      kreadReady = fetch('kanji-readings.json?v=1')
+        .then(r=>r.json())
+        .then(j=>{ KREAD = j || {}; })
+        .catch(()=>{ KREAD = null; });
+    }
+    return kreadReady;
+  }
+  // 把一段辨識文字展開成可能的讀音（假名照原樣，漢字逐字換讀音）
+  function phonCands(s){
+    if(!KANJI_RE.test(s)) return [s];
+    if(!KREAD) return [];
+    const per = [...s].map(ch => KANJI_RE.test(ch) ? (KREAD[ch]||null) : [ch]);
+    if(per.some(x=>!x)) return [];
+    let out = [''];
+    for(const opts of per){
+      const next = [];
+      for(const p of out) for(const o of opts){ if(next.length < 64) next.push(p+o); }
+      out = next;
+      if(!out.length) return [];
+    }
+    return out;
+  }
   function judgeSpeak(alts){
+    ensureKread().then(()=>judgeSpeakNow(alts));
+  }
+  function judgeSpeakNow(alts){
     if(mode!=='speak' || !current) return;
     const target = toHira(current.k);
     const clean = s => toHira((s||'').replace(/[\s、。．.,!?！？「」『』・…~\-—]/g,''));
-    const list = (alts||[]).map(clean).filter(Boolean);
-    const hit = list.some(a=>a===target) || list.some(a=>a.includes(target));
-    if(hit){
+    const raw = (alts||[]).map(clean).filter(Boolean);
+    // 原文之外，再加入漢字化成讀音的版本（例：目 → め／ま／もく…）
+    const list = raw.slice();
+    raw.forEach(a=>phonCands(a).forEach(p=>{ if(list.indexOf(p)<0) list.push(p); }));
+    const hitCand = list.find(a=>a===target) || list.find(a=>a.includes(target));
+    if(hitCand){
       answered = true;
       stats.correct++; stats.streak++;
       if(scope==='wrong') dropWrong(current);
       showFeedback(fbSpeak, true, '答對了！', scope==='wrong'?'<span class="alt">已移出錯題簿</span>':'', current.k);
       updateStats();
       speakNextBtn.hidden=false; speakNextBtn.className='btn-main next'; speakNextBtn.textContent='下一題 →';
-      speakNote.textContent = list[0] ? '（聽到：'+list[0]+'）' : '';
+      speakNote.textContent = raw[0] ? '（聽到：'+raw[0]+(hitCand!==raw[0]?'（'+hitCand+'）':'')+'）' : '';
       return;
     }
-    const other = list.find(a=>a.length<=4);
+    const other = raw.find(a=>a.length<=4);
     if(other){
       answered = true;
       stats.wrong++; stats.streak=0; addWrong(current);
-      showFeedback(fbSpeak, false, '', '你讀了「'+other+'」· 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
+      const oc = phonCands(other);
+      const otherShow = other + (oc.length===1 && oc[0]!==other ? '（'+oc[0]+'）' : '');
+      showFeedback(fbSpeak, false, '', '你讀了「'+otherShow+'」· 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
       updateStats();
       speakNextBtn.hidden=false; speakNextBtn.className='btn-main next err'; speakNextBtn.textContent='下一題 →';
       speakNote.textContent='';
