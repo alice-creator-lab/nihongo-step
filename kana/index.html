@@ -1491,51 +1491,73 @@
       ? '按「錄音」，讀出上面的字（一次即可）'
       : srReason();
   }
+  let srAttempt = 0, srGotResult = false, srLastErr = '';
   function startSpeak(){
     if(mode!=='speak' || !current) return;
     if(!SRClass){ speakNote.textContent = srReason(); return; }
     if(answered){ newQuestion(); return; }
     if(srListening) return;
+    srAttempt = 0; srLaunch();
+  }
+  function srLaunch(){
     srListening = true;
     srIntentionalAbort = false;
+    srGotResult = false; srLastErr = '';
     clearTimeout(promptTimer);
-    stopAudioNow();                        // 先停掉任何 mp3：iOS 上同時播聲會搶走麥克風，令辨識 abort
+    stopAudioNow();                        // iOS：同時播 mp3 會搶走收音，先靜音
     micBtn.classList.add('rec'); micLabel.textContent='辨識中…';
     fbSpeak.className='feedback'; fbSpeak.innerHTML='';
-    speakNote.textContent = '請讀出上面的字…';
-    // iOS 要先用 getUserMedia 拿到麥克風授權，SpeechRecognition 才不會一開即 aborted
-    const warm = (SRClass && navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
-      ? navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{ s.getTracks().forEach(t=>t.stop()); }).catch(()=>{})
+    speakNote.textContent = srAttempt ? '再聽一次，請讀出上面的字…' : '請讀出上面的字…';
+    // iOS 要先用 getUserMedia 拿到麥克風授權；放開咪後等 350ms 才開辨識，太密會即 abort
+    const warm = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+      ? navigator.mediaDevices.getUserMedia({audio:true})
+          .then(s=>{ s.getTracks().forEach(t=>t.stop()); }).catch(()=>{})
       : Promise.resolve();
-    warm.then(()=>{ if(!srListening) return; beginRecognition(); });
+    warm.then(()=>{ setTimeout(()=>{ if(srListening) beginRecognition(); }, 350); });
   }
   function beginRecognition(){
     const r = new SRClass();
-    r.lang='ja-JP'; r.interimResults=false; r.maxAlternatives=5; r.continuous=false;
+    // continuous + interimResults：iOS 預設聽 1 秒就收工，未開口就「跳走」；開 continuous 由我們自己收
+    try{ r.lang='ja-JP'; r.interimResults=true; r.maxAlternatives=5; r.continuous=true; }catch(e){}
     r.onresult = ev => {
-      const alts = [];
-      try{ const res = ev.results[0]; for(let i=0;i<res.length;i++) alts.push(res[i].transcript); }catch(e){}
-      srIntentionalAbort = true;          // 已拿到結果，之後的 abort 不算錯
-      stopSpeak();
-      judgeSpeak(alts);
-    };
-    r.onerror = ev => {
-      const err = (ev && ev.error) || '';
-      const quiet = srIntentionalAbort;
+      const alts = [], finals = [];
+      try{
+        for(let i=ev.resultIndex||0;i<ev.results.length;i++){
+          const res = ev.results[i];
+          for(let j=0;j<res.length;j++){ alts.push(res[j].transcript); if(res.isFinal) finals.push(res[j].transcript); }
+        }
+      }catch(e){}
+      if(!finals.length){                  // 只是中間結果：先顯示，繼續聽
+        if(alts[0]) speakNote.textContent = '（聽到：'+alts[0]+'…）';
+        return;
+      }
+      srGotResult = true;
       srIntentionalAbort = true;
       stopSpeak();
-      if(quiet) return;                   // 我們自己中止／已出結果，不顯示錯誤
+      judgeSpeak(finals.concat(alts));
+    };
+    r.onerror = ev => {
+      srLastErr = (ev && ev.error) || '';
+    };
+    r.onend = ()=>{
+      if(srObj!==r) return;
+      const err = srLastErr, got = srGotResult;
+      stopSpeak();
+      if(got) return;
+      if(!err && srAttempt < 1 && mode==='speak' && !answered){   // 靜靜收工：自動再試一次
+        srAttempt++; setTimeout(()=>{ if(mode==='speak' && !answered) srLaunch(); }, 300);
+        return;
+      }
       if(err==='not-allowed' || err==='service-not-allowed') speakNote.textContent='需要使用麥克風：請在設定 → Safari 允許「麥克風」，或按「示範」對照。';
-      else if(err==='no-speech') speakNote.textContent='沒有聽到聲音，請按「錄音」再讀一次。';
+      else if(err==='no-speech' || !err) speakNote.textContent='沒有聽到聲音，請按「錄音」再讀一次。';
       else if(err==='network') speakNote.textContent='語音辨識需要連網（Apple 語音服務），請檢查網絡後再試。';
       else if(err==='aborted') speakNote.textContent='錄音被系統中斷（可能係 Siri／其他 App 搶咗麥克風），請再按一次「錄音」。';
       else if(err==='audio-capture') speakNote.textContent='接收不到麥克風聲音，請檢查麥克風權限。';
-      else speakNote.textContent='辨識發生錯誤（'+err+'），再試一次。';
+      else speakNote.textContent='辨識發生錯誤（'+err+'），請再試一次。';
     };
-    r.onend = ()=>{ if(srObj===r) stopSpeak(); };
     srObj = r;
     try{ r.start(); }catch(e){ stopSpeak(); speakNote.textContent='無法啟動語音辨識，請再試一次。'; return; }
-    srTimer = setTimeout(()=>{ srIntentionalAbort = true; try{ r.stop(); }catch(e){} }, 8000);
+    srTimer = setTimeout(()=>{ srIntentionalAbort = true; try{ r.stop(); }catch(e){} }, 9000);
   }
   function judgeSpeak(alts){
     if(mode!=='speak' || !current) return;
