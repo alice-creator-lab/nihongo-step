@@ -276,6 +276,55 @@
   .scorebox .keywrap summary::before{content:'▸ '}
   .scorebox .keywrap[open] summary::before{content:'▾ '}
   .scorebox .note{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.7}
+  /* 階段測驗 */
+  .exbtn{font-size:11.5px; padding:5px 11px; border-radius:999px; border:1px solid var(--line);
+    background:#fffdf8; color:var(--shu); text-decoration:none; line-height:1.5; flex:0 0 auto}
+  .exbtn.off{color:var(--muted)}
+  .exhd{margin-top:6px}
+  .exhd h1{margin:8px 0 6px; font-size:23px; font-weight:600; line-height:1.4}
+  .exhd h1 span{display:inline-block; margin-left:9px; font-size:12px; color:var(--muted); letter-spacing:.08em; font-weight:400}
+  .exhd .goal{margin:6px 0 0; font-size:13.5px; color:var(--ink2); line-height:1.85}
+  .exparts{margin-top:18px; border:1px solid var(--line); border-radius:16px; background:var(--card); overflow:hidden}
+  .expart{display:flex; align-items:flex-start; gap:12px; padding:13px 15px; border-bottom:1px solid var(--line)}
+  .expart:last-child{border-bottom:0}
+  .expart b{font-size:14px; font-weight:600; flex:0 0 auto}
+  .expart .n{font-size:11.5px; color:var(--muted); margin-left:auto; text-align:right; line-height:1.6}
+  .expart .n i{display:block; font-style:normal; font-size:11px; color:var(--muted)}
+  .exbar{display:flex; align-items:center; justify-content:space-between; gap:10px;
+    font-size:11.5px; color:var(--muted); letter-spacing:.06em; margin-top:8px}
+  .exprog{margin:8px 0 14px; height:4px; border-radius:99px; background:#e9e0ce; overflow:hidden}
+  .exprog i{display:block; height:100%; background:var(--shu); border-radius:99px; transition:width .3s ease}
+  .exq{font-family:var(--serif); font-size:17px; line-height:1.95; margin-top:6px}
+  .expass{background:var(--sand); border-radius:12px; padding:12px 14px; font-family:var(--serif);
+    font-size:14.5px; line-height:2; white-space:pre-wrap; color:var(--ink)}
+  .exopts{display:flex; flex-direction:column; gap:8px; margin-top:16px}
+  .exopt{display:flex; gap:10px; width:100%; text-align:left; align-items:flex-start;
+    background:var(--card); border:1px solid var(--line); border-radius:13px; padding:12px 13px;
+    font-family:var(--sans); font-size:15px; line-height:1.65; color:var(--ink); appearance:none}
+  .exopt .k{flex:0 0 auto; font-size:11.5px; color:var(--muted); line-height:1.95; letter-spacing:.04em}
+  .exopt.on{border-color:var(--shu); background:#fff7f0; box-shadow:inset 0 0 0 1px var(--shu)}
+  .exopt.right{border-color:#4a7a52; background:#f4f7f1}
+  .exopt.wrong{border-color:var(--shu); background:#fdf2ee}
+  .exnav{display:flex; gap:10px; margin-top:18px}
+  .exnav .btn2{flex:1; text-align:center}
+  .exaudio{display:inline-flex; align-items:center; gap:8px; margin-top:12px; border:1px solid var(--line);
+    background:var(--card); border-radius:999px; padding:9px 16px; font-size:14px; color:var(--ink); appearance:none}
+  .exaudio.playing{background:var(--sand2)}
+  .exsum .partrow{display:flex; align-items:center; gap:10px; margin-top:11px; font-size:13px}
+  .exsum .partrow .lbl{width:78px; color:var(--ink2); flex:0 0 auto}
+  .exsum .partrow .pb{flex:1; height:6px; background:#eee5d6; border-radius:99px; overflow:hidden}
+  .exsum .partrow .pb i{display:block; height:100%; background:var(--ink2)}
+  .exsum .partrow .sc{width:60px; text-align:right; font-size:12px; color:var(--muted); flex:0 0 auto}
+  .exrev{margin-top:24px}
+  .exrev h3{font-size:12.5px; letter-spacing:.14em; color:var(--ink2); margin:0 0 10px}
+  .excard{border:1px solid var(--line); border-radius:14px; background:var(--card); padding:13px 14px; margin-bottom:10px}
+  .excard .h{display:flex; gap:8px; font-size:11.5px; color:var(--muted); letter-spacing:.04em}
+  .excard .h b{color:var(--shu); font-weight:600}
+  .excard .h b.ok{color:#4a7a52}
+  .excard .q{margin-top:6px; font-family:var(--serif); font-size:15px; line-height:1.85}
+  .excard .a{margin-top:7px; font-size:12.5px; color:var(--ink2); line-height:1.75}
+  .excard .w{margin-top:3px; font-size:12.5px; color:var(--muted); line-height:1.75}
+
   .spkprog{font-size:12.5px; color:var(--ink2); text-align:center; min-height:18px; line-height:1.6}
   .qinput{width:100%; box-sizing:border-box; margin-top:12px; padding:12px 14px; min-height:80px;
     font-size:19px; line-height:1.6; color:var(--ink); background:#fffdf8;
@@ -428,7 +477,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v97</span>
+    <span class="ver" id="verTag">v98</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -442,6 +491,7 @@
 (function(){
   'use strict';
   var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
   var app = $('#app');
   var PKEY = 'ngs-progress-v1';
 
@@ -741,6 +791,9 @@
           '<span class="badge ai">'+b.level+'</span>' +
           '<span class="badge">'+esc(b.label)+'</span>' +
           '<span class="meta">'+b.vocab+' 單字 · '+b.patterns+' 句型</span>' +
+          (EXAM_READY[b.no]
+            ? '<a class="exbtn" href="#/exam/'+b.no+'">' + (examBest(b.no) ? '測驗 '+examBest(b.no).best+'／'+examBest(b.no).total : '階段測驗') + '</a>'
+            : '<span class="exbtn off">測驗 · 準備中</span>') +
         '</div>' +
         '<div class="list">'+rows+'</div>' +
       '</section>';
@@ -1770,7 +1823,7 @@
     var items = M.items;
     var rows = items.length ? items.map(function(x){
       return '<div class="mk"><div class="k"><b>'+esc(x.prompt)+'</b>' +
-             '<span>'+(x.kind === 'word' ? '單字' : x.kind === 'listen' ? '聽力' : '練習') +
+             '<span>'+(x.kind === 'word' ? '單字' : x.kind === 'listen' ? '聽力' : x.kind === 'exam' ? '階段測驗' : '練習') +
              (x.sub ? ' · '+esc(x.sub) : '') + ' → '+esc(x.answer)+'</span></div>' +
              (x.n > 1 ? '<span class="n">×'+x.n+'</span>' : '') + '</div>';
     }).join('') : '<p class="secnote">目前沒有錯題。</p>';
@@ -2319,11 +2372,195 @@
     $('#nbBack').addEventListener('click', function(){ drawNotebook(); });
   }
 
+
+  /* ---------- 階段測驗（依 JLPT 題型編排，四選一，交卷後才看答案） ---------- */
+  var EXKEY = 'ngs-exam-v1';
+  var EXAM_READY = { 1: true };            /* 已編好題目的階段；其他階段顯示「準備中」 */
+  var EX = (function(){
+    try{ var o = JSON.parse(localStorage.getItem(EXKEY) || 'null'); if (o && typeof o === 'object') return o; }catch(e){}
+    return { v:1, stages:{} };
+  })();
+  function saveExam(){ try{ localStorage.setItem(EXKEY, JSON.stringify(EX)); }catch(e){} }
+  function examBest(stage){ return (EX.stages || {})[stage] || null; }
+  var EXCACHE = {}, exRun = null;
+
+  function loadExam(stage){
+    if (EXCACHE[stage]) return Promise.resolve(EXCACHE[stage]);
+    return getJSON('data/exam-' + stage + '.json').then(function(d){ EXCACHE[stage] = d; return d; });
+  }
+
+  function renderExam(stage){
+    stopAudio();
+    app.innerHTML = '<div class="err">載入測驗…</div>';
+    loadExam(stage).then(function(d){ examIntro(d); }).catch(function(){
+      app.innerHTML = '<p class="note">第 ' + stage + ' 階段的測驗還未編好。</p>' +
+        '<p style="margin-top:14px"><a class="back" href="#/">← 回課程地圖</a></p>';
+    });
+  }
+
+  function examIntro(d){
+    var best = examBest(d.stage);
+    var parts = d.parts.map(function(p){
+      var n = d.items.filter(function(i){ return i.part === p.key; }).length;
+      return '<div class="expart"><b>' + esc(p.label) + '</b>' +
+             '<span class="n">' + n + ' 題<i>約 ' + p.minutes + ' 分 · ' + esc(p.note) + '</i></span></div>';
+    }).join('');
+    app.innerHTML =
+      '<a class="back" href="#/" style="display:inline-block;margin:8px 0 12px">← 課程地圖</a>' +
+      '<div class="exhd"><p class="eyebrow">' + esc(d.level) + ' · 第 ' + d.stage + ' 階段</p>' +
+        '<h1>階段測驗<span>' + d.items.length + ' 題 · 約 ' +
+          d.parts.reduce(function(s,p){ return s + p.minutes; }, 0) + ' 分鐘</span></h1>' +
+        '<p class="goal">' + esc(d.note) + '</p></div>' +
+      '<div class="exparts">' + parts + '</div>' +
+      (best ? '<p class="secnote" style="margin-top:14px">最高 ' + best.best + ' ／ ' + best.total +
+        ' 題 · 已做 ' + best.n + ' 次</p>' : '') +
+      '<div class="row2" style="margin-top:16px"><button class="cta" id="exStart">開始測驗</button></div>' +
+      '<p class="secnote" style="margin-top:14px">合格線：總分 60% 以上，而且每一部分 40% 以上。中途可以離開，答案不會保存。</p>';
+    $('#exStart').addEventListener('click', function(){ startExam(d); });
+  }
+
+  function startExam(d){
+    exRun = { d: d, i: 0, ans: d.items.map(function(){ return -1; }) };
+    examQ();
+  }
+
+  function examAnswered(){
+    return exRun.ans.filter(function(a){ return a >= 0; }).length;
+  }
+
+  function examQ(){
+    var d = exRun.d, items = d.items, it = items[exRun.i];
+    var part = d.parts.filter(function(p){ return p.key === it.part; })[0] || { label: it.part };
+    var answered = examAnswered();
+    var html =
+      '<a class="back" href="#/exam/' + d.stage + '" id="exQuit" style="display:inline-block;margin:8px 0 4px">← 離開測驗</a>' +
+      '<div class="exbar"><span>' + esc(part.label) + ' · ' + esc(it.kind) + '</span>' +
+        '<span>第 ' + (exRun.i + 1) + ' ／ ' + items.length + ' 題 · 已答 ' + answered + '</span></div>' +
+      '<div class="exprog"><i id="exbar" style="width:' + Math.round(answered / items.length * 100) + '%"></i></div>' +
+      '<div class="qcard">' +
+        (it.passage ? '<div class="expass">' + esc(it.passage) + '</div>' : '') +
+        '<div class="exq">' + esc(it.q) + '</div>' +
+        (it.audio ? '<div><button class="exaudio" id="exPlay">▶ 播放（可重播）</button></div>' : '') +
+        '<div class="exopts">' + it.options.map(function(o, k){
+          return '<button class="exopt' + (exRun.ans[exRun.i] === k ? ' on' : '') + '" data-k="' + k + '">' +
+                   '<span class="k">' + '①②③④'.charAt(k) + '</span><span>' + esc(o) + '</span></button>';
+        }).join('') + '</div>' +
+      '</div>' +
+      '<div class="exnav">' +
+        (exRun.i > 0 ? '<button class="btn2" id="exPrev">← 上一題</button>' : '') +
+        '<button class="btn2 pri" id="exNext">' + (exRun.i === items.length - 1 ? '交卷 →' : '下一題 →') + '</button>' +
+      '</div>';
+    app.innerHTML = html;
+
+    if (it.audio){
+      $('#exPlay').addEventListener('click', function(){
+        playFile(it.audio, null, this);
+      });
+    }
+    Array.prototype.forEach.call($$('.exopt'), function(b){
+      b.addEventListener('click', function(){
+        exRun.ans[exRun.i] = +b.dataset.k;
+        Array.prototype.forEach.call($$('.exopt'), function(x){ x.classList.toggle('on', x === b); });
+        var a = examAnswered();
+        var pr = $('#exbar'); if (pr) pr.style.width = Math.round(a / items.length * 100) + '%';
+        var sp = $('.exbar span:last-child');
+        if (sp) sp.textContent = '第 ' + (exRun.i + 1) + ' ／ ' + items.length + ' 題 · 已答 ' + a;
+      });
+    });
+    $('#exNext').addEventListener('click', function(){
+      var last = exRun.i === items.length - 1;
+      if (!last){ exRun.i++; examQ(); window.scrollTo(0, 0); return; }
+      var left = items.length - examAnswered();
+      if (left > 0 && !confirm('還有 ' + left + ' 題未答，仍要交卷嗎？')) return;
+      examResult();
+    });
+    var pv = $('#exPrev');
+    if (pv) pv.addEventListener('click', function(){ exRun.i--; examQ(); window.scrollTo(0, 0); });
+  }
+
+
+  function examResult(){
+    var d = exRun.d, items = d.items;
+    var per = {};
+    d.parts.forEach(function(p){ per[p.key] = { n:0, ok:0, label:p.label }; });
+    var score = 0;
+    items.forEach(function(it, k){
+      per[it.part].n++;
+      if (exRun.ans[k] === it.answer){ per[it.part].ok++; score++; }
+    });
+    var total = items.length;
+    var pct = Math.round(score / total * 100);
+    var allParts = d.parts.every(function(p){ return per[p.key].ok / per[p.key].n >= 0.4; });
+    var pass = pct >= 60 && allParts;
+
+    /* 記錄最高分與次數 */
+    EX.stages = EX.stages || {};
+    var st = EX.stages[d.stage] || { best:0, n:0, total:total };
+    st.n = (st.n || 0) + 1;
+    st.total = total;
+    st.at = Date.now();
+    if (score > (st.best || 0)) st.best = score;
+    st.last = { score:score, parts:{} };
+    d.parts.forEach(function(p){ st.last.parts[p.key] = per[p.key].ok; });
+    EX.stages[d.stage] = st;
+    saveExam();
+
+    /* 錯的題目入錯題簿 */
+    items.forEach(function(it, k){
+      if (exRun.ans[k] !== it.answer){
+        addMistake({ key:'ex' + d.stage + ':' + it.id, kind:'exam',
+          prompt: it.q.length > 40 ? it.q.slice(0, 40) + '…' : it.q,
+          answer: it.options[it.answer], sub: it.kind });
+      }
+    });
+
+    var rows = d.parts.map(function(p){
+      var x = per[p.key], pc = Math.round(x.ok / x.n * 100);
+      return '<div class="partrow"><span class="lbl">' + esc(x.label) + '</span>' +
+             '<span class="pb"><i style="width:' + pc + '%"></i></span>' +
+             '<span class="sc">' + x.ok + '/' + x.n + '</span></div>';
+    }).join('');
+
+    var review = items.map(function(it, k){
+      var mine = exRun.ans[k], right = mine === it.answer;
+      return '<div class="excard">' +
+        '<div class="h"><b class="' + (right ? 'ok' : '') + '">' + (right ? '○' : '×') + '</b>' +
+          '<span>問 ' + (k + 1) + ' · ' + esc(it.kind) + '</span></div>' +
+        '<div class="q">' + esc(it.q) + '</div>' +
+        '<div class="a">正解：' + esc(it.options[it.answer]) + '</div>' +
+        (right ? '' : '<div class="w">你的答案：' + (mine >= 0 ? esc(it.options[mine]) : '未答') + '</div>') +
+        '<div class="w">' + esc(it.why) + '</div>' +
+        (it.script ? '<div class="w">音檔原文：' + esc(it.script) + '</div>' : '') +
+      '</div>';
+    }).join('');
+
+    app.innerHTML =
+      '<a class="back" href="#/exam/' + d.stage + '" style="display:inline-block;margin:8px 0 12px">← 測驗首頁</a>' +
+      '<div class="sum exsum">' +
+        '<div class="big">' + score + '<small> ／ ' + total + '</small></div>' +
+        '<p class="verdict" style="margin-top:6px;font-size:14px">' +
+          (pass ? '合格（' + pct + '%）' : (pct >= 60 ? '總分夠，但有一部分的得分低於 40%' : '不合格（' + pct + '%）')) +
+        '</p>' +
+        rows +
+        '<p class="secnote" style="margin-top:14px">最高分 ' + st.best + ' ／ ' + total + ' · 這是第 ' + st.n + ' 次作答</p>' +
+      '</div>' +
+      '<div class="row2" style="margin-top:16px">' +
+        '<button class="btn2" id="exAgain">再做一次</button>' +
+        '<a class="btn2" href="#/" style="text-decoration:none">回課程地圖</a>' +
+      '</div>' +
+      '<div class="exrev"><h3>逐題檢討（' + total + ' 題）</h3>' + review + '</div>';
+
+    $('#exAgain').addEventListener('click', function(){ startExam(d); window.scrollTo(0,0); });
+    window.scrollTo(0, 0);
+  }
+
   function route(){
     stopAudio();
     var h = (location.hash || '#/').replace(/^#/, '');
     if (h === '/seq'){ stopAudio(); renderSeq(); return; }
     if (h === '/note'){ stopAudio(); renderNotebook(); return; }
+    var em = h.match(/^\/exam\/(\d+)/);
+    if (em){ renderExam(+em[1]); return; }
     var am = h.match(/^\/all\/(vocab|grammar)/);
     if (am){ stopAudio(); renderAll(am[1]); return; }
     var wm = h.match(/^\/all\/(verbs|adjs)/);
