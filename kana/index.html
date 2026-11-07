@@ -378,7 +378,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v28</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v29</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -424,7 +424,7 @@
     <div class="card">
       <!-- READ PANEL -->
       <div class="panel active" id="readPanel">
-        <div class="type-label" id="typeLabel">ひらがな</div>
+        <div class="type-label" id="typeLabel">ひらがな（平假名）</div>
         <div class="kana" id="kana">あ</div>
         <div class="input-row">
           <input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="none"
@@ -914,14 +914,14 @@
   function buildPad(){
     padEl.innerHTML=''; padButtons=[];
     const groups=[];
-    if(scope==='hira') groups.push(['ひらがな', packHira]);
-    else if(scope==='kata') groups.push(['カタカナ', packKata]);
+    if(scope==='hira') groups.push(['ひらがな（平假名）', packHira]);
+    else if(scope==='kata') groups.push(['カタカナ（片假名）', packKata]);
     else {
       // 隨機混合／錯題簿：有邊種字就出邊種鍵盤
       const hasH = scope==='both' || pool.some(o=>o.type==='hira');
       const hasK = scope==='both' || pool.some(o=>o.type==='kata');
-      if(hasH) groups.push(['ひらがな', packHira]);
-      if(hasK) groups.push(['カタカナ', packKata]);
+      if(hasH) groups.push(['ひらがな（平假名）', packHira]);
+      if(hasK) groups.push(['カタカナ（片假名）', packKata]);
     }
     const showLabel = groups.length > 1;
     groups.forEach(([label,arr])=>{
@@ -994,7 +994,7 @@
     fbListen.className='feedback'; fbListen.innerHTML='';
     fbWrite.className='feedback'; fbWrite.innerHTML='';
   }
-  const typeName = t => t==='hira' ? 'ひらがな' : 'カタカナ';
+  const typeName = t => t==='hira' ? 'ひらがな（平假名）' : 'カタカナ（片假名）';
   const MODE_LABEL = { read:'羅馬拼音', listen:'聽音選字', write:'手寫', speak:'鍵盤輸入' };
   // 隨機混合（或題庫本身兩種字都有）→ 出題要標明係平假名定片假名
   // 錯題簿裡面平／片假名混住，聽聲／手寫都看不到字形，所以一律標明
