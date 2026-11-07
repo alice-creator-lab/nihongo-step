@@ -306,6 +306,24 @@
   body.m-write .score{padding:10px 0;}
   body.m-write #writeNextBtn{min-height:42px; margin-top:4px;}
 
+  /* 聽音選字：跟手寫一樣，喇叭與提示收成一行，一屏看到更多 */
+  body.m-listen .card{padding:16px 16px 14px;}
+  body.m-listen #poolHint{display:none;}
+  body.m-listen .prompt-wrap{flex-direction:row; gap:10px; padding:0;}
+  body.m-listen .listen-prompt{width:54px; height:54px;}
+  body.m-listen .listen-prompt .ico{font-size:24px;}
+  body.m-listen .prompt-hint{font-size:12.5px; text-align:left; flex:1 1 auto;}
+  body.m-listen #slowListenBtn{flex:0 0 auto;}
+  body.m-listen .draft-row{margin-top:8px; min-height:32px;}
+  body.m-listen .draft-kana.empty{padding:0; display:inline-flex; align-items:center; min-height:26px;}
+  body.m-listen .draft-row .btn-main{min-height:38px; padding:0 16px; font-size:14px;}
+  body.m-listen .listen-ctl{margin-top:4px;}
+  body.m-listen .listen-ctl .feedback{min-height:0;}
+  body.m-listen .listen-prompt{box-shadow:0 0 0 7px rgba(44,62,107,.10);}
+  body.m-listen .pad{gap:6px; margin-top:8px;}
+  body.m-listen .pad-group{margin-top:6px;}
+  body.m-listen .pad button{height:38px; font-size:19px;}
+
   .scorebar{width:100%; max-width:320px; display:none; gap:8px; margin-top:10px;}
   .scorebar.show{display:flex;}
   .score{flex:1; border-radius:13px; padding:13px 0; font-family:inherit; font-size:16px; font-weight:700; cursor:pointer;}
@@ -394,7 +412,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v31</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v32</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -457,6 +475,7 @@
           <button class="listen-prompt" id="listenPrompt" title="按再聽一次"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span></button>
           <div class="prompt-romaji" id="listenRomaji"></div>
           <div class="prompt-hint">聽發音 → 選回正確的<b>假名</b></div>
+          <button class="ctlbtn" id="slowListenBtn" title="慢速再聽">慢放</button>
         </div>
         <div class="draft-row">
           <span class="draft-label">你選了</span>
@@ -465,8 +484,6 @@
         </div>
         <div class="listen-ctl">
           <div class="feedback" id="fbListen"></div>
-          <button class="ctlbtn" id="replayBtn" title="再聽一次">重讀</button>
-          <button class="ctlbtn" id="slowListenBtn" title="慢速再聽">慢放</button>
         </div>
         <div class="marks" id="marks" hidden></div>
         <div class="pad" id="pad"></div>
@@ -705,7 +722,7 @@
   const emptyTitle=$('emptyTitle'), emptySub=$('emptySub'), emptyBtn=$('emptyBtn');
   const writeNextBtn=$('writeNextBtn');
   const draftKana=$('draftKana'), marksEl=$('marks'), listenCheckBtn=$('listenCheckBtn');
-  const replayBtn=$('replayBtn'), slowListenBtn=$('slowListenBtn');
+  const slowListenBtn=$('slowListenBtn');
   const wrongBadge=$('wrongBadge');
   const sheetEl=$('wrongSheet'), sheetList=$('sheetList'), sheetAdd=$('sheetAdd'), addGrid=$('addGrid');
   const startPracticeBtn=$('startPracticeBtn'), sheetSub=$('sheetSub'), addModeBtn=$('addModeBtn');
@@ -1455,6 +1472,7 @@
     stopAudioNow();                         // 切模式即靜音：羅馬拼音是「看字打拼音」，不該發聲
     mode=m; localStorage.setItem('kanaMode',m);
     document.body.classList.toggle('m-write', m==='write');   // 手寫模式用較緊湊的版面
+    document.body.classList.toggle('m-listen', m==='listen'); // 聽音選字同樣用緊湊版面
     [...modeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.mode===m));
     newQuestion();
   }
@@ -1554,7 +1572,6 @@
   });
   inputEl.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); if(answered) newQuestion(); else checkRead(); } });
   listenPrompt.addEventListener('click', playPrompt);
-  replayBtn.addEventListener('click', ()=>{ if(mode==='listen') playPrompt(); });
   slowListenBtn.addEventListener('click', ()=>{ if(mode==='listen' && current) speak(current.k, true); });
   writePrompt.addEventListener('click', playPrompt);
   revealBtn.addEventListener('click', doReveal);
@@ -1776,6 +1793,7 @@
   // ── 初始化 ────────────────────────────────────────────────
   if(!['read','listen','write','speak'].includes(mode)) mode='read';
   document.body.classList.toggle('m-write', mode==='write');
+  document.body.classList.toggle('m-listen', mode==='listen');
   if(!['hira','kata','both','wrong'].includes(scope)) scope='hira';
   [...modeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
   [...scopeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.scope===scope));
