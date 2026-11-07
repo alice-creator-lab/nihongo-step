@@ -8,19 +8,19 @@
   {
    "key": "moji",
    "label": "文字・語彙",
-   "minutes": 15,
+   "minutes": 7,
    "note": "漢字読み・表記・文脈規定"
   },
   {
    "key": "bunpo",
    "label": "文法・読解",
-   "minutes": 25,
+   "minutes": 10,
    "note": "文法形式・並べ替え・読解・情報検索"
   },
   {
    "key": "choukai",
    "label": "聴解",
-   "minutes": 10,
+   "minutes": 3,
    "note": "課題理解・ポイント理解・即時応答，每題可重播"
   }
  ],
