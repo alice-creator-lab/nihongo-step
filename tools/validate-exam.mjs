@@ -40,6 +40,17 @@ for (const stage of stages) {
       if (it.options.some((o) => !String(o || '').trim())) fail(tag + ': 有空選項');
     }
     if (!Number.isInteger(it.answer) || it.answer < 0 || it.answer > 3) fail(tag + ': answer 不是 0–3');
+
+    /* 並べ替え：order 是正確語序（選項索引），★ 是第三格 → 一定要等於 answer。
+       只寫 answer 很容易把「第幾個位置」同「第幾個選項」搞亂。 */
+    if (it.kind === '文の組み立て') {
+      if (!Array.isArray(it.order) || it.order.length !== 4 || new Set(it.order).size !== 4 ||
+          it.order.some((v) => !Number.isInteger(v) || v < 0 || v > 3)) {
+        fail(tag + ': 並べ替え要有 order（四個選項索引的正確語序）');
+      } else if (it.order[2] !== it.answer) {
+        fail(tag + ': ★ 應是 order[2]＝' + it.order[2] + '，但 answer＝' + it.answer);
+      }
+    }
     if (it.audio) {
       if (!existsSync(join(root, it.audio))) fail(tag + ': 音檔不存在 ' + it.audio);
       if (!it.script) fail(tag + ': 有音檔但缺 script（檢討時要看原文）');
