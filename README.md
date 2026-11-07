@@ -66,7 +66,7 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 
 ## 五十音頁（由 kana-dojo 併入）
 
-- `kana/index.html` 是原本 Kana Dojo 的單檔練習頁（羅馬拼音／鍵盤輸入／手寫／讀音四種模式），連 `kana/kana-templates.json`（手寫辨識模板）一併放在本站；入口在地圖「第一階段」之上的五十音區塊。
+- `kana/index.html` 是原本 Kana Dojo 的單檔練習頁（羅馬拼音／聽音選字／手寫／鍵盤輸入四種模式），連 `kana/kana-templates.json`（手寫辨識模板）一併放在本站；入口在地圖「第一階段」之上的五十音區塊。
 - 併入時做了三件事：header 加返回地圖箭頭；移除它自己的 manifest／圖示（`/kana/` 下會 404）；停用它原本的 `sw.js` 註冊（兩個 SW 爭同一個 scope），快取與更新交給根目錄 `sw.js`（已把 `kana/index.html`、`kana/kana-templates.json` 加入 `SHELL`）。
 - 更新方式：重新抓 kana-dojo 的 index.html、kana-templates.json，再套用上面三項改動。發音不用搬 kana-dojo 的 `audio/`（那批沒有授權），改用本站的 `tools/make_kana_audio.py` 自己生成到 `kana/audio/n/`。
 - 發音來源：預製 mp3（`kana/audio/n/`，以羅馬拼音命名，104 段），由 `python3 tools/make_kana_audio.py --force` 產生，再跑 `python3 tools/trim_seq_audio.py kana/audio/n --force --copy --head 0.10 --tail 0.25`。`--copy` 是關鍵：只複製音框、不重新編碼，輸出保持 edge-tts 原檔的 48kbps CBR，跟主 app 完全同格式（曾用 libmp3lame 重新編碼，聽起來會「中間斷一下」）。
@@ -77,7 +77,7 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 ## 五十音頁的手寫判定
 
 - 手寫模式（`kana/`）比對時**平假名與片假名要逐字相同**才算對；以前用 `toHira()` 兩邊轉平假名再比，隨機混合時寫「あ」也會當成「ア」答對。現在若只是寫錯字形種類，回饋會寫明「你寫了 ひらがな 的「あ」，這題要 カタカナ」。
-- 讀音模式（語音辨識）仍然用平假名正規化：聲音聽不出平／片假名，這屬於辨識限制，不算錯。
+- 鍵盤輸入模式（`kana/`）原本是語音評分，現已改為「看字打讀音」：直接用日文鍵盤輸入假名，或用鍵盤上的麥克風聽寫，站方不收音、不下載語音模型。判定用平假名正規化（打「ヌ」或「nu」都算對「ぬ」），只接受五十音表上有的音；輸入漢字、表外的音（ねぇ）或符號時只提示重打，不判錯。
 - 自動測試掛鈎：`kana/?kdebug=1` 會掛上 `window.__kanaTest`（`setCurrent`／`pick`／`stats`），正常使用時不存在。
 
 ## 技術說明

@@ -182,13 +182,13 @@
   @keyframes pop{from{opacity:0; transform:scale(.8);} to{opacity:1; transform:scale(1);}}
 
   .input-row{width:100%; margin-top:12px; display:flex; gap:10px;}
-  #answer{flex:1; min-width:0; font-family:inherit; font-size:20px; text-align:center;
+  #answer, #speakInput{flex:1; min-width:0; font-family:inherit; font-size:20px; text-align:center;
     padding:15px 14px; border-radius:15px; border:2px solid var(--line); background:#fffefb;
     color:var(--ink); outline:none; transition:.18s; letter-spacing:.08em; font-weight:600;}
-  #answer::placeholder{color:#c3b9a6; font-weight:400; letter-spacing:.04em;}
-  #answer:focus{border-color:var(--indigo); box-shadow:0 0 0 4px rgba(44,62,107,.10);}
-  #answer.correct{border-color:var(--green); background:var(--green-bg); color:var(--green);}
-  #answer.wrong{border-color:var(--red); background:var(--red-bg); color:var(--red);}
+  #answer::placeholder, #speakInput::placeholder{color:#c3b9a6; font-weight:400; letter-spacing:.04em;}
+  #answer:focus, #speakInput:focus{border-color:var(--indigo); box-shadow:0 0 0 4px rgba(44,62,107,.10);}
+  #answer.correct, #speakInput.correct{border-color:var(--green); background:var(--green-bg); color:var(--green);}
+  #answer.wrong, #speakInput.wrong{border-color:var(--red); background:var(--red-bg); color:var(--red);}
   .btn-main{border:0; border-radius:15px; padding:0 24px; font-family:inherit; font-size:16px; font-weight:700;
     background:var(--indigo); color:#fff; cursor:pointer; transition:.18s; white-space:nowrap;
     box-shadow:0 6px 18px rgba(44,62,107,.28);}
@@ -280,7 +280,7 @@
   .reveal{width:100%; text-align:center; font-size:14px; color:var(--ink-soft); margin-top:12px; display:none;}
   .reveal.show{display:block;}
   .reveal b{font-family:"Noto Serif JP",serif; font-size:32px; color:var(--ink); margin:0 6px;}
-  .speak-row{display:flex; gap:8px; width:100%; max-width:320px; margin-top:6px; align-items:stretch;}
+  .speak-row{display:flex; gap:8px; width:100%; max-width:320px; margin:12px auto 0; align-items:stretch; justify-content:center;}
   .micbtn{display:flex; align-items:center; justify-content:center; gap:8px; flex:1;}
   .micbtn svg{width:19px; height:19px;}
   .micbtn.rec{background:var(--red); box-shadow:0 6px 18px rgba(214,69,65,.3); animation:pulse 1.1s ease-in-out infinite;}
@@ -378,7 +378,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v26</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v27</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -393,9 +393,9 @@
 
     <div class="mode" id="modeSeg">
       <button data-mode="read" class="active" title="看字 → 輸入羅馬拼音">羅馬拼音</button>
-      <button data-mode="listen" title="聽發音 → 用鍵盤輸入假名">鍵盤輸入</button>
+      <button data-mode="listen" title="聽發音 → 從假名表選字">聽音選字</button>
       <button data-mode="write" title="聽發音 → 手寫">手寫</button>
-      <button data-mode="speak" title="看字 → 讀出聲音，語音評分">讀音</button>
+      <button data-mode="speak" title="看字 → 用日文鍵盤打讀音（可用鍵盤語音輸入）">鍵盤輸入</button>
     </div>
 
     <div class="modebar">
@@ -480,21 +480,21 @@
         <div class="feedback" id="fbWrite"></div>
       </div>
 
-      <!-- SPEAK PANEL（讀音評分） -->
+      <!-- SPEAK PANEL（鍵盤輸入：看字打讀音，用日文鍵盤或其語音聽寫） -->
       <div class="panel" id="speakPanel">
         <div class="type-label hide" id="speakType"></div>
         <div class="kana" id="speakKana">あ</div>
+        <div class="input-row">
+          <input id="speakInput" type="text" inputmode="text" lang="ja" autocomplete="off"
+                 autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="用日文鍵盤打讀音…">
+          <button class="btn-main" id="speakCheck">檢查</button>
+        </div>
         <div class="speak-row">
-          <button class="btn-main micbtn" id="micBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8.5 21h7"/></svg>
-            <span id="micLabel">錄音</span>
-          </button>
           <button class="ctlbtn" id="speakReplay">示範</button>
         </div>
         <div class="speak-note" id="speakNote"></div>
-        <div class="speak-tip">錄音：可用瀏覽器語音辨識，或本機 Whisper 模型（首次約 40MB，需連網下載一次）。按「示範」可先聽正確讀音。</div>
+        <div class="speak-tip">用日文鍵盤輸入這個字的讀音（例：ぬ）。想用語音，可按鍵盤上的麥克風圖示，由系統聽寫轉成假名。</div>
         <div class="feedback" id="fbSpeak"></div>
-        <button class="btn-main" id="speakNextBtn" hidden>下一題 →</button>
       </div>
 
       <!-- 錯題簿空狀態 -->
@@ -684,8 +684,8 @@
   const writebarEl=document.querySelector('.writebar');
   const emptyPanel=$('emptyPanel'), listenType=$('listenType'), writeType=$('writeType');
   const speakPanel=$('speakPanel'), speakKana=$('speakKana'), speakType=$('speakType');
-  const micBtn=$('micBtn'), micLabel=$('micLabel'), speakReplay=$('speakReplay');
-  const fbSpeak=$('fbSpeak'), speakNote=$('speakNote'), speakNextBtn=$('speakNextBtn');
+  const speakInput=$('speakInput'), speakCheck=$('speakCheck'), speakReplay=$('speakReplay');
+  const fbSpeak=$('fbSpeak'), speakNote=$('speakNote');
   const emptyTitle=$('emptyTitle'), emptySub=$('emptySub'), emptyBtn=$('emptyBtn');
   const writeNextBtn=$('writeNextBtn');
   const draftKana=$('draftKana'), marksEl=$('marks'), listenCheckBtn=$('listenCheckBtn');
@@ -995,7 +995,7 @@
     fbWrite.className='feedback'; fbWrite.innerHTML='';
   }
   const typeName = t => t==='hira' ? 'ひらがな' : 'カタカナ';
-  const MODE_LABEL = { read:'羅馬拼音', listen:'鍵盤輸入', write:'手寫', speak:'讀音評分' };
+  const MODE_LABEL = { read:'羅馬拼音', listen:'聽音選字', write:'手寫', speak:'鍵盤輸入' };
   // 隨機混合（或題庫本身兩種字都有）→ 出題要標明係平假名定片假名
   // 錯題簿裡面平／片假名混住，聽聲／手寫都看不到字形，所以一律標明
   function showTypeHint(){
@@ -1433,7 +1433,6 @@
 
   // ── 切換控制 ──────────────────────────────────────────────
   function setMode(m){
-    stopSpeak();
     clearTimeout(promptTimer);              // 取消上一個模式排住的提示音
     stopAudioNow();                         // 切模式即靜音：羅馬拼音是「看字打拼音」，不該發聲
     mode=m; localStorage.setItem('kanaMode',m);
@@ -1456,263 +1455,11 @@
     buildPool(); buildPad(); updateWrongBadge(); newQuestion();
   }
 
-  // ── 讀音模式：Web Speech 語音識別評分 ─────────────────────
-  const UA = navigator.userAgent;
-  const IS_IOS = /iPad|iPhone|iPod/.test(UA) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const IS_IOS_CHROME = IS_IOS && /CriOS/.test(UA);          // iOS 版 Chrome（WebKit 但冇語音辨識）
-  const IS_IOS_HOME = IS_IOS && (navigator.standalone === true);
-  // 一律用功能偵測，不再因為「係 iOS」就直接關掉：新版 Safari 本身支援語音辨識
-  const SRClass = window.SpeechRecognition || window.webkitSpeechRecognition || null;
-  // 不支援時，講清楚原因（唔好只叫人「改用 Chrome」，iOS 版 Chrome 一樣唔得）
-  function srReason(){
-    if(SRClass) return '';
-    if(IS_IOS_CHROME) return 'iOS 版 Chrome 不支援網頁語音辨識；請用 Safari 開啟本頁。';
-    if(IS_IOS_HOME) return '由主畫面開啟的網頁不能錄音；請用 Safari 分頁開啟本頁。';
-    if(IS_IOS) return '此 iPhone／iPad 的瀏覽器未開放語音辨識；請用 Safari，或按「示範」自行對照。';
-    return '此瀏覽器不支援語音辨識；請按「示範」自行對照。';
-  }
-  let srObj = null, srListening = false, srTimer = null, srChanged = false, srIntentionalAbort = false;
-  function stopSpeak(){
-    clearTimeout(srTimer);
-    const r = srObj; srObj = null;
-    if(r){ try{ r.onresult=null; r.onerror=null; r.onend=null; r.abort(); }catch(e){} }
-    srIntentionalAbort = true;
-    srListening = false;
-    micBtn.classList.remove('rec');
-    micLabel.textContent = '錄音';
-  }
-  function resetSpeak(){
-    fbSpeak.className='feedback'; fbSpeak.innerHTML='';
-    speakNextBtn.hidden = true;
-    srMisses = 0; srAllowSkip = false; srRetried = false;
-    stopSpeak();
-    const canRec = !!(navigator.mediaDevices && window.MediaRecorder);
-    micBtn.disabled = !(SRClass || canRec);
-    speakNote.textContent = (SRClass || canRec)
-      ? '按「錄音」，讀出上面的字（一次即可）'
-      : srReason();
-  }
-  let srAttempt = 0, srGotResult = false, srLastErr = '';
-  const DEBUG = /[?&]kdebug=1/.test(location.search);
-  const srLogArr = [];
-  let srDebugEl = null;
-  function srLog(s){
-    if(!DEBUG) return;
-    srLogArr.push(s); window.__kanaSR = srLogArr.slice();
-    if(!srDebugEl){
-      srDebugEl = document.createElement('div');
-      srDebugEl.style.cssText = 'font-size:11px;color:#8a7f6a;line-height:1.5;word-break:break-all;margin-top:6px;';
-      (document.getElementById('speakPanel') || document.body).appendChild(srDebugEl);
-    }
-    srDebugEl.textContent = '診斷：' + srLogArr.join(' · ');
-  }
-  function startSpeak(){
-    if(mode!=='speak' || !current) return;
-    if(answered){ newQuestion(); return; }
-    // 系統語音服務不可用（例如這部 iPhone 一直回 service-not-allowed）就走本機 Whisper
-    if(srBlocked || !SRClass){ whisperStart(); return; }
-    if(srListening) return;
-    srAttempt = 0; srLaunch();
-  }
-  function srLaunch(){
-    srListening = true;
-    srIntentionalAbort = false;
-    srGotResult = false; srLastErr = '';
-    clearTimeout(promptTimer);
-    stopAudioNow();                        // iOS：同時播 mp3 會搶走收音，先靜音
-    micBtn.classList.add('rec'); micLabel.textContent='辨識中…';
-    fbSpeak.className='feedback'; fbSpeak.innerHTML='';
-    speakNote.textContent = srAttempt ? '再聽一次，請讀出上面的字…' : '請讀出上面的字…';
-    // 一定在同一個點擊事件內 start()：iOS 只要離開手勢就會「開咪但收唔到聲」
-    // （唔再先 call getUserMedia／加 setTimeout，兩者在 Safari 上都會令擷取變空）
-    beginRecognition();
-  }
-
-  // ── 語音辨識後備：同主程式一樣用 Whisper（transformers.js）在本機跑 ──
-  // Safari 的 webkitSpeechRecognition 在這部 iPhone 一直回 service-not-allowed，
-  // 主程式「自動辨識」就是用這條路，所以這裡照抄。
-  let srBlocked = false;                       // Safari 語音服務不可用時，之後直接走 Whisper
-  let wTr = null, wP = null, wRec = null, wStream = null, wTimer = 0;
-  function wProg(t){ speakNote.textContent = t; }
-  function loadWhisper(){
-    if(wTr) return Promise.resolve(wTr);
-    if(wP) return wP;
-    wProg('首次使用：下載辨識模型（約 40MB），請保持網路…');
-    wP = import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2').then(m=>{
-      m.env.allowLocalModels = false;
-      if(m.env.backends && m.env.backends.onnx && m.env.backends.onnx.wasm) m.env.backends.onnx.wasm.numThreads = 1;
-      return m.pipeline('automatic-speech-recognition','Xenova/whisper-tiny',{
-        quantized:true,
-        progress_callback:pr=>{
-          if(pr && pr.status==='progress' && pr.total) wProg('下載模型 '+Math.round(pr.loaded/pr.total*100)+'%');
-        }
-      });
-    }).then(tr=>{ wTr=tr; wProg(''); return tr; }).catch(e=>{ wP=null; throw e; });
-    return wP;
-  }
-  function blobToAudio16k(blob){
-    return blob.arrayBuffer().then(ab=>{
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new Ctx();
-      return ctx.decodeAudioData(ab).then(buf=>{
-        const frames = Math.max(1, Math.ceil(buf.duration*16000));
-        const off = new OfflineAudioContext(1, frames, 16000);
-        const src = off.createBufferSource();
-        src.buffer = buf; src.connect(off.destination); src.start();
-        return off.startRendering().then(r=>{ try{ ctx.close(); }catch(e){} return r.getChannelData(0); });
-      }, e=>{ try{ ctx.close(); }catch(x){} throw e; });
-    });
-  }
-  function stopWhisper(){
-    clearTimeout(wTimer);
-    if(wRec && wRec.state==='recording'){ try{ wRec.stop(); }catch(e){} }
-    if(wStream){ try{ wStream.getTracks().forEach(t=>t.stop()); }catch(e){} wStream=null; }
-  }
-  // 短促的單音要先整理：去靜音、正規化音量、前後補 0.3 秒，否則模型容易亂聽
-  function prepAudio(a){
-    const n = a.length;
-    let peak = 0;
-    for(let i=0;i<n;i++){ const v = a[i] < 0 ? -a[i] : a[i]; if(v > peak) peak = v; }
-    if(peak < 1e-4) return a;
-    const thr = peak * 0.06;
-    let s = 0, e = n - 1;
-    while(s < n && Math.abs(a[s]) < thr) s++;
-    while(e > s && Math.abs(a[e]) < thr) e--;
-    if(e <= s) return a;
-    const pad = Math.round(0.30 * 16000);
-    const len = Math.max((e - s + 1) + pad * 2, 16000);      // 至少 1 秒
-    const out = new Float32Array(len);
-    const gain = Math.min(4, 0.9 / peak);
-    for(let i=s;i<=e;i++){
-      const v = a[i] * gain;
-      out[pad + (i - s)] = v > 1 ? 1 : (v < -1 ? -1 : v);
-    }
-    return out;
-  }
-  function whisperStart(){
-    if(mode!=='speak' || !current) return;
-    if(answered){ newQuestion(); return; }
-    if(srListening){ stopWhisper(); return; }          // 再按一次＝停止收音
-    srListening = true;
-    micBtn.classList.add('rec'); micLabel.textContent='收音中…';
-    fbSpeak.className='feedback'; fbSpeak.innerHTML='';
-    clearTimeout(promptTimer); stopAudioNow();
-    speakNote.textContent = '請讀出上面的字…讀完會自動停止';
-    const load = loadWhisper();                        // 同時開始下載模型
-    navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,channelCount:1}})
-      .then(stream=>{
-        wStream = stream;
-        return new Promise((resolve, reject)=>{
-          const chunks = [];
-          const mr = new MediaRecorder(stream);
-          wRec = mr;
-          mr.ondataavailable = e=>{ if(e.data && e.data.size) chunks.push(e.data); };
-          mr.onerror = e=>reject((e && e.error) || new Error('錄音失敗'));
-          mr.onstop = ()=>{
-            if(wStream){ try{ wStream.getTracks().forEach(t=>t.stop()); }catch(e){} wStream=null; }
-            wRec = null; clearTimeout(wTimer);
-            resolve(new Blob(chunks, {type: mr.mimeType || 'audio/webm'}));
-          };
-          mr.start();
-          wTimer = setTimeout(()=>{ if(mr.state==='recording') mr.stop(); }, 2500);
-        });
-      })
-      .then(blob=>{
-        micLabel.textContent='辨識中…';
-        speakNote.textContent='辨識中，請稍等…';
-        return load.then(tr=>blobToAudio16k(blob).then(audio=>tr(prepAudio(audio), {language:'ja', task:'transcribe'})));
-      })
-      .then(out=>{
-        const text = ((out && out.text) || '').trim();
-        stopSpeak();
-        if(!text){ speakNote.textContent='沒有辨識到聲音，請按「錄音」再讀一次。'; return; }
-        judgeSpeak([text]);
-      })
-      .catch(e=>{
-        stopSpeak();
-        speakNote.textContent = '辨識失敗：' + (e && e.message ? e.message : e);
-      });
-  }
-  function srMessage(err){
-    if(err==='service-not-allowed')
-      return 'Safari 的語音辨識服務被關掉了：請到「設定 → 一般 → 鍵盤 → 啟用聽寫」，並在「設定 → Siri 與搜尋」開啟 Siri／聽寫，然後重新載入本頁。';
-    if(err==='not-allowed')
-      return '需要使用麥克風：請在網址列左邊的「aA」→ 網站設定允許「麥克風」，或到「設定 → Safari → 麥克風」開啟。';
-    if(err==='network')
-      return '語音辨識需要連網（Apple 語音服務），請檢查網絡後再試。';
-    if(err==='audio-capture')
-      return '接收不到麥克風聲音，請檢查麥克風權限。';
-    if(err==='language-not-supported')
-      return '此裝置的聽寫未支援日語：請到「設定 → 一般 → 鍵盤 → 鍵盤 → 加入日文鍵盤」後再試。';
-    if(err==='aborted')
-      return '錄音被系統中斷（可能係 Siri／其他 App 搶咗麥克風），請再按一次「錄音」。';
-    if(err==='no-speech' || !err)
-      return '沒有聽到聲音：請確認「設定 → 一般 → 鍵盤 → 啟用聽寫」已開啟，靠近麥克風再按「錄音」。';
-    return '辨識發生錯誤（'+err+'），請再試一次。';
-  }
-  function beginRecognition(){
-    const r = new SRClass();
-    // Safari 只支援單次辨識：continuous / interimResults 開住會收唔到結果，維持 false
-    try{ r.lang='ja-JP'; r.interimResults=false; r.maxAlternatives=5; r.continuous=false; }catch(e){}
-    r.onresult = ev => {
-      const alts = [], finals = [];
-      try{
-        for(let i=ev.resultIndex||0;i<ev.results.length;i++){
-          const res = ev.results[i];
-          for(let j=0;j<res.length;j++){ alts.push(res[j].transcript); if(res.isFinal) finals.push(res[j].transcript); }
-        }
-      }catch(e){}
-      if(!finals.length){                  // 只是中間結果：先顯示，繼續聽
-        if(alts[0]) speakNote.textContent = '（聽到：'+alts[0]+'…）';
-        return;
-      }
-      srGotResult = true;
-      srLog('result:'+alts.join('|'));
-      srIntentionalAbort = true;
-      stopSpeak();
-      judgeSpeak(finals.concat(alts));
-    };
-    r.onerror = ev => {
-      const err = (ev && ev.error) || '';
-      srLastErr = err;
-      srLog('error:'+err);
-      // 這些錯誤唔會再有 onend（或 onend 已無意義），要即刻收工並講原因，
-      // 否則按鈕會一直卡住「辨識中…」
-      if(err==='service-not-allowed' || err==='not-allowed' || err==='language-not-supported'){
-        srGotResult = false;
-        srBlocked = true;                       // 之後直接用本機辨識，不再試系統服務
-        stopSpeak();
-        speakNote.textContent = '系統語音服務不可用，改用本機辨識…';
-        whisperStart();
-      }else if(err==='network' || err==='audio-capture'){
-        srGotResult = false;
-        stopSpeak();
-        speakNote.textContent = srMessage(err);
-      }
-    };
-    r.onend = ()=>{
-      srLog('end');
-      if(srObj!==r) return;
-      const err = srLastErr, got = srGotResult;
-      stopSpeak();
-      if(got) return;
-      if(!err && srAttempt < 1 && mode==='speak' && !answered){   // 靜靜收工：自動再試一次
-        srAttempt++; setTimeout(()=>{ if(mode==='speak' && !answered) srLaunch(); }, 300);
-        return;
-      }
-      speakNote.textContent = srMessage(err);
-    };
-    srObj = r;
-    if(DEBUG){ r.onstart = ()=>srLog('start'); }
-    try{ r.start(); }catch(e){ stopSpeak(); speakNote.textContent='無法啟動語音辨識，請再試一次。'; return; }
-    srTimer = setTimeout(()=>{ srIntentionalAbort = true; try{ r.stop(); }catch(e){} }, 9000);
-  }
-  // ── 讀音模式只看聲音 ────────────────────────────────────────
-  // 五十音一題只有一個音（清音／濁音／半濁音／拗音），所以只核對辨識結果的
-  // 第一個音節，而且必須是五十音表上有的音：「ねぇ」「目」「(笑)」這類
-  // 一律不顯示、不判錯，只當作「聽不清楚」。
-  let srMisses = 0, srAllowSkip = false, srRetried = false;
+  // ── 鍵盤輸入模式：看字打讀音 ───────────────────────────────
+  // 不再自建語音辨識：直接用日文鍵盤打假名；要語音就按鍵盤上的麥克風，
+  // 由系統聽寫轉成假名（iOS／Android 內建），網站不收音、不下載模型。
+  // 判定只認五十音表上有的音：「ねぇ」「目」「2」這類一律不當答案。
+  const escH = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const kanaOnly = s => toHira(s||'').replace(/[^\u3041-\u3096]/g,'');
   // 取第一個音節：小字（ゃゅょゎぁぃぅぇぉ）跟前一個假名合成一個音
   const firstUnit = s => {
@@ -1722,51 +1469,61 @@
   };
   const inTable = k => !!ROMAJI[k];            // 五十音表上有的音才接受
   const normRom = s => (s||'').toLowerCase().replace(/wo/g,'o').replace(/zi/g,'ji').replace(/([aeiou])\1+/g,'$1');
-  function judgeSpeak(alts){
-    if(mode!=='speak' || !current) return;
-    const targetKana = toHira(current.k);
-    const targetRom = normRom(ROMAJI[targetKana] || ROMAJI[current.k] || '');
-    const heard = (alts||[]).map(firstUnit).filter(inTable);
-    const hit = heard.find(h => h===targetKana || (targetRom && normRom(ROMAJI[h])===targetRom));
-    if(hit){
-      answered = true;
+  const VALID_ROM = new Set(Object.keys(BY_ROMAJI).map(normRom));   // 表上有的拼音才算輸入
+  // 判定輸入：回傳 { status:'ok' | 'wrong' | 'empty', unit }
+  function judgeTyped(text, kana){
+    const raw = String(text||'').trim();
+    if(!raw) return { status:'empty', unit:'' };
+    const targetKana = toHira(kana);
+    const targetRom = normRom(ROMAJI[targetKana] || ROMAJI[kana] || '');
+    if(/^[a-z]+$/i.test(raw)){                            // 打羅馬拼音也接受
+      const rom = normRom(raw);
+      if(!VALID_ROM.has(rom)) return { status:'empty', unit:'' };   // 不是表上的拼音
+      return { status: (targetRom && rom===targetRom) ? 'ok' : 'wrong', unit: raw.toLowerCase() };
+    }
+    const u = firstUnit(raw);
+    if(!u || !inTable(u)) return { status:'empty', unit:'' };   // 表外的字／漢字：不判錯
+    const ok = u===targetKana || (targetRom && normRom(ROMAJI[u])===targetRom);
+    return { status: ok ? 'ok' : 'wrong', unit: u };
+  }
+  function resetSpeak(){
+    fbSpeak.className='feedback'; fbSpeak.innerHTML='';
+    speakInput.value=''; speakInput.className=''; speakInput.disabled=false;
+    speakCheck.textContent='檢查'; speakCheck.className='btn-main';
+    speakNote.textContent = '';
+    speakInput.focus({preventScroll:true});       // 一入題就彈鍵盤，可直接用鍵盤上的麥克風聽寫
+  }
+  function checkSpeak(){
+    if(mode!=='speak' || !current || answered) return;
+    const r = judgeTyped(speakInput.value, current.k);
+    if(r.status==='empty'){
+      speakNote.textContent = '請用日文鍵盤輸入假名（例：ぬ），或打羅馬拼音（例：nu）。';
+      speakInput.focus({preventScroll:true});
+      return;
+    }
+    answered = true; speakInput.disabled = true;
+    if(r.status==='ok'){
       stats.correct++; stats.streak++;
       if(scope==='wrong') dropWrong(current);
+      speakInput.classList.add('correct');
       showFeedback(fbSpeak, true, '答對了！', scope==='wrong'?'<span class="alt">已移出錯題簿</span>':'', current.k);
-      updateStats();
-      speakNextBtn.hidden=false; speakNextBtn.className='btn-main next'; speakNextBtn.textContent='下一題 →';
-      speakNote.textContent = '（聽到：'+hit+'）';
-      return;
-    }
-    if(heard.length){
-      // 聽到表上有的音，但跟正解不同：辨識偶爾會聽錯，先給一次機會再判錯
-      if(!srRetried){
-        srRetried = true;
-        speakNote.textContent = '剛才辨識成「'+heard[0]+'」，請再按「錄音」讀一次確認。';
-        return;
-      }
-      answered = true;
-      stats.wrong++; stats.streak=0; addWrong(current);
-      showFeedback(fbSpeak, false, '', '你讀了「'+heard[0]+'」· 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
-      updateStats();
-      speakNextBtn.hidden=false; speakNextBtn.className='btn-main next err'; speakNextBtn.textContent='下一題 →';
+      speakCheck.textContent='下一題 →'; speakCheck.className='btn-main next';
       speakNote.textContent='';
-      return;
-    }
-    // 全部結果都不是五十音表上的音（ねぇ、漢字、雜訊）：不計分、不判錯；
-    // 連續兩次都這樣就讓用戶直接跳過，免得卡死
-    srMisses++;
-    if(srMisses >= 2){
-      srAllowSkip = true;
-      speakNextBtn.hidden=false; speakNextBtn.className='btn-main next'; speakNextBtn.textContent='跳過 →';
-      speakNote.textContent = '聽不清楚 — 可以按「示範」對照，或按「跳過」。';
     }else{
-      speakNote.textContent = '聽不清楚 — 請再按「錄音」讀一次。';
+      stats.wrong++; stats.streak=0; addWrong(current);
+      speakInput.classList.add('wrong');
+      showFeedback(fbSpeak, false, '', '你輸入了「'+escH(r.unit)+'」· 正確是 <span class="answer-txt">'+escH(current.k)+'</span>', current.k);
+      speakCheck.textContent='下一題 →'; speakCheck.className='btn-main next err';
+      speakNote.textContent='';
     }
+    updateStats();
+    speakCheck.focus({preventScroll:true});
   }
-  micBtn.addEventListener('click', startSpeak);
+  speakCheck.addEventListener('click', ()=>{ if(answered) newQuestion(); else checkSpeak(); });
+  speakInput.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){ e.preventDefault(); if(answered) newQuestion(); else checkSpeak(); }
+  });
   speakReplay.addEventListener('click', ()=>{ if(mode==='speak' && current) speak(current.k); });
-  speakNextBtn.addEventListener('click', ()=>{ if(answered || srAllowSkip) newQuestion(); });
 
   // ── 事件 ──────────────────────────────────────────────────
   modeSeg.addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) setMode(b.dataset.mode); });
@@ -1999,7 +1756,7 @@
   }));
 
   // ── 初始化 ────────────────────────────────────────────────
-  if(!['read','listen','write'].includes(mode)) mode='read';
+  if(!['read','listen','write','speak'].includes(mode)) mode='read';
   if(!['hira','kata','both','wrong'].includes(scope)) scope='hira';
   [...modeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
   [...scopeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.scope===scope));
