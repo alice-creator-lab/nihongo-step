@@ -270,7 +270,8 @@
   html{-webkit-text-size-adjust:100%;}
   body{overscroll-behavior-y:contain;}
   /* 全站不准縮放：只留上下左右捲動，禁雙擊與雙指縮放 */
-  html, body{touch-action:pan-x pan-y;}
+  /* manipulation = 可捲動、可點按，但唔會雙擊縮放；比 JS 攔 touchend 更安全（唔會食掉按鈕的 click） */
+  html, body{touch-action:manipulation;}
   .writebar{width:100%; max-width:320px; display:flex; gap:8px; margin-top:12px;}
   .mini{border:1px solid var(--line); background:var(--card); color:var(--ink-soft); font-family:inherit;
     font-size:14px; padding:11px 14px; border-radius:12px; cursor:pointer; transition:.18s;}
@@ -491,7 +492,7 @@
           <button class="ctlbtn" id="speakReplay">示範</button>
         </div>
         <div class="speak-note" id="speakNote"></div>
-        <div class="speak-tip">iPhone／iPad 的 Safari 不支援語音辨識，請改用 Chrome 開啟本頁；使用 Safari 時錄音鍵會顯示為灰色。</div>
+        <div class="speak-tip">錄音用瀏覽器的語音辨識：需要麥克風權限、要連網，並在「設定 → Siri 與搜尋」開啟聽寫。不支援時可先按「示範」對照。</div>
         <div class="feedback" id="fbSpeak"></div>
         <button class="btn-main" id="speakNextBtn" hidden>下一題 →</button>
       </div>
@@ -1399,12 +1400,9 @@
     document.addEventListener(t, e=>e.preventDefault(), {passive:false}));
   document.addEventListener('selectstart', e=>{ if(mode==='write') e.preventDefault(); });
   paper.addEventListener('contextmenu', e=>e.preventDefault());
-  let lastTapAt = 0;
-  document.addEventListener('touchend', e=>{
-    const now = Date.now();                          // 全站：不准雙擊放大
-    if(now - lastTapAt < 320) e.preventDefault();
-    lastTapAt = now;
-  }, {passive:false});
+  /* 雙擊縮放交給 CSS touch-action:manipulation 處理；
+     唔再用 JS 攔 touchend —— iOS 上那樣會連「錄音」按鈕的點擊一併食掉，
+     導致語音辨識 start() 拿不到使用者手勢而報 aborted。 */
 
   // ── 共用 feedback ─────────────────────────────────────────
   function showFeedback(el, ok, head, detailHtml, speakKana){
@@ -1474,11 +1472,12 @@
     if(IS_IOS) return '此 iPhone／iPad 的瀏覽器未開放語音辨識；請用 Safari，或按「示範」自行對照。';
     return '此瀏覽器不支援語音辨識；請按「示範」自行對照。';
   }
-  let srObj = null, srListening = false, srTimer = null, srChanged = false;
+  let srObj = null, srListening = false, srTimer = null, srChanged = false, srIntentionalAbort = false;
   function stopSpeak(){
     clearTimeout(srTimer);
     const r = srObj; srObj = null;
     if(r){ try{ r.onresult=null; r.onerror=null; r.onend=null; r.abort(); }catch(e){} }
+    srIntentionalAbort = true;
     srListening = false;
     micBtn.classList.remove('rec');
     micLabel.textContent = '錄音';
@@ -1498,29 +1497,45 @@
     if(answered){ newQuestion(); return; }
     if(srListening) return;
     srListening = true;
+    srIntentionalAbort = false;
+    clearTimeout(promptTimer);
+    stopAudioNow();                        // 先停掉任何 mp3：iOS 上同時播聲會搶走麥克風，令辨識 abort
     micBtn.classList.add('rec'); micLabel.textContent='辨識中…';
     fbSpeak.className='feedback'; fbSpeak.innerHTML='';
     speakNote.textContent = '請讀出上面的字…';
+    // iOS 要先用 getUserMedia 拿到麥克風授權，SpeechRecognition 才不會一開即 aborted
+    const warm = (SRClass && navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+      ? navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{ s.getTracks().forEach(t=>t.stop()); }).catch(()=>{})
+      : Promise.resolve();
+    warm.then(()=>{ if(!srListening) return; beginRecognition(); });
+  }
+  function beginRecognition(){
     const r = new SRClass();
     r.lang='ja-JP'; r.interimResults=false; r.maxAlternatives=5; r.continuous=false;
     r.onresult = ev => {
       const alts = [];
       try{ const res = ev.results[0]; for(let i=0;i<res.length;i++) alts.push(res[i].transcript); }catch(e){}
+      srIntentionalAbort = true;          // 已拿到結果，之後的 abort 不算錯
       stopSpeak();
       judgeSpeak(alts);
     };
     r.onerror = ev => {
       const err = (ev && ev.error) || '';
+      const quiet = srIntentionalAbort;
+      srIntentionalAbort = true;
       stopSpeak();
-      if(err==='not-allowed' || err==='service-not-allowed') speakNote.textContent='需要使用麥克風：請在瀏覽器中允許收音後再試。';
-      else if(err==='no-speech') speakNote.textContent='沒有聽到聲音，請再按一次「錄音」。';
-      else if(err==='network') speakNote.textContent='語音服務無法連線（需要網路），請按「示範」自行對照。';
+      if(quiet) return;                   // 我們自己中止／已出結果，不顯示錯誤
+      if(err==='not-allowed' || err==='service-not-allowed') speakNote.textContent='需要使用麥克風：請在設定 → Safari 允許「麥克風」，或按「示範」對照。';
+      else if(err==='no-speech') speakNote.textContent='沒有聽到聲音，請按「錄音」再讀一次。';
+      else if(err==='network') speakNote.textContent='語音辨識需要連網（Apple 語音服務），請檢查網絡後再試。';
+      else if(err==='aborted') speakNote.textContent='錄音被系統中斷（可能係 Siri／其他 App 搶咗麥克風），請再按一次「錄音」。';
+      else if(err==='audio-capture') speakNote.textContent='接收不到麥克風聲音，請檢查麥克風權限。';
       else speakNote.textContent='辨識發生錯誤（'+err+'），再試一次。';
     };
     r.onend = ()=>{ if(srObj===r) stopSpeak(); };
     srObj = r;
     try{ r.start(); }catch(e){ stopSpeak(); speakNote.textContent='無法啟動語音辨識，請再試一次。'; return; }
-    srTimer = setTimeout(()=>{ try{ r.stop(); }catch(e){} }, 8000);
+    srTimer = setTimeout(()=>{ srIntentionalAbort = true; try{ r.stop(); }catch(e){} }, 8000);
   }
   function judgeSpeak(alts){
     if(mode!=='speak' || !current) return;
