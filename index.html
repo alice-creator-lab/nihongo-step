@@ -420,7 +420,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v94</span>
+    <span class="ver" id="verTag">v95</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1521,7 +1521,9 @@
   /* 自動測試用掛鈎：只在 ?sdebug=1 時存在 */
   if (location.search.indexOf('sdebug=1') >= 0){
     window.__scoreTest = { similarity: similarity, cleanKana: cleanKana, kanjiToKana: kanjiToKana, recordSentence: recordSentence, vadStep: vadStep,
-      dictSize: function(){ return Object.keys(KANJI_READ).length; } };
+      dictSize: function(){ return Object.keys(KANJI_READ).length; },
+      recState: function(){ return { stopping: !!whisperStop, rec: whisperRec ? whisperRec.state : null,
+        btn: ($('#spkAuto') || {}).textContent, prog: ($('#spkProg') || {}).textContent }; } };
   }
 
   function openSpeak(l, di, li){
@@ -1558,9 +1560,18 @@
   }
 
   /* 手機內 Whisper 自動辨識：首次使用才下載模型，之後沿用同一個實例 */
-  var whisperP = null, whisperTr = null, whisperRec = null, whisperTimer = 0, whisperStream = null;
+  var whisperP = null, whisperTr = null, whisperRec = null, whisperStop = null, whisperTimer = 0, whisperStream = null;
 
   function spkProg(t){ var el = $('#spkProg'); if (el) el.textContent = t || ''; }
+
+  /* 收音按鈕只有一個狀態來源：idle（待錄）、recording（錄音中）、busy（辨識中）。
+     唔好再逐處直接改 textContent，否則任何一條路徑冇收尾，按鈕就會卡住「停止並辨識」。 */
+  function recUI(state){
+    var btn = $('#spkAuto'); if (!btn) return;
+    if (state === 'recording'){ btn.disabled = false; btn.textContent = '■ 停止並辨識'; }
+    else if (state === 'busy'){ btn.disabled = true; btn.textContent = '辨識中…'; }
+    else { btn.disabled = false; btn.textContent = '● 自動辨識'; }
+  }
 
   function loadWhisper(){
     if (whisperTr) return Promise.resolve(whisperTr);
@@ -1607,30 +1618,58 @@
   /* 收音：唔用固定時間切斷（句子有標點，中間停頓好正常），
      偵測到靜音夠耐才停；另設 45 秒上限防止忘記停。 */
   function recordSentence(){
-    var btn = $('#spkAuto');
     if (!navigator.mediaDevices || !window.MediaRecorder) return Promise.reject(new Error('此瀏覽器不支援錄音'));
     spkProg('要求麥克風…');
     return navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true, channelCount:1 } }).then(function(stream){
       whisperStream = stream;
       return new Promise(function(resolve, reject){
-        var chunks = [];
+        var chunks = [], done = false, vadTimer = 0, watchdog = 0, actx = null, an = null;
         var mr = new MediaRecorder(stream);
         whisperRec = mr;
-        mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
-        mr.onerror = function(e){ reject((e && e.error) || new Error('錄音失敗')); };
-        mr.onstop = function(){
-          if (whisperStream){ whisperStream.getTracks().forEach(function(t){ t.stop(); }); whisperStream = null; }
-          whisperRec = null;
+
+        function teardown(){
+          clearInterval(vadTimer);
           clearTimeout(whisperTimer);
-          /* 不論是自己按停還是靜音自動停，按鈕都要即刻反映「已停止」 */
-          if (btn){ btn.disabled = true; btn.textContent = '辨識中…'; }
+          clearTimeout(watchdog);
+          try { if (actx) actx.close(); } catch(e){}
+          actx = null;
+          if (whisperStream){ whisperStream.getTracks().forEach(function(t){ t.stop(); }); whisperStream = null; }
+          if (whisperRec === mr) whisperRec = null;
+          whisperStop = null;
+        }
+        /* 收尾只有這一個出口：自己按停、靜音自動停、瀏覽器自己停，都走這裡。
+           唔可以只靠 MediaRecorder 的 stop 事件——iOS 有時唔派，按鈕就會卡在「停止並辨識」。 */
+        function finish(){
+          if (done) return;
+          done = true;
+          try { if (mr.state === 'recording') mr.stop(); } catch(e){}
+          teardown();
+          recUI('busy');
           spkProg('收音完畢，辨識中，請稍等…');
           resolve(new Blob(chunks, { type: mr.mimeType || 'audio/webm' }));
+        }
+        function requestStop(){
+          if (done) return;
+          try { if (mr.state === 'recording') mr.stop(); } catch(e){}
+          /* 正常會即刻收到 stop 事件；收唔到就 1.5 秒後自己收尾。
+             看門狗只設一次，否則每 100ms 被重設就永遠唔會到期。 */
+          if (!watchdog) watchdog = setTimeout(finish, 1500);
+        }
+        whisperStop = requestStop;
+
+        mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+        mr.onerror = function(e){
+          if (done) return;
+          done = true; teardown(); recUI('idle');
+          reject((e && e.error) || new Error('錄音失敗'));
         };
+        mr.onstop = finish;
         mr.start();
-        if (btn){ btn.disabled = false; btn.textContent = '■ 停止並辨識'; }
-        spkProg('收音中：照句子唸一次，唸完可以按「停止並辨識」，停頓 ' + Math.round(VAD_SILENCE_MS/1000) + ' 秒亦會自動停');
-        var actx = null, an = null, vadTimer = null, lastVoice = Date.now(), spoke = false;
+        recUI('recording');
+        spkProg('收音中：照句子唸一次，唸完可以按「停止並辨識」，停頓 ' + (VAD_SILENCE_MS/1000) + ' 秒亦會自動停');
+        /* 麥克風被系統拿走（例如切去其他 app）也要收尾 */
+        stream.getAudioTracks().forEach(function(t){ t.addEventListener('ended', requestStop); });
+
         try{
           var AC = window.AudioContext || window.webkitAudioContext;
           actx = new AC();
@@ -1639,7 +1678,9 @@
         }catch(e){ actx = null; }
         var vad = { lastVoice: Date.now(), spoke: false };
         vadTimer = setInterval(function(){
-          if (mr.state !== 'recording'){ clearInterval(vadTimer); return; }
+          if (done){ clearInterval(vadTimer); return; }
+          /* 錄音機已經自己停咗（冇派事件）就照樣收尾 */
+          if (mr.state !== 'recording'){ clearInterval(vadTimer); requestStop(); return; }
           var loud = 0;
           if (an){
             var buf = new Uint8Array(an.fftSize);
@@ -1648,13 +1689,9 @@
             for (var i = 0; i < buf.length; i++){ var v = (buf[i] - 128) / 128; sum += v * v; }
             loud = Math.sqrt(sum / buf.length);
           }
-          if (vadStep(vad, loud, Date.now())){
-            clearInterval(vadTimer);
-            if (mr.state === 'recording') mr.stop();
-          }
+          if (vadStep(vad, loud, Date.now())) requestStop();
         }, 100);
-        whisperTimer = setTimeout(function(){ clearInterval(vadTimer); if (mr.state === 'recording') mr.stop(); }, 45000);
-        mr.addEventListener('stop', function(){ clearInterval(vadTimer); try { if (actx) actx.close(); } catch(e){} });
+        whisperTimer = setTimeout(requestStop, 45000);
       });
     });
   }
@@ -1662,11 +1699,10 @@
   function autoRead(l, di, li, line){
     var btn = $('#spkAuto');
     if (!btn) return;
-    if (whisperRec && whisperRec.state === 'recording'){ whisperRec.stop(); return; }
+    if (whisperStop){ whisperStop(); return; }   /* 錄音中：變回「停止並辨識」 */
     btn.disabled = true;
     loadWhisper().then(function(){ return recordSentence(); })
       .then(function(blob){
-        if (btn){ btn.disabled = true; btn.textContent = '● 自動辨識'; }
         spkProg('辨識中，請稍等…');
         return blobToAudio(blob).then(function(audio){
           return whisperTr(audio, { language: 'ja', task: 'transcribe' });
@@ -1674,13 +1710,13 @@
       })
       .then(function(out){
         var text = ((out && out.text) || '').trim();
-        if (btn) btn.disabled = false;
+        recUI('idle');
         spkProg('');
         if (!text){ toast('沒有辨識到聲音，再試一次'); return; }
         paintScore(l, di, li, line, text, null, '辨識結果');
       })
       .catch(function(e){
-        if (btn){ btn.disabled = false; btn.textContent = '● 自動辨識'; }
+        recUI('idle');
         spkProg('');
         toast('自動辨識失敗：' + (e && e.message ? e.message : e));
       });

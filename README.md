@@ -94,5 +94,6 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 - 順序表的音檔（`audio/seq/`）用 `tools/trim_seq_audio.py` 剪掉前後靜音：edge-tts 原始檔每段尾隨約 1.1 秒空白，剪完後每段約 0.7 秒，「播放全部」才會緊湊。重跑 `make_seq_audio.py --force` 後要再跑一次 `trim_seq_audio.py --force`，並把 `data/audio.json` 的 `v` 加一，令瀏覽器重抓音檔。
 - 音檔版本分三組，改一組不用重下 60MB：動詞／形容詞表 `?v=t1`、句子（會話／句型／文法／聽力）`?v=e2`、單字跟 `data/audio.json` 的 `v`。`make_audio.py --force-ex` 只重出句子；跑完把 `audio.json` 的 `v` 調回去，否則單字音檔會被迫重下。
 - 驗證人聲有無接上：`python3 -m http.server 8899` 後跑 `python3 tools/check_audio_cdp.py http://127.0.0.1:8899/`（文法總表、課內文法、聽力、對話、跟讀逐項檢查是否播 mp3、有沒有落到 TTS）。
+- 收音按鈕的狀態只有一個出口：`recUI()` 管「● 自動辨識／■ 停止並辨識／辨識中…」三態，收音結束（按停、靜音自動停、麥克風被系統拿走）一律經 `finish()` 收尾，並有 1.5 秒看門狗——iOS 的 `MediaRecorder` 有時唔派 `stop` 事件，只靠事件會令按鈕卡在「停止並辨識」。改動收音流程後跑 `python3 tools/test-speak-ui.py`（自行開 http server 與 Chromium 假麥克風，驗正常與「唔派 stop 事件」兩個情境）。
 - Service Worker 採網路優先：有新版本時直接更新，離線時才回退到快取。
 - 進度鍵為 `ngs-progress-v1`，只記錄已完成課數與各段是否看過。
