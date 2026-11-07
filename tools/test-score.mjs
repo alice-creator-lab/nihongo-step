@@ -59,9 +59,15 @@ check('回報個案：漢字換讀音後分數提高', score >= 50 && score - be
 check('完全無關的分數偏低', api.similarity('あのう、はじめまして。りです。', 'きょうはさむいですね') < 40,
   api.similarity('あのう、はじめまして。りです。', 'きょうはさむいですね') + ' 分');
 
-// 紅字標示用同一套正規化
+// 紅字標示用同一套正規化，並保留原句標點
 const marked = api.markTarget('はじめまして', 'ハジメマシテ');
 check('標示不應有紅字', !marked.includes('miss'), marked);
+
+const marked2 = api.markTarget('あのう、はじめまして。りです。', 'あのう、はじめまして。りです。');
+check('全對時保留標點且無紅字', marked2 === 'あのう、はじめまして。りです。', marked2);
+
+const marked3 = api.markTarget('あのう、はじめまして。りです。', 'あのはじまってりれ');
+check('標點保留、沒對上的音標紅', marked3.includes('、') && marked3.includes('。') && marked3.includes('class="miss"'), marked3);
 
 console.log(bad ? `\n${bad} 項不符預期` : '\n全部通過');
 process.exit(bad ? 1 : 0);

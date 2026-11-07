@@ -420,7 +420,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v91</span>
+    <span class="ver" id="verTag">v92</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1489,15 +1489,27 @@
     return Math.round(dp[a.length][b.length] / a.length * 100);
   }
   function markTarget(target, heard){
-    var a = cleanKana(target).split(''), b = cleanKana(heard).split('');
+    var display = String(target == null ? '' : target);
+    var a = cleanKana(display).split(''), b = cleanKana(heard).split('');
     var dp = lcsTable(a, b), keep = {}, i = a.length, j = b.length;
     while (i > 0 && j > 0){
       if (a[i-1] === b[j-1]){ keep[i-1] = 1; i--; j--; }
       else if (dp[i-1][j] >= dp[i][j-1]) i--;
       else j--;
     }
-    return a.map(function(ch, k){ return keep[k] ? esc(ch) : '<b class="miss">'+esc(ch)+'</b>'; }).join('');
+    /* 逐字輸出原句（保留標點），只有參與比對的假名才可能標紅 */
+    var ci = 0, out = '';
+    for (var k = 0; k < display.length; k++){
+      var ch = display.charAt(k);
+      if (/[\u3041-\u3096\u30a1-\u30f6]/.test(ch)){
+        out += keep[ci++] ? esc(ch) : '<b class="miss">'+esc(ch)+'</b>';
+      }else{
+        out += esc(ch);
+      }
+    }
+    return out;
   }
+
 
 
   /* 自動測試用掛鈎：只在 ?sdebug=1 時存在 */
@@ -1642,8 +1654,6 @@
         '<p class="verdict">'+verdict+'</p>' +
         '<div class="target">'+markTarget(target, text)+'</div>' +
         '<p class="heard">'+(sourceLabel || '你輸入的')+'：'+esc(text)+'</p>' +
-        (cleanKana(text) !== toHira(text).replace(/[\s\u3000]/g,'') ? '<p class="heard">統一後（實際比對）：'+esc(cleanKana(text))+'</p>' : '') +
-        '<p class="note">紅字是沒對上的音。評分前已把兩邊統一成平假名比對（片假名轉平假名、漢字換讀音、長音符略去）。分數＝句子假名對上的比例（'+score+'%），只反映辨識到的內容。</p>' +
       '</div>' +
       '<div class="cbtns"><button class="btn2" id="spkAgain">再試一次</button>' +
       '<button class="btn2" id="spkModel2">▶ 示範</button></div>';
