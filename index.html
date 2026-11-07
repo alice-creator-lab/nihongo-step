@@ -420,7 +420,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v89</span>
+    <span class="ver" id="verTag">v90</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1444,8 +1444,30 @@
       return String.fromCharCode(c.charCodeAt(0) - 0x60);
     });
   }
+  /* 漢字連續段換成課程內的讀音（長的詞優先）；對照表沒有的漢字略去，不當成假名 */
+  function kanjiToKana(s){
+    var str = String(s == null ? '' : s), out = '', i = 0;
+    while (i < str.length){
+      var ch = str.charAt(i);
+      if (/[\u4e00-\u9fff\u3005]/.test(ch)){
+        var done = false;
+        for (var len = Math.min(6, str.length - i); len >= 1; len--){
+          var cand = str.substr(i, len);
+          if (!/^[\u4e00-\u9fff\u3005]+$/.test(cand)) continue;
+          var rd = KANJI_READ[cand];
+          if (rd){ out += rd; i += len; done = true; break; }
+        }
+        if (!done) i++;
+        continue;
+      }
+      out += ch; i++;
+    }
+    return out;
+  }
+  /* 評分前把「目標句」與「辨識結果」都化成同一個形式：
+     片假名→平假名、漢字→假名、去掉標點與長音符，只比對音 */
   function cleanKana(s){
-    return toHira(String(s == null ? '' : s))
+    return toHira(kanjiToKana(s))
       .replace(/[\s\u3000]/g, '')
       .replace(/[、。，．,.！!？?「」『』（）()・…~～ー―-]/g, '');
   }
@@ -1477,6 +1499,12 @@
     return a.map(function(ch, k){ return keep[k] ? esc(ch) : '<b class="miss">'+esc(ch)+'</b>'; }).join('');
   }
 
+
+  /* 自動測試用掛鈎：只在 ?sdebug=1 時存在 */
+  if (location.search.indexOf('sdebug=1') >= 0){
+    window.__scoreTest = { similarity: similarity, cleanKana: cleanKana, kanjiToKana: kanjiToKana,
+      dictSize: function(){ return Object.keys(KANJI_READ).length; } };
+  }
 
   function openSpeak(l, di, li){
     var d = l.dialogues[di], line = d.lines[li];
@@ -1614,7 +1642,7 @@
         '<p class="verdict">'+verdict+'</p>' +
         '<div class="target">'+markTarget(target, text)+'</div>' +
         '<p class="heard">'+(sourceLabel || '你輸入的')+'：'+esc(text)+'</p>' +
-        '<p class="note">紅字是沒對上的音。分數＝句子假名對上的比例（'+score+'%），不是考試成績，只反映辨識到的內容。</p>' +
+        '<p class="note">紅字是沒對上的音。評分前已把兩邊統一成平假名比對（片假名轉平假名、漢字換讀音、長音符略去）。分數＝句子假名對上的比例（'+score+'%），只反映辨識到的內容。</p>' +
       '</div>' +
       '<div class="cbtns"><button class="btn2" id="spkAgain">再試一次</button>' +
       '<button class="btn2" id="spkModel2">▶ 示範</button></div>';
@@ -2213,6 +2241,7 @@
   /* ---------- 預先製作的人聲檔（data/audio.json 有記錄的句子優先用音檔） ---------- */
   var AUDIO = {};
   var WT = null;
+  var KANJI_READ = {};   // 漢字 → 假名讀音（由課程 ja／kana 對照離線產生）
   function audioFor(id, key){
     var m = AUDIO[id];
     return (m && m[key]) || null;
@@ -2255,6 +2284,7 @@
   function boot(){
     getJSON('data/audio.json').then(function(m){ AUDIO = m || {}; }).catch(function(){});
     getJSON('data/wordtables.json').then(function(m){ WT = m || null; }).catch(function(){});
+    getJSON('data/kanji-readings.json').then(function(m){ KANJI_READ = (m && m.dict) || {}; }).catch(function(){});
     getJSON('data/course.json').then(function(c){
       course = c;
       var ids = availableLessons().map(function(l){ return l.id; });

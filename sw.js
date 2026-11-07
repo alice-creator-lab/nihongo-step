@@ -1,11 +1,12 @@
 /* 日語階梯 — 網路優先的快取策略：先取最新版本，離線時才用快取。 */
-const VERSION = 'ngs-v89';
+const VERSION = 'ngs-v90';
 const SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './data/course.json',
   './data/lesson-L01.json',
+  './data/kanji-readings.json',
   './kana/index.html',
   './kana/kana-templates.json'
 ];
