@@ -420,7 +420,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v92</span>
+    <span class="ver" id="verTag">v93</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1514,7 +1514,7 @@
 
   /* 自動測試用掛鈎：只在 ?sdebug=1 時存在 */
   if (location.search.indexOf('sdebug=1') >= 0){
-    window.__scoreTest = { similarity: similarity, cleanKana: cleanKana, kanjiToKana: kanjiToKana,
+    window.__scoreTest = { similarity: similarity, cleanKana: cleanKana, kanjiToKana: kanjiToKana, recordSentence: recordSentence, vadStep: vadStep,
       dictSize: function(){ return Object.keys(KANJI_READ).length; } };
   }
 
@@ -1591,52 +1591,90 @@
     });
   }
 
+  /* 逐次判斷「係唔係講完」：夠大聲就記住最後有聲嘅時間；
+     有講過而靜音超過 VAD_SILENCE_MS 才叫停。句子中間停頓唔會誤停。 */
+  function vadStep(state, loud, now){
+    if (loud > VAD_SPEAK_RMS){ state.lastVoice = now; state.spoke = true; return false; }
+    return !!(state.spoke && now - state.lastVoice > VAD_SILENCE_MS);
+  }
+
+  /* 收音：唔用固定時間切斷（句子有標點，中間停頓好正常），
+     偵測到靜音夠耐才停；另設 45 秒上限防止忘記停。 */
+  function recordSentence(){
+    var btn = $('#spkAuto');
+    if (!navigator.mediaDevices || !window.MediaRecorder) return Promise.reject(new Error('此瀏覽器不支援錄音'));
+    spkProg('要求麥克風…');
+    return navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true, channelCount:1 } }).then(function(stream){
+      whisperStream = stream;
+      return new Promise(function(resolve, reject){
+        var chunks = [];
+        var mr = new MediaRecorder(stream);
+        whisperRec = mr;
+        mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+        mr.onerror = function(e){ reject((e && e.error) || new Error('錄音失敗')); };
+        mr.onstop = function(){
+          if (whisperStream){ whisperStream.getTracks().forEach(function(t){ t.stop(); }); whisperStream = null; }
+          whisperRec = null;
+          clearTimeout(whisperTimer);
+          resolve(new Blob(chunks, { type: mr.mimeType || 'audio/webm' }));
+        };
+        mr.start();
+        if (btn){ btn.disabled = false; btn.textContent = '■ 停止並辨識'; }
+        spkProg('收音中：照句子唸一次，唸完可以按「停止並辨識」，停頓 ' + Math.round(VAD_SILENCE_MS/1000) + ' 秒亦會自動停');
+        var actx = null, an = null, vadTimer = null, lastVoice = Date.now(), spoke = false;
+        try{
+          var AC = window.AudioContext || window.webkitAudioContext;
+          actx = new AC();
+          an = actx.createAnalyser(); an.fftSize = 1024;
+          actx.createMediaStreamSource(stream).connect(an);
+        }catch(e){ actx = null; }
+        var vad = { lastVoice: Date.now(), spoke: false };
+        vadTimer = setInterval(function(){
+          if (mr.state !== 'recording'){ clearInterval(vadTimer); return; }
+          var loud = 0;
+          if (an){
+            var buf = new Uint8Array(an.fftSize);
+            an.getByteTimeDomainData(buf);
+            var sum = 0;
+            for (var i = 0; i < buf.length; i++){ var v = (buf[i] - 128) / 128; sum += v * v; }
+            loud = Math.sqrt(sum / buf.length);
+          }
+          if (vadStep(vad, loud, Date.now())){
+            clearInterval(vadTimer);
+            if (mr.state === 'recording') mr.stop();
+          }
+        }, 100);
+        whisperTimer = setTimeout(function(){ clearInterval(vadTimer); if (mr.state === 'recording') mr.stop(); }, 45000);
+        mr.addEventListener('stop', function(){ clearInterval(vadTimer); try { if (actx) actx.close(); } catch(e){} });
+      });
+    });
+  }
+
   function autoRead(l, di, li, line){
     var btn = $('#spkAuto');
     if (!btn) return;
     if (whisperRec && whisperRec.state === 'recording'){ whisperRec.stop(); return; }
-    if (!navigator.mediaDevices || !window.MediaRecorder){ toast('此瀏覽器不支援錄音'); return; }
     btn.disabled = true;
-    loadWhisper().then(function(){
-      spkProg('要求麥克風…');
-      return navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true, channelCount:1 } }).then(function(stream){
-        whisperStream = stream;
-        return new Promise(function(resolve, reject){
-          var chunks = [];
-          var mr = new MediaRecorder(stream);
-          whisperRec = mr;
-          mr.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
-          mr.onerror = function(e){ reject((e && e.error) || new Error('錄音失敗')); };
-          mr.onstop = function(){
-            if (whisperStream){ whisperStream.getTracks().forEach(function(t){ t.stop(); }); whisperStream = null; }
-            whisperRec = null;
-            clearTimeout(whisperTimer);
-            resolve(new Blob(chunks, { type: mr.mimeType || 'audio/webm' }));
-          };
-          mr.start();
-          btn.disabled = false;
-          btn.textContent = '■ 停止並辨識';
-          spkProg('收音中：照句子唸一次，唸完按「停止並辨識」');
-          whisperTimer = setTimeout(function(){ if (mr.state === 'recording') mr.stop(); }, 9000);
+    loadWhisper().then(function(){ return recordSentence(); })
+      .then(function(blob){
+        if (btn){ btn.disabled = true; btn.textContent = '● 自動辨識'; }
+        spkProg('辨識中，請稍等…');
+        return blobToAudio(blob).then(function(audio){
+          return whisperTr(audio, { language: 'ja', task: 'transcribe' });
         });
+      })
+      .then(function(out){
+        var text = ((out && out.text) || '').trim();
+        if (btn) btn.disabled = false;
+        spkProg('');
+        if (!text){ toast('沒有辨識到聲音，再試一次'); return; }
+        paintScore(l, di, li, line, text, null, '辨識結果');
+      })
+      .catch(function(e){
+        if (btn){ btn.disabled = false; btn.textContent = '● 自動辨識'; }
+        spkProg('');
+        toast('自動辨識失敗：' + (e && e.message ? e.message : e));
       });
-    }).then(function(blob){
-      if (btn){ btn.disabled = true; btn.textContent = '● 自動辨識'; }
-      spkProg('辨識中，請稍等…');
-      return blobToAudio(blob).then(function(audio){
-        return whisperTr(audio, { language: 'ja', task: 'transcribe' });
-      });
-    }).then(function(out){
-      var text = ((out && out.text) || '').trim();
-      if (btn) btn.disabled = false;
-      spkProg('');
-      if (!text){ toast('沒有辨識到聲音，再試一次'); return; }
-      paintScore(l, di, li, line, text, function(){ autoRead(l, di, li, line); }, '辨識結果');
-    }).catch(function(e){
-      if (btn){ btn.disabled = false; btn.textContent = '● 自動辨識'; }
-      spkProg('');
-      toast('自動辨識失敗：' + (e && e.message ? e.message : e));
-    });
   }
 
   function paintScore(l, di, li, line, text, retry, sourceLabel){
@@ -1654,14 +1692,7 @@
         '<p class="verdict">'+verdict+'</p>' +
         '<div class="target">'+markTarget(target, text)+'</div>' +
         '<p class="heard">'+(sourceLabel || '你輸入的')+'：'+esc(text)+'</p>' +
-      '</div>' +
-      '<div class="cbtns"><button class="btn2" id="spkAgain">再試一次</button>' +
-      '<button class="btn2" id="spkModel2">▶ 示範</button></div>';
-
-    var again = $('#spkAgain');
-    if (again) again.addEventListener('click', function(){ if (retry) retry(); });
-    var m2 = $('#spkModel2');
-    if (m2) m2.addEventListener('click', function(){ speakLine(l, di, li, this); });
+      '</div>';
   }
 
   function segCulture(l){
@@ -2253,6 +2284,8 @@
   var AUDIO = {};
   var WT = null;
   var KANJI_READ = {};   // 漢字 → 假名讀音（由課程 ja／kana 對照離線產生）
+  var VAD_SILENCE_MS = 2500;   // 講完之後要靜幾耐才自動停止收音（句子有標點，停頓正常）
+  var VAD_SPEAK_RMS = 0.02;    // 音量門檻：低於此值當作靜音
   function audioFor(id, key){
     var m = AUDIO[id];
     return (m && m[key]) || null;
