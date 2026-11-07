@@ -491,7 +491,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v105</span>
+    <span class="ver" id="verTag">v106</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2399,7 +2399,7 @@
 
   /* ---------- 階段測驗（依 JLPT 題型編排，選擇題） ---------- */
   var EXKEY = 'ngs-exam-v1';
-  var EXAM_READY = { 1: true };            /* 已編好題目的階段；其他階段顯示「準備中」 */
+  var EXAM_READY = { 1: true, 2: true, 3: true, 4: true };   /* 已編好題目的階段；沒有的階段顯示「準備中」 */
   var EX = (function(){
     try{ var o = JSON.parse(localStorage.getItem(EXKEY) || 'null'); if (o && typeof o === 'object') return o; }catch(e){}
     return { v:1, stages:{} };

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const stages = process.argv.slice(2).length ? process.argv.slice(2) : ['1'];
+const stages = process.argv.slice(2).length ? process.argv.slice(2) : ['1', '2', '3', '4'];
 
 let bad = 0;
 const fail = (msg) => { bad++; console.log('FAIL  ' + msg); };
