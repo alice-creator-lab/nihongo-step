@@ -24,6 +24,9 @@
 <div class="card"><h2>A：lang = ja-JP</h2><button data-v="a">A 開始</button><div class="out" id="out-a">未試</div></div>
 <div class="card"><h2>B：lang = ja</h2><button data-v="b">B 開始</button><div class="out" id="out-b">未試</div></div>
 <div class="card"><h2>C：lang = en-US</h2><button data-v="c">C 開始</button><div class="out" id="out-c">未試</div></div>
+<div class="card"><h2>D：先播一段音檔（開住音訊），播完即刻辨識</h2><button data-v="d">D 開始</button><div class="out" id="out-d">未試</div></div>
+<div class="card"><h2>E：先播一段音檔，播住就按辨識（唔停聲）</h2><button data-v="e">E 開始</button><div class="out" id="out-e">未試</div></div>
+<audio id="probe" preload="auto" src="kana/audio/n/a.mp3"></audio>
 
 <script>
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -56,7 +59,25 @@ function run(k){
   try{ rec.start(); }catch(e){ log(k, 'start() 失敗：' + e.message, 'bad'); return; }
   setTimeout(()=>{ try{ rec.stop(); }catch(e){} }, 9000);
 }
-document.querySelectorAll('button[data-v]').forEach(b=>b.addEventListener('click', ()=>run(b.dataset.v)));
+const probe = document.getElementById('probe');
+document.querySelectorAll('button[data-v]').forEach(b=>b.addEventListener('click', ()=>{
+  const v = b.dataset.v;
+  if(v==='d'){
+    const el = document.getElementById('out-d');
+    el.textContent = '播放測試音…'; el.className = 'out';
+    probe.currentTime = 0;
+    probe.onended = ()=>{ probe.onended = null; run('d'); };
+    probe.play().catch(e=>{ el.textContent = '播放失敗：' + e.message; el.className='out bad'; });
+    return;
+  }
+  if(v==='e'){
+    probe.currentTime = 0;
+    probe.play().catch(()=>{});
+    setTimeout(()=>run('e'), 150);
+    return;
+  }
+  run(v);
+}));
 </script>
 </body>
 </html>
