@@ -1,63 +1,108 @@
-// 驗證「讀音模式」的漢字比對：語音辨識把單音寫成漢字時，仍應判為答對。
-// 直接由 kana/index.html 抽出 phonCands()，避免測試與實作各寫一份。
+// 驗證「讀音模式」只認聲音：漢字／符號一律不接受（不判錯、不顯示），
+// 假名則化成羅馬拼音後再核對。
+// 直接由 kana/index.html 抽出 judgeSpeak()，測試跑的是真正上線的程式碼。
 // 用法：node tools/test-kana-judge.mjs
 import fs from 'node:fs';
 import path from 'node:path';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const html = fs.readFileSync(path.join(root, 'kana/index.html'), 'utf8');
-const table = JSON.parse(fs.readFileSync(path.join(root, 'kana/kanji-readings.json'), 'utf8'));
 
-const grab = (start, end) => {
-  const i = html.indexOf(start);
-  if (i < 0) throw new Error('找不到：' + start);
-  const j = html.indexOf(end, i);
-  if (j < 0) throw new Error('找不到結尾：' + end);
-  return html.slice(i, j + end.length);
+// 由頁面的假名表建立 kana → 羅馬拼音
+const ROMAJI = {};
+for (const m of html.matchAll(/\[['"]([\u3041-\u3096\u30a1-\u30f6ー]{1,3})['"]\s*,\s*'([a-z]+)'/g)) {
+  if (!(m[1] in ROMAJI)) ROMAJI[m[1]] = m[2];
+}
+
+const lineOf = marker => {
+  const i = html.indexOf(marker);
+  if (i < 0) throw new Error('找不到：' + marker);
+  return html.slice(i, html.indexOf('\n', i));
 };
-const src =
-  grab('const KANJI_RE', ';') + '\n' +
-  grab('function phonCands(s){', '\n  }') + '\n';
-const KREAD = table;
-const phonCands = new Function('KREAD', src + '\nreturn phonCands;')(KREAD);
-
-// 與 judgeSpeakNow() 相同的判定式
+const fnSrc = (() => {
+  const i = html.indexOf('function judgeSpeak(alts){');
+  if (i < 0) throw new Error('找不到 judgeSpeak');
+  let depth = 0, j = i;
+  for (; j < html.length; j++) {
+    if (html[j] === '{') depth++;
+    else if (html[j] === '}') { depth--; if (!depth) break; }
+  }
+  return html.slice(i, j + 1);
+})();
+const helpers = lineOf('const kanaOnly =') + '\n' + lineOf('const normRom =');
 const toHira = s => (s || '').replace(/[\u30a1-\u30f6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
-const clean = s => toHira((s || '').replace(/[\s、。．.,!?！？「」『』・…~\-—]/g, ''));
-function judge(targetKana, alts) {
-  const target = toHira(targetKana);
-  const raw = alts.map(clean).filter(Boolean);
-  const list = raw.slice();
-  raw.forEach(a => phonCands(a).forEach(p => { if (list.indexOf(p) < 0) list.push(p); }));
-  return !!(list.find(a => a === target) || list.find(a => a.includes(target)));
+
+// 跑一次 judgeSpeak（每次重建狀態，等同新一題）
+function run(kana, alts) {
+  const stub = { cls: '', innerHTML: '', hidden: true, textContent: '' };
+  const stats = { correct: 0, wrong: 0, streak: 0 };
+  const wrongBook = [];
+  const note = { textContent: '' };
+  const body = `
+    var answered = false, srMisses = 0, srAllowSkip = false;
+    ${helpers}
+    ${fnSrc}
+    judgeSpeak(alts);
+    return { answered: answered, misses: srMisses, skip: srAllowSkip, fb: fbSpeak.innerHTML, note: speakNote.textContent };
+  `;
+  const fn = new Function('mode', 'current', 'ROMAJI', 'toHira', 'stats', 'scope',
+    'addWrong', 'dropWrong', 'showFeedback', 'updateStats', 'speakNextBtn', 'speakNote', 'fbSpeak', 'alts', body);
+  const out = fn('speak', { k: kana }, ROMAJI, toHira, stats, 'all',
+    k => wrongBook.push(k), () => {}, () => {}, () => {}, stub, note, stub, alts);
+  return { ...out, stats, wrongBook };
 }
 
 const cases = [
-  // 螢幕截圖的個案：讀 め，辨識成「目」
-  { kana: 'め', heard: ['目'], want: true },
-  { kana: 'め', heard: ['女'], want: true },
-  { kana: 'め', heard: ['メ'], want: true },
-  { kana: 'め', heard: ['め'], want: true },
-  { kana: 'か', heard: ['蚊'], want: true },
-  { kana: 'き', heard: ['木'], want: true },
-  { kana: 'て', heard: ['手'], want: true },
-  { kana: 'ね', heard: ['根'], want: true },
-  { kana: 'ち', heard: ['血'], want: true },
-  { kana: 'う', heard: ['雨'], want: true },    // 雨 有 う 這個讀音：情願寬鬆判對，也不要誤判答錯
-  { kana: 'ぬ', heard: ['目'], want: false },   // 讀錯就要維持答錯
-  { kana: 'あ', heard: ['目'], want: false },
-  { kana: 'め', heard: ['ぬ'], want: false },
-  { kana: 'め', heard: ['め', 'ぬ'], want: true },  // 多個候選，其中一個命中
-  { kana: 'きゃ', heard: ['きゃ'], want: true },
-  { kana: 'きゃ', heard: ['きや'], want: false },
+  // [正解, 辨識結果, 期望: 'ok' | 'wrong' | 'ignore']
+  ['め', ['め'], 'ok'],
+  ['め', ['メ'], 'ok'],
+  ['デ', ['で'], 'ok'],              // 片假名題、平假名結果：同一個音
+  ['め', ['めー'], 'ok'],
+  ['きゃ', ['きゃ'], 'ok'],
+  ['め', ['目'], 'ignore'],          // 漢字不接受，但也不算答錯
+  ['デ', ['(笑)'], 'ignore'],         // 符號雜訊
+  ['め', ['目', 'め'], 'ok'],         // 多個候選，其中一個是假名
+  ['ぬ', ['め'], 'wrong'],
+  ['きゃ', ['きや'], 'wrong'],
 ];
 
 let bad = 0;
-for (const c of cases) {
-  const got = judge(c.kana, c.heard);
-  const ok = got === c.want;
-  if (!ok) bad++;
-  console.log((ok ? 'PASS' : 'FAIL') + '  目標 ' + c.kana + ' · 聽到 ' + c.heard.join('|') + ' → ' + (got ? '答對' : '答錯'));
+for (const [kana, heard, want] of cases) {
+  const r = run(kana, heard);
+  const got = r.stats.correct ? 'ok' : r.stats.wrong ? 'wrong' : 'ignore';
+  const pass = got === want;
+  if (!pass) bad++;
+  console.log(`${pass ? 'PASS' : 'FAIL'}  正解 ${kana} · 聽到 ${heard.join('|')} → ${got}`
+    + (got === 'ignore' ? `（備註：${r.note}）` : ''));
+  if (want === 'ignore' && /目|笑/.test(r.fb + r.note)) {
+    bad++;
+    console.log('FAIL  畫面仍顯示了漢字／雜訊');
+  }
 }
-console.log(bad ? `\n${bad} 個個案不符預期` : '\n全部 ' + cases.length + ' 個個案符合預期');
+
+// 連續兩次辨識不到假名 → 第二次才給「跳過」，且不計答錯
+{
+  const stub = { cls: '', innerHTML: '', hidden: true, textContent: '' };
+  const stats = { correct: 0, wrong: 0, streak: 0 };
+  const note = { textContent: '' };
+  const body = `
+    var answered = false, srMisses = 0, srAllowSkip = false;
+    ${helpers}
+    ${fnSrc}
+    judgeSpeak(['目']);
+    const firstSkip = srAllowSkip, firstNote = speakNote.textContent;
+    judgeSpeak(['(笑)']);
+    return { firstSkip: firstSkip, firstNote: firstNote, skip: srAllowSkip,
+             label: speakNextBtn.textContent, shown: !speakNextBtn.hidden };
+  `;
+  const fn = new Function('mode', 'current', 'ROMAJI', 'toHira', 'stats', 'scope',
+    'addWrong', 'dropWrong', 'showFeedback', 'updateStats', 'speakNextBtn', 'speakNote', 'fbSpeak', body);
+  const r = fn('speak', { k: 'め' }, ROMAJI, toHira, stats, 'all',
+    () => {}, () => {}, () => {}, () => {}, stub, note, stub);
+  const pass = r.firstSkip === false && r.skip === true && r.shown && /跳過/.test(r.label) && stats.wrong === 0;
+  if (!pass) bad++;
+  console.log(`${pass ? 'PASS' : 'FAIL'}  連續兩次無假名 → 第一次不給跳過，第二次給「${r.label}」，且不計答錯`);
+}
+
+console.log(bad ? `\n${bad} 個個案不符預期` : `\n全部 ${cases.length + 1} 個個案符合預期`);
 process.exit(bad ? 1 : 0);

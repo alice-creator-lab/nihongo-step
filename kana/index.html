@@ -515,7 +515,7 @@
       <div class="stat"><span class="n" id="statAcc">—</span><span class="l">正確率</span></div>
     </div>
 
-    <footer>語音：Microsoft Nanami（預製 mp3） · 手寫辨識：本機筆順比對（模板 KanjiVG, CC BY-SA） · 漢字讀音：KANJIDIC2（EDRDG, CC BY-SA） · <span id="build">web-dev</span></footer>
+    <footer>語音：Microsoft Nanami（預製 mp3） · 手寫辨識：本機筆順比對（模板 KanjiVG, CC BY-SA） · <span id="build">web-dev</span></footer>
   </div>
 
   <!-- 錯題簿管理 sheet -->
@@ -1485,6 +1485,7 @@
   function resetSpeak(){
     fbSpeak.className='feedback'; fbSpeak.innerHTML='';
     speakNextBtn.hidden = true;
+    srMisses = 0; srAllowSkip = false;
     stopSpeak();
     const canRec = !!(navigator.mediaDevices && window.MediaRecorder);
     micBtn.disabled = !(SRClass || canRec);
@@ -1508,7 +1509,6 @@
   }
   function startSpeak(){
     if(mode!=='speak' || !current) return;
-    ensureKread();                     // 先開始抓讀音表，辨識完就有得用
     if(answered){ newQuestion(); return; }
     // 系統語音服務不可用（例如這部 iPhone 一直回 service-not-allowed）就走本機 Whisper
     if(srBlocked || !SRClass){ whisperStart(); return; }
@@ -1687,73 +1687,54 @@
     try{ r.start(); }catch(e){ stopSpeak(); speakNote.textContent='無法啟動語音辨識，請再試一次。'; return; }
     srTimer = setTimeout(()=>{ srIntentionalAbort = true; try{ r.stop(); }catch(e){} }, 9000);
   }
-  // ── 漢字讀音表：語音辨識常把單音寫成漢字（例：讀 め 卻辨識成「目」）。
-  //    五十音只看聲音，所以先把漢字化成讀音再比對，避免誤判答錯。
-  const KANJI_RE = /[\u3400-\u4dbf\u4e00-\u9fff\u3005\u3006]/;
-  let KREAD = null, kreadReady = null;
-  function ensureKread(){
-    if(!kreadReady){
-      kreadReady = fetch('kanji-readings.json?v=1')
-        .then(r=>r.json())
-        .then(j=>{ KREAD = j || {}; })
-        .catch(()=>{ KREAD = null; });
-    }
-    return kreadReady;
-  }
-  // 把一段辨識文字展開成可能的讀音（假名照原樣，漢字逐字換讀音）
-  function phonCands(s){
-    if(!KANJI_RE.test(s)) return [s];
-    if(!KREAD) return [];
-    const per = [...s].map(ch => KANJI_RE.test(ch) ? (KREAD[ch]||null) : [ch]);
-    if(per.some(x=>!x)) return [];
-    let out = [''];
-    for(const opts of per){
-      const next = [];
-      for(const p of out) for(const o of opts){ if(next.length < 64) next.push(p+o); }
-      out = next;
-      if(!out.length) return [];
-    }
-    return out;
-  }
+  // ── 讀音模式只看聲音 ────────────────────────────────────────
+  // 五十音不認漢字：辨識結果一律只取假名，再轉羅馬拼音核對。
+  // 漢字、符號（例：目、(笑)）不算答案，也不會顯示出來，只當作「聽不清楚」。
+  let srMisses = 0, srAllowSkip = false;
+  const kanaOnly = s => toHira(s||'').replace(/[^\u3041-\u3096]/g,'');
+  const normRom = s => (s||'').toLowerCase().replace(/wo/g,'o').replace(/zi/g,'ji').replace(/([aeiou])\1+/g,'$1');
   function judgeSpeak(alts){
-    ensureKread().then(()=>judgeSpeakNow(alts));
-  }
-  function judgeSpeakNow(alts){
     if(mode!=='speak' || !current) return;
-    const target = toHira(current.k);
-    const clean = s => toHira((s||'').replace(/[\s、。．.,!?！？「」『』・…~\-—]/g,''));
-    const raw = (alts||[]).map(clean).filter(Boolean);
-    // 原文之外，再加入漢字化成讀音的版本（例：目 → め／ま／もく…）
-    const list = raw.slice();
-    raw.forEach(a=>phonCands(a).forEach(p=>{ if(list.indexOf(p)<0) list.push(p); }));
-    const hitCand = list.find(a=>a===target) || list.find(a=>a.includes(target));
-    if(hitCand){
+    const targetKana = toHira(current.k);
+    const targetRom = normRom(ROMAJI[targetKana] || ROMAJI[current.k] || '');
+    const heard = (alts||[]).map(kanaOnly).filter(Boolean);
+    const hit = targetRom
+      ? heard.find(h => h===targetKana || normRom(ROMAJI[h])===targetRom)
+      : heard.find(h => h===targetKana);
+    if(hit){
       answered = true;
       stats.correct++; stats.streak++;
       if(scope==='wrong') dropWrong(current);
       showFeedback(fbSpeak, true, '答對了！', scope==='wrong'?'<span class="alt">已移出錯題簿</span>':'', current.k);
       updateStats();
       speakNextBtn.hidden=false; speakNextBtn.className='btn-main next'; speakNextBtn.textContent='下一題 →';
-      speakNote.textContent = raw[0] ? '（聽到：'+raw[0]+(hitCand!==raw[0]?'（'+hitCand+'）':'')+'）' : '';
+      speakNote.textContent = '（聽到：'+hit+'）';
       return;
     }
-    const other = raw.find(a=>a.length<=4);
+    const other = heard.find(h=>h.length<=4);
     if(other){
       answered = true;
       stats.wrong++; stats.streak=0; addWrong(current);
-      const oc = phonCands(other);
-      const otherShow = other + (oc.length===1 && oc[0]!==other ? '（'+oc[0]+'）' : '');
-      showFeedback(fbSpeak, false, '', '你讀了「'+otherShow+'」· 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
+      showFeedback(fbSpeak, false, '', '你讀了「'+other+'」· 正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
       updateStats();
       speakNextBtn.hidden=false; speakNextBtn.className='btn-main next err'; speakNextBtn.textContent='下一題 →';
       speakNote.textContent='';
       return;
     }
-    speakNote.textContent = '聽不清楚（無法辨識這個音）— 請再按「錄音」試一次。';
+    // 全部結果都不是假名（漢字／雜訊）：不計分、不判錯，請再錄；
+    // 連續兩次都這樣就讓用戶直接跳過，免得卡死
+    srMisses++;
+    if(srMisses >= 2){
+      srAllowSkip = true;
+      speakNextBtn.hidden=false; speakNextBtn.className='btn-main next'; speakNextBtn.textContent='跳過 →';
+      speakNote.textContent = '辨識不到假名（可能是雜訊）— 可以按「示範」對照，或按「跳過」。';
+    }else{
+      speakNote.textContent = '聽不清楚（辨識不到假名）— 請再按「錄音」讀一次。';
+    }
   }
   micBtn.addEventListener('click', startSpeak);
   speakReplay.addEventListener('click', ()=>{ if(mode==='speak' && current) speak(current.k); });
-  speakNextBtn.addEventListener('click', ()=>{ if(answered) newQuestion(); });
+  speakNextBtn.addEventListener('click', ()=>{ if(answered || srAllowSkip) newQuestion(); });
 
   // ── 事件 ──────────────────────────────────────────────────
   modeSeg.addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) setMode(b.dataset.mode); });
