@@ -26,8 +26,14 @@ def tts_text(item):
 
     純假名但保留「は」會被 edge-tts 讀成 ha（實測），所以一定要改寫。
     沒有 kana 才退回原句。
+
+    資料項可加 "tts" 覆寫朗讀文字（畫面仍顯示 ja／kana）：
+    漢字句與假名句無法對齊時（例如原句寫阿拉伯數字），speech() 會整句退回
+    ja，數字與連字號就交給 edge-tts 自己猜。要指定讀法時直接寫 "tts"。
     """
     if isinstance(item, dict):
+        if item.get("tts"):
+            return item["tts"]
         ja = item.get("ja") or ""
         kana = item.get("kana") or ""
         if kana:
@@ -38,6 +44,16 @@ def tts_text(item):
 
 def voice_for(who):
     return "ja-JP-KeitaNeural" if who in MALE else "ja-JP-NanamiNeural"
+
+
+def audio_rel(manifest_lesson, lid, key):
+    """回傳音檔相對路徑。
+
+    manifest 已有記錄就沿用它：個別音檔要換讀音但檔名又不想全部改版時，
+    可以直接把檔案改名（例如 L01-g6-e0-2.mp3）並更新 data/audio.json，
+    之後重跑此工具也不會把新內容寫回舊檔名。
+    """
+    return manifest_lesson.get(key) or f"audio/{lid}-{key}.mp3"
 
 
 def synth(voice, text, out):
@@ -74,30 +90,30 @@ def main():
         for di, dg in enumerate(les.get("dialogues", [])):
             for li, line in enumerate(dg.get("lines", [])):
                 key = f"d{di}-l{li}"
-                rel = f"audio/{lid}-{key}.mp3"
+                rel = audio_rel(m, lid, key)
                 m[key] = rel
                 jobs.append((voice_for(line.get("who")), tts_text(line), os.path.join(ROOT, rel), True))
         for vi, v in enumerate(les.get("vocab", [])):
             key = f"v{vi}"
-            rel = f"audio/{lid}-{key}.mp3"
+            rel = audio_rel(m, lid, key)
             m[key] = rel
             # 單字本來就用假名合成，避免漢字多讀音（例如 一日 ついたち／いちにち）
             jobs.append(("ja-JP-NanamiNeural", v["kana"], os.path.join(ROOT, rel), False))
         for pi, pat in enumerate(les.get("patterns", [])):
             for ei, ex in enumerate(pat.get("ex", [])):
                 key = f"p{pi}-e{ei}"
-                rel = f"audio/{lid}-{key}.mp3"
+                rel = audio_rel(m, lid, key)
                 m[key] = rel
                 jobs.append(("ja-JP-NanamiNeural", tts_text(ex), os.path.join(ROOT, rel), True))
         for gi, sec in enumerate(les.get("grammar", [])):
             for ei, ex in enumerate(sec.get("ex", [])):
                 key = f"g{gi}-e{ei}"
-                rel = f"audio/{lid}-{key}.mp3"
+                rel = audio_rel(m, lid, key)
                 m[key] = rel
                 jobs.append(("ja-JP-NanamiNeural", tts_text(ex), os.path.join(ROOT, rel), True))
         for li, it in enumerate(les.get("listening", [])):
             key = f"l{li}"
-            rel = f"audio/{lid}-{key}.mp3"
+            rel = audio_rel(m, lid, key)
             m[key] = rel
             jobs.append(("ja-JP-NanamiNeural", tts_text(it), os.path.join(ROOT, rel), True))
 
