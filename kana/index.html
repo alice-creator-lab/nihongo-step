@@ -290,6 +290,22 @@
   .speak-note{font-size:11.5px; color:#b6ac99; text-align:center; margin-top:10px; line-height:1.5; max-width:330px;}
   .speak-tip{font-size:11px; color:#c3b9a6; text-align:center; margin-top:14px; line-height:1.6; max-width:330px;}
 
+  /* 手寫模式：收細寫字格、把喇叭與提示收成一行，讓題目與回饋同屏可見 */
+  body.m-write .card{padding:16px 16px 14px;}
+  body.m-write #poolHint{display:none;}
+  body.m-write .prompt-wrap{flex-direction:row; gap:10px; padding:0;}
+  body.m-write .listen-prompt{width:54px; height:54px;}
+  body.m-write .listen-prompt .ico{font-size:24px;}
+  body.m-write .prompt-hint{font-size:12.5px; text-align:left;}
+  body.m-write .paper-wrap{max-width:182px; margin-top:6px;}
+  body.m-write .writebar, body.m-write .cands, body.m-write .scorebar{max-width:188px; margin-top:6px;}
+  body.m-write .writebar .mini{padding:9px 10px; font-size:13px;}
+  body.m-write #revealBtn{min-height:40px; font-size:14px;}
+  body.m-write .reveal{margin-top:4px;}
+  body.m-write .reveal b{font-size:26px;}
+  body.m-write .score{padding:10px 0;}
+  body.m-write #writeNextBtn{min-height:42px; margin-top:4px;}
+
   .scorebar{width:100%; max-width:320px; display:none; gap:8px; margin-top:10px;}
   .scorebar.show{display:flex;}
   .score{flex:1; border-radius:13px; padding:13px 0; font-family:inherit; font-size:16px; font-weight:700; cursor:pointer;}
@@ -378,7 +394,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v29</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v30</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -471,13 +487,13 @@
           <button class="mini" id="clearBtn">清除</button>
           <button class="btn-main" id="revealBtn">看答案</button>
         </div>
-        <div class="reveal" id="reveal"></div>
         <div class="scorebar" id="scorebar">
           <button class="score ok" id="okBtn">✓ 對</button>
           <button class="score no" id="noBtn">✗ 錯</button>
         </div>
-        <button class="btn-main" id="writeNextBtn" hidden>下一題 →</button>
+        <div class="reveal" id="reveal"></div>
         <div class="feedback" id="fbWrite"></div>
+        <button class="btn-main" id="writeNextBtn" hidden>下一題 →</button>
       </div>
 
       <!-- SPEAK PANEL（鍵盤輸入：看字打讀音，用日文鍵盤或其語音聽寫） -->
@@ -1163,6 +1179,7 @@
     else { stats.wrong++; stats.streak=0; addWrong(current);
       showFeedback(fbWrite, false, '', '下一題再來 <span class="alt">· '+current.r[0]+'</span>', current.k); }
     updateStats();
+    scorebar.classList.remove('show');   // 已評分，✓／✗ 不用再顯示，留位給回饋與「下一題」
     showWriteNext(ok);
   }
   function showWriteNext(ok){
@@ -1436,6 +1453,7 @@
     clearTimeout(promptTimer);              // 取消上一個模式排住的提示音
     stopAudioNow();                         // 切模式即靜音：羅馬拼音是「看字打拼音」，不該發聲
     mode=m; localStorage.setItem('kanaMode',m);
+    document.body.classList.toggle('m-write', m==='write');   // 手寫模式用較緊湊的版面
     [...modeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.mode===m));
     newQuestion();
   }
@@ -1757,6 +1775,7 @@
 
   // ── 初始化 ────────────────────────────────────────────────
   if(!['read','listen','write','speak'].includes(mode)) mode='read';
+  document.body.classList.toggle('m-write', mode==='write');
   if(!['hira','kata','both','wrong'].includes(scope)) scope='hira';
   [...modeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
   [...scopeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.scope===scope));
@@ -1946,7 +1965,7 @@
   if(location.search.indexOf('kdebug=1') >= 0){
     window.__kanaTest = {
       all: ()=>[...ALL_KANA.values()],
-      setCurrent: o=>{ mode='write'; current=o; answered=false; },
+      setCurrent: o=>{ mode='write'; document.body.classList.add('m-write'); current=o; answered=false; },
       pick: ch=>checkPicked(ch),
       pool: ()=>pool.map(o=>o.k),
       extras: ()=>extrasOn.slice(),
