@@ -14,11 +14,6 @@ for (const m of html.matchAll(/\[['"]([\u3041-\u3096\u30a1-\u30f6ー]{1,3})['"]\
   if (!(m[1] in ROMAJI)) ROMAJI[m[1]] = m[2];
 }
 
-const lineOf = marker => {
-  const i = html.indexOf(marker);
-  if (i < 0) throw new Error('找不到：' + marker);
-  return html.slice(i, html.indexOf('\n', i));
-};
 const fnSrc = (() => {
   const i = html.indexOf('function judgeSpeak(alts){');
   if (i < 0) throw new Error('找不到 judgeSpeak');
@@ -29,7 +24,7 @@ const fnSrc = (() => {
   }
   return html.slice(i, j + 1);
 })();
-const helpers = lineOf('const kanaOnly =') + '\n' + lineOf('const normRom =');
+const helpers = html.slice(html.indexOf('const kanaOnly ='), html.indexOf('\n', html.indexOf('const normRom =')));
 const toHira = s => (s || '').replace(/[\u30a1-\u30f6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
 
 // 跑一次 judgeSpeak（每次重建狀態，等同新一題）
@@ -58,6 +53,10 @@ const cases = [
   ['め', ['メ'], 'ok'],
   ['デ', ['で'], 'ok'],              // 片假名題、平假名結果：同一個音
   ['め', ['めー'], 'ok'],
+  ['そ', ['そう'], 'ok'],            // 多了 う：一題只得一個音，只看第一個音節
+  ['そ', ['それ'], 'ok'],
+  ['きゃ', ['きゃく'], 'ok'],         // 拗音本身是一個音節
+  ['そ', ['す'], 'wrong'],
   ['きゃ', ['きゃ'], 'ok'],
   ['め', ['目'], 'ignore'],          // 漢字不接受，但也不算答錯
   ['デ', ['(笑)'], 'ignore'],         // 符號雜訊

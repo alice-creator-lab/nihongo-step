@@ -1688,16 +1688,23 @@
     srTimer = setTimeout(()=>{ srIntentionalAbort = true; try{ r.stop(); }catch(e){} }, 9000);
   }
   // ── 讀音模式只看聲音 ────────────────────────────────────────
-  // 五十音不認漢字：辨識結果一律只取假名，再轉羅馬拼音核對。
-  // 漢字、符號（例：目、(笑)）不算答案，也不會顯示出來，只當作「聽不清楚」。
+  // 五十音一題只有一個音（清音／濁音／半濁音／拗音），所以只核對
+  // 辨識結果的第一個音節：多出嚟的音（例：讀 そ 辨識成「そう」）不理會。
+  // 漢字、符號（例：目、(笑)）不算答案，也不會顯示，只當作「聽不清楚」。
   let srMisses = 0, srAllowSkip = false;
   const kanaOnly = s => toHira(s||'').replace(/[^\u3041-\u3096]/g,'');
+  // 取第一個音節：小字（ゃゅょゎぁぃぅぇぉ）跟前一個假名合成一個音
+  const firstUnit = s => {
+    const k = kanaOnly(s);
+    if(!k) return '';
+    return (/[ゃゅょゎぁぃぅぇぉ]/.test(k[1] || '')) ? k.slice(0,2) : k[0];
+  };
   const normRom = s => (s||'').toLowerCase().replace(/wo/g,'o').replace(/zi/g,'ji').replace(/([aeiou])\1+/g,'$1');
   function judgeSpeak(alts){
     if(mode!=='speak' || !current) return;
     const targetKana = toHira(current.k);
     const targetRom = normRom(ROMAJI[targetKana] || ROMAJI[current.k] || '');
-    const heard = (alts||[]).map(kanaOnly).filter(Boolean);
+    const heard = (alts||[]).map(firstUnit).filter(Boolean);
     const hit = targetRom
       ? heard.find(h => h===targetKana || normRom(ROMAJI[h])===targetRom)
       : heard.find(h => h===targetKana);
@@ -1711,7 +1718,7 @@
       speakNote.textContent = '（聽到：'+hit+'）';
       return;
     }
-    const other = heard.find(h=>h.length<=4);
+    const other = heard[0];
     if(other){
       answered = true;
       stats.wrong++; stats.streak=0; addWrong(current);
