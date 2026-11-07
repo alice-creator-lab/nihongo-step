@@ -247,9 +247,6 @@
   #listenCheckBtn:disabled{opacity:.45; box-shadow:none; cursor:default;}
 
   /* 聽聲：答案／重讀／慢放 貼住檢查掣，不使捲到鍵盤尾至見到 */
-  .listen-ctl{display:flex; align-items:center; gap:8px; margin-top:8px; width:100%; flex-wrap:wrap;}
-  .listen-ctl .feedback{margin-top:0; min-height:32px; flex:1 1 140px; justify-content:flex-start; text-align:left; gap:6px; font-size:14px;}
-  .listen-ctl .feedback .answer-txt{font-size:17px;}
   .ctlbtn{border:1.5px solid var(--line); background:#fffefb; color:var(--ink-soft); font-family:inherit;
     font-size:13.5px; font-weight:700; letter-spacing:.04em; padding:0 12px; min-height:34px; border-radius:11px;
     cursor:pointer; transition:.13s; flex:0 0 auto;}
@@ -317,8 +314,13 @@
   body.m-listen .draft-row{margin-top:8px; min-height:32px;}
   body.m-listen .draft-kana.empty{padding:0; display:inline-flex; align-items:center; min-height:26px;}
   body.m-listen .draft-row .btn-main{min-height:38px; padding:0 16px; font-size:14px;}
-  body.m-listen .listen-ctl{margin-top:4px;}
-  body.m-listen .listen-ctl .feedback{min-height:0;}
+  body.m-listen .draft-row{align-items:center; flex-wrap:nowrap;}
+  body.m-listen .draft-row .feedback{margin:0; min-height:0; flex:1 1 auto; font-size:13px; gap:5px;
+    justify-content:flex-start; text-align:left; white-space:nowrap; overflow:hidden;}
+  body.m-listen .draft-row .feedback .answer-txt{font-size:15px;}
+  body.m-listen .draft-kana{margin-right:0; flex:0 0 auto;}
+  body.m-listen .draft-label{flex:0 0 auto; white-space:nowrap; font-size:12px;}
+  body.m-listen .draft-row .btn-main{flex:0 0 auto; padding:0 12px; font-size:13.5px; min-height:38px;}
   body.m-listen .listen-prompt{box-shadow:0 0 0 7px rgba(44,62,107,.10);}
   body.m-listen .pad{gap:6px; margin-top:8px;}
   body.m-listen .pad-group{margin-top:6px;}
@@ -412,7 +414,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v32</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v33</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -480,10 +482,8 @@
         <div class="draft-row">
           <span class="draft-label">你選了</span>
           <span class="draft-kana empty" id="draftKana">—</span>
-          <button class="btn-main" id="listenCheckBtn" disabled>檢查</button>
-        </div>
-        <div class="listen-ctl">
           <div class="feedback" id="fbListen"></div>
+          <button class="btn-main" id="listenCheckBtn" disabled>檢查</button>
         </div>
         <div class="marks" id="marks" hidden></div>
         <div class="pad" id="pad"></div>
@@ -1133,8 +1133,7 @@
       stats.wrong++; stats.streak=0;
       addWrong(current);
       const rb = btnFor(current.k); if(rb) rb.el.classList.add('reveal');
-      const picked = '<span class="alt">你選了 '+draft+' · </span>';
-      showFeedback(fbListen, false, '', picked+'正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
+      showFeedback(fbListen, false, '', '正確是 <span class="answer-txt">'+current.k+'</span>', current.k);
       updateStats();
     }
   }

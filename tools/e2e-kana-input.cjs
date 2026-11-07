@@ -90,6 +90,17 @@ const URL = process.argv[2];
   const focusAfter = await page.evaluate(() => document.activeElement && document.activeElement.id);
   check('切模式會收鍵盤', focusBefore === 'speakInput' && focusAfter !== 'speakInput', focusBefore + ' → ' + focusAfter);
 
+  // 聽音選字：回饋要在「你選了」同一行，鍵盤不可被推落
+  await page.click('#modeSeg button[data-mode="listen"]');
+  await page.waitForTimeout(400);
+  const padTopBefore = await page.evaluate(() => Math.round(document.getElementById('pad').getBoundingClientRect().top + scrollY));
+  await page.locator('#pad button').nth(1).click();
+  await page.waitForTimeout(400);
+  const padTopAfter = await page.evaluate(() => Math.round(document.getElementById('pad').getBoundingClientRect().top + scrollY));
+  const fbInRow = await page.evaluate(() => !!document.querySelector('.draft-row #fbListen'));
+  check('題庫（假名鍵盤）位置不因回饋而跳動', padTopBefore === padTopAfter, padTopBefore + ' → ' + padTopAfter);
+  check('回饋顯示在「你選了」同一行', fbInRow);
+
   check('頁面無 JS 錯誤', errors.length === 0, errors.join(' | '));
 
   await browser.close();
