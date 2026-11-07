@@ -274,9 +274,10 @@
     font-size:14px; padding:11px 14px; border-radius:12px; cursor:pointer; transition:.18s;}
   .mini:hover{color:var(--vermilion); border-color:#e2c5bc;}
   #revealBtn{flex:1; min-height:46px;}
-  .reveal{width:100%; text-align:center; font-size:14px; color:var(--ink-soft); margin-top:12px; display:none;}
-  .reveal.show{display:block;}
-  .reveal b{font-family:"Noto Serif JP",serif; font-size:32px; color:var(--ink); margin:0 6px;}
+  /* 只適用於手寫模式的「正確答案」行；用 id 限定，避免撞到假名鍵盤上的 .reveal 標示 */
+  #reveal{width:100%; text-align:center; font-size:14px; color:var(--ink-soft); margin-top:12px; display:none;}
+  #reveal.show{display:block;}
+  #reveal b{font-family:"Noto Serif JP",serif; font-size:32px; color:var(--ink); margin:0 6px;}
   .speak-row{display:flex; gap:8px; width:100%; max-width:320px; margin:12px auto 0; align-items:stretch; justify-content:center;}
   .micbtn{display:flex; align-items:center; justify-content:center; gap:8px; flex:1;}
   .micbtn svg{width:19px; height:19px;}
@@ -298,8 +299,8 @@
   body.m-write .writebar, body.m-write .cands, body.m-write .scorebar{max-width:188px; margin-top:6px;}
   body.m-write .writebar .mini{padding:9px 10px; font-size:13px;}
   body.m-write #revealBtn{min-height:40px; font-size:14px;}
-  body.m-write .reveal{margin-top:4px;}
-  body.m-write .reveal b{font-size:26px;}
+  body.m-write #reveal{margin-top:4px;}
+  body.m-write #reveal b{font-size:26px;}
   body.m-write .score{padding:10px 0;}
   body.m-write #writeNextBtn{min-height:42px; margin-top:4px;}
 
@@ -414,7 +415,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v33</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v34</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>

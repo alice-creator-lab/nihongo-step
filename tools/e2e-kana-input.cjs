@@ -93,12 +93,20 @@ const URL = process.argv[2];
   // 聽音選字：回饋要在「你選了」同一行，鍵盤不可被推落
   await page.click('#modeSeg button[data-mode="listen"]');
   await page.waitForTimeout(400);
+  const snapPad = () => page.evaluate(() => [...document.querySelectorAll('#pad button')].map(e => {
+    const r = e.getBoundingClientRect(); return { ch: e.dataset.ch, x: Math.round(r.x), y: Math.round(r.y) };
+  }));
+  const padSnapshot = await snapPad();
   const padTopBefore = await page.evaluate(() => Math.round(document.getElementById('pad').getBoundingClientRect().top + scrollY));
   await page.locator('#pad button').nth(1).click();
   await page.waitForTimeout(400);
   const padTopAfter = await page.evaluate(() => Math.round(document.getElementById('pad').getBoundingClientRect().top + scrollY));
   const fbInRow = await page.evaluate(() => !!document.querySelector('.draft-row #fbListen'));
   check('題庫（假名鍵盤）位置不因回饋而跳動', padTopBefore === padTopAfter, padTopBefore + ' → ' + padTopAfter);
+  const padAfter = await snapPad();
+  const byCh = new Map(padAfter.map(o => [o.ch, o]));
+  const shifted = padSnapshot.filter(o => byCh.has(o.ch) && (byCh.get(o.ch).x !== o.x || byCh.get(o.ch).y !== o.y)).map(o => o.ch);
+  check('每個假名格都不會移位（正確答案不可消失）', shifted.length === 0, shifted.length ? 'moved: ' + shifted.join(',') : 'stable');
   check('回饋顯示在「你選了」同一行', fbInRow);
 
   check('頁面無 JS 錯誤', errors.length === 0, errors.join(' | '));
