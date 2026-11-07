@@ -1525,6 +1525,23 @@
     // （唔再先 call getUserMedia／加 setTimeout，兩者在 Safari 上都會令擷取變空）
     beginRecognition();
   }
+  function srMessage(err){
+    if(err==='service-not-allowed')
+      return 'Safari 的語音辨識服務被關掉了：請到「設定 → 一般 → 鍵盤 → 啟用聽寫」，並在「設定 → Siri 與搜尋」開啟 Siri／聽寫，然後重新載入本頁。';
+    if(err==='not-allowed')
+      return '需要使用麥克風：請在網址列左邊的「aA」→ 網站設定允許「麥克風」，或到「設定 → Safari → 麥克風」開啟。';
+    if(err==='network')
+      return '語音辨識需要連網（Apple 語音服務），請檢查網絡後再試。';
+    if(err==='audio-capture')
+      return '接收不到麥克風聲音，請檢查麥克風權限。';
+    if(err==='language-not-supported')
+      return '此裝置的聽寫未支援日語：請到「設定 → 一般 → 鍵盤 → 鍵盤 → 加入日文鍵盤」後再試。';
+    if(err==='aborted')
+      return '錄音被系統中斷（可能係 Siri／其他 App 搶咗麥克風），請再按一次「錄音」。';
+    if(err==='no-speech' || !err)
+      return '沒有聽到聲音：請確認「設定 → 一般 → 鍵盤 → 啟用聽寫」已開啟，靠近麥克風再按「錄音」。';
+    return '辨識發生錯誤（'+err+'），請再試一次。';
+  }
   function beginRecognition(){
     const r = new SRClass();
     // Safari 只支援單次辨識：continuous / interimResults 開住會收唔到結果，維持 false
@@ -1548,8 +1565,17 @@
       judgeSpeak(finals.concat(alts));
     };
     r.onerror = ev => {
-      srLastErr = (ev && ev.error) || '';
-      srLog('error:'+srLastErr);
+      const err = (ev && ev.error) || '';
+      srLastErr = err;
+      srLog('error:'+err);
+      // 這些錯誤唔會再有 onend（或 onend 已無意義），要即刻收工並講原因，
+      // 否則按鈕會一直卡住「辨識中…」
+      if(err==='service-not-allowed' || err==='not-allowed' || err==='network'
+         || err==='audio-capture' || err==='language-not-supported'){
+        srGotResult = false;
+        stopSpeak();
+        speakNote.textContent = srMessage(err);
+      }
     };
     r.onend = ()=>{
       srLog('end');
@@ -1561,12 +1587,7 @@
         srAttempt++; setTimeout(()=>{ if(mode==='speak' && !answered) srLaunch(); }, 300);
         return;
       }
-      if(err==='not-allowed' || err==='service-not-allowed') speakNote.textContent='需要使用麥克風：請在設定 → Safari 允許「麥克風」，或按「示範」對照。';
-      else if(err==='no-speech' || !err) speakNote.textContent='沒有聽到聲音：請確認「設定 → Siri 與搜尋 → 聽寫」已開啟，靠近麥克風再按「錄音」。';
-      else if(err==='network') speakNote.textContent='語音辨識需要連網（Apple 語音服務），請檢查網絡後再試。';
-      else if(err==='aborted') speakNote.textContent='錄音被系統中斷（可能係 Siri／其他 App 搶咗麥克風），請再按一次「錄音」。';
-      else if(err==='audio-capture') speakNote.textContent='接收不到麥克風聲音，請檢查麥克風權限。';
-      else speakNote.textContent='辨識發生錯誤（'+err+'），請再試一次。';
+      speakNote.textContent = srMessage(err);
     };
     srObj = r;
     if(DEBUG){ r.onstart = ()=>srLog('start'); }
