@@ -492,7 +492,7 @@
           <button class="ctlbtn" id="speakReplay">示範</button>
         </div>
         <div class="speak-note" id="speakNote"></div>
-        <div class="speak-tip">錄音用瀏覽器的語音辨識：需要麥克風權限、要連網，並在「設定 → Siri 與搜尋」開啟聽寫。不支援時可先按「示範」對照。</div>
+        <div class="speak-tip">錄音：可用瀏覽器語音辨識，或本機 Whisper 模型（首次約 40MB，需連網下載一次）。按「示範」可先聽正確讀音。</div>
         <div class="feedback" id="fbSpeak"></div>
         <button class="btn-main" id="speakNextBtn" hidden>下一題 →</button>
       </div>
@@ -1486,8 +1486,9 @@
     fbSpeak.className='feedback'; fbSpeak.innerHTML='';
     speakNextBtn.hidden = true;
     stopSpeak();
-    micBtn.disabled = !SRClass;
-    speakNote.textContent = SRClass
+    const canRec = !!(navigator.mediaDevices && window.MediaRecorder);
+    micBtn.disabled = !(SRClass || canRec);
+    speakNote.textContent = (SRClass || canRec)
       ? '按「錄音」，讀出上面的字（一次即可）'
       : srReason();
   }
@@ -1507,8 +1508,9 @@
   }
   function startSpeak(){
     if(mode!=='speak' || !current) return;
-    if(!SRClass){ speakNote.textContent = srReason(); return; }
     if(answered){ newQuestion(); return; }
+    // 系統語音服務不可用（例如這部 iPhone 一直回 service-not-allowed）就走本機 Whisper
+    if(srBlocked || !SRClass){ whisperStart(); return; }
     if(srListening) return;
     srAttempt = 0; srLaunch();
   }
@@ -1524,6 +1526,91 @@
     // 一定在同一個點擊事件內 start()：iOS 只要離開手勢就會「開咪但收唔到聲」
     // （唔再先 call getUserMedia／加 setTimeout，兩者在 Safari 上都會令擷取變空）
     beginRecognition();
+  }
+
+  // ── 語音辨識後備：同主程式一樣用 Whisper（transformers.js）在本機跑 ──
+  // Safari 的 webkitSpeechRecognition 在這部 iPhone 一直回 service-not-allowed，
+  // 主程式「自動辨識」就是用這條路，所以這裡照抄。
+  let srBlocked = false;                       // Safari 語音服務不可用時，之後直接走 Whisper
+  let wTr = null, wP = null, wRec = null, wStream = null, wTimer = 0;
+  function wProg(t){ speakNote.textContent = t; }
+  function loadWhisper(){
+    if(wTr) return Promise.resolve(wTr);
+    if(wP) return wP;
+    wProg('首次使用：下載辨識模型（約 40MB），請保持網路…');
+    wP = import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2').then(m=>{
+      m.env.allowLocalModels = false;
+      if(m.env.backends && m.env.backends.onnx && m.env.backends.onnx.wasm) m.env.backends.onnx.wasm.numThreads = 1;
+      return m.pipeline('automatic-speech-recognition','Xenova/whisper-tiny',{
+        quantized:true,
+        progress_callback:pr=>{
+          if(pr && pr.status==='progress' && pr.total) wProg('下載模型 '+Math.round(pr.loaded/pr.total*100)+'%');
+        }
+      });
+    }).then(tr=>{ wTr=tr; wProg(''); return tr; }).catch(e=>{ wP=null; throw e; });
+    return wP;
+  }
+  function blobToAudio16k(blob){
+    return blob.arrayBuffer().then(ab=>{
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new Ctx();
+      return ctx.decodeAudioData(ab).then(buf=>{
+        const frames = Math.max(1, Math.ceil(buf.duration*16000));
+        const off = new OfflineAudioContext(1, frames, 16000);
+        const src = off.createBufferSource();
+        src.buffer = buf; src.connect(off.destination); src.start();
+        return off.startRendering().then(r=>{ try{ ctx.close(); }catch(e){} return r.getChannelData(0); });
+      }, e=>{ try{ ctx.close(); }catch(x){} throw e; });
+    });
+  }
+  function stopWhisper(){
+    clearTimeout(wTimer);
+    if(wRec && wRec.state==='recording'){ try{ wRec.stop(); }catch(e){} }
+    if(wStream){ try{ wStream.getTracks().forEach(t=>t.stop()); }catch(e){} wStream=null; }
+  }
+  function whisperStart(){
+    if(mode!=='speak' || !current) return;
+    if(answered){ newQuestion(); return; }
+    if(srListening){ stopWhisper(); return; }          // 再按一次＝停止收音
+    srListening = true;
+    micBtn.classList.add('rec'); micLabel.textContent='收音中…';
+    fbSpeak.className='feedback'; fbSpeak.innerHTML='';
+    clearTimeout(promptTimer); stopAudioNow();
+    speakNote.textContent = '請讀出上面的字…讀完會自動停止';
+    const load = loadWhisper();                        // 同時開始下載模型
+    navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,channelCount:1}})
+      .then(stream=>{
+        wStream = stream;
+        return new Promise((resolve, reject)=>{
+          const chunks = [];
+          const mr = new MediaRecorder(stream);
+          wRec = mr;
+          mr.ondataavailable = e=>{ if(e.data && e.data.size) chunks.push(e.data); };
+          mr.onerror = e=>reject((e && e.error) || new Error('錄音失敗'));
+          mr.onstop = ()=>{
+            if(wStream){ try{ wStream.getTracks().forEach(t=>t.stop()); }catch(e){} wStream=null; }
+            wRec = null; clearTimeout(wTimer);
+            resolve(new Blob(chunks, {type: mr.mimeType || 'audio/webm'}));
+          };
+          mr.start();
+          wTimer = setTimeout(()=>{ if(mr.state==='recording') mr.stop(); }, 2500);
+        });
+      })
+      .then(blob=>{
+        micLabel.textContent='辨識中…';
+        speakNote.textContent='辨識中，請稍等…';
+        return load.then(tr=>blobToAudio16k(blob).then(audio=>tr(audio, {language:'ja', task:'transcribe'})));
+      })
+      .then(out=>{
+        const text = ((out && out.text) || '').trim();
+        stopSpeak();
+        if(!text){ speakNote.textContent='沒有辨識到聲音，請按「錄音」再讀一次。'; return; }
+        judgeSpeak([text]);
+      })
+      .catch(e=>{
+        stopSpeak();
+        speakNote.textContent = '辨識失敗：' + (e && e.message ? e.message : e);
+      });
   }
   function srMessage(err){
     if(err==='service-not-allowed')
@@ -1570,8 +1657,13 @@
       srLog('error:'+err);
       // 這些錯誤唔會再有 onend（或 onend 已無意義），要即刻收工並講原因，
       // 否則按鈕會一直卡住「辨識中…」
-      if(err==='service-not-allowed' || err==='not-allowed' || err==='network'
-         || err==='audio-capture' || err==='language-not-supported'){
+      if(err==='service-not-allowed' || err==='not-allowed' || err==='language-not-supported'){
+        srGotResult = false;
+        srBlocked = true;                       // 之後直接用本機辨識，不再試系統服務
+        stopSpeak();
+        speakNote.textContent = '系統語音服務不可用，改用本機辨識…';
+        whisperStart();
+      }else if(err==='network' || err==='audio-capture'){
         srGotResult = false;
         stopSpeak();
         speakNote.textContent = srMessage(err);
