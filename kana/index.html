@@ -2,7 +2,7 @@
 <html lang="zh-HK">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#2c3e6b">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -262,7 +262,13 @@
   .paper-wrap{width:100%; max-width:320px; margin-top:12px; border:1.5px solid var(--line); border-radius:16px; overflow:hidden; background-color:#fffefb;
     background-image:linear-gradient(to right,transparent calc(50% - .5px),#e8e0d0 calc(50% - .5px),#e8e0d0 calc(50% + .5px),transparent calc(50% + .5px)),
                      linear-gradient(to bottom,transparent calc(50% - .5px),#e8e0d0 calc(50% - .5px),#e8e0d0 calc(50% + .5px),transparent calc(50% + .5px));}
-  #paper{display:block; width:100%; aspect-ratio:1/1; touch-action:none; cursor:crosshair;}
+  #paper{display:block; width:100%; aspect-ratio:1/1; touch-action:none; cursor:crosshair;
+    -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;}
+  /* 寫字時不要選字反白、不要長按放大鏡、不要被系統叫出選單 */
+  #writePanel, .paper-wrap{-webkit-user-select:none; user-select:none; -webkit-touch-callout:none;
+    -webkit-tap-highlight-color:transparent;}
+  html{-webkit-text-size-adjust:100%;}
+  body{overscroll-behavior-y:contain;}
   .writebar{width:100%; max-width:320px; display:flex; gap:8px; margin-top:12px;}
   .mini{border:1px solid var(--line); background:var(--card); color:var(--ink-soft); font-family:inherit;
     font-size:14px; padding:11px 14px; border-radius:12px; cursor:pointer; transition:.18s;}
@@ -1380,6 +1386,23 @@
     drawing=false; curStroke=null; scheduleRecog();
   }));
   window.addEventListener('resize', ()=>{ if(mode==='write') fitCanvas(); });
+
+  /* iOS Safari 攔不住 <meta user-scalable=no>，要自己擋：
+     - 雙指縮放（gesturestart/change）
+     - 連按兩下放大
+     - 長按選字／放大鏡
+     只在手寫模式生效，其他模式保持正常閱讀與縮放。 */
+  ['gesturestart','gesturechange','gestureend'].forEach(t=>
+    document.addEventListener(t, e=>{ if(mode==='write') e.preventDefault(); }, {passive:false}));
+  document.addEventListener('selectstart', e=>{ if(mode==='write') e.preventDefault(); });
+  paper.addEventListener('contextmenu', e=>e.preventDefault());
+  let lastTapAt = 0;
+  document.addEventListener('touchend', e=>{
+    if(mode!=='write') return;                       // 手寫模式：整個畫面都不准雙擊放大
+    const now = Date.now();
+    if(now - lastTapAt < 320) e.preventDefault();
+    lastTapAt = now;
+  }, {passive:false});
 
   // ── 共用 feedback ─────────────────────────────────────────
   function showFeedback(el, ok, head, detailHtml, speakKana){
