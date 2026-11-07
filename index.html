@@ -283,7 +283,6 @@
     display:flex; align-items:center; justify-content:center; font-size:15px}
   .examrow .tx{flex:1; min-width:0}
   .examrow .tx b{display:block; font-size:14px; font-weight:600; color:var(--ink)}
-  .examrow .tx i{display:block; font-style:normal; font-size:11.5px; color:var(--muted); margin-top:3px; line-height:1.5}
   .examrow .sc{font-size:12.5px; font-weight:600; color:var(--shu); white-space:nowrap}
   .examrow.off{background:#faf7f1}
   .examrow.off .ic{background:var(--line); color:var(--muted)}
@@ -492,7 +491,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v104</span>
+    <span class="ver" id="verTag">v105</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -768,8 +767,7 @@
     var best = EXAM_READY[b.no] ? examBest(b.no) : null;
     var inner =
       '<span class="ic">✎</span>' +
-      '<span class="tx"><b>第 ' + b.no + ' 階段測驗</b>' +
-        '<i>選擇題</i></span>' +
+      '<span class="tx"><b>第 ' + b.no + ' 階段測驗</b></span>' +
       '<span class="sc">' + (best ? '最高 ' + best.best + ' ／ ' + best.total : (EXAM_READY[b.no] ? '未做' : '準備中')) + '</span>';
     return EXAM_READY[b.no]
       ? '<a class="examrow" href="#/exam/' + b.no + '">' + inner + '</a>'
