@@ -13,6 +13,9 @@ const URL = process.argv[2];
   let bad = 0;
   const check = (name, pass, info) => { if (!pass) bad++; console.log((pass ? 'PASS' : 'FAIL') + '  ' + name + (info ? '  ' + info : '')); };
 
+  const autoFocus0 = await page.evaluate(() => document.activeElement && document.activeElement.id);
+  check('首次進入（預設羅馬拼音）不自動聚焦', autoFocus0 !== 'answer', 'activeElement=' + autoFocus0);
+
   const labels = await page.evaluate(() => [...document.querySelectorAll('#modeSeg button')].map(b => b.textContent.trim()));
   check('四個模式標籤', JSON.stringify(labels) === JSON.stringify(['羅馬拼音', '聽音選字', '手寫', '鍵盤輸入']), JSON.stringify(labels));
 
@@ -77,6 +80,15 @@ const URL = process.argv[2];
     return kana;
   });
   await page.screenshot({ path: '/tmp/kana-kbd.png' });
+
+  // 切換模式時鍵盤要收起
+  await page.click('#speakInput');
+  await page.waitForTimeout(150);
+  const focusBefore = await page.evaluate(() => document.activeElement && document.activeElement.id);
+  await page.click('#modeSeg button[data-mode="read"]');
+  await page.waitForTimeout(200);
+  const focusAfter = await page.evaluate(() => document.activeElement && document.activeElement.id);
+  check('切模式會收鍵盤', focusBefore === 'speakInput' && focusAfter !== 'speakInput', focusBefore + ' → ' + focusAfter);
 
   check('頁面無 JS 錯誤', errors.length === 0, errors.join(' | '));
 

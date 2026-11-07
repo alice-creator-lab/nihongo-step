@@ -394,7 +394,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v30</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v31</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -1045,7 +1045,7 @@
       typeEl.textContent = typeName(current.type);
       inputEl.value=''; inputEl.className=''; inputEl.disabled=false;
       checkBtn.textContent='檢查'; checkBtn.className='btn-main';
-      inputEl.focus({preventScroll:true});
+      // 不自動聚焦：鍵盤要用戶自己按輸入框才彈出
     }else if(mode==='listen'){
       listenPanel.classList.add('active'); readPanel.classList.remove('active'); writePanel.classList.remove('active'); speakPanel.classList.remove('active');
       listenType.textContent = typeName(current.type);
@@ -1072,7 +1072,7 @@
   function checkRead(){
     if(answered) return;
     const val=norm(inputEl.value);
-    if(!val){ inputEl.focus(); return; }
+    if(!val) return;
     const ok = current.r.map(norm).includes(val);
     answered=true; inputEl.disabled=true;
 
@@ -1450,6 +1450,7 @@
 
   // ── 切換控制 ──────────────────────────────────────────────
   function setMode(m){
+    if(document.activeElement && document.activeElement.blur) document.activeElement.blur();  // 切模式前收鍵盤
     clearTimeout(promptTimer);              // 取消上一個模式排住的提示音
     stopAudioNow();                         // 切模式即靜音：羅馬拼音是「看字打拼音」，不該發聲
     mode=m; localStorage.setItem('kanaMode',m);
@@ -1516,7 +1517,6 @@
     const r = judgeTyped(speakInput.value, current.k);
     if(r.status==='empty'){
       speakNote.textContent = '請用日文鍵盤輸入假名（例：ぬ），或打羅馬拼音（例：nu）。';
-      speakInput.focus({preventScroll:true});
       return;
     }
     answered = true; speakInput.disabled = true;
