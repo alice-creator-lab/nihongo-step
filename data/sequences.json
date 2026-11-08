@@ -2,7 +2,25 @@
  "groups": [
   {
    "id": "num",
-   "title": "數字",
+   "title": "數字（1～99）",
+   "note": "藍色＝變音；括號＝另一種讀法",
+   "cols": 3,
+   "cols_mobile": 3,
+   "compact": true,
+   "sections": [
+    {
+     "label": "",
+     "n": 10
+    },
+    {
+     "label": "",
+     "n": 10
+    },
+    {
+     "label": "",
+     "n": 10
+    }
+   ],
    "items": [
     {
      "kanji": "零",
@@ -187,204 +205,244 @@
      "kana": "きゅうじゅうきゅう",
      "zh": "99",
      "audio": "audio/seq/num-29.mp3"
+    }
+   ]
+  },
+  {
+   "id": "num2",
+   "title": "數字（百・千・万）",
+   "note": "藍色＝變音",
+   "cols": 3,
+   "cols_mobile": 3,
+   "compact": true,
+   "sections": [
+    {
+     "label": "",
+     "n": 9
     },
+    {
+     "label": "",
+     "n": 9
+    },
+    {
+     "label": "",
+     "n": 9
+    }
+   ],
+   "items": [
     {
      "kanji": "百",
      "kana": "ひゃく",
      "zh": "100",
-     "audio": "audio/seq/num-30.mp3"
+     "audio": "audio/seq/num2-0.mp3"
     },
     {
      "kanji": "二百",
      "kana": "にひゃく",
      "zh": "200",
-     "audio": "audio/seq/num-31.mp3"
+     "audio": "audio/seq/num2-1.mp3"
     },
     {
      "kanji": "三百",
      "kana": "さんびゃく",
      "zh": "300",
      "hl": "びゃく",
-     "audio": "audio/seq/num-32.mp3"
+     "audio": "audio/seq/num2-2.mp3"
     },
     {
      "kanji": "四百",
      "kana": "よんひゃく",
      "zh": "400",
-     "audio": "audio/seq/num-33.mp3"
+     "audio": "audio/seq/num2-3.mp3"
     },
     {
      "kanji": "五百",
      "kana": "ごひゃく",
      "zh": "500",
-     "audio": "audio/seq/num-34.mp3"
+     "audio": "audio/seq/num2-4.mp3"
     },
     {
      "kanji": "六百",
      "kana": "ろっぴゃく",
      "zh": "600",
      "hl": "っぴゃく",
-     "audio": "audio/seq/num-35.mp3"
+     "audio": "audio/seq/num2-5.mp3"
     },
     {
      "kanji": "七百",
      "kana": "ななひゃく",
      "zh": "700",
-     "audio": "audio/seq/num-36.mp3"
+     "audio": "audio/seq/num2-6.mp3"
     },
     {
      "kanji": "八百",
      "kana": "はっぴゃく",
      "zh": "800",
      "hl": "っぴゃく",
-     "audio": "audio/seq/num-37.mp3"
+     "audio": "audio/seq/num2-7.mp3"
     },
     {
      "kanji": "九百",
      "kana": "きゅうひゃく",
      "zh": "900",
-     "audio": "audio/seq/num-38.mp3"
+     "audio": "audio/seq/num2-8.mp3"
     },
     {
      "kanji": "千",
      "kana": "せん",
      "zh": "1000",
-     "audio": "audio/seq/num-39.mp3"
+     "audio": "audio/seq/num2-9.mp3"
     },
     {
      "kanji": "二千",
      "kana": "にせん",
      "zh": "2000",
-     "audio": "audio/seq/num-40.mp3"
+     "audio": "audio/seq/num2-10.mp3"
     },
     {
      "kanji": "三千",
      "kana": "さんぜん",
      "zh": "3000",
      "hl": "ぜん",
-     "audio": "audio/seq/num-41.mp3"
+     "audio": "audio/seq/num2-11.mp3"
     },
     {
      "kanji": "四千",
      "kana": "よんせん",
      "zh": "4000",
-     "audio": "audio/seq/num-42.mp3"
+     "audio": "audio/seq/num2-12.mp3"
     },
     {
      "kanji": "五千",
      "kana": "ごせん",
      "zh": "5000",
-     "audio": "audio/seq/num-43.mp3"
+     "audio": "audio/seq/num2-13.mp3"
     },
     {
      "kanji": "六千",
      "kana": "ろくせん",
      "zh": "6000",
-     "audio": "audio/seq/num-44.mp3"
+     "audio": "audio/seq/num2-14.mp3"
     },
     {
      "kanji": "七千",
      "kana": "ななせん",
      "zh": "7000",
-     "audio": "audio/seq/num-45.mp3"
+     "audio": "audio/seq/num2-15.mp3"
     },
     {
      "kanji": "八千",
      "kana": "はっせん",
      "zh": "8000",
      "hl": "っせん",
-     "audio": "audio/seq/num-46.mp3"
+     "audio": "audio/seq/num2-16.mp3"
     },
     {
      "kanji": "九千",
      "kana": "きゅうせん",
      "zh": "9000",
-     "audio": "audio/seq/num-47.mp3"
+     "audio": "audio/seq/num2-17.mp3"
     },
     {
      "kanji": "一万",
      "kana": "いちまん",
      "zh": "10000",
-     "audio": "audio/seq/num-48.mp3"
+     "audio": "audio/seq/num2-18.mp3"
     },
     {
      "kanji": "二万",
      "kana": "にまん",
      "zh": "20000",
-     "audio": "audio/seq/num-49.mp3"
+     "audio": "audio/seq/num2-19.mp3"
     },
     {
      "kanji": "三万",
      "kana": "さんまん",
      "zh": "30000",
-     "audio": "audio/seq/num-50.mp3"
+     "audio": "audio/seq/num2-20.mp3"
     },
     {
      "kanji": "四万",
      "kana": "よんまん",
      "zh": "40000",
-     "audio": "audio/seq/num-51.mp3"
+     "audio": "audio/seq/num2-21.mp3"
     },
     {
      "kanji": "五万",
      "kana": "ごまん",
      "zh": "50000",
-     "audio": "audio/seq/num-52.mp3"
+     "audio": "audio/seq/num2-22.mp3"
     },
     {
      "kanji": "六万",
      "kana": "ろくまん",
      "zh": "60000",
-     "audio": "audio/seq/num-53.mp3"
+     "audio": "audio/seq/num2-23.mp3"
     },
     {
      "kanji": "七万",
      "kana": "ななまん",
      "zh": "70000",
-     "audio": "audio/seq/num-54.mp3"
+     "audio": "audio/seq/num2-24.mp3"
     },
     {
      "kanji": "八万",
      "kana": "はちまん",
      "zh": "80000",
-     "audio": "audio/seq/num-55.mp3"
+     "audio": "audio/seq/num2-25.mp3"
     },
     {
      "kanji": "九万",
      "kana": "きゅうまん",
      "zh": "90000",
-     "audio": "audio/seq/num-56.mp3"
+     "audio": "audio/seq/num2-26.mp3"
+    }
+   ]
+  },
+  {
+   "id": "num3",
+   "title": "數字（大數）",
+   "note": "藍色＝變音",
+   "cols": 2,
+   "cols_mobile": 2,
+   "compact": true,
+   "sections": [
+    {
+     "label": "",
+     "n": 2
     },
+    {
+     "label": "",
+     "n": 2
+    }
+   ],
+   "items": [
     {
      "kanji": "十万",
      "kana": "じゅうまん",
      "zh": "100000",
-     "audio": "audio/seq/num-57.mp3"
+     "audio": "audio/seq/num3-0.mp3"
     },
     {
      "kanji": "百万",
      "kana": "ひゃくまん",
      "zh": "1000000",
-     "audio": "audio/seq/num-58.mp3"
+     "audio": "audio/seq/num3-1.mp3"
     },
     {
      "kanji": "一千万",
      "kana": "いっせんまん",
      "zh": "10000000",
      "hl": "っせんまん",
-     "audio": "audio/seq/num-59.mp3"
+     "audio": "audio/seq/num3-2.mp3"
     },
     {
      "kanji": "一億",
      "kana": "いちおく",
      "zh": "100000000",
-     "audio": "audio/seq/num-60.mp3"
+     "audio": "audio/seq/num3-3.mp3"
     }
-   ],
-   "cols": 3,
-   "cols_mobile": 2,
-   "compact": true,
-   "note": "藍色＝變音；括號＝另一種讀法"
+   ]
   },
   {
    "id": "month",

@@ -528,7 +528,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v117</span>
+    <span class="ver" id="verTag">v118</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2139,16 +2139,19 @@
     var n = g.items.length;
     /* 有 sections＝跟書本分欄（例如 時間：何時｜何分｜何分），每欄各有小標題 */
     if (g.sections && g.sections.length){
-      var m = g.sections.length, head = '<div class="sheads" style="--cols:' + m + '">',
+      var m = g.sections.length, labelled = false, head = '', labels = '',
           body = '<div class="scols" style="--cols:' + m + '">', at = 0;
       g.sections.forEach(function(s){
-        head += '<span>' + esc(s.label) + '</span>';
+        if (s.label) labelled = true;
+        labels += '<span>' + esc(s.label || '') + '</span>';
         body += '<div class="scol">' + g.items.slice(at, at + s.n).map(function(it, j){
           return seqRow(g, it, at + j);
         }).join('') + '</div>';
         at += s.n;
       });
-      return head + '</div>' + body + '</div>';
+      /* 書本有些表沒有欄標題（例如數字），有標題才畫那一行 */
+      if (labelled) head = '<div class="sheads" style="--cols:' + m + '">' + labels + '</div>';
+      return head + body + '</div>';
     }
     var cols = g.cols ? (window.innerWidth < 560 && g.cols_mobile ? g.cols_mobile : g.cols) : 1;
     if (cols > n) cols = n;
@@ -2803,7 +2806,7 @@
     // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
     if (/audio\/(verb|adj)\//.test(url)) return 't1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
-    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e7';
+    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e8';
     return AUDIO.v || 1;
   }
   function playFile(url, onend, el, rate){
