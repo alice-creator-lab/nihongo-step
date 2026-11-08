@@ -505,7 +505,7 @@
   },
   {
    "id": "day",
-   "title": "日期",
+   "title": "日期（幾號）",
    "items": [
     {
      "kanji": "一日",
@@ -584,6 +584,340 @@
      "kana": "にじゅうよっか",
      "zh": "二十四號",
      "audio": "audio/seq/day-12.mp3"
+    }
+   ],
+   "note": "一日＝ついたち"
+  },
+  {
+   "id": "dmy",
+   "title": "日數、週數、月數、年數",
+   "note": "藍色＝變音（日數 2～10 用和語讀音）",
+   "compact": true,
+   "sections": [
+    {
+     "label": "何日",
+     "n": 12
+    },
+    {
+     "label": "何週間",
+     "n": 12
+    },
+    {
+     "label": "何か月",
+     "n": 12
+    },
+    {
+     "label": "何年",
+     "n": 12
+    }
+   ],
+   "items": [
+    {
+     "kanji": "一日",
+     "kana": "いちにち",
+     "zh": "一日",
+     "audio": "audio/seq/dmy-0.mp3"
+    },
+    {
+     "kanji": "二日",
+     "kana": "ふつか",
+     "zh": "二日",
+     "hl": "ふつか",
+     "audio": "audio/seq/day-1.mp3"
+    },
+    {
+     "kanji": "三日",
+     "kana": "みっか",
+     "zh": "三日",
+     "hl": "みっか",
+     "audio": "audio/seq/day-2.mp3"
+    },
+    {
+     "kanji": "四日",
+     "kana": "よっか",
+     "zh": "四日",
+     "hl": "よっか",
+     "audio": "audio/seq/day-3.mp3"
+    },
+    {
+     "kanji": "五日",
+     "kana": "いつか",
+     "zh": "五日",
+     "hl": "いつか",
+     "audio": "audio/seq/day-4.mp3"
+    },
+    {
+     "kanji": "六日",
+     "kana": "むいか",
+     "zh": "六日",
+     "hl": "むいか",
+     "audio": "audio/seq/day-5.mp3"
+    },
+    {
+     "kanji": "七日",
+     "kana": "なのか",
+     "zh": "七日",
+     "hl": "なのか",
+     "audio": "audio/seq/day-6.mp3"
+    },
+    {
+     "kanji": "八日",
+     "kana": "ようか",
+     "zh": "八日",
+     "hl": "ようか",
+     "audio": "audio/seq/day-7.mp3"
+    },
+    {
+     "kanji": "九日",
+     "kana": "ここのか",
+     "zh": "九日",
+     "hl": "ここのか",
+     "audio": "audio/seq/day-8.mp3"
+    },
+    {
+     "kanji": "十日",
+     "kana": "とおか",
+     "zh": "十日",
+     "hl": "とおか",
+     "audio": "audio/seq/day-9.mp3"
+    },
+    {
+     "kanji": "十一日",
+     "kana": "じゅういちにち",
+     "zh": "十一日",
+     "audio": "audio/seq/dmy-10.mp3"
+    },
+    {
+     "kanji": "十二日",
+     "kana": "じゅうににち",
+     "zh": "十二日",
+     "audio": "audio/seq/dmy-11.mp3"
+    },
+    {
+     "kanji": "一週間",
+     "kana": "いっしゅうかん",
+     "zh": "一週",
+     "hl": "いっ",
+     "audio": "audio/seq/shuukan-0.mp3"
+    },
+    {
+     "kanji": "二週間",
+     "kana": "にしゅうかん",
+     "zh": "二週",
+     "audio": "audio/seq/shuukan-1.mp3"
+    },
+    {
+     "kanji": "三週間",
+     "kana": "さんしゅうかん",
+     "zh": "三週",
+     "audio": "audio/seq/shuukan-2.mp3"
+    },
+    {
+     "kanji": "四週間",
+     "kana": "よんしゅうかん",
+     "zh": "四週",
+     "audio": "audio/seq/shuukan-3.mp3"
+    },
+    {
+     "kanji": "五週間",
+     "kana": "ごしゅうかん",
+     "zh": "五週",
+     "audio": "audio/seq/shuukan-4.mp3"
+    },
+    {
+     "kanji": "六週間",
+     "kana": "ろくしゅうかん",
+     "zh": "六週",
+     "audio": "audio/seq/shuukan-5.mp3"
+    },
+    {
+     "kanji": "七週間",
+     "kana": "ななしゅうかん",
+     "zh": "七週",
+     "audio": "audio/seq/shuukan-6.mp3"
+    },
+    {
+     "kanji": "八週間",
+     "kana": "はっしゅうかん",
+     "zh": "八週",
+     "hl": "はっ",
+     "audio": "audio/seq/shuukan-7.mp3"
+    },
+    {
+     "kanji": "九週間",
+     "kana": "きゅうしゅうかん",
+     "zh": "九週",
+     "audio": "audio/seq/shuukan-8.mp3"
+    },
+    {
+     "kanji": "十週間",
+     "kana": "じゅっしゅうかん",
+     "zh": "十週",
+     "hl": "じゅっ",
+     "audio": "audio/seq/shuukan-9.mp3"
+    },
+    {
+     "kanji": "十一週間",
+     "kana": "じゅういっしゅうかん",
+     "zh": "十一週",
+     "hl": "いっ",
+     "audio": "audio/seq/dmy-22.mp3"
+    },
+    {
+     "kanji": "十二週間",
+     "kana": "じゅうにしゅうかん",
+     "zh": "十二週",
+     "audio": "audio/seq/dmy-23.mp3"
+    },
+    {
+     "kanji": "一か月",
+     "kana": "いっかげつ",
+     "zh": "一個月",
+     "hl": "いっ",
+     "audio": "audio/seq/kagetsu-0.mp3"
+    },
+    {
+     "kanji": "二か月",
+     "kana": "にかげつ",
+     "zh": "二個月",
+     "audio": "audio/seq/kagetsu-1.mp3"
+    },
+    {
+     "kanji": "三か月",
+     "kana": "さんかげつ",
+     "zh": "三個月",
+     "audio": "audio/seq/kagetsu-2.mp3"
+    },
+    {
+     "kanji": "四か月",
+     "kana": "よんかげつ",
+     "zh": "四個月",
+     "audio": "audio/seq/kagetsu-3.mp3"
+    },
+    {
+     "kanji": "五か月",
+     "kana": "ごかげつ",
+     "zh": "五個月",
+     "audio": "audio/seq/kagetsu-4.mp3"
+    },
+    {
+     "kanji": "六か月",
+     "kana": "ろっかげつ",
+     "zh": "六個月",
+     "hl": "ろっ",
+     "audio": "audio/seq/kagetsu-5.mp3"
+    },
+    {
+     "kanji": "七か月",
+     "kana": "ななかげつ",
+     "zh": "七個月",
+     "audio": "audio/seq/kagetsu-6.mp3"
+    },
+    {
+     "kanji": "八か月",
+     "kana": "はっかげつ",
+     "zh": "八個月",
+     "hl": "はっ",
+     "audio": "audio/seq/kagetsu-7.mp3"
+    },
+    {
+     "kanji": "九か月",
+     "kana": "きゅうかげつ",
+     "zh": "九個月",
+     "audio": "audio/seq/kagetsu-8.mp3"
+    },
+    {
+     "kanji": "十か月",
+     "kana": "じゅっかげつ",
+     "zh": "十個月",
+     "hl": "じゅっ",
+     "audio": "audio/seq/kagetsu-9.mp3"
+    },
+    {
+     "kanji": "十一か月",
+     "kana": "じゅういっかげつ",
+     "zh": "十一個月",
+     "hl": "いっ",
+     "audio": "audio/seq/dmy-34.mp3"
+    },
+    {
+     "kanji": "十二か月",
+     "kana": "じゅうにかげつ",
+     "zh": "十二個月",
+     "audio": "audio/seq/dmy-35.mp3"
+    },
+    {
+     "kanji": "一年",
+     "kana": "いちねん",
+     "zh": "一年",
+     "audio": "audio/seq/nen-0.mp3"
+    },
+    {
+     "kanji": "二年",
+     "kana": "にねん",
+     "zh": "二年",
+     "audio": "audio/seq/nen-1.mp3"
+    },
+    {
+     "kanji": "三年",
+     "kana": "さんねん",
+     "zh": "三年",
+     "audio": "audio/seq/nen-2.mp3"
+    },
+    {
+     "kanji": "四年",
+     "kana": "よねん",
+     "zh": "四年",
+     "hl": "よ",
+     "audio": "audio/seq/nen-3.mp3"
+    },
+    {
+     "kanji": "五年",
+     "kana": "ごねん",
+     "zh": "五年",
+     "audio": "audio/seq/nen-4.mp3"
+    },
+    {
+     "kanji": "六年",
+     "kana": "ろくねん",
+     "zh": "六年",
+     "audio": "audio/seq/nen-5.mp3"
+    },
+    {
+     "kanji": "七年",
+     "kana": "ななねん",
+     "zh": "七年",
+     "audio": "audio/seq/nen-6.mp3"
+    },
+    {
+     "kanji": "八年",
+     "kana": "はちねん",
+     "zh": "八年",
+     "audio": "audio/seq/nen-7.mp3"
+    },
+    {
+     "kanji": "九年",
+     "kana": "きゅうねん",
+     "zh": "九年",
+     "audio": "audio/seq/nen-8.mp3"
+    },
+    {
+     "kanji": "十年",
+     "kana": "じゅうねん",
+     "zh": "十年",
+     "audio": "audio/seq/nen-9.mp3"
+    },
+    {
+     "kanji": "十一年",
+     "kana": "じゅういちねん",
+     "zh": "十一年",
+     "audio": "audio/seq/dmy-46.mp3"
+    },
+    {
+     "kanji": "十二年",
+     "kana": "じゅうにねん",
+     "zh": "十二年",
+     "audio": "audio/seq/dmy-47.mp3"
     }
    ]
   },
@@ -1899,204 +2233,6 @@
      "kana": "なんえん",
      "zh": "多少日圓",
      "audio": "audio/seq/yen-10.mp3"
-    }
-   ]
-  },
-  {
-   "id": "kagetsu",
-   "title": "～か月（月數）",
-   "items": [
-    {
-     "kanji": "一か月",
-     "kana": "いっかげつ",
-     "zh": "一個月",
-     "audio": "audio/seq/kagetsu-0.mp3"
-    },
-    {
-     "kanji": "二か月",
-     "kana": "にかげつ",
-     "zh": "二個月",
-     "audio": "audio/seq/kagetsu-1.mp3"
-    },
-    {
-     "kanji": "三か月",
-     "kana": "さんかげつ",
-     "zh": "三個月",
-     "audio": "audio/seq/kagetsu-2.mp3"
-    },
-    {
-     "kanji": "四か月",
-     "kana": "よんかげつ",
-     "zh": "四個月",
-     "audio": "audio/seq/kagetsu-3.mp3"
-    },
-    {
-     "kanji": "五か月",
-     "kana": "ごかげつ",
-     "zh": "五個月",
-     "audio": "audio/seq/kagetsu-4.mp3"
-    },
-    {
-     "kanji": "六か月",
-     "kana": "ろっかげつ",
-     "zh": "六個月",
-     "audio": "audio/seq/kagetsu-5.mp3"
-    },
-    {
-     "kanji": "七か月",
-     "kana": "ななかげつ",
-     "zh": "七個月",
-     "audio": "audio/seq/kagetsu-6.mp3"
-    },
-    {
-     "kanji": "八か月",
-     "kana": "はっかげつ",
-     "zh": "八個月",
-     "audio": "audio/seq/kagetsu-7.mp3"
-    },
-    {
-     "kanji": "九か月",
-     "kana": "きゅうかげつ",
-     "zh": "九個月",
-     "audio": "audio/seq/kagetsu-8.mp3"
-    },
-    {
-     "kanji": "十か月",
-     "kana": "じゅっかげつ",
-     "zh": "十個月",
-     "audio": "audio/seq/kagetsu-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "nen",
-   "title": "～年（年數）",
-   "items": [
-    {
-     "kanji": "一年",
-     "kana": "いちねん",
-     "zh": "一年",
-     "audio": "audio/seq/nen-0.mp3"
-    },
-    {
-     "kanji": "二年",
-     "kana": "にねん",
-     "zh": "二年",
-     "audio": "audio/seq/nen-1.mp3"
-    },
-    {
-     "kanji": "三年",
-     "kana": "さんねん",
-     "zh": "三年",
-     "audio": "audio/seq/nen-2.mp3"
-    },
-    {
-     "kanji": "四年",
-     "kana": "よねん",
-     "zh": "四年",
-     "audio": "audio/seq/nen-3.mp3"
-    },
-    {
-     "kanji": "五年",
-     "kana": "ごねん",
-     "zh": "五年",
-     "audio": "audio/seq/nen-4.mp3"
-    },
-    {
-     "kanji": "六年",
-     "kana": "ろくねん",
-     "zh": "六年",
-     "audio": "audio/seq/nen-5.mp3"
-    },
-    {
-     "kanji": "七年",
-     "kana": "ななねん",
-     "zh": "七年",
-     "audio": "audio/seq/nen-6.mp3"
-    },
-    {
-     "kanji": "八年",
-     "kana": "はちねん",
-     "zh": "八年",
-     "audio": "audio/seq/nen-7.mp3"
-    },
-    {
-     "kanji": "九年",
-     "kana": "きゅうねん",
-     "zh": "九年",
-     "audio": "audio/seq/nen-8.mp3"
-    },
-    {
-     "kanji": "十年",
-     "kana": "じゅうねん",
-     "zh": "十年",
-     "audio": "audio/seq/nen-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "shuukan",
-   "title": "～週間（週數）",
-   "items": [
-    {
-     "kanji": "一週間",
-     "kana": "いっしゅうかん",
-     "zh": "一週",
-     "audio": "audio/seq/shuukan-0.mp3"
-    },
-    {
-     "kanji": "二週間",
-     "kana": "にしゅうかん",
-     "zh": "二週",
-     "audio": "audio/seq/shuukan-1.mp3"
-    },
-    {
-     "kanji": "三週間",
-     "kana": "さんしゅうかん",
-     "zh": "三週",
-     "audio": "audio/seq/shuukan-2.mp3"
-    },
-    {
-     "kanji": "四週間",
-     "kana": "よんしゅうかん",
-     "zh": "四週",
-     "audio": "audio/seq/shuukan-3.mp3"
-    },
-    {
-     "kanji": "五週間",
-     "kana": "ごしゅうかん",
-     "zh": "五週",
-     "audio": "audio/seq/shuukan-4.mp3"
-    },
-    {
-     "kanji": "六週間",
-     "kana": "ろくしゅうかん",
-     "zh": "六週",
-     "audio": "audio/seq/shuukan-5.mp3"
-    },
-    {
-     "kanji": "七週間",
-     "kana": "ななしゅうかん",
-     "zh": "七週",
-     "audio": "audio/seq/shuukan-6.mp3"
-    },
-    {
-     "kanji": "八週間",
-     "kana": "はっしゅうかん",
-     "zh": "八週",
-     "audio": "audio/seq/shuukan-7.mp3"
-    },
-    {
-     "kanji": "九週間",
-     "kana": "きゅうしゅうかん",
-     "zh": "九週",
-     "audio": "audio/seq/shuukan-8.mp3"
-    },
-    {
-     "kanji": "十週間",
-     "kana": "じゅっしゅうかん",
-     "zh": "十週",
-     "audio": "audio/seq/shuukan-9.mp3"
     }
    ]
   }

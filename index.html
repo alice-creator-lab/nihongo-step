@@ -444,6 +444,14 @@
     .sblock.b3 .srow .sn{font-size:11px}
     .sblock.b3 .srow .spk{display:none}
   }
+  /* 四欄（日數、週數、月數、年數）：每格兩行（漢字在上、假名在下），桌面與手機一致，假名才不會被擠斷 */
+  .sgrp.compact .sblock.b4 .srow{grid-template-columns:minmax(0,1fr) 26px; grid-template-rows:auto auto;
+    row-gap:0; align-items:center; padding:7px 9px}
+  .sgrp.compact .sblock.b4 .srow .sk{grid-column:1; grid-row:1; font-size:13px; line-height:1.35}
+  .sgrp.compact .sblock.b4 .srow .sn{grid-column:1; grid-row:2; font-size:11.5px; line-height:1.3; white-space:normal}
+  .sgrp.compact .sblock.b4 .srow .spk{grid-column:2; grid-row:1 / span 2}
+  /* 拆成兩組時（窄螢幕的四欄表），第二組的欄標題之上也畫一條較粗的分隔線 */
+  .sblock + .sheads{margin:0 -14px; padding:14px 10px 0; border-top:2px solid var(--line)}
   .srow.playing{background:var(--sand2)}
   .srow.playing .sk{color:var(--shu)}
   .seqlink{display:block; text-align:center; margin:14px 0 4px; font-size:12.5px; color:var(--ink2);
@@ -529,7 +537,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v120</span>
+    <span class="ver" id="verTag">v121</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2135,6 +2143,8 @@
       '<button class="spk" data-say="' + esc(it.kana) + '" data-audio="' + esc(it.audio) + '" aria-label="播放">' + SPK + '</button>' +
     '</div>';
   }
+  /* 多欄寬度類別：三欄（時間表）手機收起喇叭；四欄（日數・週數・月數・年數）每格兩行 */
+  function sblockCls(m){ return m >= 4 ? ' b4' : (m >= 3 ? ' b3' : ''); }
   /* 多欄：按「每欄固定行數」切，順序與書本一樣由上而下、再往右一欄 */
   function seqBody(g){
     var n = g.items.length;
@@ -2150,25 +2160,33 @@
           }).join('') + '</div>';
           k += s.n;
         });
-        html += '<div class="sblock' + (m >= 3 ? ' b3' : '') + '">' + body + '</div></div>';
+        html += '<div class="sblock' + sblockCls(m) + '">' + body + '</div></div>';
         at = k;
       });
       return html;
     }
     if (g.sections && g.sections.length){
-      var m = g.sections.length, labelled = false, head = '', labels = '',
-          body = '<div class="scols" style="--cols:' + m + '">', at = 0;
-      g.sections.forEach(function(s){
-        if (s.label) labelled = true;
-        labels += '<span>' + esc(s.label || '') + '</span>';
-        body += '<div class="scol">' + g.items.slice(at, at + s.n).map(function(it, j){
-          return seqRow(g, it, at + j);
-        }).join('') + '</div>';
-        at += s.n;
-      });
-      /* 書本有些表沒有欄標題（例如數字），有標題才畫那一行 */
-      if (labelled) head = '<div class="sheads" style="--cols:' + m + '">' + labels + '</div>';
-      return head + '<div class="sblock' + (m >= 3 ? ' b3' : '') + '">' + body + '</div></div>';
+      var m = g.sections.length, labelled = false, at = 0, html = '';
+      g.sections.forEach(function(s){ if (s.label) labelled = true; });
+      /* 窄螢幕：四欄表格拆成兩組（每組兩欄、各自帶欄標題），假名才有足夠寬度；
+         寬螢幕照書本排成四欄一行 */
+      var per = (m >= 4 && window.innerWidth < 700) ? 2 : m;
+      for (var start = 0; start < m; start += per){
+        var grp = g.sections.slice(start, start + per), head = '', k = at,
+            body = '<div class="scols" style="--cols:' + grp.length + '">';
+        grp.forEach(function(s){
+          head += '<span>' + esc(s.label || '') + '</span>';
+          body += '<div class="scol">' + g.items.slice(k, k + s.n).map(function(it, j){
+            return seqRow(g, it, k + j);
+          }).join('') + '</div>';
+          k += s.n;
+        });
+        at = k;
+        /* 書本有些表沒有欄標題（例如數字），有標題才畫那一行 */
+        html += (labelled ? '<div class="sheads" style="--cols:' + grp.length + '">' + head + '</div>' : '') +
+          '<div class="sblock' + sblockCls(grp.length) + '">' + body + '</div>';
+      }
+      return html;
     }
     var cols = g.cols ? (window.innerWidth < 560 && g.cols_mobile ? g.cols_mobile : g.cols) : 1;
     if (cols > n) cols = n;
