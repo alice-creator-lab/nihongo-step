@@ -539,7 +539,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v125</span>
+    <span class="ver" id="verTag">v126</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2843,7 +2843,7 @@
     // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
     if (/audio\/(verb|adj)\//.test(url)) return 't1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
-    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e10';
+    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e11';
     return AUDIO.v || 1;
   }
   function playFile(url, onend, el, rate){

@@ -13,8 +13,8 @@ import glob, math, os, struct, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SEQ = os.path.join(ROOT, "audio/seq")
 MARKS = os.path.join(SEQ, ".trimmed")
-HEAD = 0.06     # 發聲起點前保留
-TAIL = 0.10     # 發聲結束後保留
+HEAD = 0.08     # 發聲起點前保留
+TAIL = 0.22     # 發聲結束後保留（留一點尾巴，太短會像被切斷）
 QSCALE = "4"    # libmp3lame VBR 品質：4＝預設，0＝最高
 COPY = False    # True＝不重新編碼，只複製音框（-c copy）；五十音用，確保輸出同 edge-tts 原檔格式
 MIN_GAP = 0.02  # 少於這個長度就當已在範圍內
