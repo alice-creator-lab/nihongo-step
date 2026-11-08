@@ -306,61 +306,71 @@
    "kana": "いっかい",
    "kanji": "一階",
    "pos": "名詞",
-   "zh": "一樓"
+   "zh": "一樓",
+   "seqOnly": true
   },
   {
    "kana": "にかい",
    "kanji": "二階",
    "pos": "名詞",
-   "zh": "二樓"
+   "zh": "二樓",
+   "seqOnly": true
   },
   {
    "kana": "さんがい",
    "kanji": "三階",
    "pos": "名詞",
-   "zh": "三樓（變音）"
+   "zh": "三樓（變音）",
+   "seqOnly": true
   },
   {
    "kana": "よんかい",
    "kanji": "四階",
    "pos": "名詞",
-   "zh": "四樓"
+   "zh": "四樓",
+   "seqOnly": true
   },
   {
    "kana": "ごかい",
    "kanji": "五階",
    "pos": "名詞",
-   "zh": "五樓"
+   "zh": "五樓",
+   "seqOnly": true
   },
   {
    "kana": "ろっかい",
    "kanji": "六階",
    "pos": "名詞",
-   "zh": "六樓（變音）"
+   "zh": "六樓（變音）",
+   "seqOnly": true
   },
   {
    "kana": "ななかい",
    "kanji": "七階",
    "pos": "名詞",
-   "zh": "七樓"
+   "zh": "七樓",
+   "seqOnly": true
   },
   {
    "kana": "はっかい",
    "kanji": "八階",
    "pos": "名詞",
-   "zh": "八樓（變音）"
+   "zh": "八樓（變音）",
+   "seqOnly": true
   },
   {
    "kana": "きゅうかい",
    "kanji": "九階",
    "pos": "名詞",
-   "zh": "九樓"
+   "zh": "九樓",
+   "seqOnly": true
   },
   {
    "kana": "じゅっかい",
    "kanji": "十階",
    "pos": "名詞",
-   "zh": "十樓（變音）"
+   "zh": "十樓（變音）",
+   "seqOnly": true
   },
   {
    "kana": "ちか",
@@ -379,6 +389,12 @@
    "kanji": "食品売り場",
    "pos": "名詞",
    "zh": "食品賣場"
+  },
+  {
+   "kana": "かい",
+   "kanji": "階",
+   "pos": "名詞",
+   "zh": "樓層的量詞"
   }
  ],
  "grammar": [

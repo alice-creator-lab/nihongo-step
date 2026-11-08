@@ -567,7 +567,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v134</span>
+    <span class="ver" id="verTag">v135</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -934,6 +934,7 @@
       var j = lessons[l.id];
       if (!j) return;
       (j.vocab || []).forEach(function(v){
+        if (v.seqOnly) return;   /* 同詞語總表一致：數字＋量詞的整組只放順序表 */
         var sig = (v.kanji || '') + '|' + v.kana + '|' + v.zh;
         if (vocabSeen[sig]) return;
         vocabSeen[sig] = 1; vocabTotal++;
@@ -2052,6 +2053,9 @@
     availableLessons().forEach(function(meta){
       var l = lessons[meta.id]; if (!l || !l.vocab) return;
       l.vocab.forEach(function(v){
+        /* seqOnly：整組數字＋量詞（一階～十階…）只放進「順序表」，
+           詞語總表只保留量詞本身（例如「階」），免得兩邊重疊 */
+        if (v.seqOnly) return;
         var sig = (v.kanji || '') + '|' + v.kana + '|' + v.zh;
         if (seen[sig]) return;
         seen[sig] = 1;
