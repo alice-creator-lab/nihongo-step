@@ -76,8 +76,10 @@ def main():
 
     os.makedirs(os.path.join(ROOT, "audio"), exist_ok=True)
     manifest_path = os.path.join(ROOT, "data/audio.json")
+    # 一律先讀回舊 manifest：--force 只代表重生音檔，不代表忘記其他課的索引。
+    # （曾經因為 --force 配課號過濾而把整個 manifest 覆蓋成只剩該課。）
     manifest = {}
-    if os.path.exists(manifest_path) and not force:
+    if os.path.exists(manifest_path):
         try:
             manifest = json.load(open(manifest_path, encoding="utf-8"))
         except Exception:

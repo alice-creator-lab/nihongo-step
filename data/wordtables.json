@@ -1,6 +1,6 @@
 {
  "verbs": {
-  "total": 244,
+  "total": 267,
   "groups": [
    {
     "id": "godan",
@@ -238,6 +238,61 @@
       "audio": "audio/verb/L11-11.mp3"
      },
      {
+      "id": "L11",
+      "vi": 27,
+      "group": "godan",
+      "kanji": "なる",
+      "kana": "なる",
+      "jisho": "なる",
+      "masu": "なります",
+      "zh": "變成",
+      "audio": "audio/verb/L11-27.mp3"
+     },
+     {
+      "id": "L11",
+      "vi": 28,
+      "group": "godan",
+      "kanji": "売る",
+      "kana": "うる",
+      "jisho": "うる",
+      "masu": "うります",
+      "zh": "賣",
+      "audio": "audio/verb/L11-28.mp3"
+     },
+     {
+      "id": "L11",
+      "vi": 29,
+      "group": "godan",
+      "kanji": "立つ",
+      "kana": "たつ",
+      "jisho": "たつ",
+      "masu": "たちます",
+      "zh": "站",
+      "audio": "audio/verb/L11-29.mp3"
+     },
+     {
+      "id": "L11",
+      "vi": 30,
+      "group": "godan",
+      "kanji": "頼む",
+      "kana": "たのむ",
+      "jisho": "たのむ",
+      "masu": "たのみます",
+      "zh": "請求、拜託",
+      "audio": "audio/verb/L11-30.mp3"
+     },
+     {
+      "id": "L11",
+      "vi": 32,
+      "group": "godan",
+      "kanji": "やる",
+      "kana": "やる",
+      "jisho": "やる",
+      "masu": "やります",
+      "zh": "做（口語）",
+      "audio": "audio/verb/L11-32.mp3"
+     },
+     {
       "id": "L12",
       "vi": 0,
       "group": "godan",
@@ -370,6 +425,61 @@
       "audio": "audio/verb/L12-15.mp3"
      },
      {
+      "id": "L12",
+      "vi": 27,
+      "group": "godan",
+      "kanji": "渡す",
+      "kana": "わたす",
+      "jisho": "わたす",
+      "masu": "わたします",
+      "zh": "交給",
+      "audio": "audio/verb/L12-27.mp3"
+     },
+     {
+      "id": "L12",
+      "vi": 28,
+      "group": "godan",
+      "kanji": "引く",
+      "kana": "ひく",
+      "jisho": "ひく",
+      "masu": "ひきます",
+      "zh": "拉、抽",
+      "audio": "audio/verb/L12-28.mp3"
+     },
+     {
+      "id": "L12",
+      "vi": 29,
+      "group": "godan",
+      "kanji": "入る",
+      "kana": "はいる",
+      "jisho": "はいる",
+      "masu": "はいります",
+      "zh": "進入",
+      "audio": "audio/verb/L12-29.mp3"
+     },
+     {
+      "id": "L12",
+      "vi": 30,
+      "group": "godan",
+      "kanji": "はく",
+      "kana": "はく",
+      "jisho": "はく",
+      "masu": "はきます",
+      "zh": "穿（褲、鞋、襪）",
+      "audio": "audio/verb/L12-30.mp3"
+     },
+     {
+      "id": "L12",
+      "vi": 31,
+      "group": "godan",
+      "kanji": "弾く",
+      "kana": "ひく",
+      "jisho": "ひく",
+      "masu": "ひきます",
+      "zh": "彈（弦樂器、鋼琴）",
+      "audio": "audio/verb/L12-31.mp3"
+     },
+     {
       "id": "L13",
       "vi": 0,
       "group": "godan",
@@ -447,6 +557,61 @@
       "audio": "audio/verb/L13-13.mp3"
      },
      {
+      "id": "L13",
+      "vi": 39,
+      "group": "godan",
+      "kanji": "飛ぶ",
+      "kana": "とぶ",
+      "jisho": "とぶ",
+      "masu": "とびます",
+      "zh": "飛",
+      "audio": "audio/verb/L13-39.mp3"
+     },
+     {
+      "id": "L13",
+      "vi": 40,
+      "group": "godan",
+      "kanji": "並ぶ",
+      "kana": "ならぶ",
+      "jisho": "ならぶ",
+      "masu": "ならびます",
+      "zh": "排隊",
+      "audio": "audio/verb/L13-40.mp3"
+     },
+     {
+      "id": "L13",
+      "vi": 41,
+      "group": "godan",
+      "kanji": "登る",
+      "kana": "のぼる",
+      "jisho": "のぼる",
+      "masu": "のぼります",
+      "zh": "攀登",
+      "audio": "audio/verb/L13-41.mp3"
+     },
+     {
+      "id": "L13",
+      "vi": 42,
+      "group": "godan",
+      "kanji": "咲く",
+      "kana": "さく",
+      "jisho": "さく",
+      "masu": "さきます",
+      "zh": "開花",
+      "audio": "audio/verb/L13-42.mp3"
+     },
+     {
+      "id": "L13",
+      "vi": 43,
+      "group": "godan",
+      "kanji": "死ぬ",
+      "kana": "しぬ",
+      "jisho": "しぬ",
+      "masu": "しにます",
+      "zh": "死",
+      "audio": "audio/verb/L13-43.mp3"
+     },
+     {
       "id": "L14",
       "vi": 19,
       "group": "godan",
@@ -489,6 +654,28 @@
       "masu": "つかいます",
       "zh": "使用",
       "audio": "audio/verb/L14-24.mp3"
+     },
+     {
+      "id": "L14",
+      "vi": 35,
+      "group": "godan",
+      "kanji": "かかる",
+      "kana": "かかる",
+      "jisho": "かかる",
+      "masu": "かかります",
+      "zh": "花費（時間、金錢）",
+      "audio": "audio/verb/L14-35.mp3"
+     },
+     {
+      "id": "L14",
+      "vi": 36,
+      "group": "godan",
+      "kanji": "差す",
+      "kana": "さす",
+      "jisho": "さす",
+      "masu": "さします",
+      "zh": "撐（傘）",
+      "audio": "audio/verb/L14-36.mp3"
      },
      {
       "id": "L15",
@@ -1806,6 +1993,28 @@
       "audio": "audio/verb/L11-10.mp3"
      },
      {
+      "id": "L11",
+      "vi": 31,
+      "group": "ichidan",
+      "kanji": "出かける",
+      "kana": "でかける",
+      "jisho": "でかける",
+      "masu": "でかけます",
+      "zh": "外出",
+      "audio": "audio/verb/L11-31.mp3"
+     },
+     {
+      "id": "L11",
+      "vi": 33,
+      "group": "ichidan",
+      "kanji": "勤める",
+      "kana": "つとめる",
+      "jisho": "つとめる",
+      "masu": "つとめます",
+      "zh": "任職於",
+      "audio": "audio/verb/L11-33.mp3"
+     },
+     {
       "id": "L12",
       "vi": 4,
       "group": "ichidan",
@@ -1848,6 +2057,17 @@
       "masu": "つけます",
       "zh": "打開（燈、電源）",
       "audio": "audio/verb/L12-13.mp3"
+     },
+     {
+      "id": "L12",
+      "vi": 26,
+      "group": "ichidan",
+      "kanji": "入れる",
+      "kana": "いれる",
+      "jisho": "いれる",
+      "masu": "いれます",
+      "zh": "放入",
+      "audio": "audio/verb/L12-26.mp3"
      },
      {
       "id": "L13",
@@ -1894,6 +2114,17 @@
       "audio": "audio/verb/L14-21.mp3"
      },
      {
+      "id": "L14",
+      "vi": 34,
+      "group": "ichidan",
+      "kanji": "あびる",
+      "kana": "あびる",
+      "jisho": "あびる",
+      "masu": "あびます",
+      "zh": "淋浴、泡（澡）",
+      "audio": "audio/verb/L14-34.mp3"
+     },
+     {
       "id": "L15",
       "vi": 19,
       "group": "ichidan",
@@ -1914,6 +2145,17 @@
       "masu": "はじめます",
       "zh": "開始",
       "audio": "audio/verb/L15-20.mp3"
+     },
+     {
+      "id": "L16",
+      "vi": 36,
+      "group": "ichidan",
+      "kanji": "生まれる",
+      "kana": "うまれる",
+      "jisho": "うまれる",
+      "masu": "うまれます",
+      "zh": "出生",
+      "audio": "audio/verb/L16-36.mp3"
      },
      {
       "id": "L18",
@@ -2571,6 +2813,17 @@
       "audio": "audio/verb/L11-12.mp3"
      },
      {
+      "id": "L11",
+      "vi": 26,
+      "group": "irregular",
+      "kanji": "する",
+      "kana": "する",
+      "jisho": "する",
+      "masu": "します",
+      "zh": "做",
+      "audio": "audio/verb/L11-26.mp3"
+     },
+     {
       "id": "L13",
       "vi": 6,
       "group": "irregular",
@@ -2707,7 +2960,7 @@
   ]
  },
  "adjs": {
-  "total": 78,
+  "total": 128,
   "groups": [
    {
     "id": "i",
@@ -2849,6 +3102,87 @@
       "audio": "audio/adj/L08-14.mp3"
      },
      {
+      "id": "L08",
+      "vi": 26,
+      "group": "i",
+      "kanji": "いい",
+      "kana": "いい",
+      "zh": "好的",
+      "audio": "audio/adj/L08-26.mp3"
+     },
+     {
+      "id": "L08",
+      "vi": 27,
+      "group": "i",
+      "kanji": "多い",
+      "kana": "おおい",
+      "zh": "多的",
+      "audio": "audio/adj/L08-27.mp3"
+     },
+     {
+      "id": "L08",
+      "vi": 28,
+      "group": "i",
+      "kanji": "少ない",
+      "kana": "すくない",
+      "zh": "少的",
+      "audio": "audio/adj/L08-28.mp3"
+     },
+     {
+      "id": "L08",
+      "vi": 29,
+      "group": "i",
+      "kanji": "安い",
+      "kana": "やすい",
+      "zh": "便宜的",
+      "audio": "audio/adj/L08-29.mp3"
+     },
+     {
+      "id": "L08",
+      "vi": 30,
+      "group": "i",
+      "kanji": "悪い",
+      "kana": "わるい",
+      "zh": "壞的",
+      "audio": "audio/adj/L08-30.mp3"
+     },
+     {
+      "id": "L08",
+      "vi": 31,
+      "group": "i",
+      "kanji": "若い",
+      "kana": "わかい",
+      "zh": "年輕的",
+      "audio": "audio/adj/L08-31.mp3"
+     },
+     {
+      "id": "L08",
+      "vi": 32,
+      "group": "i",
+      "kanji": "強い",
+      "kana": "つよい",
+      "zh": "強的",
+      "audio": "audio/adj/L08-32.mp3"
+     },
+     {
+      "id": "L08",
+      "vi": 33,
+      "group": "i",
+      "kanji": "弱い",
+      "kana": "よわい",
+      "zh": "弱的",
+      "audio": "audio/adj/L08-33.mp3"
+     },
+     {
+      "id": "L08",
+      "vi": 35,
+      "group": "i",
+      "kanji": "かわいい",
+      "kana": "かわいい",
+      "zh": "可愛的",
+      "audio": "audio/adj/L08-35.mp3"
+     },
+     {
       "id": "L09",
       "vi": 0,
       "group": "i",
@@ -2966,6 +3300,150 @@
       "audio": "audio/adj/L09-12.mp3"
      },
      {
+      "id": "L09",
+      "vi": 26,
+      "group": "i",
+      "kanji": "暗い",
+      "kana": "くらい",
+      "zh": "暗的",
+      "audio": "audio/adj/L09-26.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 27,
+      "group": "i",
+      "kanji": "遠い",
+      "kana": "とおい",
+      "zh": "遠的",
+      "audio": "audio/adj/L09-27.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 28,
+      "group": "i",
+      "kanji": "狭い",
+      "kana": "せまい",
+      "zh": "狹窄的",
+      "audio": "audio/adj/L09-28.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 29,
+      "group": "i",
+      "kanji": "汚い",
+      "kana": "きたない",
+      "zh": "髒的",
+      "audio": "audio/adj/L09-29.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 30,
+      "group": "i",
+      "kanji": "危ない",
+      "kana": "あぶない",
+      "zh": "危險的",
+      "audio": "audio/adj/L09-30.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 31,
+      "group": "i",
+      "kanji": "太い",
+      "kana": "ふとい",
+      "zh": "粗的",
+      "audio": "audio/adj/L09-31.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 32,
+      "group": "i",
+      "kanji": "細い",
+      "kana": "ほそい",
+      "zh": "細的",
+      "audio": "audio/adj/L09-32.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 33,
+      "group": "i",
+      "kanji": "まずい",
+      "kana": "まずい",
+      "zh": "難吃的",
+      "audio": "audio/adj/L09-33.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 34,
+      "group": "i",
+      "kanji": "薄い",
+      "kana": "うすい",
+      "zh": "薄的、淡的",
+      "audio": "audio/adj/L09-34.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 35,
+      "group": "i",
+      "kanji": "低い",
+      "kana": "ひくい",
+      "zh": "低的",
+      "audio": "audio/adj/L09-35.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 36,
+      "group": "i",
+      "kanji": "丸い",
+      "kana": "まるい",
+      "zh": "圓的",
+      "audio": "audio/adj/L09-36.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 37,
+      "group": "i",
+      "kanji": "赤い",
+      "kana": "あかい",
+      "zh": "紅色的",
+      "audio": "audio/adj/L09-37.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 38,
+      "group": "i",
+      "kanji": "青い",
+      "kana": "あおい",
+      "zh": "藍色的",
+      "audio": "audio/adj/L09-38.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 39,
+      "group": "i",
+      "kanji": "白い",
+      "kana": "しろい",
+      "zh": "白色的",
+      "audio": "audio/adj/L09-39.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 40,
+      "group": "i",
+      "kanji": "黒い",
+      "kana": "くろい",
+      "zh": "黑色的",
+      "audio": "audio/adj/L09-40.mp3"
+     },
+     {
+      "id": "L09",
+      "vi": 41,
+      "group": "i",
+      "kanji": "黄色い",
+      "kana": "きいろい",
+      "zh": "黃色的",
+      "audio": "audio/adj/L09-41.mp3"
+     },
+     {
       "id": "L14",
       "vi": 13,
       "group": "i",
@@ -3027,6 +3505,60 @@
       "kana": "ねむい",
       "zh": "想睡",
       "audio": "audio/adj/L19-14.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 19,
+      "group": "i",
+      "kanji": "",
+      "kana": "おもい",
+      "zh": "重",
+      "audio": "audio/adj/L22-19.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 20,
+      "group": "i",
+      "kanji": "",
+      "kana": "かるい",
+      "zh": "輕",
+      "audio": "audio/adj/L22-20.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 21,
+      "group": "i",
+      "kanji": "",
+      "kana": "はやい",
+      "zh": "快",
+      "audio": "audio/adj/L22-21.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 22,
+      "group": "i",
+      "kanji": "",
+      "kana": "おそい",
+      "zh": "慢、晚",
+      "audio": "audio/adj/L22-22.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 23,
+      "group": "i",
+      "kanji": "",
+      "kana": "ひろい",
+      "zh": "寬廣",
+      "audio": "audio/adj/L22-23.mp3"
+     },
+     {
+      "id": "L23",
+      "vi": 23,
+      "group": "i",
+      "kanji": "",
+      "kana": "ほしい",
+      "zh": "想要（東西）",
+      "audio": "audio/adj/L23-23.mp3"
      },
      {
       "id": "L36",
@@ -3152,6 +3684,24 @@
       "audio": "audio/adj/L08-22.mp3"
      },
      {
+      "id": "L08",
+      "vi": 34,
+      "group": "na",
+      "kanji": "嫌",
+      "kana": "いや",
+      "zh": "討厭、不願意",
+      "audio": "audio/adj/L08-34.mp3"
+     },
+     {
+      "id": "L08",
+      "vi": 36,
+      "group": "na",
+      "kanji": "大好き",
+      "kana": "だいすき",
+      "zh": "很喜歡",
+      "audio": "audio/adj/L08-36.mp3"
+     },
+     {
       "id": "L09",
       "vi": 13,
       "group": "na",
@@ -3242,6 +3792,15 @@
       "audio": "audio/adj/L15-25.mp3"
      },
      {
+      "id": "L16",
+      "vi": 37,
+      "group": "na",
+      "kanji": "りっぱ",
+      "kana": "りっぱ",
+      "zh": "出色、了不起",
+      "audio": "audio/adj/L16-37.mp3"
+     },
+     {
       "id": "L18",
       "vi": 20,
       "group": "na",
@@ -3285,6 +3844,150 @@
       "kana": "とくべつ",
       "zh": "特別",
       "audio": "audio/adj/L20-21.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 12,
+      "group": "na",
+      "kanji": "心配",
+      "kana": "しんぱい",
+      "zh": "擔心",
+      "audio": "audio/adj/L21-12.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 13,
+      "group": "na",
+      "kanji": "自由",
+      "kana": "じゆう",
+      "zh": "自由",
+      "audio": "audio/adj/L21-13.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 14,
+      "group": "na",
+      "kanji": "不便",
+      "kana": "ふべん",
+      "zh": "不方便",
+      "audio": "audio/adj/L21-14.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 15,
+      "group": "na",
+      "kanji": "便利",
+      "kana": "べんり",
+      "zh": "方便",
+      "audio": "audio/adj/L21-15.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 16,
+      "group": "na",
+      "kanji": "特別",
+      "kana": "とくべつ",
+      "zh": "特別",
+      "audio": "audio/adj/L21-16.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 17,
+      "group": "na",
+      "kanji": "親切",
+      "kana": "しんせつ",
+      "zh": "親切、熱心",
+      "audio": "audio/adj/L21-17.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 18,
+      "group": "na",
+      "kanji": "有名",
+      "kana": "ゆうめい",
+      "zh": "有名",
+      "audio": "audio/adj/L21-18.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 19,
+      "group": "na",
+      "kanji": "上手",
+      "kana": "じょうず",
+      "zh": "擅長",
+      "audio": "audio/adj/L21-19.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 20,
+      "group": "na",
+      "kanji": "下手",
+      "kana": "へた",
+      "zh": "不擅長",
+      "audio": "audio/adj/L21-20.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 21,
+      "group": "na",
+      "kanji": "好き",
+      "kana": "すき",
+      "zh": "喜歡",
+      "audio": "audio/adj/L21-21.mp3"
+     },
+     {
+      "id": "L21",
+      "vi": 22,
+      "group": "na",
+      "kanji": "嫌い",
+      "kana": "きらい",
+      "zh": "討厭",
+      "audio": "audio/adj/L21-22.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 14,
+      "group": "na",
+      "kanji": "静か",
+      "kana": "しずか",
+      "zh": "安靜",
+      "audio": "audio/adj/L22-14.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 15,
+      "group": "na",
+      "kanji": "",
+      "kana": "にぎやか",
+      "zh": "熱鬧",
+      "audio": "audio/adj/L22-15.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 16,
+      "group": "na",
+      "kanji": "同じ",
+      "kana": "おなじ",
+      "zh": "一樣、相同",
+      "audio": "audio/adj/L22-16.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 17,
+      "group": "na",
+      "kanji": "大変",
+      "kana": "たいへん",
+      "zh": "辛苦、不得了",
+      "audio": "audio/adj/L22-17.mp3"
+     },
+     {
+      "id": "L22",
+      "vi": 18,
+      "group": "na",
+      "kanji": "便利",
+      "kana": "べんり",
+      "zh": "方便",
+      "audio": "audio/adj/L22-18.mp3"
      },
      {
       "id": "L30",
