@@ -479,8 +479,12 @@
   .sblock + .sheads{margin:0 -14px; padding:14px 10px 0; border-top:2px solid var(--line)}
   .srow.playing{background:var(--sand2)}
   .srow.playing .sk{color:var(--shu)}
-  .seqlink{display:block; text-align:center; margin:14px 0 4px; font-size:12.5px; color:var(--ink2);
-    background:var(--sand); border:1px solid var(--line); border-radius:12px; padding:10px}
+  .seqlinks{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:14px 0 4px; font-size:12.5px; color:var(--muted)}
+  .seqlinks span{flex:0 0 auto}
+  .seqlinks a{color:var(--ink2); background:var(--sand); border:1px solid var(--line);
+    border-radius:999px; padding:7px 12px; text-decoration:none}
+  .seqlinks a:active{background:var(--sand2)}
+  .sgrp.focus{border-color:#0b5cad; box-shadow:0 0 0 3px rgba(11,92,173,.13)}
   .tools{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:11px}
   .tool{display:flex; align-items:center; gap:8px; background:var(--sand); border:1px solid var(--line);
     border-radius:12px; padding:8px 10px; text-decoration:none; color:var(--ink);
@@ -562,7 +566,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v130</span>
+    <span class="ver" id="verTag">v131</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1167,6 +1171,14 @@
     return r;
   }
 
+  /* 每課只顯示跟這一課教過的內容相關的順序表；冇相關項目就唔放入口 */
+  var SEQ_FOR_LESSON = {
+    3: ['time'], 4: ['num', 'hitotsu', 'cnt4'], 5: ['dmy', 'week'],
+    10: ['cnt3'], 16: ['cnt1', 'cnt3'], 17: ['cnt4']
+  };
+  var SEQ_SHORT = { num:'數字', dmy:'日數', week:'星期', time:'時間', floor:'樓層',
+    hitotsu:'～つ', cnt1:'數詞（一）', cnt2:'數詞（二）', cnt3:'數詞（三）', cnt4:'數詞（四）' };
+
   function segVocab(l){
     var h = '<div class="quizbar"><div class="qinfo"><b>單字自測</b><span>抽 10 個字，先回想再看答案</span></div>' +
               '<div class="seg2" id="cardDir">' +
@@ -1190,8 +1202,14 @@
              (audioFor(l.id,'v'+vi) ? ' data-audio="'+esc(audioFor(l.id,'v'+vi))+'"' : '') +
              ' aria-label="播放發音">'+SPK+'</button></div>';
     });
-    h += '</div>' +
-         '<a class="seqlink" href="#/seq">數字、日數、星期、時間、樓層、人數的順序表 →</a>';
+    h += '</div>';
+    /* 只放跟這一課相關的順序表入口，直接跳到那一段 */
+    var rel = SEQ_FOR_LESSON[l.no] || [];
+    if (rel.length){
+      h += '<div class="seqlinks"><span>相關順序表</span>' + rel.map(function(gid){
+        return '<a href="#/seq/' + gid + '">' + esc(SEQ_SHORT[gid] || gid) + ' →</a>';
+      }).join('') + '</div>';
+    }
     return h;
   }
 
@@ -2245,7 +2263,7 @@
     }
     return out + '</div>';
   }
-  function renderSeq(){
+  function renderSeq(focusGid){
     document.title = '順序表 · 日語階梯';
     app.innerHTML =
       '<div class="lhead">' +
@@ -2258,7 +2276,7 @@
       if (!host) return;
       if (!d || !d.groups){ host.innerHTML = '<p class="secnote">載入失敗，請重新整理。</p>'; return; }
       host.innerHTML = d.groups.map(function(g){
-        return '<section class="sgrp' + (g.compact ? ' compact' : '') +
+        return '<section id="sgrp-' + esc(g.id) + '" class="sgrp' + (g.compact ? ' compact' : '') +
           (g.kind === 'matrix' ? ' matrix' : '') +
           (g.sections && g.sections.length >= 3 ? ' multi3' : '') + '">' +
           '<div class="shead"><div><b>' + esc(g.title) + '</b>' +
@@ -2278,6 +2296,15 @@
         });
       }
       bindSpeakers(host);
+      /* 由課堂的「相關順序表」入嚟：捲到對應那一段並短暫標示 */
+      if (focusGid){
+        var box = document.getElementById('sgrp-' + focusGid);
+        if (box){
+          box.classList.add('focus');
+          try{ box.scrollIntoView({ block:'start' }); }catch(e){ box.scrollIntoView(); }
+          setTimeout(function(){ box.classList.remove('focus'); }, 1800);
+        }
+      }
       /* 沒有喇叭制的表格（例如手機三欄的時間表）：點整行都可以播 */
       Array.prototype.forEach.call(host.querySelectorAll('.srow[data-audio]'), function(row){
         row.addEventListener('click', function(ev){
@@ -2850,7 +2877,8 @@
   function route(){
     stopAudio();
     var h = (location.hash || '#/').replace(/^#/, '');
-    if (h === '/seq'){ stopAudio(); renderSeq(); return; }
+    var sm = h.match(/^\/seq(?:\/([a-z0-9-]+))?/);
+    if (sm){ stopAudio(); renderSeq(sm[1] || null); return; }
     if (h === '/note'){ stopAudio(); renderNotebook(); return; }
     var em = h.match(/^\/exam\/(\d+)/);
     if (em){ renderExam(+em[1]); return; }
