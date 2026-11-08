@@ -450,6 +450,8 @@
   .sgrp.compact .sblock.b4 .srow .sk{grid-column:1; grid-row:1; font-size:13px; line-height:1.35}
   .sgrp.compact .sblock.b4 .srow .sn{grid-column:1; grid-row:2; font-size:11.5px; line-height:1.3; white-space:normal}
   .sgrp.compact .sblock.b4 .srow .spk{grid-column:2; grid-row:1 / span 2}
+  /* 何日多一行（二十日），各欄自行收口，長短不齊也看得出是完整的表 */
+  .sgrp.compact .sblock.b4 .scol{border-bottom:1px solid var(--line)}
   /* 拆成兩組時（窄螢幕的四欄表），第二組的欄標題之上也畫一條較粗的分隔線 */
   .sblock + .sheads{margin:0 -14px; padding:14px 10px 0; border-top:2px solid var(--line)}
   .srow.playing{background:var(--sand2)}
@@ -537,7 +539,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v121</span>
+    <span class="ver" id="verTag">v122</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
