@@ -456,6 +456,25 @@
   .sgrp.compact .sblock.b4 .srow .spk{grid-column:2; grid-row:1 / span 2}
   /* 何日多一行（二十日），各欄自行收口，長短不齊也看得出是完整的表 */
   .sgrp.compact .sblock.b4 .scol{border-bottom:1px solid var(--line)}
+  /* 數詞矩陣（跟教科書版面）：一列三個量詞，欄頭是疑問詞，每格漢字在上、假名在下，喇叭在右上 */
+  .mtable{margin:6px -14px 0}
+  .msheads{display:grid; grid-template-columns:repeat(var(--cols,3),minmax(0,1fr)); background:var(--sand)}
+  .mhead{position:relative; padding:7px 8px 6px; min-width:0}
+  .mhead + .mhead{border-left:1px solid var(--line)}
+  .mhead .mk{display:block; font-size:14px; font-weight:700; color:var(--ink); line-height:1.3}
+  .mhead .mn{display:block; font-size:11.5px; color:var(--muted); line-height:1.3}
+  .mhead .spk{position:absolute; right:5px; top:7px; width:20px; height:20px}
+  .mhead .spk svg{width:11px; height:11px}
+  .mscols{display:grid; grid-template-columns:repeat(var(--cols,3),minmax(0,1fr))}
+  .mscols .scol{min-width:0}
+  .mscols .scol + .scol{border-left:1px solid var(--line)}
+  .sgrp.matrix .srow{position:relative; grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto;
+    row-gap:0; padding:6px 8px}
+  .sgrp.matrix .srow .sk{grid-column:1; grid-row:1}
+  .sgrp.matrix .srow .sn{grid-column:1; grid-row:2; font-size:11.5px; line-height:1.3}
+  .sgrp.matrix .srow .sz{display:none}
+  .sgrp.matrix .srow .spk{position:absolute; right:5px; top:7px; width:20px; height:20px}
+  .sgrp.matrix .srow .spk svg{width:11px; height:11px}
   /* 拆成兩組時（窄螢幕的四欄表），第二組的欄標題之上也畫一條較粗的分隔線 */
   .sblock + .sheads{margin:0 -14px; padding:14px 10px 0; border-top:2px solid var(--line)}
   .srow.playing{background:var(--sand2)}
@@ -543,7 +562,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v127</span>
+    <span class="ver" id="verTag">v128</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2154,6 +2173,24 @@
   /* 多欄：按「每欄固定行數」切，順序與書本一樣由上而下、再往右一欄 */
   function seqBody(g){
     var n = g.items.length;
+    /* 數詞：跟教科書一樣，一列三個量詞；欄頭是疑問詞（何人／なんにん），每格有喇叭 */
+    if (g.kind === 'matrix' && g.counters && g.counters.length){
+      var cols = g.counters.length, at = 0,
+          head = '<div class="msheads" style="--cols:' + cols + '">',
+          body = '<div class="mscols" style="--cols:' + cols + '">';
+      g.counters.forEach(function(c){
+        head += '<div class="mhead">' +
+          '<button class="spk" data-say="' + esc(c.kana) + '" data-audio="' + esc(c.audio || '') +
+            '" aria-label="播放 ' + esc(c.kana) + '">' + SPK + '</button>' +
+          '<span class="mk">' + esc(c.kanji) + '</span>' +
+          '<span class="mn">' + esc(c.kana) + '</span></div>';
+        body += '<div class="scol">' + g.items.slice(at, at + c.n).map(function(it, j){
+          return seqRow(g, it, at + j);
+        }).join('') + '</div>';
+        at += c.n;
+      });
+      return '<div class="mtable">' + head + '</div>' + body + '</div>';
+    }
     /* 有 sections＝跟書本分欄（例如 時間：何時｜何分｜何分），每欄各有小標題 */
     if (g.blocks && g.blocks.length){
       /* 一個 section 內分幾組（例如數字：1～99／百千万元／大數），組與組之間一條線 */
@@ -2221,6 +2258,7 @@
       if (!d || !d.groups){ host.innerHTML = '<p class="secnote">載入失敗，請重新整理。</p>'; return; }
       host.innerHTML = d.groups.map(function(g){
         return '<section class="sgrp' + (g.compact ? ' compact' : '') +
+          (g.kind === 'matrix' ? ' matrix' : '') +
           (g.sections && g.sections.length >= 3 ? ' multi3' : '') + '">' +
           '<div class="shead"><div><b>' + esc(g.title) + '</b>' +
             (g.note ? '<span>' + esc(g.note) + '</span>' : '') + '</div>' +

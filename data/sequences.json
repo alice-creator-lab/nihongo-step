@@ -1159,8 +1159,30 @@
    ]
   },
   {
-   "id": "people",
-   "title": "人數",
+   "id": "cnt1",
+   "title": "數詞（一）：人・枚・台",
+   "note": "人＝人數｜枚＝薄片｜台＝機器車輛",
+   "kind": "matrix",
+   "counters": [
+    {
+     "kanji": "何人",
+     "kana": "なんにん",
+     "n": 10,
+     "audio": "audio/seq/q-people.mp3"
+    },
+    {
+     "kanji": "何枚",
+     "kana": "なんまい",
+     "n": 10,
+     "audio": "audio/seq/q-mai.mp3"
+    },
+    {
+     "kanji": "何台",
+     "kana": "なんだい",
+     "n": 10,
+     "audio": "audio/seq/q-dai.mp3"
+    }
+   ],
    "items": [
     {
      "kanji": "一人",
@@ -1221,79 +1243,7 @@
      "kana": "じゅうにん",
      "zh": "十個人",
      "audio": "audio/seq/people-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "hitotsu",
-   "title": "～つ（ひとつ・ふたつ）",
-   "items": [
-    {
-     "kanji": "一つ",
-     "kana": "ひとつ",
-     "zh": "一個",
-     "audio": "audio/seq/hitotsu-0.mp3"
     },
-    {
-     "kanji": "二つ",
-     "kana": "ふたつ",
-     "zh": "兩個",
-     "audio": "audio/seq/hitotsu-1.mp3"
-    },
-    {
-     "kanji": "三つ",
-     "kana": "みっつ",
-     "zh": "三個",
-     "audio": "audio/seq/hitotsu-2.mp3"
-    },
-    {
-     "kanji": "四つ",
-     "kana": "よっつ",
-     "zh": "四個",
-     "audio": "audio/seq/hitotsu-3.mp3"
-    },
-    {
-     "kanji": "五つ",
-     "kana": "いつつ",
-     "zh": "五個",
-     "audio": "audio/seq/hitotsu-4.mp3"
-    },
-    {
-     "kanji": "六つ",
-     "kana": "むっつ",
-     "zh": "六個",
-     "audio": "audio/seq/hitotsu-5.mp3"
-    },
-    {
-     "kanji": "七つ",
-     "kana": "ななつ",
-     "zh": "七個",
-     "audio": "audio/seq/hitotsu-6.mp3"
-    },
-    {
-     "kanji": "八つ",
-     "kana": "やっつ",
-     "zh": "八個",
-     "audio": "audio/seq/hitotsu-7.mp3"
-    },
-    {
-     "kanji": "九つ",
-     "kana": "ここのつ",
-     "zh": "九個",
-     "audio": "audio/seq/hitotsu-8.mp3"
-    },
-    {
-     "kanji": "十",
-     "kana": "とお",
-     "zh": "十個",
-     "audio": "audio/seq/hitotsu-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "mai",
-   "title": "～枚（薄片物件）",
-   "items": [
     {
      "kanji": "一枚",
      "kana": "いちまい",
@@ -1353,13 +1303,7 @@
      "kana": "じゅうまい",
      "zh": "十張",
      "audio": "audio/seq/mai-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "dai",
-   "title": "～台（機器、車輛）",
-   "items": [
+    },
     {
      "kanji": "一台",
      "kana": "いちだい",
@@ -1423,8 +1367,30 @@
    ]
   },
   {
-   "id": "satsu",
-   "title": "～冊（書本）",
+   "id": "cnt2",
+   "title": "數詞（二）：冊・個・本",
+   "note": "冊＝書本｜個＝小物件｜本＝細長",
+   "kind": "matrix",
+   "counters": [
+    {
+     "kanji": "何冊",
+     "kana": "なんさつ",
+     "n": 10,
+     "audio": "audio/seq/q-satsu.mp3"
+    },
+    {
+     "kanji": "何個",
+     "kana": "なんこ",
+     "n": 10,
+     "audio": "audio/seq/q-ko.mp3"
+    },
+    {
+     "kanji": "何本",
+     "kana": "なんぼん",
+     "n": 10,
+     "audio": "audio/seq/q-hon.mp3"
+    }
+   ],
    "items": [
     {
      "kanji": "一冊",
@@ -1485,13 +1451,7 @@
      "kana": "じゅっさつ",
      "zh": "十本",
      "audio": "audio/seq/satsu-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "ko",
-   "title": "～個（小物件）",
-   "items": [
+    },
     {
      "kanji": "一個",
      "kana": "いっこ",
@@ -1551,13 +1511,7 @@
      "kana": "じゅっこ",
      "zh": "十個",
      "audio": "audio/seq/ko-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "hon",
-   "title": "～本（細長物件）",
-   "items": [
+    },
     {
      "kanji": "一本",
      "kana": "いっぽん",
@@ -1621,8 +1575,30 @@
    ]
   },
   {
-   "id": "hiki",
-   "title": "～匹（小動物）",
+   "id": "cnt3",
+   "title": "數詞（三）：匹・杯・歲",
+   "note": "匹＝小動物｜杯＝飲料｜歲＝年齡",
+   "kind": "matrix",
+   "counters": [
+    {
+     "kanji": "何匹",
+     "kana": "なんびき",
+     "n": 10,
+     "audio": "audio/seq/q-hiki.mp3"
+    },
+    {
+     "kanji": "何杯",
+     "kana": "なんばい",
+     "n": 10,
+     "audio": "audio/seq/q-hai.mp3"
+    },
+    {
+     "kanji": "何歳",
+     "kana": "なんさい",
+     "n": 11,
+     "audio": "audio/seq/q-sai.mp3"
+    }
+   ],
    "items": [
     {
      "kanji": "一匹",
@@ -1683,13 +1659,7 @@
      "kana": "じゅっぴき",
      "zh": "十隻",
      "audio": "audio/seq/hiki-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "hai",
-   "title": "～杯（飲料）",
-   "items": [
+    },
     {
      "kanji": "一杯",
      "kana": "いっぱい",
@@ -1749,13 +1719,7 @@
      "kana": "じゅっぱい",
      "zh": "十杯",
      "audio": "audio/seq/hai-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "sai",
-   "title": "～歳（年齡）",
-   "items": [
+    },
     {
      "kanji": "一歳",
      "kana": "いっさい",
@@ -1825,8 +1789,30 @@
    ]
   },
   {
-   "id": "kai",
-   "title": "～回（次數）",
+   "id": "cnt4",
+   "title": "數詞（四）：回・番・円",
+   "note": "回＝次數｜番＝編號｜円＝金額",
+   "kind": "matrix",
+   "counters": [
+    {
+     "kanji": "何回",
+     "kana": "なんかい",
+     "n": 10,
+     "audio": "audio/seq/q-kai.mp3"
+    },
+    {
+     "kanji": "何番",
+     "kana": "なんばん",
+     "n": 10,
+     "audio": "audio/seq/q-ban.mp3"
+    },
+    {
+     "kanji": "何円",
+     "kana": "なんえん",
+     "n": 10,
+     "audio": "audio/seq/q-en.mp3"
+    }
+   ],
    "items": [
     {
      "kanji": "一回",
@@ -1887,13 +1873,7 @@
      "kana": "じゅっかい",
      "zh": "十次",
      "audio": "audio/seq/kai-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "ban",
-   "title": "～番（編號）",
-   "items": [
+    },
     {
      "kanji": "一番",
      "kana": "いちばん",
@@ -1953,13 +1933,7 @@
      "kana": "じゅうばん",
      "zh": "十號",
      "audio": "audio/seq/ban-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "en",
-   "title": "～円（金額）",
-   "items": [
+    },
     {
      "kanji": "一円",
      "kana": "いちえん",
@@ -2019,6 +1993,72 @@
      "kana": "じゅうえん",
      "zh": "十日圓",
      "audio": "audio/seq/en-9.mp3"
+    }
+   ]
+  },
+  {
+   "id": "hitotsu",
+   "title": "～つ（ひとつ・ふたつ）",
+   "items": [
+    {
+     "kanji": "一つ",
+     "kana": "ひとつ",
+     "zh": "一個",
+     "audio": "audio/seq/hitotsu-0.mp3"
+    },
+    {
+     "kanji": "二つ",
+     "kana": "ふたつ",
+     "zh": "兩個",
+     "audio": "audio/seq/hitotsu-1.mp3"
+    },
+    {
+     "kanji": "三つ",
+     "kana": "みっつ",
+     "zh": "三個",
+     "audio": "audio/seq/hitotsu-2.mp3"
+    },
+    {
+     "kanji": "四つ",
+     "kana": "よっつ",
+     "zh": "四個",
+     "audio": "audio/seq/hitotsu-3.mp3"
+    },
+    {
+     "kanji": "五つ",
+     "kana": "いつつ",
+     "zh": "五個",
+     "audio": "audio/seq/hitotsu-4.mp3"
+    },
+    {
+     "kanji": "六つ",
+     "kana": "むっつ",
+     "zh": "六個",
+     "audio": "audio/seq/hitotsu-5.mp3"
+    },
+    {
+     "kanji": "七つ",
+     "kana": "ななつ",
+     "zh": "七個",
+     "audio": "audio/seq/hitotsu-6.mp3"
+    },
+    {
+     "kanji": "八つ",
+     "kana": "やっつ",
+     "zh": "八個",
+     "audio": "audio/seq/hitotsu-7.mp3"
+    },
+    {
+     "kanji": "九つ",
+     "kana": "ここのつ",
+     "zh": "九個",
+     "audio": "audio/seq/hitotsu-8.mp3"
+    },
+    {
+     "kanji": "十",
+     "kana": "とお",
+     "zh": "十個",
+     "audio": "audio/seq/hitotsu-9.mp3"
     }
    ]
   },
