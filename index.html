@@ -417,6 +417,9 @@
   .srow .sn{color:var(--ink2); font-size:13px}
   .srow .sz{color:var(--muted); font-size:12.5px; text-align:right}
   /* 數字表：多欄，欄內一行一個數字 */
+  .sheads{display:grid; grid-template-columns:repeat(var(--cols,1),minmax(0,1fr)); margin:8px -14px 0;
+    padding:0 10px; font-size:11.5px; color:var(--muted); text-align:center; letter-spacing:.02em}
+  .sheads span{padding:3px 0 5px; border-bottom:1px solid var(--line)}
   .scols{display:grid; grid-template-columns:repeat(var(--cols,1),minmax(0,1fr)); margin:0 -14px}
   .scol{min-width:0}
   .scol + .scol{border-left:1px solid var(--line)}
@@ -433,6 +436,12 @@
     .sgrp.compact .srow .sk{grid-column:1; grid-row:1; font-size:13.5px; line-height:1.35}
     .sgrp.compact .srow .sn{grid-column:1; grid-row:2; font-size:11.5px; line-height:1.3}
     .sgrp.compact .srow .spk{grid-column:2; grid-row:1 / span 2}
+    /* 手機三欄（時間表）：空間不夠放喇叭，改為點整行播放 */
+    .sgrp.multi3 .srow{grid-template-columns:minmax(0,1fr); padding:6px 7px}
+    .sgrp.multi3 .srow .sk{font-size:12.5px}
+    .sgrp.multi3 .srow .sn{font-size:11px}
+    .sgrp.multi3 .srow .spk{display:none}
+    .sgrp.multi3 .srow{cursor:pointer}
   }
   .srow.playing{background:var(--sand2)}
   .srow.playing .sk{color:var(--shu)}
@@ -519,7 +528,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v116</span>
+    <span class="ver" id="verTag">v117</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1148,7 +1157,7 @@
              ' aria-label="播放發音">'+SPK+'</button></div>';
     });
     h += '</div>' +
-         '<a class="seqlink" href="#/seq">數字、日期、星期、鐘點、樓層、人數的順序表 →</a>';
+         '<a class="seqlink" href="#/seq">數字、日期、星期、時間、樓層、人數的順序表 →</a>';
     return h;
   }
 
@@ -2117,7 +2126,8 @@
     return out;
   }
   function seqRow(g, it, i){
-    return '<div class="srow" id="srow-' + g.id + '-' + i + '">' +
+    return '<div class="srow" id="srow-' + g.id + '-' + i + '"' +
+      ' data-audio="' + esc(it.audio) + '" data-say="' + esc(it.kana) + '">' +
       '<span class="sk">' + esc(it.kanji) + '</span>' +
       '<span class="sn">' + seqKana(it) + '</span>' +
       (g.compact ? '' : '<span class="sz">' + esc(it.zh) + '</span>') +
@@ -2127,6 +2137,19 @@
   /* 多欄：按「每欄固定行數」切，順序與書本一樣由上而下、再往右一欄 */
   function seqBody(g){
     var n = g.items.length;
+    /* 有 sections＝跟書本分欄（例如 時間：何時｜何分｜何分），每欄各有小標題 */
+    if (g.sections && g.sections.length){
+      var m = g.sections.length, head = '<div class="sheads" style="--cols:' + m + '">',
+          body = '<div class="scols" style="--cols:' + m + '">', at = 0;
+      g.sections.forEach(function(s){
+        head += '<span>' + esc(s.label) + '</span>';
+        body += '<div class="scol">' + g.items.slice(at, at + s.n).map(function(it, j){
+          return seqRow(g, it, at + j);
+        }).join('') + '</div>';
+        at += s.n;
+      });
+      return head + '</div>' + body + '</div>';
+    }
     var cols = g.cols ? (window.innerWidth < 560 && g.cols_mobile ? g.cols_mobile : g.cols) : 1;
     if (cols > n) cols = n;
     if (cols < 2) {
@@ -2153,7 +2176,8 @@
       if (!host) return;
       if (!d || !d.groups){ host.innerHTML = '<p class="secnote">載入失敗，請重新整理。</p>'; return; }
       host.innerHTML = d.groups.map(function(g){
-        return '<section class="sgrp' + (g.compact ? ' compact' : '') + '">' +
+        return '<section class="sgrp' + (g.compact ? ' compact' : '') +
+          (g.sections && g.sections.length >= 3 ? ' multi3' : '') + '">' +
           '<div class="shead"><div><b>' + esc(g.title) + '</b>' +
             (g.note ? '<span>' + esc(g.note) + '</span>' : '') + '</div>' +
             '<button class="btn2 splay" data-g="' + g.id + '">▶ 播放全部</button></div>' +
@@ -2171,6 +2195,14 @@
         });
       }
       bindSpeakers(host);
+      /* 沒有喇叭制的表格（例如手機三欄的時間表）：點整行都可以播 */
+      Array.prototype.forEach.call(host.querySelectorAll('.srow[data-audio]'), function(row){
+        row.addEventListener('click', function(ev){
+          if (ev.target && ev.target.closest && ev.target.closest('.spk')) return;
+          var url = row.getAttribute('data-audio');
+          if (url) playFile(url, null, row);
+        });
+      });
     });
   }
 
@@ -2771,7 +2803,7 @@
     // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
     if (/audio\/(verb|adj)\//.test(url)) return 't1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
-    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e6';
+    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e7';
     return AUDIO.v || 1;
   }
   function playFile(url, onend, el, rate){
