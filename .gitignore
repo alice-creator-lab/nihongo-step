@@ -5,3 +5,4 @@ __pycache__/
 models/
 *.tar.gz
 audio/adjform/.trimmed/
+audio/verbform/.trimmed/

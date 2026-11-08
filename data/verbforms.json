@@ -1,0 +1,3228 @@
+{
+ "v": 1,
+ "note": "辞書形由來：data/wordtables.json；て形・た形・ない形由規則生成。",
+ "sets": [
+  {
+   "id": "godan",
+   "title": "五段動詞",
+   "kana": "ごだんどうし",
+   "total": 113,
+   "blocks": [
+    {
+     "title": "わ行",
+     "rows": [
+      {
+       "group": "godan",
+       "src": "L07-6",
+       "kanji": "買う",
+       "kana": "かう",
+       "zh": "買",
+       "lessons": [
+        "L07"
+       ],
+       "masu": "かいます",
+       "te": "かって",
+       "ta": "かった",
+       "nai": "かわない",
+       "audio": {
+        "dict": "audio/verb/L07-6.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L07-9",
+       "kanji": "会う",
+       "kana": "あう",
+       "zh": "見面",
+       "lessons": [
+        "L07"
+       ],
+       "masu": "あいます",
+       "te": "あって",
+       "ta": "あった",
+       "nai": "あわない",
+       "audio": {
+        "dict": "audio/verb/L07-9.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-5",
+       "kanji": "",
+       "kana": "ならう",
+       "zh": "學習（向人學）",
+       "lessons": [
+        "L12",
+        "L38"
+       ],
+       "masu": "ならいます",
+       "te": "ならって",
+       "ta": "ならった",
+       "nai": "ならわない",
+       "audio": {
+        "dict": "audio/verb/L12-5.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L20-14",
+       "kanji": "使う",
+       "kana": "つかう",
+       "zh": "使用",
+       "lessons": [
+        "L12",
+        "L14",
+        "L20",
+        "L31"
+       ],
+       "masu": "つかいます",
+       "te": "つかって",
+       "ta": "つかった",
+       "nai": "つかわない",
+       "audio": {
+        "dict": "audio/verb/L20-14.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L13-2",
+       "kanji": "",
+       "kana": "うたう",
+       "zh": "唱歌",
+       "lessons": [
+        "L13",
+        "L24",
+        "L39"
+       ],
+       "masu": "うたいます",
+       "te": "うたって",
+       "ta": "うたった",
+       "nai": "うたわない",
+       "audio": {
+        "dict": "audio/verb/L13-2.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L14-19",
+       "kanji": "",
+       "kana": "あらう",
+       "zh": "洗",
+       "lessons": [
+        "L14"
+       ],
+       "masu": "あらいます",
+       "te": "あらって",
+       "ta": "あらった",
+       "nai": "あらわない",
+       "audio": {
+        "dict": "audio/verb/L14-19.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L14-22",
+       "kanji": "",
+       "kana": "まにあう",
+       "zh": "趕得上",
+       "lessons": [
+        "L14",
+        "L31",
+        "L32",
+        "L33"
+       ],
+       "masu": "まにあいます",
+       "te": "まにあって",
+       "ta": "まにあった",
+       "nai": "まにあわない",
+       "audio": {
+        "dict": "audio/verb/L14-22.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L18-0",
+       "kanji": "言う",
+       "kana": "いう",
+       "zh": "說",
+       "lessons": [
+        "L18"
+       ],
+       "masu": "いいます",
+       "te": "いって",
+       "ta": "いった",
+       "nai": "いわない",
+       "audio": {
+        "dict": "audio/verb/L18-0.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L18-1",
+       "kanji": "思う",
+       "kana": "おもう",
+       "zh": "想、認為",
+       "lessons": [
+        "L18"
+       ],
+       "masu": "おもいます",
+       "te": "おもって",
+       "ta": "おもった",
+       "nai": "おもわない",
+       "audio": {
+        "dict": "audio/verb/L18-1.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L18-6",
+       "kanji": "誘う",
+       "kana": "さそう",
+       "zh": "邀約",
+       "lessons": [
+        "L18"
+       ],
+       "masu": "さそいます",
+       "te": "さそって",
+       "ta": "さそった",
+       "nai": "さそわない",
+       "audio": {
+        "dict": "audio/verb/L18-6.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L20-8",
+       "kanji": "吸う",
+       "kana": "すう",
+       "zh": "抽（菸）、吸",
+       "lessons": [
+        "L20"
+       ],
+       "masu": "すいます",
+       "te": "すって",
+       "ta": "すった",
+       "nai": "すわない",
+       "audio": {
+        "dict": "audio/verb/L20-8.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L22-24",
+       "kanji": "",
+       "kana": "ちがう",
+       "zh": "不同",
+       "lessons": [
+        "L22"
+       ],
+       "masu": "ちがいます",
+       "te": "ちがって",
+       "ta": "ちがった",
+       "nai": "ちがわない",
+       "audio": {
+        "dict": "audio/verb/L22-24.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L35-20",
+       "kanji": "",
+       "kana": "そう",
+       "zh": "沿著",
+       "lessons": [
+        "L35"
+       ],
+       "masu": "そいます",
+       "te": "そって",
+       "ta": "そった",
+       "nai": "そわない",
+       "audio": {
+        "dict": "audio/verb/L35-20.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L36-24",
+       "kanji": "",
+       "kana": "わらう",
+       "zh": "笑",
+       "lessons": [
+        "L36",
+        "L39"
+       ],
+       "masu": "わらいます",
+       "te": "わらって",
+       "ta": "わらった",
+       "nai": "わらわない",
+       "audio": {
+        "dict": "audio/verb/L36-24.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L38-1",
+       "kanji": "",
+       "kana": "もらう",
+       "zh": "得到、收到",
+       "lessons": [
+        "L38"
+       ],
+       "masu": "もらいます",
+       "te": "もらって",
+       "ta": "もらった",
+       "nai": "もらわない",
+       "audio": {
+        "dict": "audio/verb/L38-1.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L38-11",
+       "kanji": "",
+       "kana": "てつだう",
+       "zh": "幫忙",
+       "lessons": [
+        "L38"
+       ],
+       "masu": "てつだいます",
+       "te": "てつだって",
+       "ta": "てつだった",
+       "nai": "てつだわない",
+       "audio": {
+        "dict": "audio/verb/L38-11.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L40-5",
+       "kanji": "",
+       "kana": "うかがう",
+       "zh": "拜訪、請教（謙讓）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "うかがいます",
+       "te": "うかがって",
+       "ta": "うかがった",
+       "nai": "うかがわない",
+       "audio": {
+        "dict": "audio/verb/L40-5.mp3"
+       }
+      }
+     ]
+    },
+    {
+     "title": "か行",
+     "rows": [
+      {
+       "group": "godan",
+       "src": "L06-0",
+       "kanji": "行く",
+       "kana": "いく",
+       "zh": "去",
+       "lessons": [
+        "L06"
+       ],
+       "masu": "いきます",
+       "te": "いって",
+       "ta": "いった",
+       "nai": "いかない",
+       "audio": {
+        "dict": "audio/verb/L06-0.mp3",
+        "masu": "audio/verbform/L06-0-masu.mp3",
+        "te": "audio/verbform/L06-0-te.mp3",
+        "ta": "audio/verbform/L06-0-ta.mp3",
+        "nai": "audio/verbform/L06-0-nai.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L06-3",
+       "kanji": "歩く",
+       "kana": "あるく",
+       "zh": "走路",
+       "lessons": [
+        "L06",
+        "L12"
+       ],
+       "masu": "あるきます",
+       "te": "あるいて",
+       "ta": "あるいた",
+       "nai": "あるかない",
+       "audio": {
+        "dict": "audio/verb/L06-3.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L07-3",
+       "kanji": "聞く",
+       "kana": "きく",
+       "zh": "聽、問",
+       "lessons": [
+        "L07",
+        "L11",
+        "L18",
+        "L24",
+        "L30"
+       ],
+       "masu": "ききます",
+       "te": "きいて",
+       "ta": "きいた",
+       "nai": "きかない",
+       "audio": {
+        "dict": "audio/verb/L07-3.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L07-5",
+       "kanji": "書く",
+       "kana": "かく",
+       "zh": "寫",
+       "lessons": [
+        "L07",
+        "L11",
+        "L24"
+       ],
+       "masu": "かきます",
+       "te": "かいて",
+       "ta": "かいた",
+       "nai": "かかない",
+       "audio": {
+        "dict": "audio/verb/L07-5.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L11-2",
+       "kanji": "",
+       "kana": "はたらく",
+       "zh": "工作",
+       "lessons": [
+        "L11",
+        "L39"
+       ],
+       "masu": "はたらきます",
+       "te": "はたらいて",
+       "ta": "はたらいた",
+       "nai": "はたらかない",
+       "audio": {
+        "dict": "audio/verb/L11-2.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-28",
+       "kanji": "引く",
+       "kana": "ひく",
+       "zh": "拉、抽",
+       "lessons": [
+        "L12"
+       ],
+       "masu": "ひきます",
+       "te": "ひいて",
+       "ta": "ひいた",
+       "nai": "ひかない",
+       "audio": {
+        "dict": "audio/verb/L12-28.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-31",
+       "kanji": "弾く",
+       "kana": "ひく",
+       "zh": "彈（弦樂器、鋼琴）",
+       "lessons": [
+        "L12"
+       ],
+       "masu": "ひきます",
+       "te": "ひいて",
+       "ta": "ひいた",
+       "nai": "ひかない",
+       "audio": {
+        "dict": "audio/verb/L12-31.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-30",
+       "kanji": "",
+       "kana": "はく",
+       "zh": "穿（褲、鞋、襪）",
+       "lessons": [
+        "L12"
+       ],
+       "masu": "はきます",
+       "te": "はいて",
+       "ta": "はいた",
+       "nai": "はかない",
+       "audio": {
+        "dict": "audio/verb/L12-30.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L13-1",
+       "kanji": "",
+       "kana": "およぐ",
+       "zh": "游泳",
+       "lessons": [
+        "L13",
+        "L24",
+        "L39"
+       ],
+       "masu": "およぎます",
+       "te": "およいで",
+       "ta": "およいだ",
+       "nai": "およがない",
+       "audio": {
+        "dict": "audio/verb/L13-1.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L13-5",
+       "kanji": "",
+       "kana": "いそぐ",
+       "zh": "急忙、趕",
+       "lessons": [
+        "L13",
+        "L14",
+        "L31",
+        "L32"
+       ],
+       "masu": "いそぎます",
+       "te": "いそいで",
+       "ta": "いそいだ",
+       "nai": "いそがない",
+       "audio": {
+        "dict": "audio/verb/L13-5.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L13-42",
+       "kanji": "咲く",
+       "kana": "さく",
+       "zh": "開花",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "さきます",
+       "te": "さいて",
+       "ta": "さいた",
+       "nai": "さかない",
+       "audio": {
+        "dict": "audio/verb/L13-42.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L15-18",
+       "kanji": "",
+       "kana": "みがく",
+       "zh": "刷、擦亮",
+       "lessons": [
+        "L15"
+       ],
+       "masu": "みがきます",
+       "te": "みがいて",
+       "ta": "みがいた",
+       "nai": "みがかない",
+       "audio": {
+        "dict": "audio/verb/L15-18.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L19-16",
+       "kanji": "空く",
+       "kana": "すく",
+       "zh": "（肚子）餓",
+       "lessons": [
+        "L19"
+       ],
+       "masu": "すきます",
+       "te": "すいて",
+       "ta": "すいた",
+       "nai": "すかない",
+       "audio": {
+        "dict": "audio/verb/L19-16.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L20-17",
+       "kanji": "脱ぐ",
+       "kana": "ぬぐ",
+       "zh": "脫（衣、鞋）",
+       "lessons": [
+        "L20"
+       ],
+       "masu": "ぬぎます",
+       "te": "ぬいで",
+       "ta": "ぬいだ",
+       "nai": "ぬがない",
+       "audio": {
+        "dict": "audio/verb/L20-17.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-0",
+       "kanji": "",
+       "kana": "あく",
+       "zh": "（門窗）打開、空出",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "あきます",
+       "te": "あいて",
+       "ta": "あいた",
+       "nai": "あかない",
+       "audio": {
+        "dict": "audio/verb/L26-0.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-8",
+       "kanji": "",
+       "kana": "つく",
+       "zh": "（燈、電器）亮起、開啟",
+       "lessons": [
+        "L26",
+        "L35"
+       ],
+       "masu": "つきます",
+       "te": "ついて",
+       "ta": "ついた",
+       "nai": "つかない",
+       "audio": {
+        "dict": "audio/verb/L26-8.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L29-18",
+       "kanji": "",
+       "kana": "ふく",
+       "zh": "吹（風）",
+       "lessons": [
+        "L29"
+       ],
+       "masu": "ふきます",
+       "te": "ふいて",
+       "ta": "ふいた",
+       "nai": "ふかない",
+       "audio": {
+        "dict": "audio/verb/L29-18.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L36-23",
+       "kanji": "",
+       "kana": "なく",
+       "zh": "哭",
+       "lessons": [
+        "L36",
+        "L39"
+       ],
+       "masu": "なきます",
+       "te": "ないて",
+       "ta": "ないた",
+       "nai": "なかない",
+       "audio": {
+        "dict": "audio/verb/L36-23.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L37-7",
+       "kanji": "",
+       "kana": "おどろく",
+       "zh": "吃驚",
+       "lessons": [
+        "L37"
+       ],
+       "masu": "おどろきます",
+       "te": "おどろいて",
+       "ta": "おどろいた",
+       "nai": "おどろかない",
+       "audio": {
+        "dict": "audio/verb/L37-7.mp3"
+       }
+      }
+     ]
+    },
+    {
+     "title": "さ行",
+     "rows": [
+      {
+       "group": "godan",
+       "src": "L07-8",
+       "kanji": "話す",
+       "kana": "はなす",
+       "zh": "說、交談",
+       "lessons": [
+        "L07",
+        "L18",
+        "L24"
+       ],
+       "masu": "はなします",
+       "te": "はなして",
+       "ta": "はなした",
+       "nai": "はなさない",
+       "audio": {
+        "dict": "audio/verb/L07-8.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L20-16",
+       "kanji": "返す",
+       "kana": "かえす",
+       "zh": "歸還",
+       "lessons": [
+        "L12",
+        "L20",
+        "L31",
+        "L38"
+       ],
+       "masu": "かえします",
+       "te": "かえして",
+       "ta": "かえした",
+       "nai": "かえさない",
+       "audio": {
+        "dict": "audio/verb/L20-16.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-3",
+       "kanji": "",
+       "kana": "かす",
+       "zh": "借出、出借",
+       "lessons": [
+        "L12",
+        "L38"
+       ],
+       "masu": "かします",
+       "te": "かして",
+       "ta": "かした",
+       "nai": "かさない",
+       "audio": {
+        "dict": "audio/verb/L12-3.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L20-25",
+       "kanji": "消す",
+       "kana": "けす",
+       "zh": "關掉（燈、電源）",
+       "lessons": [
+        "L12",
+        "L20",
+        "L26",
+        "L34"
+       ],
+       "masu": "けします",
+       "te": "けして",
+       "ta": "けした",
+       "nai": "けさない",
+       "audio": {
+        "dict": "audio/verb/L20-25.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-27",
+       "kanji": "渡す",
+       "kana": "わたす",
+       "zh": "交給",
+       "lessons": [
+        "L12"
+       ],
+       "masu": "わたします",
+       "te": "わたして",
+       "ta": "わたした",
+       "nai": "わたさない",
+       "audio": {
+        "dict": "audio/verb/L12-27.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L14-36",
+       "kanji": "差す",
+       "kana": "さす",
+       "zh": "撐（傘）",
+       "lessons": [
+        "L14"
+       ],
+       "masu": "さします",
+       "te": "さして",
+       "ta": "さした",
+       "nai": "ささない",
+       "audio": {
+        "dict": "audio/verb/L14-36.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-5",
+       "kanji": "",
+       "kana": "おとす",
+       "zh": "弄掉、使落下",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "おとします",
+       "te": "おとして",
+       "ta": "おとした",
+       "nai": "おとさない",
+       "audio": {
+        "dict": "audio/verb/L26-5.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-13",
+       "kanji": "",
+       "kana": "こわす",
+       "zh": "弄壞",
+       "lessons": [
+        "L26",
+        "L37"
+       ],
+       "masu": "こわします",
+       "te": "こわして",
+       "ta": "こわした",
+       "nai": "こわさない",
+       "audio": {
+        "dict": "audio/verb/L26-13.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-15",
+       "kanji": "",
+       "kana": "よごす",
+       "zh": "弄髒",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "よごします",
+       "te": "よごして",
+       "ta": "よごした",
+       "nai": "よごさない",
+       "audio": {
+        "dict": "audio/verb/L26-15.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-16",
+       "kanji": "",
+       "kana": "なくす",
+       "zh": "弄丟",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "なくします",
+       "te": "なくして",
+       "ta": "なくした",
+       "nai": "なくさない",
+       "audio": {
+        "dict": "audio/verb/L26-16.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L31-19",
+       "kanji": "",
+       "kana": "だす",
+       "zh": "交出、寄出",
+       "lessons": [
+        "L31"
+       ],
+       "masu": "だします",
+       "te": "だして",
+       "ta": "だした",
+       "nai": "ださない",
+       "audio": {
+        "dict": "audio/verb/L31-19.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L34-15",
+       "kanji": "",
+       "kana": "おす",
+       "zh": "按、推",
+       "lessons": [
+        "L34"
+       ],
+       "masu": "おします",
+       "te": "おして",
+       "ta": "おした",
+       "nai": "おさない",
+       "audio": {
+        "dict": "audio/verb/L34-15.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L39-12",
+       "kanji": "",
+       "kana": "ゆるす",
+       "zh": "原諒",
+       "lessons": [
+        "L39"
+       ],
+       "masu": "ゆるします",
+       "te": "ゆるして",
+       "ta": "ゆるした",
+       "nai": "ゆるさない",
+       "audio": {
+        "dict": "audio/verb/L39-12.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L40-6",
+       "kanji": "",
+       "kana": "いたす",
+       "zh": "做（謙讓）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "いたします",
+       "te": "いたして",
+       "ta": "いたした",
+       "nai": "いたさない",
+       "audio": {
+        "dict": "audio/verb/L40-6.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L40-7",
+       "kanji": "",
+       "kana": "もうす",
+       "zh": "說、叫做（謙讓）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "もうします",
+       "te": "もうして",
+       "ta": "もうした",
+       "nai": "もうさない",
+       "audio": {
+        "dict": "audio/verb/L40-7.mp3"
+       }
+      }
+     ]
+    },
+    {
+     "title": "た行",
+     "rows": [
+      {
+       "group": "godan",
+       "src": "L11-29",
+       "kanji": "立つ",
+       "kana": "たつ",
+       "zh": "站",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "たちます",
+       "te": "たって",
+       "ta": "たった",
+       "nai": "たたない",
+       "audio": {
+        "dict": "audio/verb/L11-29.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-0",
+       "kanji": "",
+       "kana": "まつ",
+       "zh": "等、等待",
+       "lessons": [
+        "L12",
+        "L39"
+       ],
+       "masu": "まちます",
+       "te": "まって",
+       "ta": "まった",
+       "nai": "またない",
+       "audio": {
+        "dict": "audio/verb/L12-0.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L15-15",
+       "kanji": "",
+       "kana": "もつ",
+       "zh": "拿、持有",
+       "lessons": [
+        "L15"
+       ],
+       "masu": "もちます",
+       "te": "もって",
+       "ta": "もった",
+       "nai": "もたない",
+       "audio": {
+        "dict": "audio/verb/L15-15.mp3"
+       }
+      }
+     ]
+    },
+    {
+     "title": "な行",
+     "rows": [
+      {
+       "group": "godan",
+       "src": "L13-43",
+       "kanji": "死ぬ",
+       "kana": "しぬ",
+       "zh": "死",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "しにます",
+       "te": "しんで",
+       "ta": "しんだ",
+       "nai": "しなない",
+       "audio": {
+        "dict": "audio/verb/L13-43.mp3"
+       }
+      }
+     ]
+    },
+    {
+     "title": "ば行",
+     "rows": [
+      {
+       "group": "godan",
+       "src": "L12-6",
+       "kanji": "",
+       "kana": "よぶ",
+       "zh": "呼叫、叫（人）",
+       "lessons": [
+        "L12",
+        "L37"
+       ],
+       "masu": "よびます",
+       "te": "よんで",
+       "ta": "よんだ",
+       "nai": "よばない",
+       "audio": {
+        "dict": "audio/verb/L12-6.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L13-0",
+       "kanji": "",
+       "kana": "あそぶ",
+       "zh": "玩、遊玩",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "あそびます",
+       "te": "あそんで",
+       "ta": "あそんだ",
+       "nai": "あそばない",
+       "audio": {
+        "dict": "audio/verb/L13-0.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L13-39",
+       "kanji": "飛ぶ",
+       "kana": "とぶ",
+       "zh": "飛",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "とびます",
+       "te": "とんで",
+       "ta": "とんだ",
+       "nai": "とばない",
+       "audio": {
+        "dict": "audio/verb/L13-39.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L13-40",
+       "kanji": "並ぶ",
+       "kana": "ならぶ",
+       "zh": "排隊",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "ならびます",
+       "te": "ならんで",
+       "ta": "ならんだ",
+       "nai": "ならばない",
+       "audio": {
+        "dict": "audio/verb/L13-40.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L37-9",
+       "kanji": "",
+       "kana": "よろこぶ",
+       "zh": "高興",
+       "lessons": [
+        "L37"
+       ],
+       "masu": "よろこびます",
+       "te": "よろこんで",
+       "ta": "よろこんだ",
+       "nai": "よろこばない",
+       "audio": {
+        "dict": "audio/verb/L37-9.mp3"
+       }
+      }
+     ]
+    },
+    {
+     "title": "ま行",
+     "rows": [
+      {
+       "group": "godan",
+       "src": "L07-1",
+       "kanji": "飲む",
+       "kana": "のむ",
+       "zh": "喝",
+       "lessons": [
+        "L07",
+        "L11"
+       ],
+       "masu": "のみます",
+       "te": "のんで",
+       "ta": "のんだ",
+       "nai": "のまない",
+       "audio": {
+        "dict": "audio/verb/L07-1.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L07-4",
+       "kanji": "読む",
+       "kana": "よむ",
+       "zh": "讀",
+       "lessons": [
+        "L07",
+        "L11",
+        "L24"
+       ],
+       "masu": "よみます",
+       "te": "よんで",
+       "ta": "よんだ",
+       "nai": "よまない",
+       "audio": {
+        "dict": "audio/verb/L07-4.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L19-7",
+       "kanji": "休む",
+       "kana": "やすむ",
+       "zh": "休息、請假",
+       "lessons": [
+        "L11",
+        "L19",
+        "L31"
+       ],
+       "masu": "やすみます",
+       "te": "やすんで",
+       "ta": "やすんだ",
+       "nai": "やすまない",
+       "audio": {
+        "dict": "audio/verb/L19-7.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L11-30",
+       "kanji": "頼む",
+       "kana": "たのむ",
+       "zh": "請求、拜託",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "たのみます",
+       "te": "たのんで",
+       "ta": "たのんだ",
+       "nai": "たのまない",
+       "audio": {
+        "dict": "audio/verb/L11-30.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L15-16",
+       "kanji": "",
+       "kana": "すむ",
+       "zh": "居住",
+       "lessons": [
+        "L15"
+       ],
+       "masu": "すみます",
+       "te": "すんで",
+       "ta": "すんだ",
+       "nai": "すまない",
+       "audio": {
+        "dict": "audio/verb/L15-16.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L35-21",
+       "kanji": "",
+       "kana": "すすむ",
+       "zh": "前進",
+       "lessons": [
+        "L35"
+       ],
+       "masu": "すすみます",
+       "te": "すすんで",
+       "ta": "すすんだ",
+       "nai": "すすまない",
+       "audio": {
+        "dict": "audio/verb/L35-21.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L36-19",
+       "kanji": "",
+       "kana": "やむ",
+       "zh": "（雨雪）停",
+       "lessons": [
+        "L36"
+       ],
+       "masu": "やみます",
+       "te": "やんで",
+       "ta": "やんだ",
+       "nai": "やまない",
+       "audio": {
+        "dict": "audio/verb/L36-19.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L37-2",
+       "kanji": "",
+       "kana": "ぬすむ",
+       "zh": "偷",
+       "lessons": [
+        "L37"
+       ],
+       "masu": "ぬすみます",
+       "te": "ぬすんで",
+       "ta": "ぬすんだ",
+       "nai": "ぬすまない",
+       "audio": {
+        "dict": "audio/verb/L37-2.mp3"
+       }
+      }
+     ]
+    },
+    {
+     "title": "ら行",
+     "rows": [
+      {
+       "group": "godan",
+       "src": "L06-2",
+       "kanji": "帰る",
+       "kana": "かえる",
+       "zh": "回去、返回",
+       "lessons": [
+        "L06",
+        "L13"
+       ],
+       "masu": "かえります",
+       "te": "かえって",
+       "ta": "かえった",
+       "nai": "かえらない",
+       "audio": {
+        "dict": "audio/verb/L06-2.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L06-4",
+       "kanji": "走る",
+       "kana": "はしる",
+       "zh": "跑",
+       "lessons": [
+        "L06",
+        "L12",
+        "L24",
+        "L39"
+       ],
+       "masu": "はしります",
+       "te": "はしって",
+       "ta": "はしった",
+       "nai": "はしらない",
+       "audio": {
+        "dict": "audio/verb/L06-4.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L07-7",
+       "kanji": "作る",
+       "kana": "つくる",
+       "zh": "做、製作",
+       "lessons": [
+        "L07",
+        "L15",
+        "L17",
+        "L24",
+        "L38"
+       ],
+       "masu": "つくります",
+       "te": "つくって",
+       "ta": "つくった",
+       "nai": "つくらない",
+       "audio": {
+        "dict": "audio/verb/L07-7.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L10-0",
+       "kanji": "",
+       "kana": "ある",
+       "zh": "有、存在（事物）",
+       "lessons": [
+        "L10"
+       ],
+       "masu": "あります",
+       "te": "あって",
+       "ta": "あった",
+       "nai": "ない",
+       "audio": {
+        "dict": "audio/verb/L10-0.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L11-4",
+       "kanji": "",
+       "kana": "おわる",
+       "zh": "結束",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "おわります",
+       "te": "おわって",
+       "ta": "おわった",
+       "nai": "おわらない",
+       "audio": {
+        "dict": "audio/verb/L11-4.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L11-5",
+       "kanji": "",
+       "kana": "はじまる",
+       "zh": "開始",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "はじまります",
+       "te": "はじまって",
+       "ta": "はじまった",
+       "nai": "はじまらない",
+       "audio": {
+        "dict": "audio/verb/L11-5.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L11-27",
+       "kanji": "",
+       "kana": "なる",
+       "zh": "變成",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "なります",
+       "te": "なって",
+       "ta": "なった",
+       "nai": "ならない",
+       "audio": {
+        "dict": "audio/verb/L11-27.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L11-28",
+       "kanji": "売る",
+       "kana": "うる",
+       "zh": "賣",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "うります",
+       "te": "うって",
+       "ta": "うった",
+       "nai": "うらない",
+       "audio": {
+        "dict": "audio/verb/L11-28.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L11-32",
+       "kanji": "",
+       "kana": "やる",
+       "zh": "做（口語）",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "やります",
+       "te": "やって",
+       "ta": "やった",
+       "nai": "やらない",
+       "audio": {
+        "dict": "audio/verb/L11-32.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L20-11",
+       "kanji": "撮る",
+       "kana": "とる",
+       "zh": "拍（照）、拿",
+       "lessons": [
+        "L12",
+        "L20"
+       ],
+       "masu": "とります",
+       "te": "とって",
+       "ta": "とった",
+       "nai": "とらない",
+       "audio": {
+        "dict": "audio/verb/L20-11.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-14",
+       "kanji": "",
+       "kana": "まがる",
+       "zh": "轉彎",
+       "lessons": [
+        "L12",
+        "L35"
+       ],
+       "masu": "まがります",
+       "te": "まがって",
+       "ta": "まがった",
+       "nai": "まがらない",
+       "audio": {
+        "dict": "audio/verb/L12-14.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-15",
+       "kanji": "",
+       "kana": "わたる",
+       "zh": "穿過、過（馬路）",
+       "lessons": [
+        "L12",
+        "L35"
+       ],
+       "masu": "わたります",
+       "te": "わたって",
+       "ta": "わたった",
+       "nai": "わたらない",
+       "audio": {
+        "dict": "audio/verb/L12-15.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L12-29",
+       "kanji": "入る",
+       "kana": "はいる",
+       "zh": "進入",
+       "lessons": [
+        "L12"
+       ],
+       "masu": "はいります",
+       "te": "はいって",
+       "ta": "はいった",
+       "nai": "はいらない",
+       "audio": {
+        "dict": "audio/verb/L12-29.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L13-3",
+       "kanji": "",
+       "kana": "おどる",
+       "zh": "跳舞",
+       "lessons": [
+        "L13",
+        "L24",
+        "L39"
+       ],
+       "masu": "おどります",
+       "te": "おどって",
+       "ta": "おどった",
+       "nai": "おどらない",
+       "audio": {
+        "dict": "audio/verb/L13-3.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L18-9",
+       "kanji": "降る",
+       "kana": "ふる",
+       "zh": "下（雨、雪）",
+       "lessons": [
+        "L13",
+        "L18",
+        "L29",
+        "L33"
+       ],
+       "masu": "ふります",
+       "te": "ふって",
+       "ta": "ふった",
+       "nai": "ふらない",
+       "audio": {
+        "dict": "audio/verb/L18-9.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L13-41",
+       "kanji": "登る",
+       "kana": "のぼる",
+       "zh": "攀登",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "のぼります",
+       "te": "のぼって",
+       "ta": "のぼった",
+       "nai": "のぼらない",
+       "audio": {
+        "dict": "audio/verb/L13-41.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L14-35",
+       "kanji": "",
+       "kana": "かかる",
+       "zh": "花費（時間、金錢）",
+       "lessons": [
+        "L14"
+       ],
+       "masu": "かかります",
+       "te": "かかって",
+       "ta": "かかった",
+       "nai": "かからない",
+       "audio": {
+        "dict": "audio/verb/L14-35.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L15-14",
+       "kanji": "",
+       "kana": "しる",
+       "zh": "知道",
+       "lessons": [
+        "L15"
+       ],
+       "masu": "しります",
+       "te": "しって",
+       "ta": "しった",
+       "nai": "しらない",
+       "audio": {
+        "dict": "audio/verb/L15-14.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L17-18",
+       "kanji": "乗る",
+       "kana": "のる",
+       "zh": "搭乘",
+       "lessons": [
+        "L17"
+       ],
+       "masu": "のります",
+       "te": "のって",
+       "ta": "のった",
+       "nai": "のらない",
+       "audio": {
+        "dict": "audio/verb/L17-18.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L18-7",
+       "kanji": "断る",
+       "kana": "ことわる",
+       "zh": "拒絕",
+       "lessons": [
+        "L18"
+       ],
+       "masu": "ことわります",
+       "te": "ことわって",
+       "ta": "ことわった",
+       "nai": "ことわらない",
+       "audio": {
+        "dict": "audio/verb/L18-7.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L20-12",
+       "kanji": "触る",
+       "kana": "さわる",
+       "zh": "觸摸",
+       "lessons": [
+        "L20"
+       ],
+       "masu": "さわります",
+       "te": "さわって",
+       "ta": "さわった",
+       "nai": "さわらない",
+       "audio": {
+        "dict": "audio/verb/L20-12.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L20-13",
+       "kanji": "座る",
+       "kana": "すわる",
+       "zh": "坐",
+       "lessons": [
+        "L20"
+       ],
+       "masu": "すわります",
+       "te": "すわって",
+       "ta": "すわった",
+       "nai": "すわらない",
+       "audio": {
+        "dict": "audio/verb/L20-13.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L21-23",
+       "kanji": "",
+       "kana": "わかる",
+       "zh": "明白、懂",
+       "lessons": [
+        "L21"
+       ],
+       "masu": "わかります",
+       "te": "わかって",
+       "ta": "わかった",
+       "nai": "わからない",
+       "audio": {
+        "dict": "audio/verb/L21-23.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L23-24",
+       "kanji": "",
+       "kana": "ほしがる",
+       "zh": "想要（第三人稱）",
+       "lessons": [
+        "L23"
+       ],
+       "masu": "ほしがります",
+       "te": "ほしがって",
+       "ta": "ほしがった",
+       "nai": "ほしがらない",
+       "audio": {
+        "dict": "audio/verb/L23-24.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L23-25",
+       "kanji": "",
+       "kana": "たがる",
+       "zh": "想做（第三人稱）",
+       "lessons": [
+        "L23"
+       ],
+       "masu": "たがります",
+       "te": "たがって",
+       "ta": "たがった",
+       "nai": "たがらない",
+       "audio": {
+        "dict": "audio/verb/L23-25.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-2",
+       "kanji": "",
+       "kana": "しまる",
+       "zh": "（門窗）關上",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "しまります",
+       "te": "しまって",
+       "ta": "しまった",
+       "nai": "しまらない",
+       "audio": {
+        "dict": "audio/verb/L26-2.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-6",
+       "kanji": "",
+       "kana": "とまる",
+       "zh": "停止、（機器）停住",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "とまります",
+       "te": "とまって",
+       "ta": "とまった",
+       "nai": "とまらない",
+       "audio": {
+        "dict": "audio/verb/L26-6.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-17",
+       "kanji": "",
+       "kana": "みつかる",
+       "zh": "被找到",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "みつかります",
+       "te": "みつかって",
+       "ta": "みつかった",
+       "nai": "みつからない",
+       "audio": {
+        "dict": "audio/verb/L26-17.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L26-18",
+       "kanji": "",
+       "kana": "かざる",
+       "zh": "裝飾、擺設",
+       "lessons": [
+        "L26",
+        "L34"
+       ],
+       "masu": "かざります",
+       "te": "かざって",
+       "ta": "かざった",
+       "nai": "かざらない",
+       "audio": {
+        "dict": "audio/verb/L26-18.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L28-21",
+       "kanji": "",
+       "kana": "がんばる",
+       "zh": "努力、加油",
+       "lessons": [
+        "L28"
+       ],
+       "masu": "がんばります",
+       "te": "がんばって",
+       "ta": "がんばった",
+       "nai": "がんばらない",
+       "audio": {
+        "dict": "audio/verb/L28-21.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L29-17",
+       "kanji": "",
+       "kana": "くもる",
+       "zh": "轉陰",
+       "lessons": [
+        "L29"
+       ],
+       "masu": "くもります",
+       "te": "くもって",
+       "ta": "くもった",
+       "nai": "くもらない",
+       "audio": {
+        "dict": "audio/verb/L29-17.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L29-19",
+       "kanji": "",
+       "kana": "あがる",
+       "zh": "上升",
+       "lessons": [
+        "L29"
+       ],
+       "masu": "あがります",
+       "te": "あがって",
+       "ta": "あがった",
+       "nai": "あがらない",
+       "audio": {
+        "dict": "audio/verb/L29-19.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L29-20",
+       "kanji": "",
+       "kana": "さがる",
+       "zh": "下降",
+       "lessons": [
+        "L29"
+       ],
+       "masu": "さがります",
+       "te": "さがって",
+       "ta": "さがった",
+       "nai": "さがらない",
+       "audio": {
+        "dict": "audio/verb/L29-20.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L30-24",
+       "kanji": "",
+       "kana": "ひろがる",
+       "zh": "傳開、擴散",
+       "lessons": [
+        "L30"
+       ],
+       "masu": "ひろがります",
+       "te": "ひろがって",
+       "ta": "ひろがった",
+       "nai": "ひろがらない",
+       "audio": {
+        "dict": "audio/verb/L30-24.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L31-20",
+       "kanji": "",
+       "kana": "のこる",
+       "zh": "留下、加班",
+       "lessons": [
+        "L31"
+       ],
+       "masu": "のこります",
+       "te": "のこって",
+       "ta": "のこった",
+       "nai": "のこらない",
+       "audio": {
+        "dict": "audio/verb/L31-20.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L34-20",
+       "kanji": "",
+       "kana": "はる",
+       "zh": "貼",
+       "lessons": [
+        "L34"
+       ],
+       "masu": "はります",
+       "te": "はって",
+       "ta": "はった",
+       "nai": "はらない",
+       "audio": {
+        "dict": "audio/verb/L34-20.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L35-19",
+       "kanji": "",
+       "kana": "とおる",
+       "zh": "通過、經過",
+       "lessons": [
+        "L35"
+       ],
+       "masu": "とおります",
+       "te": "とおって",
+       "ta": "とおった",
+       "nai": "とおらない",
+       "audio": {
+        "dict": "audio/verb/L35-19.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L37-1",
+       "kanji": "",
+       "kana": "しかる",
+       "zh": "責罵",
+       "lessons": [
+        "L37"
+       ],
+       "masu": "しかります",
+       "te": "しかって",
+       "ta": "しかった",
+       "nai": "しからない",
+       "audio": {
+        "dict": "audio/verb/L37-1.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L37-8",
+       "kanji": "",
+       "kana": "こまる",
+       "zh": "感到困擾",
+       "lessons": [
+        "L37"
+       ],
+       "masu": "こまります",
+       "te": "こまって",
+       "ta": "こまった",
+       "nai": "こまらない",
+       "audio": {
+        "dict": "audio/verb/L37-8.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L38-9",
+       "kanji": "",
+       "kana": "おくる",
+       "zh": "寄送",
+       "lessons": [
+        "L38"
+       ],
+       "masu": "おくります",
+       "te": "おくって",
+       "ta": "おくった",
+       "nai": "おくらない",
+       "audio": {
+        "dict": "audio/verb/L38-9.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L40-0",
+       "kanji": "",
+       "kana": "いらっしゃる",
+       "zh": "在、去、來（尊敬）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "いらっしゃいます",
+       "te": "いらっしゃって",
+       "ta": "いらっしゃった",
+       "nai": "いらっしゃらない",
+       "audio": {
+        "dict": "audio/verb/L40-0.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L40-1",
+       "kanji": "",
+       "kana": "めしあがる",
+       "zh": "吃、喝（尊敬）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "めしあがります",
+       "te": "めしあがって",
+       "ta": "めしあがった",
+       "nai": "めしあがらない",
+       "audio": {
+        "dict": "audio/verb/L40-1.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L40-2",
+       "kanji": "",
+       "kana": "おっしゃる",
+       "zh": "說（尊敬）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "おっしゃいます",
+       "te": "おっしゃって",
+       "ta": "おっしゃった",
+       "nai": "おっしゃらない",
+       "audio": {
+        "dict": "audio/verb/L40-2.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L40-3",
+       "kanji": "",
+       "kana": "ごらんになる",
+       "zh": "看（尊敬）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "ごらんになります",
+       "te": "ごらんになって",
+       "ta": "ごらんになった",
+       "nai": "ごらんにならない",
+       "audio": {
+        "dict": "audio/verb/L40-3.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L40-10",
+       "kanji": "",
+       "kana": "おる",
+       "zh": "在（謙讓）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "おります",
+       "te": "おって",
+       "ta": "おった",
+       "nai": "おらない",
+       "audio": {
+        "dict": "audio/verb/L40-10.mp3"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ichidan",
+   "title": "一段動詞",
+   "kana": "いちだんどうし",
+   "total": 51,
+   "blocks": [
+    {
+     "title": "〜える",
+     "rows": [
+      {
+       "group": "ichidan",
+       "src": "L07-0",
+       "kanji": "食べる",
+       "kana": "たべる",
+       "zh": "吃",
+       "lessons": [
+        "L07",
+        "L11",
+        "L24"
+       ],
+       "masu": "たべます",
+       "te": "たべて",
+       "ta": "たべた",
+       "nai": "たべない",
+       "audio": {
+        "dict": "audio/verb/L07-0.mp3",
+        "masu": "audio/verbform/L07-0-masu.mp3",
+        "te": "audio/verbform/L07-0-te.mp3",
+        "ta": "audio/verbform/L07-0-ta.mp3",
+        "nai": "audio/verbform/L07-0-nai.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L11-1",
+       "kanji": "",
+       "kana": "ねる",
+       "zh": "睡覺",
+       "lessons": [
+        "L11",
+        "L15"
+       ],
+       "masu": "ねます",
+       "te": "ねて",
+       "ta": "ねた",
+       "nai": "ねない",
+       "audio": {
+        "dict": "audio/verb/L11-1.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L11-31",
+       "kanji": "出かける",
+       "kana": "でかける",
+       "zh": "外出",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "でかけます",
+       "te": "でかけて",
+       "ta": "でかけた",
+       "nai": "でかけない",
+       "audio": {
+        "dict": "audio/verb/L11-31.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L11-33",
+       "kanji": "勤める",
+       "kana": "つとめる",
+       "zh": "任職於",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "つとめます",
+       "te": "つとめて",
+       "ta": "つとめた",
+       "nai": "つとめない",
+       "audio": {
+        "dict": "audio/verb/L11-33.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L12-4",
+       "kanji": "",
+       "kana": "おしえる",
+       "zh": "教、告訴",
+       "lessons": [
+        "L12",
+        "L38"
+       ],
+       "masu": "おしえます",
+       "te": "おしえて",
+       "ta": "おしえた",
+       "nai": "おしえない",
+       "audio": {
+        "dict": "audio/verb/L12-4.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L12-10",
+       "kanji": "",
+       "kana": "あける",
+       "zh": "打開",
+       "lessons": [
+        "L12",
+        "L26",
+        "L34"
+       ],
+       "masu": "あけます",
+       "te": "あけて",
+       "ta": "あけた",
+       "nai": "あけない",
+       "audio": {
+        "dict": "audio/verb/L12-10.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L12-11",
+       "kanji": "",
+       "kana": "しめる",
+       "zh": "關上",
+       "lessons": [
+        "L12",
+        "L26",
+        "L34"
+       ],
+       "masu": "しめます",
+       "te": "しめて",
+       "ta": "しめた",
+       "nai": "しめない",
+       "audio": {
+        "dict": "audio/verb/L12-11.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L12-13",
+       "kanji": "",
+       "kana": "つける",
+       "zh": "打開（燈、電源）",
+       "lessons": [
+        "L12",
+        "L26",
+        "L34"
+       ],
+       "masu": "つけます",
+       "te": "つけて",
+       "ta": "つけた",
+       "nai": "つけない",
+       "audio": {
+        "dict": "audio/verb/L12-13.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L12-26",
+       "kanji": "入れる",
+       "kana": "いれる",
+       "zh": "放入",
+       "lessons": [
+        "L12"
+       ],
+       "masu": "いれます",
+       "te": "いれて",
+       "ta": "いれた",
+       "nai": "いれない",
+       "audio": {
+        "dict": "audio/verb/L12-26.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L19-13",
+       "kanji": "疲れる",
+       "kana": "つかれる",
+       "zh": "累、疲勞",
+       "lessons": [
+        "L13",
+        "L19",
+        "L32",
+        "L36"
+       ],
+       "masu": "つかれます",
+       "te": "つかれて",
+       "ta": "つかれた",
+       "nai": "つかれない",
+       "audio": {
+        "dict": "audio/verb/L19-13.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L13-12",
+       "kanji": "",
+       "kana": "はれる",
+       "zh": "放晴",
+       "lessons": [
+        "L13",
+        "L29"
+       ],
+       "masu": "はれます",
+       "te": "はれて",
+       "ta": "はれた",
+       "nai": "はれない",
+       "audio": {
+        "dict": "audio/verb/L13-12.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L14-20",
+       "kanji": "",
+       "kana": "すてる",
+       "zh": "丟掉",
+       "lessons": [
+        "L14"
+       ],
+       "masu": "すてます",
+       "te": "すてて",
+       "ta": "すてた",
+       "nai": "すてない",
+       "audio": {
+        "dict": "audio/verb/L14-20.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L14-21",
+       "kanji": "",
+       "kana": "わすれる",
+       "zh": "忘記",
+       "lessons": [
+        "L14",
+        "L32"
+       ],
+       "masu": "わすれます",
+       "te": "わすれて",
+       "ta": "わすれた",
+       "nai": "わすれない",
+       "audio": {
+        "dict": "audio/verb/L14-21.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L15-20",
+       "kanji": "",
+       "kana": "はじめる",
+       "zh": "開始",
+       "lessons": [
+        "L15"
+       ],
+       "masu": "はじめます",
+       "te": "はじめて",
+       "ta": "はじめた",
+       "nai": "はじめない",
+       "audio": {
+        "dict": "audio/verb/L15-20.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L16-36",
+       "kanji": "生まれる",
+       "kana": "うまれる",
+       "zh": "出生",
+       "lessons": [
+        "L16"
+       ],
+       "masu": "うまれます",
+       "te": "うまれて",
+       "ta": "うまれた",
+       "nai": "うまれない",
+       "audio": {
+        "dict": "audio/verb/L16-36.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L18-3",
+       "kanji": "答える",
+       "kana": "こたえる",
+       "zh": "回答",
+       "lessons": [
+        "L18",
+        "L39"
+       ],
+       "masu": "こたえます",
+       "te": "こたえて",
+       "ta": "こたえた",
+       "nai": "こたえない",
+       "audio": {
+        "dict": "audio/verb/L18-3.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L18-5",
+       "kanji": "伝える",
+       "kana": "つたえる",
+       "zh": "傳達",
+       "lessons": [
+        "L18",
+        "L30"
+       ],
+       "masu": "つたえます",
+       "te": "つたえて",
+       "ta": "つたえた",
+       "nai": "つたえない",
+       "audio": {
+        "dict": "audio/verb/L18-5.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L19-8",
+       "kanji": "遅れる",
+       "kana": "おくれる",
+       "zh": "遲到、延誤",
+       "lessons": [
+        "L19",
+        "L32",
+        "L33"
+       ],
+       "masu": "おくれます",
+       "te": "おくれて",
+       "ta": "おくれた",
+       "nai": "おくれない",
+       "audio": {
+        "dict": "audio/verb/L19-8.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L21-24",
+       "kanji": "",
+       "kana": "きこえる",
+       "zh": "聽得見",
+       "lessons": [
+        "L21"
+       ],
+       "masu": "きこえます",
+       "te": "きこえて",
+       "ta": "きこえた",
+       "nai": "きこえない",
+       "audio": {
+        "dict": "audio/verb/L21-24.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L21-25",
+       "kanji": "",
+       "kana": "みえる",
+       "zh": "看得見",
+       "lessons": [
+        "L21"
+       ],
+       "masu": "みえます",
+       "te": "みえて",
+       "ta": "みえた",
+       "nai": "みえない",
+       "audio": {
+        "dict": "audio/verb/L21-25.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L24-25",
+       "kanji": "",
+       "kana": "おぼえる",
+       "zh": "記住",
+       "lessons": [
+        "L24"
+       ],
+       "masu": "おぼえます",
+       "te": "おぼえて",
+       "ta": "おぼえた",
+       "nai": "おぼえない",
+       "audio": {
+        "dict": "audio/verb/L24-25.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L26-7",
+       "kanji": "",
+       "kana": "とめる",
+       "zh": "使停止、把車停下",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "とめます",
+       "te": "とめて",
+       "ta": "とめた",
+       "nai": "とめない",
+       "audio": {
+        "dict": "audio/verb/L26-7.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L26-10",
+       "kanji": "",
+       "kana": "きえる",
+       "zh": "熄滅、消失",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "きえます",
+       "te": "きえて",
+       "ta": "きえた",
+       "nai": "きえない",
+       "audio": {
+        "dict": "audio/verb/L26-10.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L26-12",
+       "kanji": "",
+       "kana": "こわれる",
+       "zh": "壞掉",
+       "lessons": [
+        "L26",
+        "L32",
+        "L36"
+       ],
+       "masu": "こわれます",
+       "te": "こわれて",
+       "ta": "こわれた",
+       "nai": "こわれない",
+       "audio": {
+        "dict": "audio/verb/L26-12.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L26-14",
+       "kanji": "",
+       "kana": "よごれる",
+       "zh": "變髒",
+       "lessons": [
+        "L26"
+       ],
+       "masu": "よごれます",
+       "te": "よごれて",
+       "ta": "よごれた",
+       "nai": "よごれない",
+       "audio": {
+        "dict": "audio/verb/L26-14.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L26-19",
+       "kanji": "",
+       "kana": "ならべる",
+       "zh": "排列、擺放",
+       "lessons": [
+        "L26",
+        "L34"
+       ],
+       "masu": "ならべます",
+       "te": "ならべて",
+       "ta": "ならべた",
+       "nai": "ならべない",
+       "audio": {
+        "dict": "audio/verb/L26-19.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L28-22",
+       "kanji": "",
+       "kana": "つづける",
+       "zh": "繼續",
+       "lessons": [
+        "L28",
+        "L34"
+       ],
+       "masu": "つづけます",
+       "te": "つづけて",
+       "ta": "つづけた",
+       "nai": "つづけない",
+       "audio": {
+        "dict": "audio/verb/L28-22.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L28-23",
+       "kanji": "",
+       "kana": "あきらめる",
+       "zh": "放棄",
+       "lessons": [
+        "L28"
+       ],
+       "masu": "あきらめます",
+       "te": "あきらめて",
+       "ta": "あきらめた",
+       "nai": "あきらめない",
+       "audio": {
+        "dict": "audio/verb/L28-23.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L28-24",
+       "kanji": "",
+       "kana": "きめる",
+       "zh": "決定",
+       "lessons": [
+        "L28"
+       ],
+       "masu": "きめます",
+       "te": "きめて",
+       "ta": "きめた",
+       "nai": "きめない",
+       "audio": {
+        "dict": "audio/verb/L28-24.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L34-21",
+       "kanji": "",
+       "kana": "かける",
+       "zh": "掛",
+       "lessons": [
+        "L34"
+       ],
+       "masu": "かけます",
+       "te": "かけて",
+       "ta": "かけた",
+       "nai": "かけない",
+       "audio": {
+        "dict": "audio/verb/L34-21.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L34-25",
+       "kanji": "",
+       "kana": "なれる",
+       "zh": "習慣、熟悉",
+       "lessons": [
+        "L34"
+       ],
+       "masu": "なれます",
+       "te": "なれて",
+       "ta": "なれた",
+       "nai": "なれない",
+       "audio": {
+        "dict": "audio/verb/L34-25.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L35-23",
+       "kanji": "",
+       "kana": "でる",
+       "zh": "出去、出來",
+       "lessons": [
+        "L35"
+       ],
+       "masu": "でます",
+       "te": "でて",
+       "ta": "でた",
+       "nai": "でない",
+       "audio": {
+        "dict": "audio/verb/L35-23.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L36-20",
+       "kanji": "",
+       "kana": "われる",
+       "zh": "破裂",
+       "lessons": [
+        "L36"
+       ],
+       "masu": "われます",
+       "te": "われて",
+       "ta": "われた",
+       "nai": "われない",
+       "audio": {
+        "dict": "audio/verb/L36-20.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L37-0",
+       "kanji": "",
+       "kana": "ほめる",
+       "zh": "稱讚",
+       "lessons": [
+        "L37"
+       ],
+       "masu": "ほめます",
+       "te": "ほめて",
+       "ta": "ほめた",
+       "nai": "ほめない",
+       "audio": {
+        "dict": "audio/verb/L37-0.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L37-4",
+       "kanji": "",
+       "kana": "たてる",
+       "zh": "建造",
+       "lessons": [
+        "L37"
+       ],
+       "masu": "たてます",
+       "te": "たてて",
+       "ta": "たてた",
+       "nai": "たてない",
+       "audio": {
+        "dict": "audio/verb/L37-4.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L37-5",
+       "kanji": "",
+       "kana": "つかまえる",
+       "zh": "抓住",
+       "lessons": [
+        "L37"
+       ],
+       "masu": "つかまえます",
+       "te": "つかまえて",
+       "ta": "つかまえた",
+       "nai": "つかまえない",
+       "audio": {
+        "dict": "audio/verb/L37-5.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L37-10",
+       "kanji": "",
+       "kana": "かんがえる",
+       "zh": "思考",
+       "lessons": [
+        "L37"
+       ],
+       "masu": "かんがえます",
+       "te": "かんがえて",
+       "ta": "かんがえた",
+       "nai": "かんがえない",
+       "audio": {
+        "dict": "audio/verb/L37-10.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L38-0",
+       "kanji": "",
+       "kana": "あげる",
+       "zh": "給（別人）",
+       "lessons": [
+        "L38"
+       ],
+       "masu": "あげます",
+       "te": "あげて",
+       "ta": "あげた",
+       "nai": "あげない",
+       "audio": {
+        "dict": "audio/verb/L38-0.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L38-2",
+       "kanji": "",
+       "kana": "くれる",
+       "zh": "（別人）給我",
+       "lessons": [
+        "L38"
+       ],
+       "masu": "くれます",
+       "te": "くれて",
+       "ta": "くれた",
+       "nai": "くれない",
+       "audio": {
+        "dict": "audio/verb/L38-2.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L38-8",
+       "kanji": "",
+       "kana": "みせる",
+       "zh": "給人看",
+       "lessons": [
+        "L38"
+       ],
+       "masu": "みせます",
+       "te": "みせて",
+       "ta": "みせた",
+       "nai": "みせない",
+       "audio": {
+        "dict": "audio/verb/L38-8.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L39-2",
+       "kanji": "",
+       "kana": "しらべる",
+       "zh": "調查、查詢",
+       "lessons": [
+        "L39"
+       ],
+       "masu": "しらべます",
+       "te": "しらべて",
+       "ta": "しらべた",
+       "nai": "しらべない",
+       "audio": {
+        "dict": "audio/verb/L39-2.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L39-3",
+       "kanji": "",
+       "kana": "かたづける",
+       "zh": "收拾、整理",
+       "lessons": [
+        "L39"
+       ],
+       "masu": "かたづけます",
+       "te": "かたづけて",
+       "ta": "かたづけた",
+       "nai": "かたづけない",
+       "audio": {
+        "dict": "audio/verb/L39-3.mp3"
+       }
+      }
+     ]
+    },
+    {
+     "title": "〜いる",
+     "rows": [
+      {
+       "group": "ichidan",
+       "src": "L07-2",
+       "kanji": "見る",
+       "kana": "みる",
+       "zh": "看",
+       "lessons": [
+        "L07",
+        "L11"
+       ],
+       "masu": "みます",
+       "te": "みて",
+       "ta": "みた",
+       "nai": "みない",
+       "audio": {
+        "dict": "audio/verb/L07-2.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L10-1",
+       "kanji": "",
+       "kana": "いる",
+       "zh": "有、存在（人與動物）",
+       "lessons": [
+        "L10"
+       ],
+       "masu": "います",
+       "te": "いて",
+       "ta": "いた",
+       "nai": "いない",
+       "audio": {
+        "dict": "audio/verb/L10-1.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L11-0",
+       "kanji": "",
+       "kana": "おきる",
+       "zh": "起床",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "おきます",
+       "te": "おきて",
+       "ta": "おきた",
+       "nai": "おきない",
+       "audio": {
+        "dict": "audio/verb/L11-0.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L14-34",
+       "kanji": "",
+       "kana": "あびる",
+       "zh": "淋浴、泡（澡）",
+       "lessons": [
+        "L14"
+       ],
+       "masu": "あびます",
+       "te": "あびて",
+       "ta": "あびた",
+       "nai": "あびない",
+       "audio": {
+        "dict": "audio/verb/L14-34.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L20-15",
+       "kanji": "借りる",
+       "kana": "かりる",
+       "zh": "借（入）",
+       "lessons": [
+        "L20",
+        "L38"
+       ],
+       "masu": "かります",
+       "te": "かりて",
+       "ta": "かりた",
+       "nai": "かりない",
+       "audio": {
+        "dict": "audio/verb/L20-15.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L24-13",
+       "kanji": "",
+       "kana": "できる",
+       "zh": "會、能（可能）",
+       "lessons": [
+        "L24"
+       ],
+       "masu": "できます",
+       "te": "できて",
+       "ta": "できた",
+       "nai": "できない",
+       "audio": {
+        "dict": "audio/verb/L24-13.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L26-4",
+       "kanji": "",
+       "kana": "おちる",
+       "zh": "掉落",
+       "lessons": [
+        "L26",
+        "L36"
+       ],
+       "masu": "おちます",
+       "te": "おちて",
+       "ta": "おちた",
+       "nai": "おちない",
+       "audio": {
+        "dict": "audio/verb/L26-4.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L30-23",
+       "kanji": "",
+       "kana": "しんじる",
+       "zh": "相信",
+       "lessons": [
+        "L30"
+       ],
+       "masu": "しんじます",
+       "te": "しんじて",
+       "ta": "しんじた",
+       "nai": "しんじない",
+       "audio": {
+        "dict": "audio/verb/L30-23.mp3"
+       }
+      },
+      {
+       "group": "ichidan",
+       "src": "L40-9",
+       "kanji": "",
+       "kana": "ぞんじる",
+       "zh": "知道（謙讓）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "ぞんじます",
+       "te": "ぞんじて",
+       "ta": "ぞんじた",
+       "nai": "ぞんじない",
+       "audio": {
+        "dict": "audio/verb/L40-9.mp3"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "irregular",
+   "title": "不規則動詞",
+   "kana": "ふきそくどうし",
+   "total": 15,
+   "blocks": [
+    {
+     "title": "する系",
+     "rows": [
+      {
+       "group": "irregular",
+       "src": "L07-10",
+       "kanji": "勉強する",
+       "kana": "べんきょうする",
+       "zh": "讀書、學習",
+       "lessons": [
+        "L07",
+        "L11"
+       ],
+       "masu": "べんきょうします",
+       "te": "べんきょうして",
+       "ta": "べんきょうした",
+       "nai": "べんきょうしない",
+       "audio": {
+        "dict": "audio/verb/L07-10.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L07-11",
+       "kanji": "掃除する",
+       "kana": "そうじする",
+       "zh": "打掃",
+       "lessons": [
+        "L07",
+        "L13"
+       ],
+       "masu": "そうじします",
+       "te": "そうじして",
+       "ta": "そうじした",
+       "nai": "そうじしない",
+       "audio": {
+        "dict": "audio/verb/L07-11.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L11-26",
+       "kanji": "",
+       "kana": "する",
+       "zh": "做",
+       "lessons": [
+        "L11"
+       ],
+       "masu": "します",
+       "te": "して",
+       "ta": "した",
+       "nai": "しない",
+       "audio": {
+        "dict": "audio/verb/L11-26.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L13-6",
+       "kanji": "",
+       "kana": "よやくする",
+       "zh": "預約",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "よやくします",
+       "te": "よやくして",
+       "ta": "よやくした",
+       "nai": "よやくしない",
+       "audio": {
+        "dict": "audio/verb/L13-6.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L13-7",
+       "kanji": "",
+       "kana": "せんたくする",
+       "zh": "洗衣服",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "せんたくします",
+       "te": "せんたくして",
+       "ta": "せんたくした",
+       "nai": "せんたくしない",
+       "audio": {
+        "dict": "audio/verb/L13-7.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L13-9",
+       "kanji": "",
+       "kana": "さんぽする",
+       "zh": "散步",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "さんぽします",
+       "te": "さんぽして",
+       "ta": "さんぽした",
+       "nai": "さんぽしない",
+       "audio": {
+        "dict": "audio/verb/L13-9.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L13-10",
+       "kanji": "",
+       "kana": "コピーする",
+       "zh": "影印",
+       "lessons": [
+        "L13"
+       ],
+       "masu": "コピーします",
+       "te": "コピーして",
+       "ta": "コピーした",
+       "nai": "コピーしない",
+       "audio": {
+        "dict": "audio/verb/L13-10.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L24-20",
+       "kanji": "",
+       "kana": "うんてんする",
+       "zh": "開車",
+       "lessons": [
+        "L24"
+       ],
+       "masu": "うんてんします",
+       "te": "うんてんして",
+       "ta": "うんてんした",
+       "nai": "うんてんしない",
+       "audio": {
+        "dict": "audio/verb/L24-20.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L30-25",
+       "kanji": "",
+       "kana": "かくにんする",
+       "zh": "確認",
+       "lessons": [
+        "L30"
+       ],
+       "masu": "かくにんします",
+       "te": "かくにんして",
+       "ta": "かくにんした",
+       "nai": "かくにんしない",
+       "audio": {
+        "dict": "audio/verb/L30-25.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L38-12",
+       "kanji": "",
+       "kana": "せつめいする",
+       "zh": "說明",
+       "lessons": [
+        "L38"
+       ],
+       "masu": "せつめいします",
+       "te": "せつめいして",
+       "ta": "せつめいした",
+       "nai": "せつめいしない",
+       "audio": {
+        "dict": "audio/verb/L38-12.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L38-13",
+       "kanji": "",
+       "kana": "しょうかいする",
+       "zh": "介紹",
+       "lessons": [
+        "L38"
+       ],
+       "masu": "しょうかいします",
+       "te": "しょうかいして",
+       "ta": "しょうかいした",
+       "nai": "しょうかいしない",
+       "audio": {
+        "dict": "audio/verb/L38-13.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L39-1",
+       "kanji": "",
+       "kana": "れんしゅうする",
+       "zh": "練習",
+       "lessons": [
+        "L39"
+       ],
+       "masu": "れんしゅうします",
+       "te": "れんしゅうして",
+       "ta": "れんしゅうした",
+       "nai": "れんしゅうしない",
+       "audio": {
+        "dict": "audio/verb/L39-1.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L39-13",
+       "kanji": "",
+       "kana": "しんぱいする",
+       "zh": "擔心",
+       "lessons": [
+        "L39"
+       ],
+       "masu": "しんぱいします",
+       "te": "しんぱいして",
+       "ta": "しんぱいした",
+       "nai": "しんぱいしない",
+       "audio": {
+        "dict": "audio/verb/L39-13.mp3"
+       }
+      },
+      {
+       "group": "irregular",
+       "src": "L40-8",
+       "kanji": "",
+       "kana": "はいけんする",
+       "zh": "看（謙讓）",
+       "lessons": [
+        "L40"
+       ],
+       "masu": "はいけんします",
+       "te": "はいけんして",
+       "ta": "はいけんした",
+       "nai": "はいけんしない",
+       "audio": {
+        "dict": "audio/verb/L40-8.mp3"
+       }
+      }
+     ]
+    },
+    {
+     "title": "来る",
+     "rows": [
+      {
+       "group": "irregular",
+       "src": "L06-1",
+       "kanji": "来る",
+       "kana": "くる",
+       "zh": "來",
+       "lessons": [
+        "L06"
+       ],
+       "masu": "きます",
+       "te": "きて",
+       "ta": "きた",
+       "nai": "こない",
+       "audio": {
+        "dict": "audio/verb/L06-1.mp3"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

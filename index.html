@@ -605,6 +605,41 @@
   .aftbl td .afspk svg{width:13px; height:13px}
   .aftbl td .afspk.on{color:var(--shu); opacity:1}
   @media (max-width:359px){ .aftbl td{font-size:10px} }
+  /* 動詞詳細表：辞書形行頭，ます形・て形・た形・ない形五欄，按語尾的行分組 */
+  .wth .vfentry{flex:0 0 auto; border:1px solid var(--line); border-radius:999px; background:var(--card);
+    padding:3px 9px; font-size:11px; font-weight:500; color:var(--shu); text-decoration:none; white-space:nowrap}
+  .wth .vfentry:active{background:var(--sand2)}
+  .vftblwrap{margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow-x:auto;
+    -webkit-overflow-scrolling:touch; background:var(--card)}
+  .vftbl{width:100%; border-collapse:collapse; table-layout:fixed}
+  .vftbl col.cd{width:30%}
+  .vftbl col.cf{width:17.5%}
+  .vftbl thead th{background:var(--sand); font-size:11.5px; font-weight:600; color:var(--ink2);
+    padding:7px 2px; text-align:center; border-bottom:1px solid var(--line); border-left:1px solid var(--line)}
+  .vftbl thead th:first-child{border-left:0}
+  .vftbl tr.vgrp th{background:var(--sand2); font-size:11.5px; font-weight:600; color:var(--ink2);
+    text-align:left; padding:5px 8px; border-top:1px solid var(--line); scroll-margin-top:104px}
+  .vftbl tr.vgrp th em{font-style:normal; font-weight:400; color:var(--muted); margin-left:6px}
+  .vftbl td{border-top:1px solid var(--line); border-left:1px solid var(--line); padding:6px 1px 5px;
+    vertical-align:top; font-family:var(--serif); font-size:11px; line-height:1.4; color:var(--ink);
+    letter-spacing:-.01em}
+  .vftbl td:first-child{border-left:0}
+  .vftbl tr.vgrp + tr td{border-top:0}
+  .vftbl .vd{font-family:var(--sans); padding:6px 4px 5px 6px}
+  .vdtop{display:flex; align-items:flex-start; gap:2px}
+  .vdtop b{flex:1; min-width:0; font-size:14px; font-weight:600; line-height:1.3;
+    font-family:var(--serif); overflow-wrap:anywhere}
+  .vdtop b.kl{font-size:12px; letter-spacing:-.03em}
+  .vdsub{display:flex; align-items:baseline; gap:4px; margin-top:1px}
+  .vdsub .vk{flex:1; min-width:0; font-size:10px; color:var(--muted); line-height:1.25;
+    overflow-wrap:anywhere}
+  .vftbl td.vf{text-align:center}
+  .vftbl td.vf .fn{display:block; overflow-wrap:anywhere}
+  .vftbl .spk.vspk{width:16px; height:16px; border:0; background:none; padding:0; margin:2px auto 0;
+    color:var(--muted); opacity:.85; display:flex}
+  .vftbl .spk.vspk svg{width:12px; height:12px}
+  .vftbl .spk.vspk:active{background:none}
+  .vftbl .spk.vspk.playing{background:none; color:var(--shu); opacity:1}
 
   .gacc{border-bottom:1px solid var(--line); padding:11px 2px}
   .gacc summary{display:flex; gap:8px; align-items:baseline; font-size:14.5px; font-weight:500;
@@ -625,7 +660,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v149</span>
+    <span class="ver" id="verTag">v150</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2633,7 +2668,9 @@
           if (!g.items.length) return;
           h += '<h3 class="wth" id="wt-g-' + g.id + '">' +
                  '<span class="wtn">' + esc(g.title) + '</span>' +
-                 '<span class="wtr"><em>' + g.items.length + ' 項</em>' +
+                 '<span class="wtr">' +
+                   (isVerb ? '<a class="vfentry" href="#/all/verbs/forms/' + g.id + '">詳細表 →</a>' : '') +
+                   '<em>' + g.items.length + ' 項</em>' +
                  '<button class="gplay" data-start="' + k + '" data-label="▶ 本組" ' +
                    'aria-label="由本組開始播放">▶ 本組</button></span></h3>';
           h += g.items.map(function(x){ return rowHtml(x, k++); }).join('');
@@ -2675,6 +2712,75 @@
         return { audio: it.x.audio, el: rows[k] };
       });
       playAllQueued(items, this);
+    });
+  }
+
+  /* ---------- 動詞詳細表（入口：動詞表每個分類標題） ----------
+     欄序：辞書形 → ます形 → て形 → た形 → ない形，辞書形行頭。
+     資料由 tools/build_verbforms.py 生成；て形／た形／ない形是規則推導，
+     行く、ある、来る、する 等例外寫死在該工具。 */
+  var VERBFORMS = null;
+  function renderVerbForms(id){
+    var set = null;
+    (VERBFORMS && VERBFORMS.sets || []).forEach(function(s){ if (s.id === id) set = s; });
+    document.title = '動詞詳細表 · 日語階梯';
+    if (!set){
+      app.innerHTML = '<div class="lhead"><a class="back" href="#/all/verbs">← 動詞表</a>' +
+        '<h1>動詞詳細表</h1></div><p class="secnote">資料載入失敗，請重新整理。</p>';
+      return;
+    }
+    var FORMS = [['masu','ます形'],['te','て形'],['ta','た形'],['nai','ない形']];
+    var h = '<div class="lhead">' +
+      '<a class="back" href="#/all/verbs">← 動詞表</a>' +
+      '<h1>' + esc(set.title) + ' 詳細表<span class="k">' + esc(set.kana) + '</span></h1>' +
+      '<p class="goal">第一欄是辞書形，之後是ます形、て形、た形、ない形；按語尾的行分類。</p>' +
+    '</div>';
+    if (set.blocks.length > 1){
+      h += '<div class="jumpbar" id="vfjump">' + set.blocks.map(function(b, i){
+        return '<button class="jump" data-i="' + i + '">' + esc(b.title) +
+               '<b>' + b.rows.length + '</b></button>';
+      }).join('') + '</div>';
+    }
+    h += '<div class="vftblwrap"><table class="vftbl"><colgroup><col class="cd">' +
+      '<col class="cf"><col class="cf"><col class="cf"><col class="cf"></colgroup><thead><tr>' +
+      '<th>辞書形</th>' + FORMS.map(function(f){ return '<th>' + f[1] + '</th>'; }).join('') +
+      '</tr></thead><tbody>';
+    set.blocks.forEach(function(b, bi){
+      if (!b.rows.length) return;
+      h += '<tr class="vgrp" id="vfg-' + bi + '"><th colspan="5">' + esc(b.title) +
+           '<em>' + b.rows.length + ' 項</em></th></tr>';
+      b.rows.forEach(function(r){
+        var au = r.audio || {};
+        var kcls = (!r.kanji && r.kana.length >= 7) ? ' class="kl"' : '';
+        h += '<tr>' +
+          '<td class="vd">' +
+            '<div class="vdtop"><b' + kcls + '>' + esc(r.kanji || r.kana) + '</b></div>' +
+            (r.kanji ? '<div class="vdsub"><span class="vk">' + esc(r.kana) + '</span></div>' : '') +
+          '</td>' +
+          FORMS.map(function(f){
+            var key = f[0];
+            return '<td class="vf"><span class="fn">' + esc(r[key]) + '</span>' +
+              (au[key] ? '<button class="spk vspk" data-audio="' + esc(au[key]) +
+                '" aria-label="播放' + f[1] + '">' + SPK + '</button>' : '') + '</td>';
+          }).join('') +
+        '</tr>';
+      });
+    });
+    h += '</tbody></table></div>' +
+      '<p class="secnote">示範音檔暫時只有「行く」與「食べる」兩行；其他行先顯示文字。</p>';
+    app.innerHTML = h;
+    var jb = $('#vfjump');
+    if (jb) jb.addEventListener('click', function(e){
+      var b = e.target.closest('.jump'); if (!b) return;
+      var el = document.getElementById('vfg-' + b.getAttribute('data-i'));
+      if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+    var tbl = document.querySelector('.vftbl');
+    if (tbl) tbl.addEventListener('click', function(e){
+      var b = e.target.closest('.vspk'); if (!b) return;
+      if (b.classList.contains('playing')){ stopAudio(); return; }
+      stopAudio();
+      playFile(b.getAttribute('data-audio'), null, b);
     });
   }
 
@@ -3144,6 +3250,8 @@
     if (em){ VIEW = 'exam'; renderExam(+em[1]); return; }
     var am = h.match(/^\/all\/(vocab|grammar)/);
     if (am){ VIEW = 'all'; stopAudio(); window.scrollTo(0, 0); renderAll(am[1]); return; }
+    var vf = h.match(/^\/all\/verbs\/forms\/(godan|ichidan|irregular)/);
+    if (vf){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderVerbForms(vf[1]); return; }
     var wm = h.match(/^\/all\/(verbs|adjs)/);
     if (h === '/all/adjs/forms'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderAdjForms(); return; }
     if (wm){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderWordTable(wm[1]); return; }
@@ -3178,6 +3286,8 @@
     // 句子（會話・句型・文法・聽力）與動詞／形容詞表各自一套版本號，
     // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
     if (/audio\/(verb|adj)\//.test(url)) return 't1';
+    /* 動詞詳細表（audio/verbform/）自成一套版本號 */
+    if (/audio\/verbform\//.test(url)) return 'vf1';
     /* 形容詞變化頁（audio/adjform/）自成一套版本號 */
     if (/audio\/adjform\//.test(url)) return 'f1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
@@ -3214,6 +3324,7 @@
   function boot(){
     getJSON('data/audio.json').then(function(m){ AUDIO = m || {}; }).catch(function(){});
     getJSON('data/wordtables.json').then(function(m){ WT = m || null; }).catch(function(){});
+    getJSON('data/verbforms.json').then(function(m){ VERBFORMS = m || null; }).catch(function(){});
     getJSON('data/kanji-readings.json').then(function(m){ KANJI_READ = (m && m.dict) || {}; }).catch(function(){});
     getJSON('data/course.json').then(function(c){
       course = c;

@@ -1,6 +1,6 @@
 {
  "verbs": {
-  "total": 267,
+  "total": 266,
   "groups": [
    {
     "id": "godan",
@@ -1815,8 +1815,8 @@
       "vi": 0,
       "group": "godan",
       "kanji": "",
-      "kana": "いらっしゃう",
-      "jisho": "いらっしゃう",
+      "kana": "いらっしゃる",
+      "jisho": "いらっしゃる",
       "masu": "いらっしゃいます",
       "zh": "在、去、來（尊敬）",
       "audio": "audio/verb/L40-0.mp3"
@@ -1837,8 +1837,8 @@
       "vi": 2,
       "group": "godan",
       "kanji": "",
-      "kana": "おっしゃう",
-      "jisho": "おっしゃう",
+      "kana": "おっしゃる",
+      "jisho": "おっしゃる",
       "masu": "おっしゃいます",
       "zh": "說（尊敬）",
       "audio": "audio/verb/L40-2.mp3"
@@ -1853,17 +1853,6 @@
       "masu": "ごらんになります",
       "zh": "看（尊敬）",
       "audio": "audio/verb/L40-3.mp3"
-     },
-     {
-      "id": "L40",
-      "vi": 4,
-      "group": "godan",
-      "kanji": "",
-      "kana": "ごぞんじです",
-      "jisho": "ごぞんじです",
-      "masu": "ごぞんじでします",
-      "zh": "知道（尊敬）",
-      "audio": "audio/verb/L40-4.mp3"
      },
      {
       "id": "L40",
