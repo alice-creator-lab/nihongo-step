@@ -219,6 +219,7 @@
   .fb.ok{color:#3f7a4f}
   .fb.bad{color:var(--shu)}
   .fb .corr{display:block; margin-top:4px; font-family:var(--serif); font-size:15.5px; color:var(--ink)}
+  .fb .diff{display:block; margin-top:6px; font-size:12.5px; color:var(--shu)}
   .sum{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 18px; text-align:center}
   .sum .big{font-family:var(--serif); font-size:36px; line-height:1.2}
   .sum .big small{font-size:14px; color:var(--muted)}
@@ -498,7 +499,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v109</span>
+    <span class="ver" id="verTag">v110</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -655,13 +656,47 @@
     toast(on ? '已加入練習本（' + NB.items.length + '）' : '已移出練習本');
   }
 
-  /* 答案比對：去掉空白與標點、全形轉半形，再逐字比對 */
+  /* 答案比對：先做 NFKC（全形英數、半形片假名都收成同一形），
+     再去掉所有空白、標點與符號，最後才比。手寫輸入常把句號「。」認成
+     半濁點「゜」、把「～」寫成「〜」，這些都不該影響判定。 */
   function norm(s){
-    return String(s == null ? '' : s)
-      .replace(/[\u3000\s]/g, '')
-      .replace(/[。、，．,.！!？?「」『』（）()]/g, '')
-      .replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(c){ return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); })
-      .toLowerCase();
+    var t = String(s == null ? '' : s);
+    try { t = t.normalize('NFKC'); } catch(e){}
+    /* NFKC 把「゛」「゜」拆成「空格＋組合字元」，先去掉空白再做 NFC，
+       か＋゛ 才會組成が；接不上的（ん＋゜）最後才連組合字元一併去掉。 */
+    t = t.replace(/[\s\u3000]+/g, '');
+    try { t = t.normalize('NFC'); } catch(e){}
+    return t.replace(/[\u3099-\u309c]/g, '')
+            .replace(/[\p{P}\p{S}]/gu, '')
+            .toLowerCase();
+  }
+  /* 編輯距離：只用來判斷「差多少」，決定要不要顯示逐字提示 */
+  function lev(a, b){
+    var m = a.length, n = b.length, i, j, prev = [], cur;
+    for (j = 0; j <= n; j++) prev[j] = j;
+    for (i = 1; i <= m; i++){
+      cur = [i];
+      for (j = 1; j <= n; j++){
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1,
+                          prev[j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1));
+      }
+      prev = cur;
+    }
+    return prev[n];
+  }
+  /* 錯答時指出第一個不同的字：手寫輸入的差異常常肉眼難分，
+     講清楚是第幾個字，比對整句快。差太遠（例如填助詞題）就不提示，免誤導。 */
+  function diffNote(val, model){
+    var a = String(val == null ? '' : val).trim(), b = String(model == null ? '' : model).trim();
+    var na = norm(a), nb = norm(b), d = lev(na, nb);
+    if (!d || d > 3 || Math.abs(na.length - nb.length) > 3) return '';
+    var n = Math.min(a.length, b.length), i = 0;
+    while (i < n && a.charAt(i) === b.charAt(i)) i++;
+    if (i === a.length && i === b.length) return '';
+    if (i < n) return '<span class="diff">第 ' + (i + 1) + ' 個字不同：你寫「' + esc(a.charAt(i)) + '」，正解「' + esc(b.charAt(i)) + '」</span>';
+    return '<span class="diff">' + (a.length > b.length
+      ? '後面多寫了「' + esc(a.slice(i)) + '」'
+      : '後面少了「' + esc(b.slice(i)) + '」') + '</span>';
   }
 
   function toast(msg){
@@ -1414,7 +1449,7 @@
       }
 
       var ok = (e.answers || [e.a]).some(function(a){ return norm(a) === norm(val); });
-      if (ok) markRight(); else markWrong(e.a, '你寫的<span class="corr">'+esc(val)+'</span>');
+      if (ok) markRight(); else markWrong(e.a, '你寫的<span class="corr">'+esc(val)+'</span>' + diffNote(val, e.a));
     });
 
     if (e.hint){
