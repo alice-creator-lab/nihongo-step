@@ -2091,6 +2091,227 @@
      "audio": "audio/seq/en-9.mp3"
     }
    ]
+  },
+  {
+   "id": "cnt5",
+   "title": "數詞（五）：足・頭・羽",
+   "note": "足＝鞋襪成雙｜頭＝大型動物｜羽＝鳥類、兔",
+   "kind": "matrix",
+   "counters": [
+    {
+     "kanji": "何足",
+     "kana": "なんそく",
+     "n": 10,
+     "audio": "audio/seq/q-soku.mp3"
+    },
+    {
+     "kanji": "何頭",
+     "kana": "なんとう",
+     "n": 10,
+     "audio": "audio/seq/q-tou.mp3"
+    },
+    {
+     "kanji": "何羽",
+     "kana": "なんわ",
+     "n": 10,
+     "audio": "audio/seq/q-wa.mp3"
+    }
+   ],
+   "items": [
+    {
+     "kanji": "一足",
+     "kana": "いっそく",
+     "zh": "一雙",
+     "audio": "audio/seq/soku-0.mp3",
+     "hl": "っそく"
+    },
+    {
+     "kanji": "二足",
+     "kana": "にそく",
+     "zh": "二雙",
+     "audio": "audio/seq/soku-1.mp3"
+    },
+    {
+     "kanji": "三足",
+     "kana": "さんぞく",
+     "zh": "三雙",
+     "audio": "audio/seq/soku-2.mp3",
+     "hl": "ぞく"
+    },
+    {
+     "kanji": "四足",
+     "kana": "よんそく",
+     "zh": "四雙",
+     "audio": "audio/seq/soku-3.mp3"
+    },
+    {
+     "kanji": "五足",
+     "kana": "ごそく",
+     "zh": "五雙",
+     "audio": "audio/seq/soku-4.mp3"
+    },
+    {
+     "kanji": "六足",
+     "kana": "ろくそく",
+     "zh": "六雙",
+     "audio": "audio/seq/soku-5.mp3"
+    },
+    {
+     "kanji": "七足",
+     "kana": "ななそく",
+     "zh": "七雙",
+     "audio": "audio/seq/soku-6.mp3"
+    },
+    {
+     "kanji": "八足",
+     "kana": "はっそく",
+     "zh": "八雙",
+     "audio": "audio/seq/soku-7.mp3",
+     "hl": "っそく"
+    },
+    {
+     "kanji": "九足",
+     "kana": "きゅうそく",
+     "zh": "九雙",
+     "audio": "audio/seq/soku-8.mp3"
+    },
+    {
+     "kanji": "十足",
+     "kana": "じゅっそく",
+     "zh": "十雙",
+     "audio": "audio/seq/soku-9.mp3",
+     "hl": "じゅっそく"
+    },
+    {
+     "kanji": "一頭",
+     "kana": "いっとう",
+     "zh": "一頭",
+     "audio": "audio/seq/tou-0.mp3",
+     "hl": "っとう"
+    },
+    {
+     "kanji": "二頭",
+     "kana": "にとう",
+     "zh": "二頭",
+     "audio": "audio/seq/tou-1.mp3"
+    },
+    {
+     "kanji": "三頭",
+     "kana": "さんとう",
+     "zh": "三頭",
+     "audio": "audio/seq/tou-2.mp3"
+    },
+    {
+     "kanji": "四頭",
+     "kana": "よんとう",
+     "zh": "四頭",
+     "audio": "audio/seq/tou-3.mp3"
+    },
+    {
+     "kanji": "五頭",
+     "kana": "ごとう",
+     "zh": "五頭",
+     "audio": "audio/seq/tou-4.mp3"
+    },
+    {
+     "kanji": "六頭",
+     "kana": "ろくとう",
+     "zh": "六頭",
+     "audio": "audio/seq/tou-5.mp3"
+    },
+    {
+     "kanji": "七頭",
+     "kana": "ななとう",
+     "zh": "七頭",
+     "audio": "audio/seq/tou-6.mp3"
+    },
+    {
+     "kanji": "八頭",
+     "kana": "はっとう",
+     "zh": "八頭",
+     "audio": "audio/seq/tou-7.mp3",
+     "hl": "っとう"
+    },
+    {
+     "kanji": "九頭",
+     "kana": "きゅうとう",
+     "zh": "九頭",
+     "audio": "audio/seq/tou-8.mp3"
+    },
+    {
+     "kanji": "十頭",
+     "kana": "じゅっとう",
+     "zh": "十頭",
+     "audio": "audio/seq/tou-9.mp3",
+     "hl": "じゅっとう"
+    },
+    {
+     "kanji": "一羽",
+     "kana": "いちわ",
+     "zh": "一隻",
+     "audio": "audio/seq/wa-0.mp3"
+    },
+    {
+     "kanji": "二羽",
+     "kana": "にわ",
+     "zh": "二隻",
+     "audio": "audio/seq/wa-1.mp3"
+    },
+    {
+     "kanji": "三羽",
+     "kana": "さんわ",
+     "zh": "三隻",
+     "audio": "audio/seq/wa-2.mp3",
+     "alt": "さんば"
+    },
+    {
+     "kanji": "四羽",
+     "kana": "よんわ",
+     "zh": "四隻",
+     "audio": "audio/seq/wa-3.mp3",
+     "alt": "しわ"
+    },
+    {
+     "kanji": "五羽",
+     "kana": "ごわ",
+     "zh": "五隻",
+     "audio": "audio/seq/wa-4.mp3"
+    },
+    {
+     "kanji": "六羽",
+     "kana": "ろくわ",
+     "zh": "六隻",
+     "audio": "audio/seq/wa-5.mp3",
+     "alt": "ろっぱ"
+    },
+    {
+     "kanji": "七羽",
+     "kana": "ななわ",
+     "zh": "七隻",
+     "audio": "audio/seq/wa-6.mp3",
+     "alt": "しちわ"
+    },
+    {
+     "kanji": "八羽",
+     "kana": "はちわ",
+     "zh": "八隻",
+     "audio": "audio/seq/wa-7.mp3",
+     "alt": "はっぱ"
+    },
+    {
+     "kanji": "九羽",
+     "kana": "きゅうわ",
+     "zh": "九隻",
+     "audio": "audio/seq/wa-8.mp3"
+    },
+    {
+     "kanji": "十羽",
+     "kana": "じゅっぱ",
+     "zh": "十隻",
+     "audio": "audio/seq/wa-9.mp3",
+     "hl": "っぱ"
+    }
+   ]
   }
  ]
 }

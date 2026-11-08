@@ -590,7 +590,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v145</span>
+    <span class="ver" id="verTag">v146</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1201,10 +1201,11 @@
   /* 每課只顯示跟這一課教過的內容相關的順序表；冇相關項目就唔放入口 */
   var SEQ_FOR_LESSON = {
     3: ['time'], 4: ['num', 'hitotsu', 'cnt4'], 5: ['dmy', 'week'],
-    7: ['floor'], 10: ['cnt3'], 16: ['cnt1', 'cnt3'], 17: ['cnt4']
+    7: ['floor'], 10: ['cnt3', 'cnt5'], 16: ['cnt1', 'cnt3'], 17: ['cnt4']
   };
   var SEQ_SHORT = { num:'數字', dmy:'日數', week:'星期', time:'時間', floor:'樓層',
-    hitotsu:'～つ', cnt1:'數詞（一）', cnt2:'數詞（二）', cnt3:'數詞（三）', cnt4:'數詞（四）' };
+    hitotsu:'～つ', cnt1:'數詞（一）', cnt2:'數詞（二）', cnt3:'數詞（三）', cnt4:'數詞（四）',
+    cnt5:'數詞（五）' };
 
   function segVocab(l){
     var h = '<div class="quizbar"><div class="qinfo"><b>單字自測</b><span>抽 10 個字，先回想再看答案</span></div>' +
