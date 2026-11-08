@@ -575,7 +575,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v139</span>
+    <span class="ver" id="verTag">v140</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1205,8 +1205,10 @@
       /* 單字表分組：同一課內按 group 插入小標題（顏色、衣服、食物…） */
       if (v.group && v.group !== lastGroup) h += '<div class="vsec">'+esc(v.group)+'</div>';
       lastGroup = v.group || '';
-      var head = v.kanji ? '<span class="vkanji">'+esc(v.kanji)+'</span><span class="vkana">'+esc(v.kana)+'</span>'
-                         : '<span class="vkanji">'+esc(v.kana)+'</span>';
+      /* kanji 與 kana 相同時（片假名、假名詞）只當作一行，避免「シャツ シャツ」 */
+      var kj = (v.kanji && v.kanji !== v.kana) ? v.kanji : '';
+      var head = kj ? '<span class="vkanji">'+esc(kj)+'</span><span class="vkana">'+esc(v.kana)+'</span>'
+                    : '<span class="vkanji">'+esc(v.kana)+'</span>';
       h += '<div class="vrow"><div class="vmain">' +
              '<div class="vtop">'+head+'</div>' +
              '<div class="vbtm"><span class="vzh">'+esc(v.zh)+'</span><span class="pos">'+esc(v.pos)+'</span></div>' +
@@ -1284,10 +1286,11 @@
     if (r.i >= r.deck.length) return renderCardSummary(l);
 
     var v = r.deck[r.i];
-    var jp = v.kanji || v.kana;
+    var vkj = (v.kanji && v.kanji !== v.kana) ? v.kanji : '';
+    var jp = vkj || v.kana;
     var front = r.dir === 'jp2zh' ? jp : v.zh;
-    var sub = (r.dir === 'jp2zh' && v.kanji) ? v.kana : '';
-    var back = r.dir === 'jp2zh' ? v.zh : (v.kanji ? v.kanji + '　' + v.kana : v.kana);
+    var sub = (r.dir === 'jp2zh' && vkj) ? v.kana : '';
+    var back = r.dir === 'jp2zh' ? v.zh : (vkj ? vkj + '　' + v.kana : v.kana);
 
     host.innerHTML =
       '<div class="cardmeta">第 '+(r.i+1)+' ／ '+r.deck.length+' 題 · '+(r.dir==='jp2zh'?'日→中':'中→日')+'</div>' +
@@ -2399,8 +2402,8 @@
             '<button class="spk" data-say="' + esc(v.kana) + '"' +
               (audioFor(it.id, 'v' + it.vi) ? ' data-audio="' + esc(audioFor(it.id, 'v' + it.vi)) + '"' : '') +
               ' aria-label="播放讀音">' + SPK + '</button>' +
-            '<div class="ak"><b>' + esc(v.kanji || v.kana) + '</b>' +
-              (v.kanji ? '<span>' + esc(v.kana) + '</span>' : '') + '</div>' +
+            '<div class="ak"><b>' + esc((v.kanji && v.kanji !== v.kana) ? v.kanji : v.kana) + '</b>' +
+              ((v.kanji && v.kanji !== v.kana) ? '<span>' + esc(v.kana) + '</span>' : '') + '</div>' +
             '<div class="az"><span class="vzh">' + esc(v.zh) + '</span>' +
               (v.pos ? '<span class="pos">' + esc(v.pos) + '</span>' : '') + '</div>' +
             '<div class="al">' + it.id + '</div></div>';
