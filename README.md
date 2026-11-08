@@ -100,7 +100,7 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 - 已移除「慢速」功能（v51）：header 的慢速鍵、聽力頁的慢速重播、全域 `ngs-slow` 設定全部刪除，播放一律原速。`playFile(url,onend,el)` 仍保留選用的 `rate` 參數供連播使用，但 UI 不再提供慢速入口。
 - 動詞表／形容詞表由 `tools/build_wordtables.py` 由各課單字自動生成 `data/wordtables.json`：動詞換算成原形＋ます形後分五段／一段／不規則，形容詞依 pos（い形／な形／形容動詞）分類。單字表的假名時而寫ます形、時而寫原形，改分類規則時兩個方向都要顧及。動詞原形音檔在 `audio/verb/`。
 - 動詞表／形容詞表的音檔（`audio/verb/`、`audio/adj/`）生成後同樣要跑 `tools/trim_seq_audio.py audio/verb`、`... audio/adj`，剪完每段約 0.6 秒，「播放全部」才會緊湊。這兩個目錄用獨立版本號 `auVer()`（`?v=t1`），不要為它們去 bump `audio.json` 的 `v`，否則全部 60MB 音檔都要重下。
-- 「形容詞的變化」（`#/all/adjs/forms`）入口在形容詞表頂部，一頁列出い形容詞／な形容詞 × 現在・過去 × 肯定・否定：每種形式一行（另一說法用「〃」列接在下面），全部有預製人聲。音檔在 `audio/adjform/`（`F1`–`F16`），由 `tools/make_adjform_audio.py` 用假名合成，生成後跑 `tools/trim_seq_audio.py audio/adjform`；這批音檔在 `auVer()` 用獨立版本號 `?v=f1`。
+- 「形容詞的變化」（`#/all/adjs/forms`）入口在形容詞表頂部，**照課本排成同一個表格**：欄＝い形容詞／な形容詞，列＝現在・過去（縱排 `rowspan`）× 肯定・否定，每格把該組所有說法逐行列出（い否定 2 句、な否定 4 句），漢字有 `ruby` 振假名。使用者要的是這張表本身，不要改寫成「每種形式一行」的清單。格內文字 11px、`white-space:nowrap`，靠 `table-layout:auto` 讓い／な兩欄按內容分配寬度（390／375／360px 實測不溢出）。每格右下角喇叭依次播放該格全部說法（`AFPLAY`／`afPlayCell()`，`afStop()` 已接入 `stopAudio()`）。音檔在 `audio/adjform/`（`F1`–`F16`），由 `tools/make_adjform_audio.py` 用假名合成，生成後跑 `tools/trim_seq_audio.py audio/adjform`；這批音檔在 `auVer()` 用獨立版本號 `?v=f1`。驗收：`python3 tools/test_adjforms.py <url>`（表格結構、8 格 16 句、逐格依次播完、390/375/360 無溢出）。
 - 「播放全部」在課內單字、句型（v52）、詞語總表、練習本、動詞表、形容詞表都有；句型頁會把全課例句依序播完，正在播的那一行會反白。
 - 「播放全部」會用 `followRow()` 自動把當前播放的那一行捲到畫面中間（判斷只在跑出可視範圍時才捲，避免每 0.6 秒都動畫面）。
 - 單字表可以分組：單字物件加 `"group": "顏色"`（或「衣服」「食物」「招呼語」等），課內單字頁會在該組第一行前插入小標題（`.vsec`）。分組只用於顯示與閱讀，不影響單字卡抽題、播放全部與詞語總表（三者都仍按整課單字處理）。同一課的分組要連續排列，否則同一組名會重複出現標題。

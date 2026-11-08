@@ -294,27 +294,20 @@ async def main():
     await pump(1.0)
     out["練習本 播動詞"] = await js("window.__played.slice(-1)")
 
-    # 12) 形容詞的變化：入口在形容詞表頂部，16 個形式都要接到音檔
+    # 12) 形容詞的變化：入口在形容詞表頂部，表格 8 格 16 句都要接到音檔
+    #     （表格結構、逐格播放順序、窄螢幕不溢出由 tools/test_adjforms.py 專責驗）
     await visit("#/all/adjs", 2.5)
     await wait_until("document.querySelectorAll('#alllist .arow').length")
-    out["形容詞表 變化入口"] = await js("(function(){var a=document.querySelector('a.afentry'); return a? [a.getAttribute('href'), a.textContent.replace(/\\s+/g,' ').trim()] : null;})()")
+    out["形容詞表 變化入口"] = await js("(function(){var a=document.querySelector('a.afentry'); return a? a.getAttribute('href') : null;})()")
     await js("document.querySelector('a.afentry').click(); 1")
     await pump(1.2)
-    await wait_until("document.querySelectorAll('.afrow').length")
-    out["形容詞變化 行數"] = await js("document.querySelectorAll('.afrow').length")
-    out["形容詞變化 喇叭數"] = await js("document.querySelectorAll('.afrow .spk[data-audio]').length")
-    out["形容詞變化 標題"] = await js("document.querySelector('.lhead h1').textContent")
+    await wait_until("document.querySelectorAll('.aftbl .f').length")
+    out["形容詞變化 表格"] = await js("[document.querySelectorAll('.aftbl thead th').length, document.querySelectorAll('.aftbl tbody td').length, document.querySelectorAll('.aftbl .f').length]")
     await js(INSTR)
-    played = []
-    for k in range(16):
-        await js("document.querySelectorAll('.afrow .spk')[%d].click(); 1" % k)
-        await pump(0.35)
-        played.append(await js("window.__played.slice(-1)[0]"))
-    want = await js("Array.prototype.map.call(document.querySelectorAll('.afrow .spk'), function(b){return b.getAttribute('data-audio').split('/').slice(-2).join('/');})")
-    out["形容詞變化 播放順序"] = [p.split("?")[0] for p in played]
-    out["形容詞變化 每行播對"] = bool(want) and [p.split("?")[0] for p in played] == want
-    out["形容詞變化 16 段齊"] = len(set(want or [])) == 16
-    out["形容詞變化 未落 TTS"] = not any(str(p).startswith("TTS:") for p in played)
+    await js("document.querySelectorAll('.aftbl .afspk')[3].click(); 1")
+    await pump(1.2)
+    out["形容詞變化 播放"] = await js("window.__played.slice(-1)")
+    out["形容詞變化 未落 TTS"] = await js("!window.__played.some(function(x){return String(x).indexOf('TTS:')===0;})")
     await js("document.querySelector('.lhead .back').click(); 1")
     await pump(1.0)
     out["形容詞變化 返回表"] = await js("(document.querySelectorAll('#alllist .arow').length > 0) && location.hash")
