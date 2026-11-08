@@ -424,6 +424,8 @@
   }
   /* 順序表 */
   .sgrp{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 14px 6px; margin-bottom:11px}
+  /* 順序表頁尾：回課程地圖，用一條細線跟最後一張表分開 */
+  .seqfoot{margin:18px 0 6px; padding-top:14px; border-top:1px solid var(--line)}
   .shead{display:flex; align-items:flex-start; gap:10px; justify-content:space-between; margin-bottom:8px}
   .shead b{font-size:15px; display:block}
   .shead span{display:block; font-size:11.5px; color:var(--muted); margin-top:2px; line-height:1.45}
@@ -590,7 +592,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v146</span>
+    <span class="ver" id="verTag">v147</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2369,7 +2371,7 @@
             (g.note ? '<span>' + esc(g.note) + '</span>' : '') + '</div>' +
             '<button class="btn2 splay" data-g="' + g.id + '">▶ 播放全部</button></div>' +
           seqBody(g) + '</section>';
-      }).join('');
+      }).join('') + '<div class="seqfoot"><a class="back" href="#/">← 回課程地圖</a></div>';
       var btns = host.querySelectorAll('.splay');
       for (var k = 0; k < btns.length; k++){
         btns[k].addEventListener('click', function(){
