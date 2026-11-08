@@ -82,6 +82,28 @@ const KANJI = [
   ['つく', '点く'], ['つく', '着く'], ['とる', '取る'], ['とる', '撮る'],
   ['よやくする', '予約する'], ['そうじする', '掃除する'], ['れんしゅうする', '練習する'],
 ];
+let kbad2 = 0;
+for (const r of rows) {
+  if (!r.kanji) continue;
+  for (const f of ['kmasu', 'kte', 'kta', 'knai']) {
+    if (!r[f] || !r[f].includes(r.kanji.slice(0, 1))) { fail(`${r.kanji}: ${f} 缺漢字`); kbad2++; }
+  }
+}
+const KFORM = [
+  ['いく', '行きます', '行って', '行った', '行かない'],
+  ['たべる', '食べます', '食べて', '食べた', '食べない'],
+  ['べんきょうする', '勉強します', '勉強して', '勉強した', '勉強しない'],
+  ['くる', '来ます', '来て', '来た', '来ない'],
+  ['まにあう', '間に合います', '間に合って', '間に合った', '間に合わない'],
+];
+for (const [kana, a, b, c, e] of KFORM) {
+  const r = rows.find((x) => x.kana === kana);
+  if (!r || [r.kmasu, r.kte, r.kta, r.knai].join('/') !== [a, b, c, e].join('/')) {
+    fail(`${kana}: 漢字形不符`); kbad2++;
+  }
+}
+if (!kbad2) ok('每行漢字形齊全，指定 5 條正確');
+
 let kbad = 0;
 for (const [kana, kanji] of KANJI) {
   if (!rows.some((r) => r.kana === kana && r.kanji === kanji)) {

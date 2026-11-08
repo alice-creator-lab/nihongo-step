@@ -121,18 +121,23 @@ async def main():
           for (var i=0;i<rows.length;i++){
             var b=rows[i].querySelector('.vdtop b');
             if (b && b.textContent==='%s'){
-              return Array.prototype.map.call(rows[i].querySelectorAll('td'),function(td){return td.textContent.trim();});
+              var out=[rows[i].querySelector('.vd').textContent.trim()];
+              Array.prototype.forEach.call(rows[i].querySelectorAll('td.vf'), function(td){
+                var fn=td.querySelector('.fn'), fk=td.querySelector('.fk');
+                out.push([fn?fn.textContent:'', fk?fk.textContent:'']);
+              });
+              return out;
             }
           }
           return null; })()""" % kana)
     await call("Page.navigate", {"url": BASE + "#/all/verbs/forms/godan"}, sid)
     await wait_until("document.querySelectorAll('.vftbl tbody tr').length")
     out["行く"] = await row_of("行く")
-    out["行く五形正確"] = out["行く"][1:] == ["いきます", "いって", "いった", "いかない"]
+    out["行く五形正確"] = out["行く"][1:] == [["行きます","いきます"],["行って","いって"],["行った","いった"],["行かない","いかない"]]
     await call("Page.navigate", {"url": BASE + "#/all/verbs/forms/ichidan"}, sid)
     await wait_until("document.querySelectorAll('.vftbl tbody tr').length")
     out["食べる"] = await row_of("食べる")
-    out["食べる五形正確"] = out["食べる"][1:] == ["たべます", "たべて", "たべた", "たべない"]
+    out["食べる五形正確"] = out["食べる"][1:] == [["食べます","たべます"],["食べて","たべて"],["食べた","たべた"],["食べない","たべない"]]
 
     # 闊度：表格容器不可橫向滾動，格子文字不可爆出
     for w in (390, 375, 360):

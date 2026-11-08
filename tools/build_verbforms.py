@@ -56,6 +56,21 @@ def forms(jisho, group, masu):
     return {"masu": masu, "te": te, "ta": ta, "nai": nai}
 
 
+def kform(kanji, kana, form_kana):
+    """漢字語幹＋該形的假名語尾：行く→行きます、食べる→食べます、勉強する→勉強します。"""
+    if not kanji:
+        return ""
+    if kanji == "来る":
+        return "来" + form_kana[1:]
+    if kanji.endswith("する"):
+        stem, base = kanji[:-2], kana[:-2]
+    else:
+        stem, base = kanji[:-1], kana[:-1]
+    if form_kana.startswith(base):
+        return stem + form_kana[len(base):]
+    return ""
+
+
 def norm_kanji(kanji, kana):
     kanji = kanji or ""
     return "" if kanji == kana else kanji
@@ -94,6 +109,8 @@ def main():
                 "zh": next((x["zh"] for x in xs if x.get("zh")), ""),
                 "lessons": lessons,
                 "masu": f["masu"], "te": f["te"], "ta": f["ta"], "nai": f["nai"],
+                "kmasu": kform(kanji, kana, f["masu"]), "kte": kform(kanji, kana, f["te"]),
+                "kta": kform(kanji, kana, f["ta"]), "knai": kform(kanji, kana, f["nai"]),
                 "audio": audio_for(head, f),
                 "_order": (head["id"], head["vi"]),
             })
