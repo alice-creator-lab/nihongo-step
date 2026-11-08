@@ -484,6 +484,7 @@
   .seqlinks a{color:var(--ink2); background:var(--sand); border:1px solid var(--line);
     border-radius:999px; padding:7px 12px; text-decoration:none}
   .seqlinks a:active{background:var(--sand2)}
+  .sgrp{scroll-margin-top:70px}
   .sgrp.focus{border-color:#0b5cad; box-shadow:0 0 0 3px rgba(11,92,173,.13)}
   .tools{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:11px}
   .tool{display:flex; align-items:center; gap:8px; background:var(--sand); border:1px solid var(--line);
@@ -566,7 +567,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v131</span>
+    <span class="ver" id="verTag">v132</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2301,7 +2302,12 @@
         var box = document.getElementById('sgrp-' + focusGid);
         if (box){
           box.classList.add('focus');
-          try{ box.scrollIntoView({ block:'start' }); }catch(e){ box.scrollIntoView(); }
+          /* 頁首 header 是 sticky，直接 scrollIntoView 會把段標題和「播放全部」藏在 header 後面；
+             改為自己捲，留 header 高度再加一點空隙 */
+          var hd = document.querySelector('.hdr');
+          var off = (hd ? hd.offsetHeight : 0) + 12;
+          var y = box.getBoundingClientRect().top + (window.pageYOffset || 0) - off;
+          window.scrollTo(0, Math.max(0, y));
           setTimeout(function(){ box.classList.remove('focus'); }, 1800);
         }
       }
