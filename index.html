@@ -421,7 +421,7 @@
     padding:0 10px; font-size:11.5px; color:var(--muted); text-align:center; letter-spacing:.02em}
   .sheads span{padding:3px 0 5px; border-bottom:1px solid var(--line)}
   /* 同一 section 內的分組：用一條較粗的分隔線，跟行與行之間的細線分得開 */
-  .sblock + .sblock{border-top:2px solid var(--sand2); margin-top:10px; padding-top:8px}
+  .sblock + .sblock{border-top:2px solid var(--line); margin:12px -14px 0; padding:10px 14px 0}
   .scols{display:grid; grid-template-columns:repeat(var(--cols,1),minmax(0,1fr)); margin:0 -14px}
   .scol{min-width:0}
   .scol + .scol{border-left:1px solid var(--line)}
@@ -529,7 +529,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v119</span>
+    <span class="ver" id="verTag">v120</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2150,7 +2150,7 @@
           }).join('') + '</div>';
           k += s.n;
         });
-        html += '<div class="sblock' + (m >= 3 ? ' b3' : '') + '">' + body + '</div>';
+        html += '<div class="sblock' + (m >= 3 ? ' b3' : '') + '">' + body + '</div></div>';
         at = k;
       });
       return html;
@@ -2168,7 +2168,7 @@
       });
       /* 書本有些表沒有欄標題（例如數字），有標題才畫那一行 */
       if (labelled) head = '<div class="sheads" style="--cols:' + m + '">' + labels + '</div>';
-      return head + '<div class="sblock' + (m >= 3 ? ' b3' : '') + '">' + body + '</div>';
+      return head + '<div class="sblock' + (m >= 3 ? ' b3' : '') + '">' + body + '</div></div>';
     }
     var cols = g.cols ? (window.innerWidth < 560 && g.cols_mobile ? g.cols_mobile : g.cols) : 1;
     if (cols > n) cols = n;
