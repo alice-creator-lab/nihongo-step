@@ -591,12 +591,12 @@
   {
    "id": "dmy",
    "title": "日數、週數、月數、年數",
-   "note": "藍色＝變音（日數 2～10 與二十日為和語讀音）",
+   "note": "藍色＝變音（日數 2～10、十四日、二十日、二十四日為和語讀音）",
    "compact": true,
    "sections": [
     {
      "label": "何日",
-     "n": 13
+     "n": 15
     },
     {
      "label": "何週間",
@@ -694,11 +694,25 @@
      "audio": "audio/seq/dmy-11.mp3"
     },
     {
+     "kanji": "十四日",
+     "kana": "じゅうよっか",
+     "zh": "十四日",
+     "hl": "よっか",
+     "audio": "audio/seq/day-10.mp3"
+    },
+    {
      "kanji": "二十日",
      "kana": "はつか",
      "zh": "二十日",
      "hl": "はつか",
      "audio": "audio/seq/day-11.mp3"
+    },
+    {
+     "kanji": "二十四日",
+     "kana": "にじゅうよっか",
+     "zh": "二十四日",
+     "hl": "よっか",
+     "audio": "audio/seq/day-12.mp3"
     },
     {
      "kanji": "一週間",
