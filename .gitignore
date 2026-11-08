@@ -4,3 +4,4 @@ audio/seq/.trimmed/
 __pycache__/
 models/
 *.tar.gz
+audio/adjform/.trimmed/

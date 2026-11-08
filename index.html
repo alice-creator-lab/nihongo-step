@@ -573,6 +573,34 @@
   .arow .az{flex:1; min-width:0; font-size:13.5px; color:var(--ink2)}
   .arow .al{font-size:11px; color:var(--muted); white-space:nowrap}
   .arow .spk{width:34px; height:34px; flex:0 0 34px}
+  /* 形容詞的變化（入口在形容詞表頂部，獨立一頁） */
+  .afentry{display:flex; align-items:center; gap:10px; margin:14px 0 0; padding:12px 14px;
+    border:1px solid var(--line); border-radius:14px; background:var(--sand);
+    text-decoration:none; color:var(--ink); -webkit-tap-highlight-color:transparent}
+  .afentry:active{background:var(--sand2)}
+  .afentry .tx{flex:1; min-width:0}
+  .afentry b{display:block; font-size:14px; font-weight:600; line-height:1.35}
+  .afentry .tx span{display:block; font-size:11.5px; color:var(--muted); margin-top:2px}
+  .afentry .go{flex:0 0 auto; font-size:12px; color:var(--shu); white-space:nowrap}
+  .afh{display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--ink2);
+    margin:20px 0 0; padding-bottom:5px; border-bottom:1px solid var(--line)}
+  .afh .tin{font-size:10.5px; font-weight:400; color:var(--muted); letter-spacing:.06em}
+  .afrow{display:flex; align-items:flex-start; gap:9px; padding:11px 2px; border-bottom:1px solid var(--line)}
+  .afrow .aft{flex:0 0 20px; margin-top:2px; text-align:center; font-size:11.5px; color:var(--ai);
+    border:1px solid var(--line); border-radius:6px; background:var(--card); line-height:20px}
+  .afrow .afx{flex:1; min-width:0}
+  .afrow .afx b{display:block; font-size:16.5px; font-weight:500; line-height:1.45;
+    font-family:"Hiragino Mincho ProN",serif; word-break:break-word}
+  .afrow .afx .kr{display:block; font-size:11.5px; color:var(--muted); margin-top:1px}
+  .afrow.sub .aft{color:var(--muted); background:transparent; border-color:transparent}
+  .afrow.sub .afx b{font-size:15px; color:var(--ink2); font-weight:400}
+  .afrow.sub .afx .kr{font-size:11px}
+  .afrow .spk{width:34px; height:34px; flex:0 0 34px; margin-top:2px}
+  .afnote{margin-top:22px; padding:14px 16px; border:1px solid var(--line); border-radius:14px;
+    background:var(--sand); font-size:12.5px; color:var(--ink2); line-height:1.9}
+  .afnote h3{margin:0 0 6px; font-size:12.5px; font-weight:600; color:var(--ink)}
+  .afnote ul{margin:0; padding-left:18px}
+  .afnote li{margin:3px 0}
   .gacc{border-bottom:1px solid var(--line); padding:11px 2px}
   .gacc summary{display:flex; gap:8px; align-items:baseline; font-size:14.5px; font-weight:500;
     cursor:pointer; list-style:none}
@@ -592,7 +620,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v147</span>
+    <span class="ver" id="verTag">v148</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2528,6 +2556,12 @@
           ? '第 1–40 課的動詞，按五段、一段、不規則分類；大字是原形，下面是ます形。'
           : '第 1–40 課的形容詞，按い形容詞、な形容詞分類。') + '</p>' +
       '</div>' +
+      (isVerb ? '' :
+        '<a class="afentry" href="#/all/adjs/forms">' +
+          '<div class="tx"><b>形容詞的變化</b>' +
+            '<span>現在・過去 ／ 肯定・否定 一覽</span></div>' +
+          '<span class="go">看一覽 →</span>' +
+        '</a>') +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="搜尋原形、假名或中文"></div>' +
       '<div class="jumpbar" id="wtjump"></div>' +
@@ -2636,6 +2670,66 @@
       });
       playAllQueued(items, this);
     });
+  }
+
+  /* ---------- 形容詞的變化（入口：形容詞表頂部） ----------
+     一頁看完い形容詞／な形容詞 × 現在・過去 × 肯定・否定，
+     用短文例句示範（高い／有名），每句都有預製人聲。 */
+  var AFFORMS = [
+    { h:'現在・肯定', jp:'げんざい・こうてい', rows:[
+      { t:'い', ja:'高いです', kana:'たかいです', audio:'audio/adjform/F1.mp3' },
+      { t:'な', ja:'有名です', kana:'ゆうめいです', audio:'audio/adjform/F2.mp3' } ] },
+    { h:'現在・否定', jp:'げんざい・ひてい', rows:[
+      { t:'い', ja:'高くないです', kana:'たかくないです', audio:'audio/adjform/F3.mp3' },
+      { t:'〃', ja:'高くありません', kana:'たかくありません', audio:'audio/adjform/F9.mp3', sub:1 },
+      { t:'な', ja:'有名じゃありません', kana:'ゆうめいじゃありません', audio:'audio/adjform/F4.mp3' },
+      { t:'〃', ja:'有名ではありません', kana:'ゆうめいではありません', audio:'audio/adjform/F10.mp3', sub:1 },
+      { t:'〃', ja:'有名じゃないです', kana:'ゆうめいじゃないです', audio:'audio/adjform/F11.mp3', sub:1 },
+      { t:'〃', ja:'有名ではないです', kana:'ゆうめいではないです', audio:'audio/adjform/F12.mp3', sub:1 } ] },
+    { h:'過去・肯定', jp:'かこ・こうてい', rows:[
+      { t:'い', ja:'高かったです', kana:'たかかったです', audio:'audio/adjform/F5.mp3' },
+      { t:'な', ja:'有名でした', kana:'ゆうめいでした', audio:'audio/adjform/F6.mp3' } ] },
+    { h:'過去・否定', jp:'かこ・ひてい', rows:[
+      { t:'い', ja:'高くなかったです', kana:'たかくなかったです', audio:'audio/adjform/F7.mp3' },
+      { t:'〃', ja:'高くありませんでした', kana:'たかくありませんでした', audio:'audio/adjform/F13.mp3', sub:1 },
+      { t:'な', ja:'有名じゃありませんでした', kana:'ゆうめいじゃありませんでした', audio:'audio/adjform/F8.mp3' },
+      { t:'〃', ja:'有名ではありませんでした', kana:'ゆうめいではありませんでした', audio:'audio/adjform/F14.mp3', sub:1 },
+      { t:'〃', ja:'有名じゃなかったです', kana:'ゆうめいじゃなかったです', audio:'audio/adjform/F15.mp3', sub:1 },
+      { t:'〃', ja:'有名ではなかったです', kana:'ゆうめいではなかったです', audio:'audio/adjform/F16.mp3', sub:1 } ] }
+  ];
+
+  function renderAdjForms(){
+    document.title = '形容詞的變化 · 日語階梯';
+    var h = '<div class="lhead">' +
+      '<a class="back" href="#/all/adjs">← 形容詞表</a>' +
+      '<h1>形容詞的變化<span class="k">けいようし の へんか</span></h1>' +
+      '<p class="goal">い形容詞與な形容詞的現在、過去，以及肯定、否定。點右邊的喇叭可以聽讀音。</p>' +
+    '</div>';
+
+    AFFORMS.forEach(function(g){
+      h += '<h3 class="afh">' + g.h + '<span class="tin">' + g.jp + '</span></h3>';
+      g.rows.forEach(function(r){
+        h += '<div class="afrow' + (r.sub ? ' sub' : '') + '">' +
+          '<span class="aft">' + r.t + '</span>' +
+          '<div class="afx"><b>' + esc(r.ja) + '</b>' +
+            '<span class="kr">' + esc(r.kana) + '</span>' +
+          '</div>' +
+          '<button class="spk" data-say="' + esc(r.kana) + '" data-audio="' + esc(r.audio) +
+            '" aria-label="播放讀音">' + SPK + '</button>' +
+        '</div>';
+      });
+    });
+
+    h += '<div class="afnote"><h3>變化規則</h3><ul>' +
+      '<li><b>い形容詞</b>：字尾「い」換成「く」＝現在否定、過去否定；換成「かった」＝過去肯定。' +
+        '現在肯定直接用原形＋です。</li>' +
+      '<li><b>な形容詞</b>：詞幹不變，後面接 です／じゃありません／でした／じゃありませんでした。</li>' +
+      '<li>「じゃ」與「では」、「ありません」與「ないです」意思相同，會話多用「じゃ」「ないです」。</li>' +
+      '<li>例外：いい → よくない／よかった／よくなかった（否定與過去用「よく」）。</li>' +
+    '</ul></div>';
+
+    app.innerHTML = h;
+    bindSpeakers(app);
   }
 
   /* ---------- 練習本 ---------- */
@@ -3010,6 +3104,7 @@
     var am = h.match(/^\/all\/(vocab|grammar)/);
     if (am){ VIEW = 'all'; stopAudio(); window.scrollTo(0, 0); renderAll(am[1]); return; }
     var wm = h.match(/^\/all\/(verbs|adjs)/);
+    if (h === '/all/adjs/forms'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderAdjForms(); return; }
     if (wm){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderWordTable(wm[1]); return; }
     var m = h.match(/^\/l\/(L\d{2})(?:\/([a-z]+))?/);
     if (m && lessons[m[1]]){
@@ -3042,6 +3137,8 @@
     // 句子（會話・句型・文法・聽力）與動詞／形容詞表各自一套版本號，
     // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
     if (/audio\/(verb|adj)\//.test(url)) return 't1';
+    /* 形容詞變化頁（audio/adjform/）自成一套版本號 */
+    if (/audio\/adjform\//.test(url)) return 'f1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
     if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e11';
     return AUDIO.v || 1;
