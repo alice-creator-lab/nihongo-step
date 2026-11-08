@@ -428,7 +428,7 @@
   .scol .srow{padding:7px 10px; gap:6px}
   .sgrp.compact .srow{grid-template-columns:3.6em minmax(0,1fr) 26px; font-size:13.5px}
   .sgrp.compact .srow .sn{white-space:nowrap}
-  .sgrp.compact .srow .sp{font-style:normal; color:#0b5cad; font-weight:700;
+  .srow .sp{font-style:normal; color:#0b5cad; font-weight:700;
     background:#e6eefb; border-radius:4px; padding:0 3px; -webkit-print-color-adjust:exact}
   .sgrp.compact .srow .alt{color:var(--muted); font-size:11px}
   /* 手機：兩欄、每格兩行（漢字在上、假名在下），避免假名被擠到換行 */
@@ -562,7 +562,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v129</span>
+    <span class="ver" id="verTag">v130</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2251,6 +2251,7 @@
       '<div class="lhead">' +
         '<a class="back" href="#/">← 課程地圖</a>' +
         '<h1>順序表<span class="k">じゅんじょ</span></h1>' +
+        '<p class="secnote">藍色＝變音；括號＝另一種讀法</p>' +
       '</div><div id="seqhost"><p class="secnote">載入中…</p></div>';
     loadSeq(function(d){
       var host = document.getElementById('seqhost');

@@ -3,7 +3,6 @@
   {
    "id": "num",
    "title": "數字",
-   "note": "藍色＝變音；括號＝另一種讀法",
    "compact": true,
    "blocks": [
     {
@@ -830,7 +829,6 @@
   {
    "id": "time",
    "title": "時間",
-   "note": "藍色＝變音",
    "cols": 3,
    "cols_mobile": 3,
    "compact": true,
@@ -1159,6 +1157,72 @@
    ]
   },
   {
+   "id": "hitotsu",
+   "title": "～つ（ひとつ・ふたつ）",
+   "items": [
+    {
+     "kanji": "一つ",
+     "kana": "ひとつ",
+     "zh": "一個",
+     "audio": "audio/seq/hitotsu-0.mp3"
+    },
+    {
+     "kanji": "二つ",
+     "kana": "ふたつ",
+     "zh": "兩個",
+     "audio": "audio/seq/hitotsu-1.mp3"
+    },
+    {
+     "kanji": "三つ",
+     "kana": "みっつ",
+     "zh": "三個",
+     "audio": "audio/seq/hitotsu-2.mp3"
+    },
+    {
+     "kanji": "四つ",
+     "kana": "よっつ",
+     "zh": "四個",
+     "audio": "audio/seq/hitotsu-3.mp3"
+    },
+    {
+     "kanji": "五つ",
+     "kana": "いつつ",
+     "zh": "五個",
+     "audio": "audio/seq/hitotsu-4.mp3"
+    },
+    {
+     "kanji": "六つ",
+     "kana": "むっつ",
+     "zh": "六個",
+     "audio": "audio/seq/hitotsu-5.mp3"
+    },
+    {
+     "kanji": "七つ",
+     "kana": "ななつ",
+     "zh": "七個",
+     "audio": "audio/seq/hitotsu-6.mp3"
+    },
+    {
+     "kanji": "八つ",
+     "kana": "やっつ",
+     "zh": "八個",
+     "audio": "audio/seq/hitotsu-7.mp3"
+    },
+    {
+     "kanji": "九つ",
+     "kana": "ここのつ",
+     "zh": "九個",
+     "audio": "audio/seq/hitotsu-8.mp3"
+    },
+    {
+     "kanji": "十",
+     "kana": "とお",
+     "zh": "十個",
+     "audio": "audio/seq/hitotsu-9.mp3"
+    }
+   ]
+  },
+  {
    "id": "cnt1",
    "title": "數詞（一）：人・枚・台",
    "note": "人＝人數｜枚＝薄片｜台＝機器車輛",
@@ -1206,7 +1270,8 @@
      "kanji": "四人",
      "kana": "よにん",
      "zh": "四個人",
-     "audio": "audio/seq/people-3.mp3"
+     "audio": "audio/seq/people-3.mp3",
+     "hl": "よ"
     },
     {
      "kanji": "五人",
@@ -1224,7 +1289,8 @@
      "kanji": "七人",
      "kana": "しちにん",
      "zh": "七個人",
-     "audio": "audio/seq/people-6.mp3"
+     "audio": "audio/seq/people-6.mp3",
+     "hl": "しち"
     },
     {
      "kanji": "八人",
@@ -1396,7 +1462,8 @@
      "kanji": "一冊",
      "kana": "いっさつ",
      "zh": "一本",
-     "audio": "audio/seq/satsu-0.mp3"
+     "audio": "audio/seq/satsu-0.mp3",
+     "hl": "っさつ"
     },
     {
      "kanji": "二冊",
@@ -1438,7 +1505,8 @@
      "kanji": "八冊",
      "kana": "はっさつ",
      "zh": "八本",
-     "audio": "audio/seq/satsu-7.mp3"
+     "audio": "audio/seq/satsu-7.mp3",
+     "hl": "っさつ"
     },
     {
      "kanji": "九冊",
@@ -1450,13 +1518,15 @@
      "kanji": "十冊",
      "kana": "じゅっさつ",
      "zh": "十本",
-     "audio": "audio/seq/satsu-9.mp3"
+     "audio": "audio/seq/satsu-9.mp3",
+     "hl": "っさつ"
     },
     {
      "kanji": "一個",
      "kana": "いっこ",
      "zh": "一個",
-     "audio": "audio/seq/ko-0.mp3"
+     "audio": "audio/seq/ko-0.mp3",
+     "hl": "っこ"
     },
     {
      "kanji": "二個",
@@ -1486,7 +1556,8 @@
      "kanji": "六個",
      "kana": "ろっこ",
      "zh": "六個",
-     "audio": "audio/seq/ko-5.mp3"
+     "audio": "audio/seq/ko-5.mp3",
+     "hl": "っこ"
     },
     {
      "kanji": "七個",
@@ -1510,13 +1581,15 @@
      "kanji": "十個",
      "kana": "じゅっこ",
      "zh": "十個",
-     "audio": "audio/seq/ko-9.mp3"
+     "audio": "audio/seq/ko-9.mp3",
+     "hl": "っこ"
     },
     {
      "kanji": "一本",
      "kana": "いっぽん",
      "zh": "一支",
-     "audio": "audio/seq/hon-0.mp3"
+     "audio": "audio/seq/hon-0.mp3",
+     "hl": "っぽん"
     },
     {
      "kanji": "二本",
@@ -1528,7 +1601,8 @@
      "kanji": "三本",
      "kana": "さんぼん",
      "zh": "三支",
-     "audio": "audio/seq/hon-2.mp3"
+     "audio": "audio/seq/hon-2.mp3",
+     "hl": "ぼん"
     },
     {
      "kanji": "四本",
@@ -1546,7 +1620,8 @@
      "kanji": "六本",
      "kana": "ろっぽん",
      "zh": "六支",
-     "audio": "audio/seq/hon-5.mp3"
+     "audio": "audio/seq/hon-5.mp3",
+     "hl": "ろっぽん"
     },
     {
      "kanji": "七本",
@@ -1558,7 +1633,8 @@
      "kanji": "八本",
      "kana": "はっぽん",
      "zh": "八支",
-     "audio": "audio/seq/hon-7.mp3"
+     "audio": "audio/seq/hon-7.mp3",
+     "hl": "はっぽん"
     },
     {
      "kanji": "九本",
@@ -1570,7 +1646,8 @@
      "kanji": "十本",
      "kana": "じゅっぽん",
      "zh": "十支",
-     "audio": "audio/seq/hon-9.mp3"
+     "audio": "audio/seq/hon-9.mp3",
+     "hl": "じゅっぽん"
     }
    ]
   },
@@ -1604,7 +1681,8 @@
      "kanji": "一匹",
      "kana": "いっぴき",
      "zh": "一隻",
-     "audio": "audio/seq/hiki-0.mp3"
+     "audio": "audio/seq/hiki-0.mp3",
+     "hl": "っぴき"
     },
     {
      "kanji": "二匹",
@@ -1616,7 +1694,8 @@
      "kanji": "三匹",
      "kana": "さんびき",
      "zh": "三隻",
-     "audio": "audio/seq/hiki-2.mp3"
+     "audio": "audio/seq/hiki-2.mp3",
+     "hl": "びき"
     },
     {
      "kanji": "四匹",
@@ -1634,7 +1713,8 @@
      "kanji": "六匹",
      "kana": "ろっぴき",
      "zh": "六隻",
-     "audio": "audio/seq/hiki-5.mp3"
+     "audio": "audio/seq/hiki-5.mp3",
+     "hl": "ろっぴき"
     },
     {
      "kanji": "七匹",
@@ -1646,7 +1726,8 @@
      "kanji": "八匹",
      "kana": "はっぴき",
      "zh": "八隻",
-     "audio": "audio/seq/hiki-7.mp3"
+     "audio": "audio/seq/hiki-7.mp3",
+     "hl": "はっぴき"
     },
     {
      "kanji": "九匹",
@@ -1658,13 +1739,15 @@
      "kanji": "十匹",
      "kana": "じゅっぴき",
      "zh": "十隻",
-     "audio": "audio/seq/hiki-9.mp3"
+     "audio": "audio/seq/hiki-9.mp3",
+     "hl": "じゅっぴき"
     },
     {
      "kanji": "一杯",
      "kana": "いっぱい",
      "zh": "一杯",
-     "audio": "audio/seq/hai-0.mp3"
+     "audio": "audio/seq/hai-0.mp3",
+     "hl": "っぱい"
     },
     {
      "kanji": "二杯",
@@ -1676,7 +1759,8 @@
      "kanji": "三杯",
      "kana": "さんばい",
      "zh": "三杯",
-     "audio": "audio/seq/hai-2.mp3"
+     "audio": "audio/seq/hai-2.mp3",
+     "hl": "ばい"
     },
     {
      "kanji": "四杯",
@@ -1694,7 +1778,8 @@
      "kanji": "六杯",
      "kana": "ろっぱい",
      "zh": "六杯",
-     "audio": "audio/seq/hai-5.mp3"
+     "audio": "audio/seq/hai-5.mp3",
+     "hl": "ろっぱい"
     },
     {
      "kanji": "七杯",
@@ -1706,7 +1791,8 @@
      "kanji": "八杯",
      "kana": "はっぱい",
      "zh": "八杯",
-     "audio": "audio/seq/hai-7.mp3"
+     "audio": "audio/seq/hai-7.mp3",
+     "hl": "はっぱい"
     },
     {
      "kanji": "九杯",
@@ -1718,13 +1804,15 @@
      "kanji": "十杯",
      "kana": "じゅっぱい",
      "zh": "十杯",
-     "audio": "audio/seq/hai-9.mp3"
+     "audio": "audio/seq/hai-9.mp3",
+     "hl": "じゅっぱい"
     },
     {
      "kanji": "一歳",
      "kana": "いっさい",
      "zh": "一歲",
-     "audio": "audio/seq/sai-0.mp3"
+     "audio": "audio/seq/sai-0.mp3",
+     "hl": "っさい"
     },
     {
      "kanji": "二歳",
@@ -1766,7 +1854,8 @@
      "kanji": "八歳",
      "kana": "はっさい",
      "zh": "八歲",
-     "audio": "audio/seq/sai-7.mp3"
+     "audio": "audio/seq/sai-7.mp3",
+     "hl": "はっさい"
     },
     {
      "kanji": "九歳",
@@ -1778,13 +1867,15 @@
      "kanji": "十歳",
      "kana": "じゅっさい",
      "zh": "十歲",
-     "audio": "audio/seq/sai-9.mp3"
+     "audio": "audio/seq/sai-9.mp3",
+     "hl": "じゅっさい"
     },
     {
      "kanji": "二十歳",
      "kana": "はたち",
      "zh": "二十歲",
-     "audio": "audio/seq/sai-10.mp3"
+     "audio": "audio/seq/sai-10.mp3",
+     "hl": "はたち"
     }
    ]
   },
@@ -1818,7 +1909,8 @@
      "kanji": "一回",
      "kana": "いっかい",
      "zh": "一次",
-     "audio": "audio/seq/kai-0.mp3"
+     "audio": "audio/seq/kai-0.mp3",
+     "hl": "っかい"
     },
     {
      "kanji": "二回",
@@ -1848,7 +1940,8 @@
      "kanji": "六回",
      "kana": "ろっかい",
      "zh": "六次",
-     "audio": "audio/seq/kai-5.mp3"
+     "audio": "audio/seq/kai-5.mp3",
+     "hl": "ろっかい"
     },
     {
      "kanji": "七回",
@@ -1860,7 +1953,8 @@
      "kanji": "八回",
      "kana": "はっかい",
      "zh": "八次",
-     "audio": "audio/seq/kai-7.mp3"
+     "audio": "audio/seq/kai-7.mp3",
+     "hl": "はっかい"
     },
     {
      "kanji": "九回",
@@ -1872,7 +1966,8 @@
      "kanji": "十回",
      "kana": "じゅっかい",
      "zh": "十次",
-     "audio": "audio/seq/kai-9.mp3"
+     "audio": "audio/seq/kai-9.mp3",
+     "hl": "じゅっかい"
     },
     {
      "kanji": "一番",
@@ -1956,7 +2051,8 @@
      "kanji": "四円",
      "kana": "よえん",
      "zh": "四日圓",
-     "audio": "audio/seq/en-3.mp3"
+     "audio": "audio/seq/en-3.mp3",
+     "hl": "よ"
     },
     {
      "kanji": "五円",
@@ -1993,72 +2089,6 @@
      "kana": "じゅうえん",
      "zh": "十日圓",
      "audio": "audio/seq/en-9.mp3"
-    }
-   ]
-  },
-  {
-   "id": "hitotsu",
-   "title": "～つ（ひとつ・ふたつ）",
-   "items": [
-    {
-     "kanji": "一つ",
-     "kana": "ひとつ",
-     "zh": "一個",
-     "audio": "audio/seq/hitotsu-0.mp3"
-    },
-    {
-     "kanji": "二つ",
-     "kana": "ふたつ",
-     "zh": "兩個",
-     "audio": "audio/seq/hitotsu-1.mp3"
-    },
-    {
-     "kanji": "三つ",
-     "kana": "みっつ",
-     "zh": "三個",
-     "audio": "audio/seq/hitotsu-2.mp3"
-    },
-    {
-     "kanji": "四つ",
-     "kana": "よっつ",
-     "zh": "四個",
-     "audio": "audio/seq/hitotsu-3.mp3"
-    },
-    {
-     "kanji": "五つ",
-     "kana": "いつつ",
-     "zh": "五個",
-     "audio": "audio/seq/hitotsu-4.mp3"
-    },
-    {
-     "kanji": "六つ",
-     "kana": "むっつ",
-     "zh": "六個",
-     "audio": "audio/seq/hitotsu-5.mp3"
-    },
-    {
-     "kanji": "七つ",
-     "kana": "ななつ",
-     "zh": "七個",
-     "audio": "audio/seq/hitotsu-6.mp3"
-    },
-    {
-     "kanji": "八つ",
-     "kana": "やっつ",
-     "zh": "八個",
-     "audio": "audio/seq/hitotsu-7.mp3"
-    },
-    {
-     "kanji": "九つ",
-     "kana": "ここのつ",
-     "zh": "九個",
-     "audio": "audio/seq/hitotsu-8.mp3"
-    },
-    {
-     "kanji": "十",
-     "kana": "とお",
-     "zh": "十個",
-     "audio": "audio/seq/hitotsu-9.mp3"
     }
    ]
   }
