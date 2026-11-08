@@ -519,7 +519,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v114</span>
+    <span class="ver" id="verTag">v115</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2080,8 +2080,8 @@
     step();
   }
 
-  /* 順序表「播放全部」：語速略快、段與段之間不留白，方便反覆跟讀洗腦 */
-  var SEQ_RATE = 1.25;
+  /* 順序表「播放全部」：維持原速，只靠音檔前後留白縮短段與段之間的間隔 */
+  var SEQ_RATE = 1;
   function playGroup(g, btn){
     var i = 0;
     SEQPLAY.on = true;
@@ -2771,7 +2771,7 @@
     // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
     if (/audio\/(verb|adj)\//.test(url)) return 't1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
-    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e4';
+    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e5';
     return AUDIO.v || 1;
   }
   function playFile(url, onend, el, rate){

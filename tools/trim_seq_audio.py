@@ -91,7 +91,18 @@ def trim(path, force=False, marks=None):
 
 def main():
     global HEAD, TAIL, QSCALE, COPY
-    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    # 位置參數只收「不是選項、也不是選項數值」的項目（--head 0.08 的 0.08 不是目錄）
+    args, skip_next = [], False
+    for a in sys.argv[1:]:
+        if skip_next:
+            skip_next = False
+            continue
+        if a in ("--head", "--tail", "--q"):
+            skip_next = True
+            continue
+        if a.startswith("--"):
+            continue
+        args.append(a)
     force = "--force" in sys.argv
     COPY = "--copy" in sys.argv
     # 可調整前後留白：五十音只有一個音節，尾巴留長一點才不會聽起來被切斷
