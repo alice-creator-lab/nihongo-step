@@ -501,7 +501,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v111</span>
+    <span class="ver" id="verTag">v112</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -668,9 +668,8 @@
        か＋゛ 才會組成が；接不上的（ん＋゜）最後才連組合字元一併去掉。 */
     t = t.replace(/[\s\u3000]+/g, '');
     try { t = t.normalize('NFC'); } catch(e){}
-    return t.replace(/[\u3099-\u309c]/g, '')
-            .replace(/[\p{P}\p{S}]/gu, '')
-            .toLowerCase();
+    /* 只留文字與數字：零寬字元、各種空白、標點、符號、殘留濁點全部去掉 */
+    return t.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
   }
   /* 編輯距離：只用來判斷「差多少」，決定要不要顯示逐字提示 */
   function lev(a, b){
@@ -686,28 +685,59 @@
     }
     return prev[n];
   }
-  /* 錯答時把不同的字直接標紅：不寫「第幾個字」，讓句子自己講。
-     差太遠（例如填助詞題）就不標，免得滿江紅反而看不懂。 */
-  function diffParts(val, model){
-    var a0 = String(val == null ? '' : val).trim(), b0 = String(model == null ? '' : model).trim();
-    /* 句尾標點不參與比對，也不標紅 */
-    var ta = (a0.match(/[。．.！!？?]+$/) || [''])[0], tb = (b0.match(/[。．.！!？?]+$/) || [''])[0];
-    var a = a0.slice(0, a0.length - ta.length), b = b0.slice(0, b0.length - tb.length);
-    var na = norm(a), nb = norm(b), d = lev(na, nb);
-    if (!d || d > 3 || Math.abs(na.length - nb.length) > 3) return null;
-    var pre = 0;
-    while (pre < a.length && pre < b.length && a.charAt(pre) === b.charAt(pre)) pre++;
-    var suf = 0;
-    while (suf < a.length - pre && suf < b.length - pre &&
-           a.charAt(a.length - 1 - suf) === b.charAt(b.length - 1 - suf)) suf++;
-    return {
-      a: [a.slice(0, pre), a.slice(pre, a.length - suf), (suf ? a.slice(a.length - suf) : '') + ta],
-      b: [b.slice(0, pre), b.slice(pre, b.length - suf), (suf ? b.slice(b.length - suf) : '') + tb]
-    };
+  /* 只把真正不同的字標紅：用 LCS 逐字比對，相同的前後文保持原樣，
+     所以差一個字就只紅一個字，不會整句變紅。 */
+  function visChars(s){
+    var out = [], i = 0;
+    while (i < s.length){
+      var cp = s.codePointAt(i), ch = String.fromCodePoint(cp);
+      /* 空白、標點、零寬字元不參與比對，也不標紅 */
+      if (/[\p{L}\p{N}]/u.test(ch)) out.push({ ch: ch, at: i, len: ch.length });
+      i += ch.length;
+    }
+    return out;
   }
-  function diffHtml(parts, which){
-    var p = parts[which];
-    return esc(p[0]) + (p[1] ? '<em class="diffmark">' + esc(p[1]) + '</em>' : '') + esc(p[2] || '');
+  function lcsMarks(A, B){
+    var n = A.length, m = B.length, i, j, k;
+    var dp = [];
+    for (i = 0; i <= n; i++){ dp.push([]); for (j = 0; j <= m; j++) dp[i].push(0); }
+    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--)
+      dp[i][j] = A[i].ch === B[j].ch ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    var ma = [], mb = [];
+    for (k = 0; k < n; k++) ma.push(true);
+    for (k = 0; k < m; k++) mb.push(true);
+    i = 0; j = 0;
+    while (i < n && j < m){
+      if (A[i].ch === B[j].ch){ ma[i] = false; mb[j] = false; i++; j++; }
+      else if (dp[i + 1][j] >= dp[i][j + 1]) i++;
+      else j++;
+    }
+    return [ma, mb];
+  }
+  function markHtml(s, chars, marks){
+    var out = '', pos = 0, open = false, i, c;
+    for (i = 0; i < chars.length; i++){
+      c = chars[i];
+      if (open && !marks[i]){ out += '</em>'; open = false; }
+      out += esc(s.slice(pos, c.at));
+      if (marks[i]){
+        if (!open){ out += '<em class="diffmark">'; open = true; }
+        out += esc(c.ch);
+      } else {
+        out += esc(c.ch);
+      }
+      pos = c.at + c.len;
+    }
+    if (open) out += '</em>';
+    return out + esc(s.slice(pos));
+  }
+  function diffRender(val, model){
+    var a = String(val == null ? '' : val).trim(), b = String(model == null ? '' : model).trim();
+    var na = norm(a), nb = norm(b), d = lev(na, nb);
+    /* 差太遠（例如填助詞題）就不標，免整句紅 */
+    if (!d || d > 3 || Math.abs(na.length - nb.length) > 3) return null;
+    var r = lcsMarks(visChars(a), visChars(b));
+    return { a: markHtml(a, visChars(a), r[0]), b: markHtml(b, visChars(b), r[1]) };
   }
 
   function toast(msg){
@@ -1461,9 +1491,8 @@
 
       var ok = (e.answers || [e.a]).some(function(a){ return norm(a) === norm(val); });
       if (ok) markRight(); else {
-        var dp = diffParts(val, e.a);
-        markWrong(e.a, '你寫的<span class="corr">' + (dp ? diffHtml(dp, 'a') : esc(val)) + '</span>',
-                  dp ? diffHtml(dp, 'b') : '');
+        var dp = diffRender(val, e.a);
+        markWrong(e.a, '你寫的<span class="corr">' + (dp ? dp.a : esc(val)) + '</span>', dp ? dp.b : '');
       }
     });
 
