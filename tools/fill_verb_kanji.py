@@ -100,11 +100,11 @@ def main():
     existing = {}
     for g in wt["groups"]:
         for x in g["items"]:
-            if x["kanji"]:
+            if x["kanji"] and x["kanji"] != x["kana"]:
                 existing.setdefault((g["id"], x["kana"]), x["kanji"])
     for g in wt["groups"]:
         for x in g["items"]:
-            if x["kanji"]:
+            if x["kanji"] and x["kanji"] != x["kana"]:
                 continue
             kanji = (ITEM_OVERRIDE.get((x["id"], x["vi"]))
                      or want(g["id"], x["kana"])
