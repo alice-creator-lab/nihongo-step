@@ -198,6 +198,10 @@
   .seg2 button.on{background:var(--ink); color:#fffdf8}
   .quizbar .btn2{padding:9px 15px; font-size:13px}
   .cardmeta{text-align:center; font-size:11.5px; color:var(--muted); letter-spacing:.1em; margin:8px 0 10px}
+  .cardmeta.nmeta{display:flex; align-items:center; justify-content:space-between; gap:10px;
+    text-align:left; letter-spacing:.04em}
+  .cardmeta .nquit{appearance:none; flex:0 0 auto; border:1px solid var(--line); background:var(--card);
+    color:var(--ink2); font-family:var(--sans); font-size:12px; padding:7px 13px; border-radius:999px}
   .fcard{background:linear-gradient(160deg,#fffdf8,#f7f0e2); border:1px solid var(--line); border-radius:20px;
     min-height:190px; display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap:7px; padding:26px 18px; text-align:center}
@@ -586,7 +590,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v144</span>
+    <span class="ver" id="verTag">v145</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2725,8 +2729,9 @@
     var au = x.audio || audioFor(x.id, 'v' + x.vi);
 
     body.innerHTML =
-      '<div class="cardmeta">練習本 · 第 ' + (r.i + 1) + ' ／ ' + r.deck.length + ' 題 · ' +
-        (r.dir === 'jp2zh' ? '日→中' : '中→日') + '</div>' +
+      '<div class="cardmeta nmeta"><span>練習本 · 第 ' + (r.i + 1) + ' ／ ' + r.deck.length + ' 題 · ' +
+        (r.dir === 'jp2zh' ? '日→中' : '中→日') + '</span>' +
+        '<button class="nquit" id="nbQuit" aria-label="離開練習，回到練習本">✕ 離開練習</button></div>' +
       '<div class="fcard" id="fcard" style="position:relative">' +
         '<button class="spk cardspk" data-say="' + esc(x.kana) + '"' +
           (au ? ' data-audio="' + esc(au) + '"' : '') +
@@ -2743,6 +2748,8 @@
       '<p class="secnote" style="text-align:center">不記得的字會同時收入錯題簿，並留在練習本。</p>';
 
     bindSpeakers(body);
+    var quit = $('#nbQuit');
+    if (quit) quit.addEventListener('click', function(){ stopAudio(); drawNotebook(); });
     var fcard = $('#fcard');
     function reveal(){
       $('#fback').classList.remove('hide');
