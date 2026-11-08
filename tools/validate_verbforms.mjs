@@ -22,7 +22,7 @@ for (const s of d.sets || []) {
 }
 
 if (d.sets?.length !== 3) fail(`sets 應為 3，實為 ${d.sets?.length}`);
-if (rows.length !== 179) fail(`總行數應為 179，實為 ${rows.length}`);
+if (rows.length !== 181) fail(`總行數應為 181，實為 ${rows.length}`);
 else ok(`三組共 ${rows.length} 行（五段 ${d.sets[0].total}、一段 ${d.sets[1].total}、不規則 ${d.sets[2].total}）`);
 
 const seen = new Set();
@@ -69,6 +69,30 @@ for (const [kana, kanji, masu, te, ta, nai] of EXPECT) {
   if (got !== want) { fail(`${kana}: ${got} ≠ ${want}`); expBad++; }
 }
 if (!expBad) ok(`指定例外與規則範例 ${EXPECT.length} 條全部正確`);
+
+/* 漢字：書上有的照書（歌う、習う…）；書上用假名的保留空白。 */
+const KANJI = [
+  ['うたう', '歌う'], ['ならう', '習う'], ['はたらく', '働く'], ['まにあう', '間に合う'],
+  ['みがく', '磨く'], ['いそぐ', '急ぐ'], ['およぐ', '泳ぐ'], ['やすむ', '休む'],
+  ['おわる', '終わる'], ['しる', '知る'], ['とおる', '通る'], ['とまる', '止まる'],
+  ['のぼる', '登る'], ['のる', '乗る'], ['はしる', '走る'], ['ふる', '降る'],
+  ['ねる', '寝る'], ['おしえる', '教える'], ['あける', '開ける'], ['しめる', '閉める'],
+  ['すてる', '捨てる'], ['わすれる', '忘れる'], ['おぼえる', '覚える'], ['とめる', '止める'],
+  ['なれる', '慣れる'], ['でる', '出る'], ['みせる', '見せる'], ['おきる', '起きる'],
+  ['つく', '点く'], ['つく', '着く'], ['とる', '取る'], ['とる', '撮る'],
+  ['よやくする', '予約する'], ['そうじする', '掃除する'], ['れんしゅうする', '練習する'],
+];
+let kbad = 0;
+for (const [kana, kanji] of KANJI) {
+  if (!rows.some((r) => r.kana === kana && r.kanji === kanji)) {
+    fail(`找不到 ${kanji}（${kana}）`);
+    kbad++;
+  }
+}
+for (const kana of ['ある', 'いる', 'する', 'なる', 'わかる', 'あげる', 'くれる', 'もらう', 'つける', 'かける', 'できる', 'いらっしゃる']) {
+  if (rows.some((r) => r.kana === kana && r.kanji)) { fail(`${kana} 應保留假名`); kbad++; }
+}
+if (!kbad) ok(`漢字 ${KANJI.length} 條與假名保留 ${12} 條全部符合`);
 
 const withTe = rows.filter((r) => r.audio?.te);
 const srcs = withTe.map((r) => r.src).sort().join(',');

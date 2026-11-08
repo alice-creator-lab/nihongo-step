@@ -95,7 +95,7 @@ async def main():
     out["動詞表入口"] = await js("Array.prototype.map.call(document.querySelectorAll('.wth'),function(h){var a=h.querySelector('.vfentry'); return [h.querySelector('.wtn').textContent, a?a.textContent.trim():null, a?a.getAttribute('href'):null];})")
 
     pages = {}
-    for setid, blocks, total in (("godan", 8, 113), ("ichidan", 2, 51), ("irregular", 2, 15)):
+    for setid, blocks, total in (("godan", 8, 115), ("ichidan", 2, 51), ("irregular", 2, 15)):
         await call("Page.navigate", {"url": BASE + "#/all/verbs/forms/" + setid}, sid)
         await wait_until("document.querySelectorAll('.vftbl tbody tr').length")
         pages[setid] = {

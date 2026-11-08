@@ -6,7 +6,7 @@
    "id": "godan",
    "title": "五段動詞",
    "kana": "ごだんどうし",
-   "total": 113,
+   "total": 115,
    "blocks": [
     {
      "title": "わ行",
@@ -48,7 +48,7 @@
       {
        "group": "godan",
        "src": "L12-5",
-       "kanji": "",
+       "kanji": "習う",
        "kana": "ならう",
        "zh": "學習（向人學）",
        "lessons": [
@@ -65,7 +65,7 @@
       },
       {
        "group": "godan",
-       "src": "L20-14",
+       "src": "L12-9",
        "kanji": "使う",
        "kana": "つかう",
        "zh": "使用",
@@ -80,13 +80,13 @@
        "ta": "つかった",
        "nai": "つかわない",
        "audio": {
-        "dict": "audio/verb/L20-14.mp3"
+        "dict": "audio/verb/L12-9.mp3"
        }
       },
       {
        "group": "godan",
        "src": "L13-2",
-       "kanji": "",
+       "kanji": "歌う",
        "kana": "うたう",
        "zh": "唱歌",
        "lessons": [
@@ -105,7 +105,7 @@
       {
        "group": "godan",
        "src": "L14-19",
-       "kanji": "",
+       "kanji": "洗う",
        "kana": "あらう",
        "zh": "洗",
        "lessons": [
@@ -122,7 +122,7 @@
       {
        "group": "godan",
        "src": "L14-22",
-       "kanji": "",
+       "kanji": "間に合う",
        "kana": "まにあう",
        "zh": "趕得上",
        "lessons": [
@@ -210,7 +210,7 @@
       {
        "group": "godan",
        "src": "L22-24",
-       "kanji": "",
+       "kanji": "違う",
        "kana": "ちがう",
        "zh": "不同",
        "lessons": [
@@ -227,7 +227,7 @@
       {
        "group": "godan",
        "src": "L35-20",
-       "kanji": "",
+       "kanji": "沿う",
        "kana": "そう",
        "zh": "沿著",
        "lessons": [
@@ -244,7 +244,7 @@
       {
        "group": "godan",
        "src": "L36-24",
-       "kanji": "",
+       "kanji": "笑う",
        "kana": "わらう",
        "zh": "笑",
        "lessons": [
@@ -279,7 +279,7 @@
       {
        "group": "godan",
        "src": "L38-11",
-       "kanji": "",
+       "kanji": "手伝う",
        "kana": "てつだう",
        "zh": "幫忙",
        "lessons": [
@@ -296,7 +296,7 @@
       {
        "group": "godan",
        "src": "L40-5",
-       "kanji": "",
+       "kanji": "伺う",
        "kana": "うかがう",
        "zh": "拜訪、請教（謙讓）",
        "lessons": [
@@ -397,7 +397,7 @@
       {
        "group": "godan",
        "src": "L11-2",
-       "kanji": "",
+       "kanji": "働く",
        "kana": "はたらく",
        "zh": "工作",
        "lessons": [
@@ -431,23 +431,6 @@
       },
       {
        "group": "godan",
-       "src": "L12-31",
-       "kanji": "弾く",
-       "kana": "ひく",
-       "zh": "彈（弦樂器、鋼琴）",
-       "lessons": [
-        "L12"
-       ],
-       "masu": "ひきます",
-       "te": "ひいて",
-       "ta": "ひいた",
-       "nai": "ひかない",
-       "audio": {
-        "dict": "audio/verb/L12-31.mp3"
-       }
-      },
-      {
-       "group": "godan",
        "src": "L12-30",
        "kanji": "",
        "kana": "はく",
@@ -465,8 +448,25 @@
       },
       {
        "group": "godan",
+       "src": "L12-31",
+       "kanji": "弾く",
+       "kana": "ひく",
+       "zh": "彈（弦樂器、鋼琴）",
+       "lessons": [
+        "L12"
+       ],
+       "masu": "ひきます",
+       "te": "ひいて",
+       "ta": "ひいた",
+       "nai": "ひかない",
+       "audio": {
+        "dict": "audio/verb/L12-31.mp3"
+       }
+      },
+      {
+       "group": "godan",
        "src": "L13-1",
-       "kanji": "",
+       "kanji": "泳ぐ",
        "kana": "およぐ",
        "zh": "游泳",
        "lessons": [
@@ -485,7 +485,7 @@
       {
        "group": "godan",
        "src": "L13-5",
-       "kanji": "",
+       "kanji": "急ぐ",
        "kana": "いそぐ",
        "zh": "急忙、趕",
        "lessons": [
@@ -522,7 +522,7 @@
       {
        "group": "godan",
        "src": "L15-18",
-       "kanji": "",
+       "kanji": "磨く",
        "kana": "みがく",
        "zh": "刷、擦亮",
        "lessons": [
@@ -573,7 +573,7 @@
       {
        "group": "godan",
        "src": "L26-0",
-       "kanji": "",
+       "kanji": "開く",
        "kana": "あく",
        "zh": "（門窗）打開、空出",
        "lessons": [
@@ -590,12 +590,11 @@
       {
        "group": "godan",
        "src": "L26-8",
-       "kanji": "",
+       "kanji": "点く",
        "kana": "つく",
        "zh": "（燈、電器）亮起、開啟",
        "lessons": [
-        "L26",
-        "L35"
+        "L26"
        ],
        "masu": "つきます",
        "te": "ついて",
@@ -608,7 +607,7 @@
       {
        "group": "godan",
        "src": "L29-18",
-       "kanji": "",
+       "kanji": "吹く",
        "kana": "ふく",
        "zh": "吹（風）",
        "lessons": [
@@ -624,8 +623,25 @@
       },
       {
        "group": "godan",
+       "src": "L35-22",
+       "kanji": "着く",
+       "kana": "つく",
+       "zh": "抵達",
+       "lessons": [
+        "L35"
+       ],
+       "masu": "つきます",
+       "te": "ついて",
+       "ta": "ついた",
+       "nai": "つかない",
+       "audio": {
+        "dict": "audio/verb/L35-22.mp3"
+       }
+      },
+      {
+       "group": "godan",
        "src": "L36-23",
-       "kanji": "",
+       "kanji": "泣く",
        "kana": "なく",
        "zh": "哭",
        "lessons": [
@@ -643,7 +659,7 @@
       {
        "group": "godan",
        "src": "L37-7",
-       "kanji": "",
+       "kanji": "驚く",
        "kana": "おどろく",
        "zh": "吃驚",
        "lessons": [
@@ -683,7 +699,7 @@
       },
       {
        "group": "godan",
-       "src": "L20-16",
+       "src": "L12-2",
        "kanji": "返す",
        "kana": "かえす",
        "zh": "歸還",
@@ -698,13 +714,13 @@
        "ta": "かえした",
        "nai": "かえさない",
        "audio": {
-        "dict": "audio/verb/L20-16.mp3"
+        "dict": "audio/verb/L12-2.mp3"
        }
       },
       {
        "group": "godan",
        "src": "L12-3",
-       "kanji": "",
+       "kanji": "貸す",
        "kana": "かす",
        "zh": "借出、出借",
        "lessons": [
@@ -721,7 +737,7 @@
       },
       {
        "group": "godan",
-       "src": "L20-25",
+       "src": "L12-12",
        "kanji": "消す",
        "kana": "けす",
        "zh": "關掉（燈、電源）",
@@ -736,7 +752,7 @@
        "ta": "けした",
        "nai": "けさない",
        "audio": {
-        "dict": "audio/verb/L20-25.mp3"
+        "dict": "audio/verb/L12-12.mp3"
        }
       },
       {
@@ -776,7 +792,7 @@
       {
        "group": "godan",
        "src": "L26-5",
-       "kanji": "",
+       "kanji": "落とす",
        "kana": "おとす",
        "zh": "弄掉、使落下",
        "lessons": [
@@ -793,7 +809,7 @@
       {
        "group": "godan",
        "src": "L26-13",
-       "kanji": "",
+       "kanji": "壊す",
        "kana": "こわす",
        "zh": "弄壞",
        "lessons": [
@@ -811,7 +827,7 @@
       {
        "group": "godan",
        "src": "L26-15",
-       "kanji": "",
+       "kanji": "汚す",
        "kana": "よごす",
        "zh": "弄髒",
        "lessons": [
@@ -828,7 +844,7 @@
       {
        "group": "godan",
        "src": "L26-16",
-       "kanji": "",
+       "kanji": "無くす",
        "kana": "なくす",
        "zh": "弄丟",
        "lessons": [
@@ -845,7 +861,7 @@
       {
        "group": "godan",
        "src": "L31-19",
-       "kanji": "",
+       "kanji": "出す",
        "kana": "だす",
        "zh": "交出、寄出",
        "lessons": [
@@ -862,7 +878,7 @@
       {
        "group": "godan",
        "src": "L34-15",
-       "kanji": "",
+       "kanji": "押す",
        "kana": "おす",
        "zh": "按、推",
        "lessons": [
@@ -879,7 +895,7 @@
       {
        "group": "godan",
        "src": "L39-12",
-       "kanji": "",
+       "kanji": "許す",
        "kana": "ゆるす",
        "zh": "原諒",
        "lessons": [
@@ -952,7 +968,7 @@
       {
        "group": "godan",
        "src": "L12-0",
-       "kanji": "",
+       "kanji": "待つ",
        "kana": "まつ",
        "zh": "等、等待",
        "lessons": [
@@ -970,7 +986,7 @@
       {
        "group": "godan",
        "src": "L15-15",
-       "kanji": "",
+       "kanji": "持つ",
        "kana": "もつ",
        "zh": "拿、持有",
        "lessons": [
@@ -1014,7 +1030,7 @@
       {
        "group": "godan",
        "src": "L12-6",
-       "kanji": "",
+       "kanji": "呼ぶ",
        "kana": "よぶ",
        "zh": "呼叫、叫（人）",
        "lessons": [
@@ -1032,7 +1048,7 @@
       {
        "group": "godan",
        "src": "L13-0",
-       "kanji": "",
+       "kanji": "遊ぶ",
        "kana": "あそぶ",
        "zh": "玩、遊玩",
        "lessons": [
@@ -1083,7 +1099,7 @@
       {
        "group": "godan",
        "src": "L37-9",
-       "kanji": "",
+       "kanji": "喜ぶ",
        "kana": "よろこぶ",
        "zh": "高興",
        "lessons": [
@@ -1141,7 +1157,7 @@
       },
       {
        "group": "godan",
-       "src": "L19-7",
+       "src": "L11-3",
        "kanji": "休む",
        "kana": "やすむ",
        "zh": "休息、請假",
@@ -1155,7 +1171,7 @@
        "ta": "やすんだ",
        "nai": "やすまない",
        "audio": {
-        "dict": "audio/verb/L19-7.mp3"
+        "dict": "audio/verb/L11-3.mp3"
        }
       },
       {
@@ -1178,7 +1194,7 @@
       {
        "group": "godan",
        "src": "L15-16",
-       "kanji": "",
+       "kanji": "住む",
        "kana": "すむ",
        "zh": "居住",
        "lessons": [
@@ -1195,7 +1211,7 @@
       {
        "group": "godan",
        "src": "L35-21",
-       "kanji": "",
+       "kanji": "進む",
        "kana": "すすむ",
        "zh": "前進",
        "lessons": [
@@ -1212,7 +1228,7 @@
       {
        "group": "godan",
        "src": "L36-19",
-       "kanji": "",
+       "kanji": "止む",
        "kana": "やむ",
        "zh": "（雨雪）停",
        "lessons": [
@@ -1229,7 +1245,7 @@
       {
        "group": "godan",
        "src": "L37-2",
-       "kanji": "",
+       "kanji": "盗む",
        "kana": "ぬすむ",
        "zh": "偷",
        "lessons": [
@@ -1327,7 +1343,7 @@
       {
        "group": "godan",
        "src": "L11-4",
-       "kanji": "",
+       "kanji": "終わる",
        "kana": "おわる",
        "zh": "結束",
        "lessons": [
@@ -1344,7 +1360,7 @@
       {
        "group": "godan",
        "src": "L11-5",
-       "kanji": "",
+       "kanji": "始まる",
        "kana": "はじまる",
        "zh": "開始",
        "lessons": [
@@ -1411,26 +1427,25 @@
       },
       {
        "group": "godan",
-       "src": "L20-11",
-       "kanji": "撮る",
+       "src": "L12-1",
+       "kanji": "取る",
        "kana": "とる",
        "zh": "拍（照）、拿",
        "lessons": [
-        "L12",
-        "L20"
+        "L12"
        ],
        "masu": "とります",
        "te": "とって",
        "ta": "とった",
        "nai": "とらない",
        "audio": {
-        "dict": "audio/verb/L20-11.mp3"
+        "dict": "audio/verb/L12-1.mp3"
        }
       },
       {
        "group": "godan",
        "src": "L12-14",
-       "kanji": "",
+       "kanji": "曲がる",
        "kana": "まがる",
        "zh": "轉彎",
        "lessons": [
@@ -1448,7 +1463,7 @@
       {
        "group": "godan",
        "src": "L12-15",
-       "kanji": "",
+       "kanji": "渡る",
        "kana": "わたる",
        "zh": "穿過、過（馬路）",
        "lessons": [
@@ -1483,7 +1498,7 @@
       {
        "group": "godan",
        "src": "L13-3",
-       "kanji": "",
+       "kanji": "踊る",
        "kana": "おどる",
        "zh": "跳舞",
        "lessons": [
@@ -1501,7 +1516,7 @@
       },
       {
        "group": "godan",
-       "src": "L18-9",
+       "src": "L13-13",
        "kanji": "降る",
        "kana": "ふる",
        "zh": "下（雨、雪）",
@@ -1516,7 +1531,7 @@
        "ta": "ふった",
        "nai": "ふらない",
        "audio": {
-        "dict": "audio/verb/L18-9.mp3"
+        "dict": "audio/verb/L13-13.mp3"
        }
       },
       {
@@ -1556,7 +1571,7 @@
       {
        "group": "godan",
        "src": "L15-14",
-       "kanji": "",
+       "kanji": "知る",
        "kana": "しる",
        "zh": "知道",
        "lessons": [
@@ -1602,6 +1617,23 @@
        "nai": "ことわらない",
        "audio": {
         "dict": "audio/verb/L18-7.mp3"
+       }
+      },
+      {
+       "group": "godan",
+       "src": "L20-11",
+       "kanji": "撮る",
+       "kana": "とる",
+       "zh": "拍（照）",
+       "lessons": [
+        "L20"
+       ],
+       "masu": "とります",
+       "te": "とって",
+       "ta": "とった",
+       "nai": "とらない",
+       "audio": {
+        "dict": "audio/verb/L20-11.mp3"
        }
       },
       {
@@ -1658,7 +1690,7 @@
       {
        "group": "godan",
        "src": "L23-24",
-       "kanji": "",
+       "kanji": "欲しがる",
        "kana": "ほしがる",
        "zh": "想要（第三人稱）",
        "lessons": [
@@ -1692,7 +1724,7 @@
       {
        "group": "godan",
        "src": "L26-2",
-       "kanji": "",
+       "kanji": "閉まる",
        "kana": "しまる",
        "zh": "（門窗）關上",
        "lessons": [
@@ -1709,7 +1741,7 @@
       {
        "group": "godan",
        "src": "L26-6",
-       "kanji": "",
+       "kanji": "止まる",
        "kana": "とまる",
        "zh": "停止、（機器）停住",
        "lessons": [
@@ -1726,7 +1758,7 @@
       {
        "group": "godan",
        "src": "L26-17",
-       "kanji": "",
+       "kanji": "見つかる",
        "kana": "みつかる",
        "zh": "被找到",
        "lessons": [
@@ -1743,7 +1775,7 @@
       {
        "group": "godan",
        "src": "L26-18",
-       "kanji": "",
+       "kanji": "飾る",
        "kana": "かざる",
        "zh": "裝飾、擺設",
        "lessons": [
@@ -1761,7 +1793,7 @@
       {
        "group": "godan",
        "src": "L28-21",
-       "kanji": "",
+       "kanji": "頑張る",
        "kana": "がんばる",
        "zh": "努力、加油",
        "lessons": [
@@ -1778,7 +1810,7 @@
       {
        "group": "godan",
        "src": "L29-17",
-       "kanji": "",
+       "kanji": "曇る",
        "kana": "くもる",
        "zh": "轉陰",
        "lessons": [
@@ -1795,7 +1827,7 @@
       {
        "group": "godan",
        "src": "L29-19",
-       "kanji": "",
+       "kanji": "上がる",
        "kana": "あがる",
        "zh": "上升",
        "lessons": [
@@ -1812,7 +1844,7 @@
       {
        "group": "godan",
        "src": "L29-20",
-       "kanji": "",
+       "kanji": "下がる",
        "kana": "さがる",
        "zh": "下降",
        "lessons": [
@@ -1829,7 +1861,7 @@
       {
        "group": "godan",
        "src": "L30-24",
-       "kanji": "",
+       "kanji": "広がる",
        "kana": "ひろがる",
        "zh": "傳開、擴散",
        "lessons": [
@@ -1846,7 +1878,7 @@
       {
        "group": "godan",
        "src": "L31-20",
-       "kanji": "",
+       "kanji": "残る",
        "kana": "のこる",
        "zh": "留下、加班",
        "lessons": [
@@ -1863,7 +1895,7 @@
       {
        "group": "godan",
        "src": "L34-20",
-       "kanji": "",
+       "kanji": "貼る",
        "kana": "はる",
        "zh": "貼",
        "lessons": [
@@ -1880,7 +1912,7 @@
       {
        "group": "godan",
        "src": "L35-19",
-       "kanji": "",
+       "kanji": "通る",
        "kana": "とおる",
        "zh": "通過、經過",
        "lessons": [
@@ -1897,7 +1929,7 @@
       {
        "group": "godan",
        "src": "L37-1",
-       "kanji": "",
+       "kanji": "叱る",
        "kana": "しかる",
        "zh": "責罵",
        "lessons": [
@@ -1914,7 +1946,7 @@
       {
        "group": "godan",
        "src": "L37-8",
-       "kanji": "",
+       "kanji": "困る",
        "kana": "こまる",
        "zh": "感到困擾",
        "lessons": [
@@ -1931,7 +1963,7 @@
       {
        "group": "godan",
        "src": "L38-9",
-       "kanji": "",
+       "kanji": "送る",
        "kana": "おくる",
        "zh": "寄送",
        "lessons": [
@@ -1965,7 +1997,7 @@
       {
        "group": "godan",
        "src": "L40-1",
-       "kanji": "",
+       "kanji": "召し上がる",
        "kana": "めしあがる",
        "zh": "吃、喝（尊敬）",
        "lessons": [
@@ -1999,7 +2031,7 @@
       {
        "group": "godan",
        "src": "L40-3",
-       "kanji": "",
+       "kanji": "ご覧になる",
        "kana": "ごらんになる",
        "zh": "看（尊敬）",
        "lessons": [
@@ -2069,7 +2101,7 @@
       {
        "group": "ichidan",
        "src": "L11-1",
-       "kanji": "",
+       "kanji": "寝る",
        "kana": "ねる",
        "zh": "睡覺",
        "lessons": [
@@ -2121,7 +2153,7 @@
       {
        "group": "ichidan",
        "src": "L12-4",
-       "kanji": "",
+       "kanji": "教える",
        "kana": "おしえる",
        "zh": "教、告訴",
        "lessons": [
@@ -2139,7 +2171,7 @@
       {
        "group": "ichidan",
        "src": "L12-10",
-       "kanji": "",
+       "kanji": "開ける",
        "kana": "あける",
        "zh": "打開",
        "lessons": [
@@ -2158,7 +2190,7 @@
       {
        "group": "ichidan",
        "src": "L12-11",
-       "kanji": "",
+       "kanji": "閉める",
        "kana": "しめる",
        "zh": "關上",
        "lessons": [
@@ -2212,7 +2244,7 @@
       },
       {
        "group": "ichidan",
-       "src": "L19-13",
+       "src": "L13-11",
        "kanji": "疲れる",
        "kana": "つかれる",
        "zh": "累、疲勞",
@@ -2227,13 +2259,13 @@
        "ta": "つかれた",
        "nai": "つかれない",
        "audio": {
-        "dict": "audio/verb/L19-13.mp3"
+        "dict": "audio/verb/L13-11.mp3"
        }
       },
       {
        "group": "ichidan",
        "src": "L13-12",
-       "kanji": "",
+       "kanji": "晴れる",
        "kana": "はれる",
        "zh": "放晴",
        "lessons": [
@@ -2251,7 +2283,7 @@
       {
        "group": "ichidan",
        "src": "L14-20",
-       "kanji": "",
+       "kanji": "捨てる",
        "kana": "すてる",
        "zh": "丟掉",
        "lessons": [
@@ -2268,7 +2300,7 @@
       {
        "group": "ichidan",
        "src": "L14-21",
-       "kanji": "",
+       "kanji": "忘れる",
        "kana": "わすれる",
        "zh": "忘記",
        "lessons": [
@@ -2286,7 +2318,7 @@
       {
        "group": "ichidan",
        "src": "L15-20",
-       "kanji": "",
+       "kanji": "始める",
        "kana": "はじめる",
        "zh": "開始",
        "lessons": [
@@ -2375,7 +2407,7 @@
       {
        "group": "ichidan",
        "src": "L21-24",
-       "kanji": "",
+       "kanji": "聞こえる",
        "kana": "きこえる",
        "zh": "聽得見",
        "lessons": [
@@ -2392,7 +2424,7 @@
       {
        "group": "ichidan",
        "src": "L21-25",
-       "kanji": "",
+       "kanji": "見える",
        "kana": "みえる",
        "zh": "看得見",
        "lessons": [
@@ -2409,7 +2441,7 @@
       {
        "group": "ichidan",
        "src": "L24-25",
-       "kanji": "",
+       "kanji": "覚える",
        "kana": "おぼえる",
        "zh": "記住",
        "lessons": [
@@ -2426,7 +2458,7 @@
       {
        "group": "ichidan",
        "src": "L26-7",
-       "kanji": "",
+       "kanji": "止める",
        "kana": "とめる",
        "zh": "使停止、把車停下",
        "lessons": [
@@ -2443,7 +2475,7 @@
       {
        "group": "ichidan",
        "src": "L26-10",
-       "kanji": "",
+       "kanji": "消える",
        "kana": "きえる",
        "zh": "熄滅、消失",
        "lessons": [
@@ -2460,7 +2492,7 @@
       {
        "group": "ichidan",
        "src": "L26-12",
-       "kanji": "",
+       "kanji": "壊れる",
        "kana": "こわれる",
        "zh": "壞掉",
        "lessons": [
@@ -2479,7 +2511,7 @@
       {
        "group": "ichidan",
        "src": "L26-14",
-       "kanji": "",
+       "kanji": "汚れる",
        "kana": "よごれる",
        "zh": "變髒",
        "lessons": [
@@ -2496,7 +2528,7 @@
       {
        "group": "ichidan",
        "src": "L26-19",
-       "kanji": "",
+       "kanji": "並べる",
        "kana": "ならべる",
        "zh": "排列、擺放",
        "lessons": [
@@ -2514,7 +2546,7 @@
       {
        "group": "ichidan",
        "src": "L28-22",
-       "kanji": "",
+       "kanji": "続ける",
        "kana": "つづける",
        "zh": "繼續",
        "lessons": [
@@ -2532,7 +2564,7 @@
       {
        "group": "ichidan",
        "src": "L28-23",
-       "kanji": "",
+       "kanji": "諦める",
        "kana": "あきらめる",
        "zh": "放棄",
        "lessons": [
@@ -2549,7 +2581,7 @@
       {
        "group": "ichidan",
        "src": "L28-24",
-       "kanji": "",
+       "kanji": "決める",
        "kana": "きめる",
        "zh": "決定",
        "lessons": [
@@ -2583,7 +2615,7 @@
       {
        "group": "ichidan",
        "src": "L34-25",
-       "kanji": "",
+       "kanji": "慣れる",
        "kana": "なれる",
        "zh": "習慣、熟悉",
        "lessons": [
@@ -2600,7 +2632,7 @@
       {
        "group": "ichidan",
        "src": "L35-23",
-       "kanji": "",
+       "kanji": "出る",
        "kana": "でる",
        "zh": "出去、出來",
        "lessons": [
@@ -2617,7 +2649,7 @@
       {
        "group": "ichidan",
        "src": "L36-20",
-       "kanji": "",
+       "kanji": "割れる",
        "kana": "われる",
        "zh": "破裂",
        "lessons": [
@@ -2634,7 +2666,7 @@
       {
        "group": "ichidan",
        "src": "L37-0",
-       "kanji": "",
+       "kanji": "褒める",
        "kana": "ほめる",
        "zh": "稱讚",
        "lessons": [
@@ -2651,7 +2683,7 @@
       {
        "group": "ichidan",
        "src": "L37-4",
-       "kanji": "",
+       "kanji": "建てる",
        "kana": "たてる",
        "zh": "建造",
        "lessons": [
@@ -2668,7 +2700,7 @@
       {
        "group": "ichidan",
        "src": "L37-5",
-       "kanji": "",
+       "kanji": "捕まえる",
        "kana": "つかまえる",
        "zh": "抓住",
        "lessons": [
@@ -2685,7 +2717,7 @@
       {
        "group": "ichidan",
        "src": "L37-10",
-       "kanji": "",
+       "kanji": "考える",
        "kana": "かんがえる",
        "zh": "思考",
        "lessons": [
@@ -2736,7 +2768,7 @@
       {
        "group": "ichidan",
        "src": "L38-8",
-       "kanji": "",
+       "kanji": "見せる",
        "kana": "みせる",
        "zh": "給人看",
        "lessons": [
@@ -2753,7 +2785,7 @@
       {
        "group": "ichidan",
        "src": "L39-2",
-       "kanji": "",
+       "kanji": "調べる",
        "kana": "しらべる",
        "zh": "調查、查詢",
        "lessons": [
@@ -2770,7 +2802,7 @@
       {
        "group": "ichidan",
        "src": "L39-3",
-       "kanji": "",
+       "kanji": "片付ける",
        "kana": "かたづける",
        "zh": "收拾、整理",
        "lessons": [
@@ -2827,7 +2859,7 @@
       {
        "group": "ichidan",
        "src": "L11-0",
-       "kanji": "",
+       "kanji": "起きる",
        "kana": "おきる",
        "zh": "起床",
        "lessons": [
@@ -2896,7 +2928,7 @@
       {
        "group": "ichidan",
        "src": "L26-4",
-       "kanji": "",
+       "kanji": "落ちる",
        "kana": "おちる",
        "zh": "掉落",
        "lessons": [
@@ -2914,7 +2946,7 @@
       {
        "group": "ichidan",
        "src": "L30-23",
-       "kanji": "",
+       "kanji": "信じる",
        "kana": "しんじる",
        "zh": "相信",
        "lessons": [
@@ -2931,7 +2963,7 @@
       {
        "group": "ichidan",
        "src": "L40-9",
-       "kanji": "",
+       "kanji": "存じる",
        "kana": "ぞんじる",
        "zh": "知道（謙讓）",
        "lessons": [
@@ -3014,7 +3046,7 @@
       {
        "group": "irregular",
        "src": "L13-6",
-       "kanji": "",
+       "kanji": "予約する",
        "kana": "よやくする",
        "zh": "預約",
        "lessons": [
@@ -3031,7 +3063,7 @@
       {
        "group": "irregular",
        "src": "L13-7",
-       "kanji": "",
+       "kanji": "洗濯する",
        "kana": "せんたくする",
        "zh": "洗衣服",
        "lessons": [
@@ -3048,7 +3080,7 @@
       {
        "group": "irregular",
        "src": "L13-9",
-       "kanji": "",
+       "kanji": "散歩する",
        "kana": "さんぽする",
        "zh": "散步",
        "lessons": [
@@ -3082,7 +3114,7 @@
       {
        "group": "irregular",
        "src": "L24-20",
-       "kanji": "",
+       "kanji": "運転する",
        "kana": "うんてんする",
        "zh": "開車",
        "lessons": [
@@ -3099,7 +3131,7 @@
       {
        "group": "irregular",
        "src": "L30-25",
-       "kanji": "",
+       "kanji": "確認する",
        "kana": "かくにんする",
        "zh": "確認",
        "lessons": [
@@ -3116,7 +3148,7 @@
       {
        "group": "irregular",
        "src": "L38-12",
-       "kanji": "",
+       "kanji": "説明する",
        "kana": "せつめいする",
        "zh": "說明",
        "lessons": [
@@ -3133,7 +3165,7 @@
       {
        "group": "irregular",
        "src": "L38-13",
-       "kanji": "",
+       "kanji": "紹介する",
        "kana": "しょうかいする",
        "zh": "介紹",
        "lessons": [
@@ -3150,7 +3182,7 @@
       {
        "group": "irregular",
        "src": "L39-1",
-       "kanji": "",
+       "kanji": "練習する",
        "kana": "れんしゅうする",
        "zh": "練習",
        "lessons": [
@@ -3167,7 +3199,7 @@
       {
        "group": "irregular",
        "src": "L39-13",
-       "kanji": "",
+       "kanji": "心配する",
        "kana": "しんぱいする",
        "zh": "擔心",
        "lessons": [
@@ -3184,7 +3216,7 @@
       {
        "group": "irregular",
        "src": "L40-8",
-       "kanji": "",
+       "kanji": "拝見する",
        "kana": "はいけんする",
        "zh": "看（謙讓）",
        "lessons": [

@@ -77,30 +77,26 @@ def main():
     data = json.load(open(WT, encoding="utf-8"))["verbs"]
     rows = []
     for g in data["groups"]:
-        # 先按 (組, 假名) 收攏；同一假名有兩個不同漢字（ひく＝引く／弾く）就分開
+        # 按 (假名, 漢字) 收攏：ひく＝引く／弾く、つく＝着く／点く、とる＝取る／撮る
+        # 各自成行；同一字的重複課次合併，課號全列。
         bucket = {}
         for x in g["items"]:
-            bucket.setdefault(x["kana"], []).append(x)
-        for kana, xs in bucket.items():
-            kanji_set = {norm_kanji(x.get("kanji"), kana) for x in xs} - {""}
-            groups = [[x] for x in xs if norm_kanji(x.get("kanji"), kana)] if len(kanji_set) > 1 \
-                else [xs]
-            for part in groups:
-                # 空漢字的同形重複併入有漢字那條
-                head = next((x for x in part if norm_kanji(x.get("kanji"), kana)), part[0])
-                lessons = sorted({x["id"] for x in part})
-                f = forms(kana, g["id"], head["masu"])
-                rows.append({
-                    "group": g["id"],
-                    "src": "%s-%d" % (head["id"], head["vi"]),
-                    "kanji": norm_kanji(head.get("kanji"), kana),
-                    "kana": kana,
-                    "zh": next((x["zh"] for x in part if x.get("zh")), ""),
-                    "lessons": lessons,
-                    "masu": f["masu"], "te": f["te"], "ta": f["ta"], "nai": f["nai"],
-                    "audio": audio_for(head, f),
-                    "_order": (head["id"], head["vi"]),
-                })
+            bucket.setdefault((x["kana"], norm_kanji(x.get("kanji"), x["kana"])), []).append(x)
+        for (kana, kanji), xs in bucket.items():
+            head = xs[0]
+            lessons = sorted({x["id"] for x in xs})
+            f = forms(kana, g["id"], head["masu"])
+            rows.append({
+                "group": g["id"],
+                "src": "%s-%d" % (head["id"], head["vi"]),
+                "kanji": kanji,
+                "kana": kana,
+                "zh": next((x["zh"] for x in xs if x.get("zh")), ""),
+                "lessons": lessons,
+                "masu": f["masu"], "te": f["te"], "ta": f["ta"], "nai": f["nai"],
+                "audio": audio_for(head, f),
+                "_order": (head["id"], head["vi"]),
+            })
 
     for r in rows:
         for name in ("kana", "masu", "te", "ta", "nai"):
