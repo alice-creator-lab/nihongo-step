@@ -586,7 +586,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v143</span>
+    <span class="ver" id="verTag">v144</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2646,11 +2646,23 @@
       '</div>' +
       (n ? '<div class="nbar">' +
              '<button class="btn2" id="nbPlay">▶ 播放全部</button>' +
+             '<div class="seg2" id="noteDir">' +
+               '<button data-dir="jp2zh" class="'+(cardDir==='jp2zh'?'on':'')+'" aria-label="題目出日文，答中文">日→中</button>' +
+               '<button data-dir="zh2jp" class="'+(cardDir==='zh2jp'?'on':'')+'" aria-label="題目出中文，答日文">中→日</button>' +
+             '</div>' +
              '<button class="btn2 pri" id="nbStart">開始練習</button>' +
            '</div>' : '') +
       '<div id="notebody"></div>';
     drawNotebook();
     if (n){
+      var nd = $('#noteDir');
+      if (nd) nd.addEventListener('click', function(e){
+        var b = e.target.closest('[data-dir]'); if (!b) return;
+        cardDir = b.dataset.dir;
+        Array.prototype.forEach.call(nd.querySelectorAll('button'), function(x){
+          x.classList.toggle('on', x.dataset.dir === cardDir);
+        });
+      });
       $('#nbPlay').addEventListener('click', function(){
         if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
         var rows = document.querySelectorAll('#notebody .nrow');
