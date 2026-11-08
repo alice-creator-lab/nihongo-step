@@ -244,7 +244,18 @@
   .sheetbox{background:var(--paper); width:100%; max-width:760px; margin:0 auto; border-radius:20px 20px 0 0;
     max-height:76vh; overflow:auto; padding:18px 18px calc(22px + env(safe-area-inset-bottom))}
   .sheetbox h3{margin:0 0 3px; font-size:16px}
-  .mk{display:flex; gap:10px; padding:10px 0; border-bottom:1px dashed var(--line)}
+  .mk{display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-bottom:1px dashed var(--line);
+    cursor:pointer; -webkit-tap-highlight-color:transparent}
+  .mk .tick{flex:0 0 auto; width:21px; height:21px; margin-top:2px; border-radius:6px;
+    border:1.5px solid var(--line); background:var(--paper); position:relative}
+  .mk .tick::after{content:""; position:absolute; left:7px; top:3px; width:5px; height:10px;
+    border:solid #fffdf8; border-width:0 2px 2px 0; transform:rotate(45deg); opacity:0}
+  .mk.sel .tick{background:var(--shu); border-color:var(--shu)}
+  .mk.sel .tick::after{opacity:1}
+  .mk.sel .k b{color:var(--shu)}
+  .mkfoot{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap}
+  .mkfoot .btn2{flex:1 1 0; white-space:nowrap}
+  .mkfoot .btn2[disabled]{opacity:.4}
   .mk .k{flex:1; min-width:0}
   .mk .k b{display:block; font-family:var(--serif); font-size:15px; font-weight:500}
   .mk .k span{font-size:12px; color:var(--muted)}
@@ -575,7 +586,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v142</span>
+    <span class="ver" id="verTag">v143</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2024,34 +2035,75 @@
   }
 
   /* ---------- 錯題簿 ---------- */
+  /* 錯題簿頂部的錯題數徽章：移除單項後即時同步，清零就收起 */
+  function syncMkPill(){
+    var b = $('#mkBtn');
+    if (!b) return;
+    var n = mistakeCount();
+    if (!n){ b.style.display = 'none'; return; }
+    var x = b.querySelector('b');
+    if (x) x.textContent = n;
+  }
   function openMistakes(){
     stopAudio();
     var box = $('#sheetbox');
     var items = M.items;
-    var rows = items.length ? items.map(function(x){
-      return '<div class="mk"><div class="k"><b>'+esc(x.prompt)+'</b>' +
+    var rows = items.length ? items.map(function(x, i){
+      return '<div class="mk" data-i="'+i+'"><span class="tick"></span>' +
+             '<div class="k"><b>'+esc(x.prompt)+'</b>' +
              '<span>'+(x.kind === 'word' ? '單字' : x.kind === 'listen' ? '聽力' : x.kind === 'exam' ? '階段測驗' : '練習') +
              (x.sub ? ' · '+esc(x.sub) : '') + ' → '+esc(x.answer)+'</span></div></div>';
     }).join('') : '<p class="secnote">目前沒有錯題。</p>';
 
     box.innerHTML = '<h3>錯題簿</h3>' +
-      '<p class="secnote">答錯的單字與題目會自動記在這裡；進度只存在這部裝置。間隔複習會在後續版本加入。</p>' +
+      '<p class="secnote">答錯的單字與題目會自動記在這裡；進度只存在這部裝置。選取後可逐項移除。</p>' +
       rows +
-      '<div class="row2" style="margin-top:14px">' +
+      '<div class="mkfoot">' +
         '<button class="btn2" id="sheetClose">關閉</button>' +
+        (items.length ? '<button class="btn2 pri" id="sheetDel" disabled>移除已選</button>' : '') +
         (items.length ? '<button class="btn2" id="sheetClear">清除全部</button>' : '') +
       '</div>';
 
     $('#sheet').classList.add('on');
     document.body.style.overflow = 'hidden';
     $('#sheetClose').addEventListener('click', closeSheet);
-    if (items.length) $('#sheetClear').addEventListener('click', function(){
-      M.items = []; saveMistakes();
-      closeSheet(); route(); toast('已清除錯題簿');
-    });
-    $('#sheet').addEventListener('click', function(e){
-      if (e.target.id === 'sheet') closeSheet();
-    });
+    if (items.length){
+      var sel = {}, delBtn = $('#sheetDel');
+      var syncDel = function(){
+        var n = Object.keys(sel).length;
+        delBtn.disabled = !n;
+        delBtn.textContent = n ? '移除已選 '+n+' 項' : '移除已選';
+      };
+      Array.prototype.forEach.call(box.querySelectorAll('.mk'), function(el){
+        el.addEventListener('click', function(){
+          var i = +el.getAttribute('data-i');
+          if (sel[i]) delete sel[i]; else sel[i] = 1;
+          el.classList.toggle('sel', !!sel[i]);
+          syncDel();
+        });
+      });
+      delBtn.addEventListener('click', function(){
+        var idx = Object.keys(sel).map(Number).sort(function(a, b){ return b - a; });
+        if (!idx.length) return;
+        idx.forEach(function(i){ M.items.splice(i, 1); });
+        saveMistakes();
+        toast('已移除 '+idx.length+' 項');
+        if (M.items.length) openMistakes();
+        else { closeSheet(); syncMkPill(); route(); }
+        syncMkPill();
+      });
+      $('#sheetClear').addEventListener('click', function(){
+        M.items = []; saveMistakes();
+        closeSheet(); route(); toast('已清除錯題簿');
+      });
+    }
+    /* 背景遮罩只綁一次：openMistakes 會因移除項目而重入 */
+    if (!openMistakes.bound){
+      openMistakes.bound = true;
+      $('#sheet').addEventListener('click', function(e){
+        if (e.target.id === 'sheet') closeSheet();
+      });
+    }
   }
   function closeSheet(){
     var s = $('#sheet');
