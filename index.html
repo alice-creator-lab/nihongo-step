@@ -416,6 +416,23 @@
   .srow .sk{color:var(--ink)}
   .srow .sn{color:var(--ink2); font-size:13px}
   .srow .sz{color:var(--muted); font-size:12.5px; text-align:right}
+  /* 數字表：多欄，欄內一行一個數字 */
+  .scols{display:grid; grid-template-columns:repeat(var(--cols,1),minmax(0,1fr)); margin:0 -14px}
+  .scol{min-width:0}
+  .scol + .scol{border-left:1px solid var(--line)}
+  .scol .srow{padding:7px 10px; gap:6px}
+  .sgrp.compact .srow{grid-template-columns:3.6em minmax(0,1fr) 26px; font-size:13.5px}
+  .sgrp.compact .srow .sn{white-space:nowrap}
+  .sgrp.compact .srow .sp{font-style:normal; color:var(--ai); font-weight:600}
+  .sgrp.compact .srow .alt{color:var(--muted); font-size:11px}
+  /* 手機：兩欄、每格兩行（漢字在上、假名在下），避免假名被擠到換行 */
+  @media (max-width:559px){
+    .sgrp.compact .srow{grid-template-columns:minmax(0,1fr) 26px; grid-template-rows:auto auto;
+      align-items:center; row-gap:0; padding:6px 8px}
+    .sgrp.compact .srow .sk{grid-column:1; grid-row:1; font-size:13.5px; line-height:1.35}
+    .sgrp.compact .srow .sn{grid-column:1; grid-row:2; font-size:11.5px; line-height:1.3}
+    .sgrp.compact .srow .spk{grid-column:2; grid-row:1 / span 2}
+  }
   .srow.playing{background:var(--sand2)}
   .srow.playing .sk{color:var(--shu)}
   .seqlink{display:block; text-align:center; margin:14px 0 4px; font-size:12.5px; color:var(--ink2);
@@ -501,7 +518,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v112</span>
+    <span class="ver" id="verTag">v113</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2088,6 +2105,39 @@
     }
     step();
   }
+  /* 假名：變音部分（hl）用藍色；括號內的別讀法用灰色小字 */
+  function seqKana(it){
+    var k = it.kana, h = it.hl || '', at = h ? k.indexOf(h) : -1;
+    var out = at < 0 ? esc(k)
+      : esc(k.slice(0, at)) + '<i class="sp">' + esc(h) + '</i>' + esc(k.slice(at + h.length));
+    if (it.alt) out += '<span class="alt">（' + esc(it.alt) + '）</span>';
+    return out;
+  }
+  function seqRow(g, it, i){
+    return '<div class="srow" id="srow-' + g.id + '-' + i + '">' +
+      '<span class="sk">' + esc(it.kanji) + '</span>' +
+      '<span class="sn">' + seqKana(it) + '</span>' +
+      (g.compact ? '' : '<span class="sz">' + esc(it.zh) + '</span>') +
+      '<button class="spk" data-say="' + esc(it.kana) + '" data-audio="' + esc(it.audio) + '" aria-label="播放">' + SPK + '</button>' +
+    '</div>';
+  }
+  /* 多欄：按「每欄固定行數」切，順序與書本一樣由上而下、再往右一欄 */
+  function seqBody(g){
+    var n = g.items.length;
+    var cols = g.cols ? (window.innerWidth < 560 && g.cols_mobile ? g.cols_mobile : g.cols) : 1;
+    if (cols > n) cols = n;
+    if (cols < 2) {
+      return '<div class="stable">' + g.items.map(function(it, i){ return seqRow(g, it, i); }).join('') + '</div>';
+    }
+    var per = Math.ceil(n / cols), out = '<div class="scols" style="--cols:' + cols + '">';
+    for (var ci = 0; ci < cols; ci++){
+      var start = ci * per;
+      out += '<div class="scol">' + g.items.slice(start, start + per).map(function(it, j){
+        return seqRow(g, it, start + j);
+      }).join('') + '</div>';
+    }
+    return out + '</div>';
+  }
   function renderSeq(){
     document.title = '順序表 · 日語階梯';
     app.innerHTML =
@@ -2100,17 +2150,11 @@
       if (!host) return;
       if (!d || !d.groups){ host.innerHTML = '<p class="secnote">載入失敗，請重新整理。</p>'; return; }
       host.innerHTML = d.groups.map(function(g){
-        return '<section class="sgrp">' +
-          '<div class="shead"><div><b>' + g.title + '</b></div>' +
+        return '<section class="sgrp' + (g.compact ? ' compact' : '') + '">' +
+          '<div class="shead"><div><b>' + esc(g.title) + '</b>' +
+            (g.note ? '<span>' + esc(g.note) + '</span>' : '') + '</div>' +
             '<button class="btn2 splay" data-g="' + g.id + '">▶ 播放全部</button></div>' +
-          '<div class="stable">' + g.items.map(function(it, i){
-            return '<div class="srow" id="srow-' + g.id + '-' + i + '">' +
-              '<span class="sk">' + it.kanji + '</span>' +
-              '<span class="sn">' + it.kana + '</span>' +
-              '<span class="sz">' + it.zh + '</span>' +
-              '<button class="spk" data-say="' + it.kana + '" data-audio="' + it.audio + '" aria-label="播放">' + SPK + '</button>' +
-            '</div>';
-          }).join('') + '</div></section>';
+          seqBody(g) + '</section>';
       }).join('');
       var btns = host.querySelectorAll('.splay');
       for (var k = 0; k < btns.length; k++){

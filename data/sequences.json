@@ -5,84 +5,386 @@
    "title": "數字",
    "items": [
     {
-     "kanji": "〇",
-     "kana": "ゼロ",
-     "zh": "零",
+     "kanji": "零",
+     "kana": "れい",
+     "zh": "0",
+     "alt": "ゼロ",
      "audio": "audio/seq/num-0.mp3"
     },
     {
      "kanji": "一",
      "kana": "いち",
-     "zh": "一",
+     "zh": "1",
      "audio": "audio/seq/num-1.mp3"
     },
     {
      "kanji": "二",
      "kana": "に",
-     "zh": "二",
+     "zh": "2",
      "audio": "audio/seq/num-2.mp3"
     },
     {
      "kanji": "三",
      "kana": "さん",
-     "zh": "三",
+     "zh": "3",
      "audio": "audio/seq/num-3.mp3"
     },
     {
      "kanji": "四",
      "kana": "よん",
-     "zh": "四",
+     "zh": "4",
+     "alt": "し",
      "audio": "audio/seq/num-4.mp3"
     },
     {
      "kanji": "五",
      "kana": "ご",
-     "zh": "五",
+     "zh": "5",
      "audio": "audio/seq/num-5.mp3"
     },
     {
      "kanji": "六",
      "kana": "ろく",
-     "zh": "六",
+     "zh": "6",
      "audio": "audio/seq/num-6.mp3"
     },
     {
      "kanji": "七",
      "kana": "なな",
-     "zh": "七",
+     "zh": "7",
+     "alt": "しち",
      "audio": "audio/seq/num-7.mp3"
     },
     {
      "kanji": "八",
      "kana": "はち",
-     "zh": "八",
+     "zh": "8",
      "audio": "audio/seq/num-8.mp3"
     },
     {
      "kanji": "九",
      "kana": "きゅう",
-     "zh": "九",
+     "zh": "9",
+     "alt": "く",
      "audio": "audio/seq/num-9.mp3"
     },
     {
      "kanji": "十",
      "kana": "じゅう",
-     "zh": "十",
+     "zh": "10",
      "audio": "audio/seq/num-10.mp3"
+    },
+    {
+     "kanji": "十一",
+     "kana": "じゅういち",
+     "zh": "11",
+     "audio": "audio/seq/num-11.mp3"
+    },
+    {
+     "kanji": "十二",
+     "kana": "じゅうに",
+     "zh": "12",
+     "audio": "audio/seq/num-12.mp3"
+    },
+    {
+     "kanji": "十三",
+     "kana": "じゅうさん",
+     "zh": "13",
+     "audio": "audio/seq/num-13.mp3"
+    },
+    {
+     "kanji": "十四",
+     "kana": "じゅうよん",
+     "zh": "14",
+     "audio": "audio/seq/num-14.mp3"
+    },
+    {
+     "kanji": "十五",
+     "kana": "じゅうご",
+     "zh": "15",
+     "audio": "audio/seq/num-15.mp3"
+    },
+    {
+     "kanji": "十六",
+     "kana": "じゅうろく",
+     "zh": "16",
+     "audio": "audio/seq/num-16.mp3"
+    },
+    {
+     "kanji": "十七",
+     "kana": "じゅうなな",
+     "zh": "17",
+     "audio": "audio/seq/num-17.mp3"
+    },
+    {
+     "kanji": "十八",
+     "kana": "じゅうはち",
+     "zh": "18",
+     "audio": "audio/seq/num-18.mp3"
+    },
+    {
+     "kanji": "十九",
+     "kana": "じゅうきゅう",
+     "zh": "19",
+     "audio": "audio/seq/num-19.mp3"
+    },
+    {
+     "kanji": "二十",
+     "kana": "にじゅう",
+     "zh": "20",
+     "audio": "audio/seq/num-20.mp3"
+    },
+    {
+     "kanji": "二十一",
+     "kana": "にじゅういち",
+     "zh": "21",
+     "audio": "audio/seq/num-21.mp3"
+    },
+    {
+     "kanji": "二十二",
+     "kana": "にじゅうに",
+     "zh": "22",
+     "audio": "audio/seq/num-22.mp3"
+    },
+    {
+     "kanji": "三十三",
+     "kana": "さんじゅうさん",
+     "zh": "33",
+     "audio": "audio/seq/num-23.mp3"
+    },
+    {
+     "kanji": "四十四",
+     "kana": "よんじゅうよん",
+     "zh": "44",
+     "audio": "audio/seq/num-24.mp3"
+    },
+    {
+     "kanji": "五十五",
+     "kana": "ごじゅうご",
+     "zh": "55",
+     "audio": "audio/seq/num-25.mp3"
+    },
+    {
+     "kanji": "六十六",
+     "kana": "ろくじゅうろく",
+     "zh": "66",
+     "audio": "audio/seq/num-26.mp3"
+    },
+    {
+     "kanji": "七十七",
+     "kana": "ななじゅうなな",
+     "zh": "77",
+     "audio": "audio/seq/num-27.mp3"
+    },
+    {
+     "kanji": "八十八",
+     "kana": "はちじゅうはち",
+     "zh": "88",
+     "audio": "audio/seq/num-28.mp3"
+    },
+    {
+     "kanji": "九十九",
+     "kana": "きゅうじゅうきゅう",
+     "zh": "99",
+     "audio": "audio/seq/num-29.mp3"
     },
     {
      "kanji": "百",
      "kana": "ひゃく",
-     "zh": "一百",
-     "audio": "audio/seq/num-11.mp3"
+     "zh": "100",
+     "audio": "audio/seq/num-30.mp3"
+    },
+    {
+     "kanji": "二百",
+     "kana": "にひゃく",
+     "zh": "200",
+     "audio": "audio/seq/num-31.mp3"
+    },
+    {
+     "kanji": "三百",
+     "kana": "さんびゃく",
+     "zh": "300",
+     "hl": "びゃく",
+     "audio": "audio/seq/num-32.mp3"
+    },
+    {
+     "kanji": "四百",
+     "kana": "よんひゃく",
+     "zh": "400",
+     "audio": "audio/seq/num-33.mp3"
+    },
+    {
+     "kanji": "五百",
+     "kana": "ごひゃく",
+     "zh": "500",
+     "audio": "audio/seq/num-34.mp3"
+    },
+    {
+     "kanji": "六百",
+     "kana": "ろっぴゃく",
+     "zh": "600",
+     "hl": "っぴゃく",
+     "audio": "audio/seq/num-35.mp3"
+    },
+    {
+     "kanji": "七百",
+     "kana": "ななひゃく",
+     "zh": "700",
+     "audio": "audio/seq/num-36.mp3"
+    },
+    {
+     "kanji": "八百",
+     "kana": "はっぴゃく",
+     "zh": "800",
+     "hl": "っぴゃく",
+     "audio": "audio/seq/num-37.mp3"
+    },
+    {
+     "kanji": "九百",
+     "kana": "きゅうひゃく",
+     "zh": "900",
+     "audio": "audio/seq/num-38.mp3"
     },
     {
      "kanji": "千",
      "kana": "せん",
-     "zh": "一千",
-     "audio": "audio/seq/num-12.mp3"
+     "zh": "1000",
+     "audio": "audio/seq/num-39.mp3"
+    },
+    {
+     "kanji": "二千",
+     "kana": "にせん",
+     "zh": "2000",
+     "audio": "audio/seq/num-40.mp3"
+    },
+    {
+     "kanji": "三千",
+     "kana": "さんぜん",
+     "zh": "3000",
+     "hl": "ぜん",
+     "audio": "audio/seq/num-41.mp3"
+    },
+    {
+     "kanji": "四千",
+     "kana": "よんせん",
+     "zh": "4000",
+     "audio": "audio/seq/num-42.mp3"
+    },
+    {
+     "kanji": "五千",
+     "kana": "ごせん",
+     "zh": "5000",
+     "audio": "audio/seq/num-43.mp3"
+    },
+    {
+     "kanji": "六千",
+     "kana": "ろくせん",
+     "zh": "6000",
+     "audio": "audio/seq/num-44.mp3"
+    },
+    {
+     "kanji": "七千",
+     "kana": "ななせん",
+     "zh": "7000",
+     "audio": "audio/seq/num-45.mp3"
+    },
+    {
+     "kanji": "八千",
+     "kana": "はっせん",
+     "zh": "8000",
+     "hl": "っせん",
+     "audio": "audio/seq/num-46.mp3"
+    },
+    {
+     "kanji": "九千",
+     "kana": "きゅうせん",
+     "zh": "9000",
+     "audio": "audio/seq/num-47.mp3"
+    },
+    {
+     "kanji": "一万",
+     "kana": "いちまん",
+     "zh": "10000",
+     "audio": "audio/seq/num-48.mp3"
+    },
+    {
+     "kanji": "二万",
+     "kana": "にまん",
+     "zh": "20000",
+     "audio": "audio/seq/num-49.mp3"
+    },
+    {
+     "kanji": "三万",
+     "kana": "さんまん",
+     "zh": "30000",
+     "audio": "audio/seq/num-50.mp3"
+    },
+    {
+     "kanji": "四万",
+     "kana": "よんまん",
+     "zh": "40000",
+     "audio": "audio/seq/num-51.mp3"
+    },
+    {
+     "kanji": "五万",
+     "kana": "ごまん",
+     "zh": "50000",
+     "audio": "audio/seq/num-52.mp3"
+    },
+    {
+     "kanji": "六万",
+     "kana": "ろくまん",
+     "zh": "60000",
+     "audio": "audio/seq/num-53.mp3"
+    },
+    {
+     "kanji": "七万",
+     "kana": "ななまん",
+     "zh": "70000",
+     "audio": "audio/seq/num-54.mp3"
+    },
+    {
+     "kanji": "八万",
+     "kana": "はちまん",
+     "zh": "80000",
+     "audio": "audio/seq/num-55.mp3"
+    },
+    {
+     "kanji": "九万",
+     "kana": "きゅうまん",
+     "zh": "90000",
+     "audio": "audio/seq/num-56.mp3"
+    },
+    {
+     "kanji": "十万",
+     "kana": "じゅうまん",
+     "zh": "100000",
+     "audio": "audio/seq/num-57.mp3"
+    },
+    {
+     "kanji": "百万",
+     "kana": "ひゃくまん",
+     "zh": "1000000",
+     "audio": "audio/seq/num-58.mp3"
+    },
+    {
+     "kanji": "一千万",
+     "kana": "いっせんまん",
+     "zh": "10000000",
+     "hl": "っせんまん",
+     "audio": "audio/seq/num-59.mp3"
+    },
+    {
+     "kanji": "一億",
+     "kana": "いちおく",
+     "zh": "100000000",
+     "audio": "audio/seq/num-60.mp3"
     }
-   ]
+   ],
+   "cols": 3,
+   "cols_mobile": 2,
+   "compact": true,
+   "note": "藍色＝變音；括號＝另一種讀法"
   },
   {
    "id": "month",
