@@ -633,6 +633,8 @@
   .vdsub{display:flex; align-items:baseline; gap:4px; margin-top:1px}
   .vdsub .vk{flex:1; min-width:0; font-size:10px; color:var(--muted); line-height:1.25;
     overflow-wrap:anywhere}
+  .vftbl td.on{background:var(--sand2)}
+  .vdtop .spk.vspk{margin:0; flex:0 0 16px}
   .vftbl td.vf{text-align:center; padding:5px 1px 4px}
   .vftbl td.vf .fn{display:block; font-size:11.5px; line-height:1.25; overflow-wrap:anywhere}
   .vftbl td.vf .fk{display:block; font-size:9.5px; line-height:1.2; color:var(--muted);
@@ -662,7 +664,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v153</span>
+    <span class="ver" id="verTag">v154</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -916,6 +918,7 @@
     if (typeof stopSeq === 'function') stopSeq();
     if (typeof stopAllPlay === 'function') stopAllPlay();
     if (typeof afStop === 'function') afStop();
+    if (typeof vfStop === 'function') vfStop();
     if ('speechSynthesis' in window) speechSynthesis.cancel();
     if (typeof curAudio !== 'undefined' && curAudio){ curAudio.pause(); curAudio = null; }
     if (playingEl) playingEl.classList.remove('playing');
@@ -2721,6 +2724,41 @@
      欄序：辞書形 → ます形 → て形 → た形 → ない形，辞書形行頭。
      資料由 tools/build_verbforms.py 生成；て形／た形／ない形是規則推導，
      行く、ある、来る、する 等例外寫死在該工具。 */
+  var VFP = { on:false, btn:null };
+  function vfStop(){
+    VFP.on = false;
+    if (VFP.btn){ VFP.btn.classList.remove('playing'); VFP.btn = null; }
+    Array.prototype.forEach.call(document.querySelectorAll('.vftbl td.on'), function(td){
+      td.classList.remove('on');
+    });
+  }
+  function vfPlayRow(btn, tr){
+    if (VFP.on && VFP.btn === btn){ stopAudio(); return; }
+    stopAudio();
+    var tds = tr.querySelectorAll('td');
+    var order = ['dict', 'masu', 'te', 'ta', 'nai'];
+    var items = [];
+    order.forEach(function(k, i){
+      var url = tr.getAttribute('data-audio-' + k);
+      if (url) items.push({ url:url, el:tds[i] });
+    });
+    if (!items.length){ toast('這行還沒有音檔'); return; }
+    VFP.on = true; VFP.btn = btn; btn.classList.add('playing');
+    var i = 0;
+    function step(){
+      if (!VFP.on) return;
+      if (i >= items.length){ vfStop(); return; }
+      var it = items[i];
+      it.el.classList.add('on');
+      var ok = playFile(it.url, function(){
+        it.el.classList.remove('on');
+        if (!VFP.on) return;
+        i++; step();
+      }, null);
+      if (!ok){ vfStop(); }
+    }
+    step();
+  }
   var VERBFORMS = null;
   function renderVerbForms(id){
     var set = null;
@@ -2754,24 +2792,27 @@
       b.rows.forEach(function(r){
         var au = r.audio || {};
         var kcls = (!r.kanji && r.kana.length >= 7) ? ' class="kl"' : '';
-        h += '<tr>' +
+        var dat = ['dict', 'masu', 'te', 'ta', 'nai'].map(function(k){
+          return au[k] ? ' data-audio-' + k + '="' + esc(au[k]) + '"' : '';
+        }).join('');
+        h += '<tr' + dat + '>' +
           '<td class="vd">' +
-            '<div class="vdtop"><b' + kcls + '>' + esc(r.kanji || r.kana) + '</b></div>' +
+            '<div class="vdtop"><b' + kcls + '>' + esc(r.kanji || r.kana) + '</b>' +
+              (au.dict ? '<button class="spk vspk vfrow" aria-label="播放五個形">' + SPK + '</button>' : '') +
+            '</div>' +
             (r.kanji ? '<div class="vdsub"><span class="vk">' + esc(r.kana) + '</span></div>' : '') +
           '</td>' +
           FORMS.map(function(f){
             var key = f[0];
             var kf = r['k' + key] || '';
             return '<td class="vf"><span class="fn">' + esc(kf || r[key]) + '</span>' +
-              (kf ? '<span class="fk">' + esc(r[key]) + '</span>' : '') +
-              (au[key] ? '<button class="spk vspk" data-audio="' + esc(au[key]) +
-                '" aria-label="播放' + f[1] + '">' + SPK + '</button>' : '') + '</td>';
+              (kf ? '<span class="fk">' + esc(r[key]) + '</span>' : '') + '</td>';
           }).join('') +
         '</tr>';
       });
     });
     h += '</tbody></table></div>' +
-      '<p class="secnote">示範音檔暫時只有「行く」與「食べる」兩行；其他行先顯示文字。</p>';
+      '<p class="secnote">點辞書形右邊的喇叭，會依次播放辞書形、ます形、て形、た形、ない形。</p>';
     app.innerHTML = h;
     var jb = $('#vfjump');
     if (jb) jb.addEventListener('click', function(e){
@@ -2781,10 +2822,8 @@
     });
     var tbl = document.querySelector('.vftbl');
     if (tbl) tbl.addEventListener('click', function(e){
-      var b = e.target.closest('.vspk'); if (!b) return;
-      if (b.classList.contains('playing')){ stopAudio(); return; }
-      stopAudio();
-      playFile(b.getAttribute('data-audio'), null, b);
+      var b = e.target.closest('.vfrow'); if (!b) return;
+      vfPlayRow(b, b.closest('tr'));
     });
   }
 

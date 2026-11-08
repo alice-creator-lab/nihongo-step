@@ -116,13 +116,9 @@ for (const kana of ['ある', 'いる', 'する', 'なる', 'わかる', 'あげ
 }
 if (!kbad) ok(`漢字 ${KANJI.length} 條與假名保留 ${12} 條全部符合`);
 
-const withTe = rows.filter((r) => r.audio?.te);
-const srcs = withTe.map((r) => r.src).sort().join(',');
-if (srcs !== 'L06-0,L07-0') fail(`示範音檔應只有 L06-0、L07-0，實為 ${srcs}`);
-else ok('示範音檔為行く（L06-0）與食べる（L07-0）兩行');
-
-const badRows = rows.filter((r) => !r.audio?.dict).length;
-if (badRows) console.log(`NOTE  ${badRows} 行沒有辞書形音檔`);
+const noAudio = rows.filter((r) => !['dict', 'masu', 'te', 'ta', 'nai'].every((k) => r.audio?.[k]));
+if (noAudio.length) fail(`音檔不齊：${noAudio.length} 行，例如 ${noAudio[0].kanji || noAudio[0].kana}`);
+else ok(`每行五段音檔齊全（${rows.length * 5} 段）`);
 
 console.log(bad ? `\n${bad} 項未通過` : '\n全部通過');
 process.exit(bad ? 1 : 0);

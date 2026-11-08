@@ -154,38 +154,46 @@ async def main():
           return {wrap:[wrap.scrollWidth, wrap.clientWidth], bad:bad.slice(0,4), inner:innerWidth};
         })()""")
 
-    # 音檔：行く的て形
+    # 音檔：点辞書形的喇叭，依次播五形
     await viewport(390)
     await call("Page.navigate", {"url": BASE + "#/all/verbs/forms/godan"}, sid)
-    await wait_until("document.querySelectorAll('.vftbl .vspk').length")
+    await wait_until("document.querySelectorAll('.vftbl .vfrow').length")
     await js(INSTR)
     clicked = await js("""(function(){
       var rows=document.querySelectorAll('.vftbl tbody tr:not(.vgrp)');
       for (var i=0;i<rows.length;i++){
         var b=rows[i].querySelector('.vdtop b');
         if (b && b.textContent==='行く'){
-          var sp=rows[i].querySelectorAll('.vspk');
-          sp[1].click(); return sp.length;
+          rows[i].querySelector('.vfrow').click(); return 1;
         }
       }
       return null; })()""")
-    await asyncio.sleep(0.15)
-    out["行く喇叭數"] = clicked
-    out["播放檔"] = await js("window.__played || []")
-    out["停止"] = await js("""(function(){
+    got = []
+    for _ in range(30):
+        await asyncio.sleep(0.4)
+        got = await js("window.__played || []")
+        if len(got) >= 5:
+            break
+    out["行く喇叭數"] = await js("""(function(){
       var rows=document.querySelectorAll('.vftbl tbody tr:not(.vgrp)');
       for (var i=0;i<rows.length;i++){
         var b=rows[i].querySelector('.vdtop b');
-        if (b && b.textContent==='行く'){
-          rows[i].querySelectorAll('.vspk')[1].click();
-          break;
-        }
+        if (b && b.textContent==='行く'){ return rows[i].querySelectorAll('.vspk').length; }
+      } })()""")
+    out["播放檔"] = got
+    out["五形依次"] = [g.split("?")[0].split("/")[-1] for g in got[:5]] == \
+        ["L06-0.mp3", "L06-0-masu.mp3", "L06-0-te.mp3", "L06-0-ta.mp3", "L06-0-nai.mp3"]
+    out["播放中高亮"] = await js("document.querySelectorAll('.vftbl td.on').length")
+    # 再按一次停止（趁還在播）
+    await js("""(function(){
+      var rows=document.querySelectorAll('.vftbl tbody tr:not(.vgrp)');
+      for (var i=0;i<rows.length;i++){
+        var b=rows[i].querySelector('.vdtop b');
+        if (b && b.textContent==='行く'){ rows[i].querySelector('.vfrow').click(); break; }
       }
-      return [document.querySelectorAll('.vftbl .vspk.playing').length,
-              !!(window.__cur && !window.__cur.paused)];
     })()""")
     await asyncio.sleep(0.4)
-    out["停止後"] = await js("[document.querySelectorAll('.vftbl .vspk.playing').length, !!(window.__cur && !window.__cur.paused)]")
+    out["停止後"] = await js("[document.querySelectorAll('.vftbl .spk.playing').length, document.querySelectorAll('.vftbl td.on').length, !!(window.__cur && !window.__cur.paused)]")
 
     print(json.dumps(out, ensure_ascii=False, indent=1))
     proc.terminate()

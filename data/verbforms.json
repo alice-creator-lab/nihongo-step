@@ -29,7 +29,11 @@
        "kta": "買った",
        "knai": "買わない",
        "audio": {
-        "dict": "audio/verb/L07-6.mp3"
+        "dict": "audio/verb/L07-6.mp3",
+        "masu": "audio/verbform/L07-6-masu.mp3",
+        "te": "audio/verbform/L07-6-te.mp3",
+        "ta": "audio/verbform/L07-6-ta.mp3",
+        "nai": "audio/verbform/L07-6-nai.mp3"
        }
       },
       {
@@ -50,7 +54,11 @@
        "kta": "会った",
        "knai": "会わない",
        "audio": {
-        "dict": "audio/verb/L07-9.mp3"
+        "dict": "audio/verb/L07-9.mp3",
+        "masu": "audio/verbform/L07-9-masu.mp3",
+        "te": "audio/verbform/L07-9-te.mp3",
+        "ta": "audio/verbform/L07-9-ta.mp3",
+        "nai": "audio/verbform/L07-9-nai.mp3"
        }
       },
       {
@@ -72,7 +80,11 @@
        "kta": "習った",
        "knai": "習わない",
        "audio": {
-        "dict": "audio/verb/L12-5.mp3"
+        "dict": "audio/verb/L12-5.mp3",
+        "masu": "audio/verbform/L12-5-masu.mp3",
+        "te": "audio/verbform/L12-5-te.mp3",
+        "ta": "audio/verbform/L12-5-ta.mp3",
+        "nai": "audio/verbform/L12-5-nai.mp3"
        }
       },
       {
@@ -96,7 +108,11 @@
        "kta": "使った",
        "knai": "使わない",
        "audio": {
-        "dict": "audio/verb/L12-9.mp3"
+        "dict": "audio/verb/L12-9.mp3",
+        "masu": "audio/verbform/L12-9-masu.mp3",
+        "te": "audio/verbform/L12-9-te.mp3",
+        "ta": "audio/verbform/L12-9-ta.mp3",
+        "nai": "audio/verbform/L12-9-nai.mp3"
        }
       },
       {
@@ -119,7 +135,11 @@
        "kta": "歌った",
        "knai": "歌わない",
        "audio": {
-        "dict": "audio/verb/L13-2.mp3"
+        "dict": "audio/verb/L13-2.mp3",
+        "masu": "audio/verbform/L13-2-masu.mp3",
+        "te": "audio/verbform/L13-2-te.mp3",
+        "ta": "audio/verbform/L13-2-ta.mp3",
+        "nai": "audio/verbform/L13-2-nai.mp3"
        }
       },
       {
@@ -140,7 +160,11 @@
        "kta": "洗った",
        "knai": "洗わない",
        "audio": {
-        "dict": "audio/verb/L14-19.mp3"
+        "dict": "audio/verb/L14-19.mp3",
+        "masu": "audio/verbform/L14-19-masu.mp3",
+        "te": "audio/verbform/L14-19-te.mp3",
+        "ta": "audio/verbform/L14-19-ta.mp3",
+        "nai": "audio/verbform/L14-19-nai.mp3"
        }
       },
       {
@@ -164,7 +188,11 @@
        "kta": "間に合った",
        "knai": "間に合わない",
        "audio": {
-        "dict": "audio/verb/L14-22.mp3"
+        "dict": "audio/verb/L14-22.mp3",
+        "masu": "audio/verbform/L14-22-masu.mp3",
+        "te": "audio/verbform/L14-22-te.mp3",
+        "ta": "audio/verbform/L14-22-ta.mp3",
+        "nai": "audio/verbform/L14-22-nai.mp3"
        }
       },
       {
@@ -185,7 +213,11 @@
        "kta": "言った",
        "knai": "言わない",
        "audio": {
-        "dict": "audio/verb/L18-0.mp3"
+        "dict": "audio/verb/L18-0.mp3",
+        "masu": "audio/verbform/L18-0-masu.mp3",
+        "te": "audio/verbform/L18-0-te.mp3",
+        "ta": "audio/verbform/L18-0-ta.mp3",
+        "nai": "audio/verbform/L18-0-nai.mp3"
        }
       },
       {
@@ -206,7 +238,11 @@
        "kta": "思った",
        "knai": "思わない",
        "audio": {
-        "dict": "audio/verb/L18-1.mp3"
+        "dict": "audio/verb/L18-1.mp3",
+        "masu": "audio/verbform/L18-1-masu.mp3",
+        "te": "audio/verbform/L18-1-te.mp3",
+        "ta": "audio/verbform/L18-1-ta.mp3",
+        "nai": "audio/verbform/L18-1-nai.mp3"
        }
       },
       {
@@ -227,7 +263,11 @@
        "kta": "誘った",
        "knai": "誘わない",
        "audio": {
-        "dict": "audio/verb/L18-6.mp3"
+        "dict": "audio/verb/L18-6.mp3",
+        "masu": "audio/verbform/L18-6-masu.mp3",
+        "te": "audio/verbform/L18-6-te.mp3",
+        "ta": "audio/verbform/L18-6-ta.mp3",
+        "nai": "audio/verbform/L18-6-nai.mp3"
        }
       },
       {
@@ -248,7 +288,11 @@
        "kta": "吸った",
        "knai": "吸わない",
        "audio": {
-        "dict": "audio/verb/L20-8.mp3"
+        "dict": "audio/verb/L20-8.mp3",
+        "masu": "audio/verbform/L20-8-masu.mp3",
+        "te": "audio/verbform/L20-8-te.mp3",
+        "ta": "audio/verbform/L20-8-ta.mp3",
+        "nai": "audio/verbform/L20-8-nai.mp3"
        }
       },
       {
@@ -269,7 +313,11 @@
        "kta": "違った",
        "knai": "違わない",
        "audio": {
-        "dict": "audio/verb/L22-24.mp3"
+        "dict": "audio/verb/L22-24.mp3",
+        "masu": "audio/verbform/L22-24-masu.mp3",
+        "te": "audio/verbform/L22-24-te.mp3",
+        "ta": "audio/verbform/L22-24-ta.mp3",
+        "nai": "audio/verbform/L22-24-nai.mp3"
        }
       },
       {
@@ -290,7 +338,11 @@
        "kta": "沿った",
        "knai": "沿わない",
        "audio": {
-        "dict": "audio/verb/L35-20.mp3"
+        "dict": "audio/verb/L35-20.mp3",
+        "masu": "audio/verbform/L35-20-masu.mp3",
+        "te": "audio/verbform/L35-20-te.mp3",
+        "ta": "audio/verbform/L35-20-ta.mp3",
+        "nai": "audio/verbform/L35-20-nai.mp3"
        }
       },
       {
@@ -312,7 +364,11 @@
        "kta": "笑った",
        "knai": "笑わない",
        "audio": {
-        "dict": "audio/verb/L36-24.mp3"
+        "dict": "audio/verb/L36-24.mp3",
+        "masu": "audio/verbform/L36-24-masu.mp3",
+        "te": "audio/verbform/L36-24-te.mp3",
+        "ta": "audio/verbform/L36-24-ta.mp3",
+        "nai": "audio/verbform/L36-24-nai.mp3"
        }
       },
       {
@@ -333,7 +389,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L38-1.mp3"
+        "dict": "audio/verb/L38-1.mp3",
+        "masu": "audio/verbform/L38-1-masu.mp3",
+        "te": "audio/verbform/L38-1-te.mp3",
+        "ta": "audio/verbform/L38-1-ta.mp3",
+        "nai": "audio/verbform/L38-1-nai.mp3"
        }
       },
       {
@@ -354,7 +414,11 @@
        "kta": "手伝った",
        "knai": "手伝わない",
        "audio": {
-        "dict": "audio/verb/L38-11.mp3"
+        "dict": "audio/verb/L38-11.mp3",
+        "masu": "audio/verbform/L38-11-masu.mp3",
+        "te": "audio/verbform/L38-11-te.mp3",
+        "ta": "audio/verbform/L38-11-ta.mp3",
+        "nai": "audio/verbform/L38-11-nai.mp3"
        }
       },
       {
@@ -375,7 +439,11 @@
        "kta": "伺った",
        "knai": "伺わない",
        "audio": {
-        "dict": "audio/verb/L40-5.mp3"
+        "dict": "audio/verb/L40-5.mp3",
+        "masu": "audio/verbform/L40-5-masu.mp3",
+        "te": "audio/verbform/L40-5-te.mp3",
+        "ta": "audio/verbform/L40-5-ta.mp3",
+        "nai": "audio/verbform/L40-5-nai.mp3"
        }
       }
      ]
@@ -427,7 +495,11 @@
        "kta": "歩いた",
        "knai": "歩かない",
        "audio": {
-        "dict": "audio/verb/L06-3.mp3"
+        "dict": "audio/verb/L06-3.mp3",
+        "masu": "audio/verbform/L06-3-masu.mp3",
+        "te": "audio/verbform/L06-3-te.mp3",
+        "ta": "audio/verbform/L06-3-ta.mp3",
+        "nai": "audio/verbform/L06-3-nai.mp3"
        }
       },
       {
@@ -452,7 +524,11 @@
        "kta": "聞いた",
        "knai": "聞かない",
        "audio": {
-        "dict": "audio/verb/L07-3.mp3"
+        "dict": "audio/verb/L07-3.mp3",
+        "masu": "audio/verbform/L07-3-masu.mp3",
+        "te": "audio/verbform/L07-3-te.mp3",
+        "ta": "audio/verbform/L07-3-ta.mp3",
+        "nai": "audio/verbform/L07-3-nai.mp3"
        }
       },
       {
@@ -475,7 +551,11 @@
        "kta": "書いた",
        "knai": "書かない",
        "audio": {
-        "dict": "audio/verb/L07-5.mp3"
+        "dict": "audio/verb/L07-5.mp3",
+        "masu": "audio/verbform/L07-5-masu.mp3",
+        "te": "audio/verbform/L07-5-te.mp3",
+        "ta": "audio/verbform/L07-5-ta.mp3",
+        "nai": "audio/verbform/L07-5-nai.mp3"
        }
       },
       {
@@ -497,7 +577,11 @@
        "kta": "働いた",
        "knai": "働かない",
        "audio": {
-        "dict": "audio/verb/L11-2.mp3"
+        "dict": "audio/verb/L11-2.mp3",
+        "masu": "audio/verbform/L11-2-masu.mp3",
+        "te": "audio/verbform/L11-2-te.mp3",
+        "ta": "audio/verbform/L11-2-ta.mp3",
+        "nai": "audio/verbform/L11-2-nai.mp3"
        }
       },
       {
@@ -518,7 +602,11 @@
        "kta": "引いた",
        "knai": "引かない",
        "audio": {
-        "dict": "audio/verb/L12-28.mp3"
+        "dict": "audio/verb/L12-28.mp3",
+        "masu": "audio/verbform/L12-28-masu.mp3",
+        "te": "audio/verbform/L12-28-te.mp3",
+        "ta": "audio/verbform/L12-28-ta.mp3",
+        "nai": "audio/verbform/L12-28-nai.mp3"
        }
       },
       {
@@ -539,7 +627,11 @@
        "kta": "履いた",
        "knai": "履かない",
        "audio": {
-        "dict": "audio/verb/L12-30.mp3"
+        "dict": "audio/verb/L12-30.mp3",
+        "masu": "audio/verbform/L12-30-masu.mp3",
+        "te": "audio/verbform/L12-30-te.mp3",
+        "ta": "audio/verbform/L12-30-ta.mp3",
+        "nai": "audio/verbform/L12-30-nai.mp3"
        }
       },
       {
@@ -560,7 +652,11 @@
        "kta": "弾いた",
        "knai": "弾かない",
        "audio": {
-        "dict": "audio/verb/L12-31.mp3"
+        "dict": "audio/verb/L12-31.mp3",
+        "masu": "audio/verbform/L12-31-masu.mp3",
+        "te": "audio/verbform/L12-31-te.mp3",
+        "ta": "audio/verbform/L12-31-ta.mp3",
+        "nai": "audio/verbform/L12-31-nai.mp3"
        }
       },
       {
@@ -583,7 +679,11 @@
        "kta": "泳いだ",
        "knai": "泳がない",
        "audio": {
-        "dict": "audio/verb/L13-1.mp3"
+        "dict": "audio/verb/L13-1.mp3",
+        "masu": "audio/verbform/L13-1-masu.mp3",
+        "te": "audio/verbform/L13-1-te.mp3",
+        "ta": "audio/verbform/L13-1-ta.mp3",
+        "nai": "audio/verbform/L13-1-nai.mp3"
        }
       },
       {
@@ -607,7 +707,11 @@
        "kta": "急いだ",
        "knai": "急がない",
        "audio": {
-        "dict": "audio/verb/L13-5.mp3"
+        "dict": "audio/verb/L13-5.mp3",
+        "masu": "audio/verbform/L13-5-masu.mp3",
+        "te": "audio/verbform/L13-5-te.mp3",
+        "ta": "audio/verbform/L13-5-ta.mp3",
+        "nai": "audio/verbform/L13-5-nai.mp3"
        }
       },
       {
@@ -628,7 +732,11 @@
        "kta": "咲いた",
        "knai": "咲かない",
        "audio": {
-        "dict": "audio/verb/L13-42.mp3"
+        "dict": "audio/verb/L13-42.mp3",
+        "masu": "audio/verbform/L13-42-masu.mp3",
+        "te": "audio/verbform/L13-42-te.mp3",
+        "ta": "audio/verbform/L13-42-ta.mp3",
+        "nai": "audio/verbform/L13-42-nai.mp3"
        }
       },
       {
@@ -649,7 +757,11 @@
        "kta": "磨いた",
        "knai": "磨かない",
        "audio": {
-        "dict": "audio/verb/L15-18.mp3"
+        "dict": "audio/verb/L15-18.mp3",
+        "masu": "audio/verbform/L15-18-masu.mp3",
+        "te": "audio/verbform/L15-18-te.mp3",
+        "ta": "audio/verbform/L15-18-ta.mp3",
+        "nai": "audio/verbform/L15-18-nai.mp3"
        }
       },
       {
@@ -670,7 +782,11 @@
        "kta": "空いた",
        "knai": "空かない",
        "audio": {
-        "dict": "audio/verb/L19-16.mp3"
+        "dict": "audio/verb/L19-16.mp3",
+        "masu": "audio/verbform/L19-16-masu.mp3",
+        "te": "audio/verbform/L19-16-te.mp3",
+        "ta": "audio/verbform/L19-16-ta.mp3",
+        "nai": "audio/verbform/L19-16-nai.mp3"
        }
       },
       {
@@ -691,7 +807,11 @@
        "kta": "脱いだ",
        "knai": "脱がない",
        "audio": {
-        "dict": "audio/verb/L20-17.mp3"
+        "dict": "audio/verb/L20-17.mp3",
+        "masu": "audio/verbform/L20-17-masu.mp3",
+        "te": "audio/verbform/L20-17-te.mp3",
+        "ta": "audio/verbform/L20-17-ta.mp3",
+        "nai": "audio/verbform/L20-17-nai.mp3"
        }
       },
       {
@@ -712,7 +832,11 @@
        "kta": "開いた",
        "knai": "開かない",
        "audio": {
-        "dict": "audio/verb/L26-0.mp3"
+        "dict": "audio/verb/L26-0.mp3",
+        "masu": "audio/verbform/L26-0-masu.mp3",
+        "te": "audio/verbform/L26-0-te.mp3",
+        "ta": "audio/verbform/L26-0-ta.mp3",
+        "nai": "audio/verbform/L26-0-nai.mp3"
        }
       },
       {
@@ -733,7 +857,11 @@
        "kta": "点いた",
        "knai": "点かない",
        "audio": {
-        "dict": "audio/verb/L26-8.mp3"
+        "dict": "audio/verb/L26-8.mp3",
+        "masu": "audio/verbform/L26-8-masu.mp3",
+        "te": "audio/verbform/L26-8-te.mp3",
+        "ta": "audio/verbform/L26-8-ta.mp3",
+        "nai": "audio/verbform/L26-8-nai.mp3"
        }
       },
       {
@@ -754,7 +882,11 @@
        "kta": "吹いた",
        "knai": "吹かない",
        "audio": {
-        "dict": "audio/verb/L29-18.mp3"
+        "dict": "audio/verb/L29-18.mp3",
+        "masu": "audio/verbform/L29-18-masu.mp3",
+        "te": "audio/verbform/L29-18-te.mp3",
+        "ta": "audio/verbform/L29-18-ta.mp3",
+        "nai": "audio/verbform/L29-18-nai.mp3"
        }
       },
       {
@@ -775,7 +907,11 @@
        "kta": "着いた",
        "knai": "着かない",
        "audio": {
-        "dict": "audio/verb/L35-22.mp3"
+        "dict": "audio/verb/L35-22.mp3",
+        "masu": "audio/verbform/L35-22-masu.mp3",
+        "te": "audio/verbform/L35-22-te.mp3",
+        "ta": "audio/verbform/L35-22-ta.mp3",
+        "nai": "audio/verbform/L35-22-nai.mp3"
        }
       },
       {
@@ -797,7 +933,11 @@
        "kta": "泣いた",
        "knai": "泣かない",
        "audio": {
-        "dict": "audio/verb/L36-23.mp3"
+        "dict": "audio/verb/L36-23.mp3",
+        "masu": "audio/verbform/L36-23-masu.mp3",
+        "te": "audio/verbform/L36-23-te.mp3",
+        "ta": "audio/verbform/L36-23-ta.mp3",
+        "nai": "audio/verbform/L36-23-nai.mp3"
        }
       },
       {
@@ -818,7 +958,11 @@
        "kta": "驚いた",
        "knai": "驚かない",
        "audio": {
-        "dict": "audio/verb/L37-7.mp3"
+        "dict": "audio/verb/L37-7.mp3",
+        "masu": "audio/verbform/L37-7-masu.mp3",
+        "te": "audio/verbform/L37-7-te.mp3",
+        "ta": "audio/verbform/L37-7-ta.mp3",
+        "nai": "audio/verbform/L37-7-nai.mp3"
        }
       }
      ]
@@ -846,7 +990,11 @@
        "kta": "話した",
        "knai": "話さない",
        "audio": {
-        "dict": "audio/verb/L07-8.mp3"
+        "dict": "audio/verb/L07-8.mp3",
+        "masu": "audio/verbform/L07-8-masu.mp3",
+        "te": "audio/verbform/L07-8-te.mp3",
+        "ta": "audio/verbform/L07-8-ta.mp3",
+        "nai": "audio/verbform/L07-8-nai.mp3"
        }
       },
       {
@@ -870,7 +1018,11 @@
        "kta": "返した",
        "knai": "返さない",
        "audio": {
-        "dict": "audio/verb/L12-2.mp3"
+        "dict": "audio/verb/L12-2.mp3",
+        "masu": "audio/verbform/L12-2-masu.mp3",
+        "te": "audio/verbform/L12-2-te.mp3",
+        "ta": "audio/verbform/L12-2-ta.mp3",
+        "nai": "audio/verbform/L12-2-nai.mp3"
        }
       },
       {
@@ -892,7 +1044,11 @@
        "kta": "貸した",
        "knai": "貸さない",
        "audio": {
-        "dict": "audio/verb/L12-3.mp3"
+        "dict": "audio/verb/L12-3.mp3",
+        "masu": "audio/verbform/L12-3-masu.mp3",
+        "te": "audio/verbform/L12-3-te.mp3",
+        "ta": "audio/verbform/L12-3-ta.mp3",
+        "nai": "audio/verbform/L12-3-nai.mp3"
        }
       },
       {
@@ -916,7 +1072,11 @@
        "kta": "消した",
        "knai": "消さない",
        "audio": {
-        "dict": "audio/verb/L12-12.mp3"
+        "dict": "audio/verb/L12-12.mp3",
+        "masu": "audio/verbform/L12-12-masu.mp3",
+        "te": "audio/verbform/L12-12-te.mp3",
+        "ta": "audio/verbform/L12-12-ta.mp3",
+        "nai": "audio/verbform/L12-12-nai.mp3"
        }
       },
       {
@@ -937,7 +1097,11 @@
        "kta": "渡した",
        "knai": "渡さない",
        "audio": {
-        "dict": "audio/verb/L12-27.mp3"
+        "dict": "audio/verb/L12-27.mp3",
+        "masu": "audio/verbform/L12-27-masu.mp3",
+        "te": "audio/verbform/L12-27-te.mp3",
+        "ta": "audio/verbform/L12-27-ta.mp3",
+        "nai": "audio/verbform/L12-27-nai.mp3"
        }
       },
       {
@@ -958,7 +1122,11 @@
        "kta": "差した",
        "knai": "差さない",
        "audio": {
-        "dict": "audio/verb/L14-36.mp3"
+        "dict": "audio/verb/L14-36.mp3",
+        "masu": "audio/verbform/L14-36-masu.mp3",
+        "te": "audio/verbform/L14-36-te.mp3",
+        "ta": "audio/verbform/L14-36-ta.mp3",
+        "nai": "audio/verbform/L14-36-nai.mp3"
        }
       },
       {
@@ -979,7 +1147,11 @@
        "kta": "落とした",
        "knai": "落とさない",
        "audio": {
-        "dict": "audio/verb/L26-5.mp3"
+        "dict": "audio/verb/L26-5.mp3",
+        "masu": "audio/verbform/L26-5-masu.mp3",
+        "te": "audio/verbform/L26-5-te.mp3",
+        "ta": "audio/verbform/L26-5-ta.mp3",
+        "nai": "audio/verbform/L26-5-nai.mp3"
        }
       },
       {
@@ -1001,7 +1173,11 @@
        "kta": "壊した",
        "knai": "壊さない",
        "audio": {
-        "dict": "audio/verb/L26-13.mp3"
+        "dict": "audio/verb/L26-13.mp3",
+        "masu": "audio/verbform/L26-13-masu.mp3",
+        "te": "audio/verbform/L26-13-te.mp3",
+        "ta": "audio/verbform/L26-13-ta.mp3",
+        "nai": "audio/verbform/L26-13-nai.mp3"
        }
       },
       {
@@ -1022,7 +1198,11 @@
        "kta": "汚した",
        "knai": "汚さない",
        "audio": {
-        "dict": "audio/verb/L26-15.mp3"
+        "dict": "audio/verb/L26-15.mp3",
+        "masu": "audio/verbform/L26-15-masu.mp3",
+        "te": "audio/verbform/L26-15-te.mp3",
+        "ta": "audio/verbform/L26-15-ta.mp3",
+        "nai": "audio/verbform/L26-15-nai.mp3"
        }
       },
       {
@@ -1043,7 +1223,11 @@
        "kta": "無くした",
        "knai": "無くさない",
        "audio": {
-        "dict": "audio/verb/L26-16.mp3"
+        "dict": "audio/verb/L26-16.mp3",
+        "masu": "audio/verbform/L26-16-masu.mp3",
+        "te": "audio/verbform/L26-16-te.mp3",
+        "ta": "audio/verbform/L26-16-ta.mp3",
+        "nai": "audio/verbform/L26-16-nai.mp3"
        }
       },
       {
@@ -1064,7 +1248,11 @@
        "kta": "出した",
        "knai": "出さない",
        "audio": {
-        "dict": "audio/verb/L31-19.mp3"
+        "dict": "audio/verb/L31-19.mp3",
+        "masu": "audio/verbform/L31-19-masu.mp3",
+        "te": "audio/verbform/L31-19-te.mp3",
+        "ta": "audio/verbform/L31-19-ta.mp3",
+        "nai": "audio/verbform/L31-19-nai.mp3"
        }
       },
       {
@@ -1085,7 +1273,11 @@
        "kta": "押した",
        "knai": "押さない",
        "audio": {
-        "dict": "audio/verb/L34-15.mp3"
+        "dict": "audio/verb/L34-15.mp3",
+        "masu": "audio/verbform/L34-15-masu.mp3",
+        "te": "audio/verbform/L34-15-te.mp3",
+        "ta": "audio/verbform/L34-15-ta.mp3",
+        "nai": "audio/verbform/L34-15-nai.mp3"
        }
       },
       {
@@ -1106,7 +1298,11 @@
        "kta": "許した",
        "knai": "許さない",
        "audio": {
-        "dict": "audio/verb/L39-12.mp3"
+        "dict": "audio/verb/L39-12.mp3",
+        "masu": "audio/verbform/L39-12-masu.mp3",
+        "te": "audio/verbform/L39-12-te.mp3",
+        "ta": "audio/verbform/L39-12-ta.mp3",
+        "nai": "audio/verbform/L39-12-nai.mp3"
        }
       },
       {
@@ -1127,7 +1323,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L40-6.mp3"
+        "dict": "audio/verb/L40-6.mp3",
+        "masu": "audio/verbform/L40-6-masu.mp3",
+        "te": "audio/verbform/L40-6-te.mp3",
+        "ta": "audio/verbform/L40-6-ta.mp3",
+        "nai": "audio/verbform/L40-6-nai.mp3"
        }
       },
       {
@@ -1148,7 +1348,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L40-7.mp3"
+        "dict": "audio/verb/L40-7.mp3",
+        "masu": "audio/verbform/L40-7-masu.mp3",
+        "te": "audio/verbform/L40-7-te.mp3",
+        "ta": "audio/verbform/L40-7-ta.mp3",
+        "nai": "audio/verbform/L40-7-nai.mp3"
        }
       }
      ]
@@ -1174,7 +1378,11 @@
        "kta": "立った",
        "knai": "立たない",
        "audio": {
-        "dict": "audio/verb/L11-29.mp3"
+        "dict": "audio/verb/L11-29.mp3",
+        "masu": "audio/verbform/L11-29-masu.mp3",
+        "te": "audio/verbform/L11-29-te.mp3",
+        "ta": "audio/verbform/L11-29-ta.mp3",
+        "nai": "audio/verbform/L11-29-nai.mp3"
        }
       },
       {
@@ -1196,7 +1404,11 @@
        "kta": "待った",
        "knai": "待たない",
        "audio": {
-        "dict": "audio/verb/L12-0.mp3"
+        "dict": "audio/verb/L12-0.mp3",
+        "masu": "audio/verbform/L12-0-masu.mp3",
+        "te": "audio/verbform/L12-0-te.mp3",
+        "ta": "audio/verbform/L12-0-ta.mp3",
+        "nai": "audio/verbform/L12-0-nai.mp3"
        }
       },
       {
@@ -1217,7 +1429,11 @@
        "kta": "持った",
        "knai": "持たない",
        "audio": {
-        "dict": "audio/verb/L15-15.mp3"
+        "dict": "audio/verb/L15-15.mp3",
+        "masu": "audio/verbform/L15-15-masu.mp3",
+        "te": "audio/verbform/L15-15-te.mp3",
+        "ta": "audio/verbform/L15-15-ta.mp3",
+        "nai": "audio/verbform/L15-15-nai.mp3"
        }
       }
      ]
@@ -1243,7 +1459,11 @@
        "kta": "死んだ",
        "knai": "死なない",
        "audio": {
-        "dict": "audio/verb/L13-43.mp3"
+        "dict": "audio/verb/L13-43.mp3",
+        "masu": "audio/verbform/L13-43-masu.mp3",
+        "te": "audio/verbform/L13-43-te.mp3",
+        "ta": "audio/verbform/L13-43-ta.mp3",
+        "nai": "audio/verbform/L13-43-nai.mp3"
        }
       }
      ]
@@ -1270,7 +1490,11 @@
        "kta": "呼んだ",
        "knai": "呼ばない",
        "audio": {
-        "dict": "audio/verb/L12-6.mp3"
+        "dict": "audio/verb/L12-6.mp3",
+        "masu": "audio/verbform/L12-6-masu.mp3",
+        "te": "audio/verbform/L12-6-te.mp3",
+        "ta": "audio/verbform/L12-6-ta.mp3",
+        "nai": "audio/verbform/L12-6-nai.mp3"
        }
       },
       {
@@ -1291,7 +1515,11 @@
        "kta": "遊んだ",
        "knai": "遊ばない",
        "audio": {
-        "dict": "audio/verb/L13-0.mp3"
+        "dict": "audio/verb/L13-0.mp3",
+        "masu": "audio/verbform/L13-0-masu.mp3",
+        "te": "audio/verbform/L13-0-te.mp3",
+        "ta": "audio/verbform/L13-0-ta.mp3",
+        "nai": "audio/verbform/L13-0-nai.mp3"
        }
       },
       {
@@ -1312,7 +1540,11 @@
        "kta": "飛んだ",
        "knai": "飛ばない",
        "audio": {
-        "dict": "audio/verb/L13-39.mp3"
+        "dict": "audio/verb/L13-39.mp3",
+        "masu": "audio/verbform/L13-39-masu.mp3",
+        "te": "audio/verbform/L13-39-te.mp3",
+        "ta": "audio/verbform/L13-39-ta.mp3",
+        "nai": "audio/verbform/L13-39-nai.mp3"
        }
       },
       {
@@ -1333,7 +1565,11 @@
        "kta": "並んだ",
        "knai": "並ばない",
        "audio": {
-        "dict": "audio/verb/L13-40.mp3"
+        "dict": "audio/verb/L13-40.mp3",
+        "masu": "audio/verbform/L13-40-masu.mp3",
+        "te": "audio/verbform/L13-40-te.mp3",
+        "ta": "audio/verbform/L13-40-ta.mp3",
+        "nai": "audio/verbform/L13-40-nai.mp3"
        }
       },
       {
@@ -1354,7 +1590,11 @@
        "kta": "喜んだ",
        "knai": "喜ばない",
        "audio": {
-        "dict": "audio/verb/L37-9.mp3"
+        "dict": "audio/verb/L37-9.mp3",
+        "masu": "audio/verbform/L37-9-masu.mp3",
+        "te": "audio/verbform/L37-9-te.mp3",
+        "ta": "audio/verbform/L37-9-ta.mp3",
+        "nai": "audio/verbform/L37-9-nai.mp3"
        }
       }
      ]
@@ -1381,7 +1621,11 @@
        "kta": "飲んだ",
        "knai": "飲まない",
        "audio": {
-        "dict": "audio/verb/L07-1.mp3"
+        "dict": "audio/verb/L07-1.mp3",
+        "masu": "audio/verbform/L07-1-masu.mp3",
+        "te": "audio/verbform/L07-1-te.mp3",
+        "ta": "audio/verbform/L07-1-ta.mp3",
+        "nai": "audio/verbform/L07-1-nai.mp3"
        }
       },
       {
@@ -1404,7 +1648,11 @@
        "kta": "読んだ",
        "knai": "読まない",
        "audio": {
-        "dict": "audio/verb/L07-4.mp3"
+        "dict": "audio/verb/L07-4.mp3",
+        "masu": "audio/verbform/L07-4-masu.mp3",
+        "te": "audio/verbform/L07-4-te.mp3",
+        "ta": "audio/verbform/L07-4-ta.mp3",
+        "nai": "audio/verbform/L07-4-nai.mp3"
        }
       },
       {
@@ -1427,7 +1675,11 @@
        "kta": "休んだ",
        "knai": "休まない",
        "audio": {
-        "dict": "audio/verb/L11-3.mp3"
+        "dict": "audio/verb/L11-3.mp3",
+        "masu": "audio/verbform/L11-3-masu.mp3",
+        "te": "audio/verbform/L11-3-te.mp3",
+        "ta": "audio/verbform/L11-3-ta.mp3",
+        "nai": "audio/verbform/L11-3-nai.mp3"
        }
       },
       {
@@ -1448,7 +1700,11 @@
        "kta": "頼んだ",
        "knai": "頼まない",
        "audio": {
-        "dict": "audio/verb/L11-30.mp3"
+        "dict": "audio/verb/L11-30.mp3",
+        "masu": "audio/verbform/L11-30-masu.mp3",
+        "te": "audio/verbform/L11-30-te.mp3",
+        "ta": "audio/verbform/L11-30-ta.mp3",
+        "nai": "audio/verbform/L11-30-nai.mp3"
        }
       },
       {
@@ -1469,7 +1725,11 @@
        "kta": "住んだ",
        "knai": "住まない",
        "audio": {
-        "dict": "audio/verb/L15-16.mp3"
+        "dict": "audio/verb/L15-16.mp3",
+        "masu": "audio/verbform/L15-16-masu.mp3",
+        "te": "audio/verbform/L15-16-te.mp3",
+        "ta": "audio/verbform/L15-16-ta.mp3",
+        "nai": "audio/verbform/L15-16-nai.mp3"
        }
       },
       {
@@ -1490,7 +1750,11 @@
        "kta": "進んだ",
        "knai": "進まない",
        "audio": {
-        "dict": "audio/verb/L35-21.mp3"
+        "dict": "audio/verb/L35-21.mp3",
+        "masu": "audio/verbform/L35-21-masu.mp3",
+        "te": "audio/verbform/L35-21-te.mp3",
+        "ta": "audio/verbform/L35-21-ta.mp3",
+        "nai": "audio/verbform/L35-21-nai.mp3"
        }
       },
       {
@@ -1511,7 +1775,11 @@
        "kta": "止んだ",
        "knai": "止まない",
        "audio": {
-        "dict": "audio/verb/L36-19.mp3"
+        "dict": "audio/verb/L36-19.mp3",
+        "masu": "audio/verbform/L36-19-masu.mp3",
+        "te": "audio/verbform/L36-19-te.mp3",
+        "ta": "audio/verbform/L36-19-ta.mp3",
+        "nai": "audio/verbform/L36-19-nai.mp3"
        }
       },
       {
@@ -1532,7 +1800,11 @@
        "kta": "盗んだ",
        "knai": "盗まない",
        "audio": {
-        "dict": "audio/verb/L37-2.mp3"
+        "dict": "audio/verb/L37-2.mp3",
+        "masu": "audio/verbform/L37-2-masu.mp3",
+        "te": "audio/verbform/L37-2-te.mp3",
+        "ta": "audio/verbform/L37-2-ta.mp3",
+        "nai": "audio/verbform/L37-2-nai.mp3"
        }
       }
      ]
@@ -1559,7 +1831,11 @@
        "kta": "帰った",
        "knai": "帰らない",
        "audio": {
-        "dict": "audio/verb/L06-2.mp3"
+        "dict": "audio/verb/L06-2.mp3",
+        "masu": "audio/verbform/L06-2-masu.mp3",
+        "te": "audio/verbform/L06-2-te.mp3",
+        "ta": "audio/verbform/L06-2-ta.mp3",
+        "nai": "audio/verbform/L06-2-nai.mp3"
        }
       },
       {
@@ -1583,7 +1859,11 @@
        "kta": "走った",
        "knai": "走らない",
        "audio": {
-        "dict": "audio/verb/L06-4.mp3"
+        "dict": "audio/verb/L06-4.mp3",
+        "masu": "audio/verbform/L06-4-masu.mp3",
+        "te": "audio/verbform/L06-4-te.mp3",
+        "ta": "audio/verbform/L06-4-ta.mp3",
+        "nai": "audio/verbform/L06-4-nai.mp3"
        }
       },
       {
@@ -1608,7 +1888,11 @@
        "kta": "作った",
        "knai": "作らない",
        "audio": {
-        "dict": "audio/verb/L07-7.mp3"
+        "dict": "audio/verb/L07-7.mp3",
+        "masu": "audio/verbform/L07-7-masu.mp3",
+        "te": "audio/verbform/L07-7-te.mp3",
+        "ta": "audio/verbform/L07-7-ta.mp3",
+        "nai": "audio/verbform/L07-7-nai.mp3"
        }
       },
       {
@@ -1629,7 +1913,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L10-0.mp3"
+        "dict": "audio/verb/L10-0.mp3",
+        "masu": "audio/verbform/L10-0-masu.mp3",
+        "te": "audio/verbform/L10-0-te.mp3",
+        "ta": "audio/verbform/L10-0-ta.mp3",
+        "nai": "audio/verbform/L10-0-nai.mp3"
        }
       },
       {
@@ -1650,7 +1938,11 @@
        "kta": "終わった",
        "knai": "終わらない",
        "audio": {
-        "dict": "audio/verb/L11-4.mp3"
+        "dict": "audio/verb/L11-4.mp3",
+        "masu": "audio/verbform/L11-4-masu.mp3",
+        "te": "audio/verbform/L11-4-te.mp3",
+        "ta": "audio/verbform/L11-4-ta.mp3",
+        "nai": "audio/verbform/L11-4-nai.mp3"
        }
       },
       {
@@ -1671,7 +1963,11 @@
        "kta": "始まった",
        "knai": "始まらない",
        "audio": {
-        "dict": "audio/verb/L11-5.mp3"
+        "dict": "audio/verb/L11-5.mp3",
+        "masu": "audio/verbform/L11-5-masu.mp3",
+        "te": "audio/verbform/L11-5-te.mp3",
+        "ta": "audio/verbform/L11-5-ta.mp3",
+        "nai": "audio/verbform/L11-5-nai.mp3"
        }
       },
       {
@@ -1692,7 +1988,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L11-27.mp3"
+        "dict": "audio/verb/L11-27.mp3",
+        "masu": "audio/verbform/L11-27-masu.mp3",
+        "te": "audio/verbform/L11-27-te.mp3",
+        "ta": "audio/verbform/L11-27-ta.mp3",
+        "nai": "audio/verbform/L11-27-nai.mp3"
        }
       },
       {
@@ -1713,7 +2013,11 @@
        "kta": "売った",
        "knai": "売らない",
        "audio": {
-        "dict": "audio/verb/L11-28.mp3"
+        "dict": "audio/verb/L11-28.mp3",
+        "masu": "audio/verbform/L11-28-masu.mp3",
+        "te": "audio/verbform/L11-28-te.mp3",
+        "ta": "audio/verbform/L11-28-ta.mp3",
+        "nai": "audio/verbform/L11-28-nai.mp3"
        }
       },
       {
@@ -1734,7 +2038,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L11-32.mp3"
+        "dict": "audio/verb/L11-32.mp3",
+        "masu": "audio/verbform/L11-32-masu.mp3",
+        "te": "audio/verbform/L11-32-te.mp3",
+        "ta": "audio/verbform/L11-32-ta.mp3",
+        "nai": "audio/verbform/L11-32-nai.mp3"
        }
       },
       {
@@ -1755,7 +2063,11 @@
        "kta": "取った",
        "knai": "取らない",
        "audio": {
-        "dict": "audio/verb/L12-1.mp3"
+        "dict": "audio/verb/L12-1.mp3",
+        "masu": "audio/verbform/L12-1-masu.mp3",
+        "te": "audio/verbform/L12-1-te.mp3",
+        "ta": "audio/verbform/L12-1-ta.mp3",
+        "nai": "audio/verbform/L12-1-nai.mp3"
        }
       },
       {
@@ -1777,7 +2089,11 @@
        "kta": "曲がった",
        "knai": "曲がらない",
        "audio": {
-        "dict": "audio/verb/L12-14.mp3"
+        "dict": "audio/verb/L12-14.mp3",
+        "masu": "audio/verbform/L12-14-masu.mp3",
+        "te": "audio/verbform/L12-14-te.mp3",
+        "ta": "audio/verbform/L12-14-ta.mp3",
+        "nai": "audio/verbform/L12-14-nai.mp3"
        }
       },
       {
@@ -1799,7 +2115,11 @@
        "kta": "渡った",
        "knai": "渡らない",
        "audio": {
-        "dict": "audio/verb/L12-15.mp3"
+        "dict": "audio/verb/L12-15.mp3",
+        "masu": "audio/verbform/L12-15-masu.mp3",
+        "te": "audio/verbform/L12-15-te.mp3",
+        "ta": "audio/verbform/L12-15-ta.mp3",
+        "nai": "audio/verbform/L12-15-nai.mp3"
        }
       },
       {
@@ -1820,7 +2140,11 @@
        "kta": "入った",
        "knai": "入らない",
        "audio": {
-        "dict": "audio/verb/L12-29.mp3"
+        "dict": "audio/verb/L12-29.mp3",
+        "masu": "audio/verbform/L12-29-masu.mp3",
+        "te": "audio/verbform/L12-29-te.mp3",
+        "ta": "audio/verbform/L12-29-ta.mp3",
+        "nai": "audio/verbform/L12-29-nai.mp3"
        }
       },
       {
@@ -1843,7 +2167,11 @@
        "kta": "踊った",
        "knai": "踊らない",
        "audio": {
-        "dict": "audio/verb/L13-3.mp3"
+        "dict": "audio/verb/L13-3.mp3",
+        "masu": "audio/verbform/L13-3-masu.mp3",
+        "te": "audio/verbform/L13-3-te.mp3",
+        "ta": "audio/verbform/L13-3-ta.mp3",
+        "nai": "audio/verbform/L13-3-nai.mp3"
        }
       },
       {
@@ -1867,7 +2195,11 @@
        "kta": "降った",
        "knai": "降らない",
        "audio": {
-        "dict": "audio/verb/L13-13.mp3"
+        "dict": "audio/verb/L13-13.mp3",
+        "masu": "audio/verbform/L13-13-masu.mp3",
+        "te": "audio/verbform/L13-13-te.mp3",
+        "ta": "audio/verbform/L13-13-ta.mp3",
+        "nai": "audio/verbform/L13-13-nai.mp3"
        }
       },
       {
@@ -1888,7 +2220,11 @@
        "kta": "登った",
        "knai": "登らない",
        "audio": {
-        "dict": "audio/verb/L13-41.mp3"
+        "dict": "audio/verb/L13-41.mp3",
+        "masu": "audio/verbform/L13-41-masu.mp3",
+        "te": "audio/verbform/L13-41-te.mp3",
+        "ta": "audio/verbform/L13-41-ta.mp3",
+        "nai": "audio/verbform/L13-41-nai.mp3"
        }
       },
       {
@@ -1909,7 +2245,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L14-35.mp3"
+        "dict": "audio/verb/L14-35.mp3",
+        "masu": "audio/verbform/L14-35-masu.mp3",
+        "te": "audio/verbform/L14-35-te.mp3",
+        "ta": "audio/verbform/L14-35-ta.mp3",
+        "nai": "audio/verbform/L14-35-nai.mp3"
        }
       },
       {
@@ -1930,7 +2270,11 @@
        "kta": "知った",
        "knai": "知らない",
        "audio": {
-        "dict": "audio/verb/L15-14.mp3"
+        "dict": "audio/verb/L15-14.mp3",
+        "masu": "audio/verbform/L15-14-masu.mp3",
+        "te": "audio/verbform/L15-14-te.mp3",
+        "ta": "audio/verbform/L15-14-ta.mp3",
+        "nai": "audio/verbform/L15-14-nai.mp3"
        }
       },
       {
@@ -1951,7 +2295,11 @@
        "kta": "乗った",
        "knai": "乗らない",
        "audio": {
-        "dict": "audio/verb/L17-18.mp3"
+        "dict": "audio/verb/L17-18.mp3",
+        "masu": "audio/verbform/L17-18-masu.mp3",
+        "te": "audio/verbform/L17-18-te.mp3",
+        "ta": "audio/verbform/L17-18-ta.mp3",
+        "nai": "audio/verbform/L17-18-nai.mp3"
        }
       },
       {
@@ -1972,7 +2320,11 @@
        "kta": "断った",
        "knai": "断らない",
        "audio": {
-        "dict": "audio/verb/L18-7.mp3"
+        "dict": "audio/verb/L18-7.mp3",
+        "masu": "audio/verbform/L18-7-masu.mp3",
+        "te": "audio/verbform/L18-7-te.mp3",
+        "ta": "audio/verbform/L18-7-ta.mp3",
+        "nai": "audio/verbform/L18-7-nai.mp3"
        }
       },
       {
@@ -1993,7 +2345,11 @@
        "kta": "撮った",
        "knai": "撮らない",
        "audio": {
-        "dict": "audio/verb/L20-11.mp3"
+        "dict": "audio/verb/L20-11.mp3",
+        "masu": "audio/verbform/L20-11-masu.mp3",
+        "te": "audio/verbform/L20-11-te.mp3",
+        "ta": "audio/verbform/L20-11-ta.mp3",
+        "nai": "audio/verbform/L20-11-nai.mp3"
        }
       },
       {
@@ -2014,7 +2370,11 @@
        "kta": "触った",
        "knai": "触らない",
        "audio": {
-        "dict": "audio/verb/L20-12.mp3"
+        "dict": "audio/verb/L20-12.mp3",
+        "masu": "audio/verbform/L20-12-masu.mp3",
+        "te": "audio/verbform/L20-12-te.mp3",
+        "ta": "audio/verbform/L20-12-ta.mp3",
+        "nai": "audio/verbform/L20-12-nai.mp3"
        }
       },
       {
@@ -2035,7 +2395,11 @@
        "kta": "座った",
        "knai": "座らない",
        "audio": {
-        "dict": "audio/verb/L20-13.mp3"
+        "dict": "audio/verb/L20-13.mp3",
+        "masu": "audio/verbform/L20-13-masu.mp3",
+        "te": "audio/verbform/L20-13-te.mp3",
+        "ta": "audio/verbform/L20-13-ta.mp3",
+        "nai": "audio/verbform/L20-13-nai.mp3"
        }
       },
       {
@@ -2056,7 +2420,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L21-23.mp3"
+        "dict": "audio/verb/L21-23.mp3",
+        "masu": "audio/verbform/L21-23-masu.mp3",
+        "te": "audio/verbform/L21-23-te.mp3",
+        "ta": "audio/verbform/L21-23-ta.mp3",
+        "nai": "audio/verbform/L21-23-nai.mp3"
        }
       },
       {
@@ -2077,7 +2445,11 @@
        "kta": "欲しがった",
        "knai": "欲しがらない",
        "audio": {
-        "dict": "audio/verb/L23-24.mp3"
+        "dict": "audio/verb/L23-24.mp3",
+        "masu": "audio/verbform/L23-24-masu.mp3",
+        "te": "audio/verbform/L23-24-te.mp3",
+        "ta": "audio/verbform/L23-24-ta.mp3",
+        "nai": "audio/verbform/L23-24-nai.mp3"
        }
       },
       {
@@ -2098,7 +2470,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L23-25.mp3"
+        "dict": "audio/verb/L23-25.mp3",
+        "masu": "audio/verbform/L23-25-masu.mp3",
+        "te": "audio/verbform/L23-25-te.mp3",
+        "ta": "audio/verbform/L23-25-ta.mp3",
+        "nai": "audio/verbform/L23-25-nai.mp3"
        }
       },
       {
@@ -2119,7 +2495,11 @@
        "kta": "閉まった",
        "knai": "閉まらない",
        "audio": {
-        "dict": "audio/verb/L26-2.mp3"
+        "dict": "audio/verb/L26-2.mp3",
+        "masu": "audio/verbform/L26-2-masu.mp3",
+        "te": "audio/verbform/L26-2-te.mp3",
+        "ta": "audio/verbform/L26-2-ta.mp3",
+        "nai": "audio/verbform/L26-2-nai.mp3"
        }
       },
       {
@@ -2140,7 +2520,11 @@
        "kta": "止まった",
        "knai": "止まらない",
        "audio": {
-        "dict": "audio/verb/L26-6.mp3"
+        "dict": "audio/verb/L26-6.mp3",
+        "masu": "audio/verbform/L26-6-masu.mp3",
+        "te": "audio/verbform/L26-6-te.mp3",
+        "ta": "audio/verbform/L26-6-ta.mp3",
+        "nai": "audio/verbform/L26-6-nai.mp3"
        }
       },
       {
@@ -2161,7 +2545,11 @@
        "kta": "見つかった",
        "knai": "見つからない",
        "audio": {
-        "dict": "audio/verb/L26-17.mp3"
+        "dict": "audio/verb/L26-17.mp3",
+        "masu": "audio/verbform/L26-17-masu.mp3",
+        "te": "audio/verbform/L26-17-te.mp3",
+        "ta": "audio/verbform/L26-17-ta.mp3",
+        "nai": "audio/verbform/L26-17-nai.mp3"
        }
       },
       {
@@ -2183,7 +2571,11 @@
        "kta": "飾った",
        "knai": "飾らない",
        "audio": {
-        "dict": "audio/verb/L26-18.mp3"
+        "dict": "audio/verb/L26-18.mp3",
+        "masu": "audio/verbform/L26-18-masu.mp3",
+        "te": "audio/verbform/L26-18-te.mp3",
+        "ta": "audio/verbform/L26-18-ta.mp3",
+        "nai": "audio/verbform/L26-18-nai.mp3"
        }
       },
       {
@@ -2204,7 +2596,11 @@
        "kta": "頑張った",
        "knai": "頑張らない",
        "audio": {
-        "dict": "audio/verb/L28-21.mp3"
+        "dict": "audio/verb/L28-21.mp3",
+        "masu": "audio/verbform/L28-21-masu.mp3",
+        "te": "audio/verbform/L28-21-te.mp3",
+        "ta": "audio/verbform/L28-21-ta.mp3",
+        "nai": "audio/verbform/L28-21-nai.mp3"
        }
       },
       {
@@ -2225,7 +2621,11 @@
        "kta": "曇った",
        "knai": "曇らない",
        "audio": {
-        "dict": "audio/verb/L29-17.mp3"
+        "dict": "audio/verb/L29-17.mp3",
+        "masu": "audio/verbform/L29-17-masu.mp3",
+        "te": "audio/verbform/L29-17-te.mp3",
+        "ta": "audio/verbform/L29-17-ta.mp3",
+        "nai": "audio/verbform/L29-17-nai.mp3"
        }
       },
       {
@@ -2246,7 +2646,11 @@
        "kta": "上がった",
        "knai": "上がらない",
        "audio": {
-        "dict": "audio/verb/L29-19.mp3"
+        "dict": "audio/verb/L29-19.mp3",
+        "masu": "audio/verbform/L29-19-masu.mp3",
+        "te": "audio/verbform/L29-19-te.mp3",
+        "ta": "audio/verbform/L29-19-ta.mp3",
+        "nai": "audio/verbform/L29-19-nai.mp3"
        }
       },
       {
@@ -2267,7 +2671,11 @@
        "kta": "下がった",
        "knai": "下がらない",
        "audio": {
-        "dict": "audio/verb/L29-20.mp3"
+        "dict": "audio/verb/L29-20.mp3",
+        "masu": "audio/verbform/L29-20-masu.mp3",
+        "te": "audio/verbform/L29-20-te.mp3",
+        "ta": "audio/verbform/L29-20-ta.mp3",
+        "nai": "audio/verbform/L29-20-nai.mp3"
        }
       },
       {
@@ -2288,7 +2696,11 @@
        "kta": "広がった",
        "knai": "広がらない",
        "audio": {
-        "dict": "audio/verb/L30-24.mp3"
+        "dict": "audio/verb/L30-24.mp3",
+        "masu": "audio/verbform/L30-24-masu.mp3",
+        "te": "audio/verbform/L30-24-te.mp3",
+        "ta": "audio/verbform/L30-24-ta.mp3",
+        "nai": "audio/verbform/L30-24-nai.mp3"
        }
       },
       {
@@ -2309,7 +2721,11 @@
        "kta": "残った",
        "knai": "残らない",
        "audio": {
-        "dict": "audio/verb/L31-20.mp3"
+        "dict": "audio/verb/L31-20.mp3",
+        "masu": "audio/verbform/L31-20-masu.mp3",
+        "te": "audio/verbform/L31-20-te.mp3",
+        "ta": "audio/verbform/L31-20-ta.mp3",
+        "nai": "audio/verbform/L31-20-nai.mp3"
        }
       },
       {
@@ -2330,7 +2746,11 @@
        "kta": "貼った",
        "knai": "貼らない",
        "audio": {
-        "dict": "audio/verb/L34-20.mp3"
+        "dict": "audio/verb/L34-20.mp3",
+        "masu": "audio/verbform/L34-20-masu.mp3",
+        "te": "audio/verbform/L34-20-te.mp3",
+        "ta": "audio/verbform/L34-20-ta.mp3",
+        "nai": "audio/verbform/L34-20-nai.mp3"
        }
       },
       {
@@ -2351,7 +2771,11 @@
        "kta": "通った",
        "knai": "通らない",
        "audio": {
-        "dict": "audio/verb/L35-19.mp3"
+        "dict": "audio/verb/L35-19.mp3",
+        "masu": "audio/verbform/L35-19-masu.mp3",
+        "te": "audio/verbform/L35-19-te.mp3",
+        "ta": "audio/verbform/L35-19-ta.mp3",
+        "nai": "audio/verbform/L35-19-nai.mp3"
        }
       },
       {
@@ -2372,7 +2796,11 @@
        "kta": "叱った",
        "knai": "叱らない",
        "audio": {
-        "dict": "audio/verb/L37-1.mp3"
+        "dict": "audio/verb/L37-1.mp3",
+        "masu": "audio/verbform/L37-1-masu.mp3",
+        "te": "audio/verbform/L37-1-te.mp3",
+        "ta": "audio/verbform/L37-1-ta.mp3",
+        "nai": "audio/verbform/L37-1-nai.mp3"
        }
       },
       {
@@ -2393,7 +2821,11 @@
        "kta": "困った",
        "knai": "困らない",
        "audio": {
-        "dict": "audio/verb/L37-8.mp3"
+        "dict": "audio/verb/L37-8.mp3",
+        "masu": "audio/verbform/L37-8-masu.mp3",
+        "te": "audio/verbform/L37-8-te.mp3",
+        "ta": "audio/verbform/L37-8-ta.mp3",
+        "nai": "audio/verbform/L37-8-nai.mp3"
        }
       },
       {
@@ -2414,7 +2846,11 @@
        "kta": "送った",
        "knai": "送らない",
        "audio": {
-        "dict": "audio/verb/L38-9.mp3"
+        "dict": "audio/verb/L38-9.mp3",
+        "masu": "audio/verbform/L38-9-masu.mp3",
+        "te": "audio/verbform/L38-9-te.mp3",
+        "ta": "audio/verbform/L38-9-ta.mp3",
+        "nai": "audio/verbform/L38-9-nai.mp3"
        }
       },
       {
@@ -2435,7 +2871,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L40-0.mp3"
+        "dict": "audio/verb/L40-0.mp3",
+        "masu": "audio/verbform/L40-0-masu.mp3",
+        "te": "audio/verbform/L40-0-te.mp3",
+        "ta": "audio/verbform/L40-0-ta.mp3",
+        "nai": "audio/verbform/L40-0-nai.mp3"
        }
       },
       {
@@ -2456,7 +2896,11 @@
        "kta": "召し上がった",
        "knai": "召し上がらない",
        "audio": {
-        "dict": "audio/verb/L40-1.mp3"
+        "dict": "audio/verb/L40-1.mp3",
+        "masu": "audio/verbform/L40-1-masu.mp3",
+        "te": "audio/verbform/L40-1-te.mp3",
+        "ta": "audio/verbform/L40-1-ta.mp3",
+        "nai": "audio/verbform/L40-1-nai.mp3"
        }
       },
       {
@@ -2477,7 +2921,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L40-2.mp3"
+        "dict": "audio/verb/L40-2.mp3",
+        "masu": "audio/verbform/L40-2-masu.mp3",
+        "te": "audio/verbform/L40-2-te.mp3",
+        "ta": "audio/verbform/L40-2-ta.mp3",
+        "nai": "audio/verbform/L40-2-nai.mp3"
        }
       },
       {
@@ -2498,7 +2946,11 @@
        "kta": "ご覧になった",
        "knai": "ご覧にならない",
        "audio": {
-        "dict": "audio/verb/L40-3.mp3"
+        "dict": "audio/verb/L40-3.mp3",
+        "masu": "audio/verbform/L40-3-masu.mp3",
+        "te": "audio/verbform/L40-3-te.mp3",
+        "ta": "audio/verbform/L40-3-ta.mp3",
+        "nai": "audio/verbform/L40-3-nai.mp3"
        }
       },
       {
@@ -2519,7 +2971,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L40-10.mp3"
+        "dict": "audio/verb/L40-10.mp3",
+        "masu": "audio/verbform/L40-10-masu.mp3",
+        "te": "audio/verbform/L40-10-te.mp3",
+        "ta": "audio/verbform/L40-10-ta.mp3",
+        "nai": "audio/verbform/L40-10-nai.mp3"
        }
       }
      ]
@@ -2581,7 +3037,11 @@
        "kta": "寝た",
        "knai": "寝ない",
        "audio": {
-        "dict": "audio/verb/L11-1.mp3"
+        "dict": "audio/verb/L11-1.mp3",
+        "masu": "audio/verbform/L11-1-masu.mp3",
+        "te": "audio/verbform/L11-1-te.mp3",
+        "ta": "audio/verbform/L11-1-ta.mp3",
+        "nai": "audio/verbform/L11-1-nai.mp3"
        }
       },
       {
@@ -2602,7 +3062,11 @@
        "kta": "出かけた",
        "knai": "出かけない",
        "audio": {
-        "dict": "audio/verb/L11-31.mp3"
+        "dict": "audio/verb/L11-31.mp3",
+        "masu": "audio/verbform/L11-31-masu.mp3",
+        "te": "audio/verbform/L11-31-te.mp3",
+        "ta": "audio/verbform/L11-31-ta.mp3",
+        "nai": "audio/verbform/L11-31-nai.mp3"
        }
       },
       {
@@ -2623,7 +3087,11 @@
        "kta": "勤めた",
        "knai": "勤めない",
        "audio": {
-        "dict": "audio/verb/L11-33.mp3"
+        "dict": "audio/verb/L11-33.mp3",
+        "masu": "audio/verbform/L11-33-masu.mp3",
+        "te": "audio/verbform/L11-33-te.mp3",
+        "ta": "audio/verbform/L11-33-ta.mp3",
+        "nai": "audio/verbform/L11-33-nai.mp3"
        }
       },
       {
@@ -2645,7 +3113,11 @@
        "kta": "教えた",
        "knai": "教えない",
        "audio": {
-        "dict": "audio/verb/L12-4.mp3"
+        "dict": "audio/verb/L12-4.mp3",
+        "masu": "audio/verbform/L12-4-masu.mp3",
+        "te": "audio/verbform/L12-4-te.mp3",
+        "ta": "audio/verbform/L12-4-ta.mp3",
+        "nai": "audio/verbform/L12-4-nai.mp3"
        }
       },
       {
@@ -2668,7 +3140,11 @@
        "kta": "開けた",
        "knai": "開けない",
        "audio": {
-        "dict": "audio/verb/L12-10.mp3"
+        "dict": "audio/verb/L12-10.mp3",
+        "masu": "audio/verbform/L12-10-masu.mp3",
+        "te": "audio/verbform/L12-10-te.mp3",
+        "ta": "audio/verbform/L12-10-ta.mp3",
+        "nai": "audio/verbform/L12-10-nai.mp3"
        }
       },
       {
@@ -2691,7 +3167,11 @@
        "kta": "閉めた",
        "knai": "閉めない",
        "audio": {
-        "dict": "audio/verb/L12-11.mp3"
+        "dict": "audio/verb/L12-11.mp3",
+        "masu": "audio/verbform/L12-11-masu.mp3",
+        "te": "audio/verbform/L12-11-te.mp3",
+        "ta": "audio/verbform/L12-11-ta.mp3",
+        "nai": "audio/verbform/L12-11-nai.mp3"
        }
       },
       {
@@ -2714,7 +3194,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L12-13.mp3"
+        "dict": "audio/verb/L12-13.mp3",
+        "masu": "audio/verbform/L12-13-masu.mp3",
+        "te": "audio/verbform/L12-13-te.mp3",
+        "ta": "audio/verbform/L12-13-ta.mp3",
+        "nai": "audio/verbform/L12-13-nai.mp3"
        }
       },
       {
@@ -2735,7 +3219,11 @@
        "kta": "入れた",
        "knai": "入れない",
        "audio": {
-        "dict": "audio/verb/L12-26.mp3"
+        "dict": "audio/verb/L12-26.mp3",
+        "masu": "audio/verbform/L12-26-masu.mp3",
+        "te": "audio/verbform/L12-26-te.mp3",
+        "ta": "audio/verbform/L12-26-ta.mp3",
+        "nai": "audio/verbform/L12-26-nai.mp3"
        }
       },
       {
@@ -2759,7 +3247,11 @@
        "kta": "疲れた",
        "knai": "疲れない",
        "audio": {
-        "dict": "audio/verb/L13-11.mp3"
+        "dict": "audio/verb/L13-11.mp3",
+        "masu": "audio/verbform/L13-11-masu.mp3",
+        "te": "audio/verbform/L13-11-te.mp3",
+        "ta": "audio/verbform/L13-11-ta.mp3",
+        "nai": "audio/verbform/L13-11-nai.mp3"
        }
       },
       {
@@ -2781,7 +3273,11 @@
        "kta": "晴れた",
        "knai": "晴れない",
        "audio": {
-        "dict": "audio/verb/L13-12.mp3"
+        "dict": "audio/verb/L13-12.mp3",
+        "masu": "audio/verbform/L13-12-masu.mp3",
+        "te": "audio/verbform/L13-12-te.mp3",
+        "ta": "audio/verbform/L13-12-ta.mp3",
+        "nai": "audio/verbform/L13-12-nai.mp3"
        }
       },
       {
@@ -2802,7 +3298,11 @@
        "kta": "捨てた",
        "knai": "捨てない",
        "audio": {
-        "dict": "audio/verb/L14-20.mp3"
+        "dict": "audio/verb/L14-20.mp3",
+        "masu": "audio/verbform/L14-20-masu.mp3",
+        "te": "audio/verbform/L14-20-te.mp3",
+        "ta": "audio/verbform/L14-20-ta.mp3",
+        "nai": "audio/verbform/L14-20-nai.mp3"
        }
       },
       {
@@ -2824,7 +3324,11 @@
        "kta": "忘れた",
        "knai": "忘れない",
        "audio": {
-        "dict": "audio/verb/L14-21.mp3"
+        "dict": "audio/verb/L14-21.mp3",
+        "masu": "audio/verbform/L14-21-masu.mp3",
+        "te": "audio/verbform/L14-21-te.mp3",
+        "ta": "audio/verbform/L14-21-ta.mp3",
+        "nai": "audio/verbform/L14-21-nai.mp3"
        }
       },
       {
@@ -2845,7 +3349,11 @@
        "kta": "始めた",
        "knai": "始めない",
        "audio": {
-        "dict": "audio/verb/L15-20.mp3"
+        "dict": "audio/verb/L15-20.mp3",
+        "masu": "audio/verbform/L15-20-masu.mp3",
+        "te": "audio/verbform/L15-20-te.mp3",
+        "ta": "audio/verbform/L15-20-ta.mp3",
+        "nai": "audio/verbform/L15-20-nai.mp3"
        }
       },
       {
@@ -2866,7 +3374,11 @@
        "kta": "生まれた",
        "knai": "生まれない",
        "audio": {
-        "dict": "audio/verb/L16-36.mp3"
+        "dict": "audio/verb/L16-36.mp3",
+        "masu": "audio/verbform/L16-36-masu.mp3",
+        "te": "audio/verbform/L16-36-te.mp3",
+        "ta": "audio/verbform/L16-36-ta.mp3",
+        "nai": "audio/verbform/L16-36-nai.mp3"
        }
       },
       {
@@ -2888,7 +3400,11 @@
        "kta": "答えた",
        "knai": "答えない",
        "audio": {
-        "dict": "audio/verb/L18-3.mp3"
+        "dict": "audio/verb/L18-3.mp3",
+        "masu": "audio/verbform/L18-3-masu.mp3",
+        "te": "audio/verbform/L18-3-te.mp3",
+        "ta": "audio/verbform/L18-3-ta.mp3",
+        "nai": "audio/verbform/L18-3-nai.mp3"
        }
       },
       {
@@ -2910,7 +3426,11 @@
        "kta": "伝えた",
        "knai": "伝えない",
        "audio": {
-        "dict": "audio/verb/L18-5.mp3"
+        "dict": "audio/verb/L18-5.mp3",
+        "masu": "audio/verbform/L18-5-masu.mp3",
+        "te": "audio/verbform/L18-5-te.mp3",
+        "ta": "audio/verbform/L18-5-ta.mp3",
+        "nai": "audio/verbform/L18-5-nai.mp3"
        }
       },
       {
@@ -2933,7 +3453,11 @@
        "kta": "遅れた",
        "knai": "遅れない",
        "audio": {
-        "dict": "audio/verb/L19-8.mp3"
+        "dict": "audio/verb/L19-8.mp3",
+        "masu": "audio/verbform/L19-8-masu.mp3",
+        "te": "audio/verbform/L19-8-te.mp3",
+        "ta": "audio/verbform/L19-8-ta.mp3",
+        "nai": "audio/verbform/L19-8-nai.mp3"
        }
       },
       {
@@ -2954,7 +3478,11 @@
        "kta": "聞こえた",
        "knai": "聞こえない",
        "audio": {
-        "dict": "audio/verb/L21-24.mp3"
+        "dict": "audio/verb/L21-24.mp3",
+        "masu": "audio/verbform/L21-24-masu.mp3",
+        "te": "audio/verbform/L21-24-te.mp3",
+        "ta": "audio/verbform/L21-24-ta.mp3",
+        "nai": "audio/verbform/L21-24-nai.mp3"
        }
       },
       {
@@ -2975,7 +3503,11 @@
        "kta": "見えた",
        "knai": "見えない",
        "audio": {
-        "dict": "audio/verb/L21-25.mp3"
+        "dict": "audio/verb/L21-25.mp3",
+        "masu": "audio/verbform/L21-25-masu.mp3",
+        "te": "audio/verbform/L21-25-te.mp3",
+        "ta": "audio/verbform/L21-25-ta.mp3",
+        "nai": "audio/verbform/L21-25-nai.mp3"
        }
       },
       {
@@ -2996,7 +3528,11 @@
        "kta": "覚えた",
        "knai": "覚えない",
        "audio": {
-        "dict": "audio/verb/L24-25.mp3"
+        "dict": "audio/verb/L24-25.mp3",
+        "masu": "audio/verbform/L24-25-masu.mp3",
+        "te": "audio/verbform/L24-25-te.mp3",
+        "ta": "audio/verbform/L24-25-ta.mp3",
+        "nai": "audio/verbform/L24-25-nai.mp3"
        }
       },
       {
@@ -3017,7 +3553,11 @@
        "kta": "止めた",
        "knai": "止めない",
        "audio": {
-        "dict": "audio/verb/L26-7.mp3"
+        "dict": "audio/verb/L26-7.mp3",
+        "masu": "audio/verbform/L26-7-masu.mp3",
+        "te": "audio/verbform/L26-7-te.mp3",
+        "ta": "audio/verbform/L26-7-ta.mp3",
+        "nai": "audio/verbform/L26-7-nai.mp3"
        }
       },
       {
@@ -3038,7 +3578,11 @@
        "kta": "消えた",
        "knai": "消えない",
        "audio": {
-        "dict": "audio/verb/L26-10.mp3"
+        "dict": "audio/verb/L26-10.mp3",
+        "masu": "audio/verbform/L26-10-masu.mp3",
+        "te": "audio/verbform/L26-10-te.mp3",
+        "ta": "audio/verbform/L26-10-ta.mp3",
+        "nai": "audio/verbform/L26-10-nai.mp3"
        }
       },
       {
@@ -3061,7 +3605,11 @@
        "kta": "壊れた",
        "knai": "壊れない",
        "audio": {
-        "dict": "audio/verb/L26-12.mp3"
+        "dict": "audio/verb/L26-12.mp3",
+        "masu": "audio/verbform/L26-12-masu.mp3",
+        "te": "audio/verbform/L26-12-te.mp3",
+        "ta": "audio/verbform/L26-12-ta.mp3",
+        "nai": "audio/verbform/L26-12-nai.mp3"
        }
       },
       {
@@ -3082,7 +3630,11 @@
        "kta": "汚れた",
        "knai": "汚れない",
        "audio": {
-        "dict": "audio/verb/L26-14.mp3"
+        "dict": "audio/verb/L26-14.mp3",
+        "masu": "audio/verbform/L26-14-masu.mp3",
+        "te": "audio/verbform/L26-14-te.mp3",
+        "ta": "audio/verbform/L26-14-ta.mp3",
+        "nai": "audio/verbform/L26-14-nai.mp3"
        }
       },
       {
@@ -3104,7 +3656,11 @@
        "kta": "並べた",
        "knai": "並べない",
        "audio": {
-        "dict": "audio/verb/L26-19.mp3"
+        "dict": "audio/verb/L26-19.mp3",
+        "masu": "audio/verbform/L26-19-masu.mp3",
+        "te": "audio/verbform/L26-19-te.mp3",
+        "ta": "audio/verbform/L26-19-ta.mp3",
+        "nai": "audio/verbform/L26-19-nai.mp3"
        }
       },
       {
@@ -3126,7 +3682,11 @@
        "kta": "続けた",
        "knai": "続けない",
        "audio": {
-        "dict": "audio/verb/L28-22.mp3"
+        "dict": "audio/verb/L28-22.mp3",
+        "masu": "audio/verbform/L28-22-masu.mp3",
+        "te": "audio/verbform/L28-22-te.mp3",
+        "ta": "audio/verbform/L28-22-ta.mp3",
+        "nai": "audio/verbform/L28-22-nai.mp3"
        }
       },
       {
@@ -3147,7 +3707,11 @@
        "kta": "諦めた",
        "knai": "諦めない",
        "audio": {
-        "dict": "audio/verb/L28-23.mp3"
+        "dict": "audio/verb/L28-23.mp3",
+        "masu": "audio/verbform/L28-23-masu.mp3",
+        "te": "audio/verbform/L28-23-te.mp3",
+        "ta": "audio/verbform/L28-23-ta.mp3",
+        "nai": "audio/verbform/L28-23-nai.mp3"
        }
       },
       {
@@ -3168,7 +3732,11 @@
        "kta": "決めた",
        "knai": "決めない",
        "audio": {
-        "dict": "audio/verb/L28-24.mp3"
+        "dict": "audio/verb/L28-24.mp3",
+        "masu": "audio/verbform/L28-24-masu.mp3",
+        "te": "audio/verbform/L28-24-te.mp3",
+        "ta": "audio/verbform/L28-24-ta.mp3",
+        "nai": "audio/verbform/L28-24-nai.mp3"
        }
       },
       {
@@ -3189,7 +3757,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L34-21.mp3"
+        "dict": "audio/verb/L34-21.mp3",
+        "masu": "audio/verbform/L34-21-masu.mp3",
+        "te": "audio/verbform/L34-21-te.mp3",
+        "ta": "audio/verbform/L34-21-ta.mp3",
+        "nai": "audio/verbform/L34-21-nai.mp3"
        }
       },
       {
@@ -3210,7 +3782,11 @@
        "kta": "慣れた",
        "knai": "慣れない",
        "audio": {
-        "dict": "audio/verb/L34-25.mp3"
+        "dict": "audio/verb/L34-25.mp3",
+        "masu": "audio/verbform/L34-25-masu.mp3",
+        "te": "audio/verbform/L34-25-te.mp3",
+        "ta": "audio/verbform/L34-25-ta.mp3",
+        "nai": "audio/verbform/L34-25-nai.mp3"
        }
       },
       {
@@ -3231,7 +3807,11 @@
        "kta": "出た",
        "knai": "出ない",
        "audio": {
-        "dict": "audio/verb/L35-23.mp3"
+        "dict": "audio/verb/L35-23.mp3",
+        "masu": "audio/verbform/L35-23-masu.mp3",
+        "te": "audio/verbform/L35-23-te.mp3",
+        "ta": "audio/verbform/L35-23-ta.mp3",
+        "nai": "audio/verbform/L35-23-nai.mp3"
        }
       },
       {
@@ -3252,7 +3832,11 @@
        "kta": "割れた",
        "knai": "割れない",
        "audio": {
-        "dict": "audio/verb/L36-20.mp3"
+        "dict": "audio/verb/L36-20.mp3",
+        "masu": "audio/verbform/L36-20-masu.mp3",
+        "te": "audio/verbform/L36-20-te.mp3",
+        "ta": "audio/verbform/L36-20-ta.mp3",
+        "nai": "audio/verbform/L36-20-nai.mp3"
        }
       },
       {
@@ -3273,7 +3857,11 @@
        "kta": "褒めた",
        "knai": "褒めない",
        "audio": {
-        "dict": "audio/verb/L37-0.mp3"
+        "dict": "audio/verb/L37-0.mp3",
+        "masu": "audio/verbform/L37-0-masu.mp3",
+        "te": "audio/verbform/L37-0-te.mp3",
+        "ta": "audio/verbform/L37-0-ta.mp3",
+        "nai": "audio/verbform/L37-0-nai.mp3"
        }
       },
       {
@@ -3294,7 +3882,11 @@
        "kta": "建てた",
        "knai": "建てない",
        "audio": {
-        "dict": "audio/verb/L37-4.mp3"
+        "dict": "audio/verb/L37-4.mp3",
+        "masu": "audio/verbform/L37-4-masu.mp3",
+        "te": "audio/verbform/L37-4-te.mp3",
+        "ta": "audio/verbform/L37-4-ta.mp3",
+        "nai": "audio/verbform/L37-4-nai.mp3"
        }
       },
       {
@@ -3315,7 +3907,11 @@
        "kta": "捕まえた",
        "knai": "捕まえない",
        "audio": {
-        "dict": "audio/verb/L37-5.mp3"
+        "dict": "audio/verb/L37-5.mp3",
+        "masu": "audio/verbform/L37-5-masu.mp3",
+        "te": "audio/verbform/L37-5-te.mp3",
+        "ta": "audio/verbform/L37-5-ta.mp3",
+        "nai": "audio/verbform/L37-5-nai.mp3"
        }
       },
       {
@@ -3336,7 +3932,11 @@
        "kta": "考えた",
        "knai": "考えない",
        "audio": {
-        "dict": "audio/verb/L37-10.mp3"
+        "dict": "audio/verb/L37-10.mp3",
+        "masu": "audio/verbform/L37-10-masu.mp3",
+        "te": "audio/verbform/L37-10-te.mp3",
+        "ta": "audio/verbform/L37-10-ta.mp3",
+        "nai": "audio/verbform/L37-10-nai.mp3"
        }
       },
       {
@@ -3357,7 +3957,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L38-0.mp3"
+        "dict": "audio/verb/L38-0.mp3",
+        "masu": "audio/verbform/L38-0-masu.mp3",
+        "te": "audio/verbform/L38-0-te.mp3",
+        "ta": "audio/verbform/L38-0-ta.mp3",
+        "nai": "audio/verbform/L38-0-nai.mp3"
        }
       },
       {
@@ -3378,7 +3982,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L38-2.mp3"
+        "dict": "audio/verb/L38-2.mp3",
+        "masu": "audio/verbform/L38-2-masu.mp3",
+        "te": "audio/verbform/L38-2-te.mp3",
+        "ta": "audio/verbform/L38-2-ta.mp3",
+        "nai": "audio/verbform/L38-2-nai.mp3"
        }
       },
       {
@@ -3399,7 +4007,11 @@
        "kta": "見せた",
        "knai": "見せない",
        "audio": {
-        "dict": "audio/verb/L38-8.mp3"
+        "dict": "audio/verb/L38-8.mp3",
+        "masu": "audio/verbform/L38-8-masu.mp3",
+        "te": "audio/verbform/L38-8-te.mp3",
+        "ta": "audio/verbform/L38-8-ta.mp3",
+        "nai": "audio/verbform/L38-8-nai.mp3"
        }
       },
       {
@@ -3420,7 +4032,11 @@
        "kta": "調べた",
        "knai": "調べない",
        "audio": {
-        "dict": "audio/verb/L39-2.mp3"
+        "dict": "audio/verb/L39-2.mp3",
+        "masu": "audio/verbform/L39-2-masu.mp3",
+        "te": "audio/verbform/L39-2-te.mp3",
+        "ta": "audio/verbform/L39-2-ta.mp3",
+        "nai": "audio/verbform/L39-2-nai.mp3"
        }
       },
       {
@@ -3441,7 +4057,11 @@
        "kta": "片付けた",
        "knai": "片付けない",
        "audio": {
-        "dict": "audio/verb/L39-3.mp3"
+        "dict": "audio/verb/L39-3.mp3",
+        "masu": "audio/verbform/L39-3-masu.mp3",
+        "te": "audio/verbform/L39-3-te.mp3",
+        "ta": "audio/verbform/L39-3-ta.mp3",
+        "nai": "audio/verbform/L39-3-nai.mp3"
        }
       }
      ]
@@ -3468,7 +4088,11 @@
        "kta": "見た",
        "knai": "見ない",
        "audio": {
-        "dict": "audio/verb/L07-2.mp3"
+        "dict": "audio/verb/L07-2.mp3",
+        "masu": "audio/verbform/L07-2-masu.mp3",
+        "te": "audio/verbform/L07-2-te.mp3",
+        "ta": "audio/verbform/L07-2-ta.mp3",
+        "nai": "audio/verbform/L07-2-nai.mp3"
        }
       },
       {
@@ -3489,7 +4113,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L10-1.mp3"
+        "dict": "audio/verb/L10-1.mp3",
+        "masu": "audio/verbform/L10-1-masu.mp3",
+        "te": "audio/verbform/L10-1-te.mp3",
+        "ta": "audio/verbform/L10-1-ta.mp3",
+        "nai": "audio/verbform/L10-1-nai.mp3"
        }
       },
       {
@@ -3510,7 +4138,11 @@
        "kta": "起きた",
        "knai": "起きない",
        "audio": {
-        "dict": "audio/verb/L11-0.mp3"
+        "dict": "audio/verb/L11-0.mp3",
+        "masu": "audio/verbform/L11-0-masu.mp3",
+        "te": "audio/verbform/L11-0-te.mp3",
+        "ta": "audio/verbform/L11-0-ta.mp3",
+        "nai": "audio/verbform/L11-0-nai.mp3"
        }
       },
       {
@@ -3531,7 +4163,11 @@
        "kta": "浴びた",
        "knai": "浴びない",
        "audio": {
-        "dict": "audio/verb/L14-34.mp3"
+        "dict": "audio/verb/L14-34.mp3",
+        "masu": "audio/verbform/L14-34-masu.mp3",
+        "te": "audio/verbform/L14-34-te.mp3",
+        "ta": "audio/verbform/L14-34-ta.mp3",
+        "nai": "audio/verbform/L14-34-nai.mp3"
        }
       },
       {
@@ -3553,7 +4189,11 @@
        "kta": "借りた",
        "knai": "借りない",
        "audio": {
-        "dict": "audio/verb/L20-15.mp3"
+        "dict": "audio/verb/L20-15.mp3",
+        "masu": "audio/verbform/L20-15-masu.mp3",
+        "te": "audio/verbform/L20-15-te.mp3",
+        "ta": "audio/verbform/L20-15-ta.mp3",
+        "nai": "audio/verbform/L20-15-nai.mp3"
        }
       },
       {
@@ -3574,7 +4214,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L24-13.mp3"
+        "dict": "audio/verb/L24-13.mp3",
+        "masu": "audio/verbform/L24-13-masu.mp3",
+        "te": "audio/verbform/L24-13-te.mp3",
+        "ta": "audio/verbform/L24-13-ta.mp3",
+        "nai": "audio/verbform/L24-13-nai.mp3"
        }
       },
       {
@@ -3596,7 +4240,11 @@
        "kta": "落ちた",
        "knai": "落ちない",
        "audio": {
-        "dict": "audio/verb/L26-4.mp3"
+        "dict": "audio/verb/L26-4.mp3",
+        "masu": "audio/verbform/L26-4-masu.mp3",
+        "te": "audio/verbform/L26-4-te.mp3",
+        "ta": "audio/verbform/L26-4-ta.mp3",
+        "nai": "audio/verbform/L26-4-nai.mp3"
        }
       },
       {
@@ -3617,7 +4265,11 @@
        "kta": "信じた",
        "knai": "信じない",
        "audio": {
-        "dict": "audio/verb/L30-23.mp3"
+        "dict": "audio/verb/L30-23.mp3",
+        "masu": "audio/verbform/L30-23-masu.mp3",
+        "te": "audio/verbform/L30-23-te.mp3",
+        "ta": "audio/verbform/L30-23-ta.mp3",
+        "nai": "audio/verbform/L30-23-nai.mp3"
        }
       },
       {
@@ -3638,7 +4290,11 @@
        "kta": "存じた",
        "knai": "存じない",
        "audio": {
-        "dict": "audio/verb/L40-9.mp3"
+        "dict": "audio/verb/L40-9.mp3",
+        "masu": "audio/verbform/L40-9-masu.mp3",
+        "te": "audio/verbform/L40-9-te.mp3",
+        "ta": "audio/verbform/L40-9-ta.mp3",
+        "nai": "audio/verbform/L40-9-nai.mp3"
        }
       }
      ]
@@ -3673,7 +4329,11 @@
        "kta": "勉強した",
        "knai": "勉強しない",
        "audio": {
-        "dict": "audio/verb/L07-10.mp3"
+        "dict": "audio/verb/L07-10.mp3",
+        "masu": "audio/verbform/L07-10-masu.mp3",
+        "te": "audio/verbform/L07-10-te.mp3",
+        "ta": "audio/verbform/L07-10-ta.mp3",
+        "nai": "audio/verbform/L07-10-nai.mp3"
        }
       },
       {
@@ -3695,7 +4355,11 @@
        "kta": "掃除した",
        "knai": "掃除しない",
        "audio": {
-        "dict": "audio/verb/L07-11.mp3"
+        "dict": "audio/verb/L07-11.mp3",
+        "masu": "audio/verbform/L07-11-masu.mp3",
+        "te": "audio/verbform/L07-11-te.mp3",
+        "ta": "audio/verbform/L07-11-ta.mp3",
+        "nai": "audio/verbform/L07-11-nai.mp3"
        }
       },
       {
@@ -3716,7 +4380,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L11-26.mp3"
+        "dict": "audio/verb/L11-26.mp3",
+        "masu": "audio/verbform/L11-26-masu.mp3",
+        "te": "audio/verbform/L11-26-te.mp3",
+        "ta": "audio/verbform/L11-26-ta.mp3",
+        "nai": "audio/verbform/L11-26-nai.mp3"
        }
       },
       {
@@ -3737,7 +4405,11 @@
        "kta": "予約した",
        "knai": "予約しない",
        "audio": {
-        "dict": "audio/verb/L13-6.mp3"
+        "dict": "audio/verb/L13-6.mp3",
+        "masu": "audio/verbform/L13-6-masu.mp3",
+        "te": "audio/verbform/L13-6-te.mp3",
+        "ta": "audio/verbform/L13-6-ta.mp3",
+        "nai": "audio/verbform/L13-6-nai.mp3"
        }
       },
       {
@@ -3758,7 +4430,11 @@
        "kta": "洗濯した",
        "knai": "洗濯しない",
        "audio": {
-        "dict": "audio/verb/L13-7.mp3"
+        "dict": "audio/verb/L13-7.mp3",
+        "masu": "audio/verbform/L13-7-masu.mp3",
+        "te": "audio/verbform/L13-7-te.mp3",
+        "ta": "audio/verbform/L13-7-ta.mp3",
+        "nai": "audio/verbform/L13-7-nai.mp3"
        }
       },
       {
@@ -3779,7 +4455,11 @@
        "kta": "散歩した",
        "knai": "散歩しない",
        "audio": {
-        "dict": "audio/verb/L13-9.mp3"
+        "dict": "audio/verb/L13-9.mp3",
+        "masu": "audio/verbform/L13-9-masu.mp3",
+        "te": "audio/verbform/L13-9-te.mp3",
+        "ta": "audio/verbform/L13-9-ta.mp3",
+        "nai": "audio/verbform/L13-9-nai.mp3"
        }
       },
       {
@@ -3800,7 +4480,11 @@
        "kta": "",
        "knai": "",
        "audio": {
-        "dict": "audio/verb/L13-10.mp3"
+        "dict": "audio/verb/L13-10.mp3",
+        "masu": "audio/verbform/L13-10-masu.mp3",
+        "te": "audio/verbform/L13-10-te.mp3",
+        "ta": "audio/verbform/L13-10-ta.mp3",
+        "nai": "audio/verbform/L13-10-nai.mp3"
        }
       },
       {
@@ -3821,7 +4505,11 @@
        "kta": "運転した",
        "knai": "運転しない",
        "audio": {
-        "dict": "audio/verb/L24-20.mp3"
+        "dict": "audio/verb/L24-20.mp3",
+        "masu": "audio/verbform/L24-20-masu.mp3",
+        "te": "audio/verbform/L24-20-te.mp3",
+        "ta": "audio/verbform/L24-20-ta.mp3",
+        "nai": "audio/verbform/L24-20-nai.mp3"
        }
       },
       {
@@ -3842,7 +4530,11 @@
        "kta": "確認した",
        "knai": "確認しない",
        "audio": {
-        "dict": "audio/verb/L30-25.mp3"
+        "dict": "audio/verb/L30-25.mp3",
+        "masu": "audio/verbform/L30-25-masu.mp3",
+        "te": "audio/verbform/L30-25-te.mp3",
+        "ta": "audio/verbform/L30-25-ta.mp3",
+        "nai": "audio/verbform/L30-25-nai.mp3"
        }
       },
       {
@@ -3863,7 +4555,11 @@
        "kta": "説明した",
        "knai": "説明しない",
        "audio": {
-        "dict": "audio/verb/L38-12.mp3"
+        "dict": "audio/verb/L38-12.mp3",
+        "masu": "audio/verbform/L38-12-masu.mp3",
+        "te": "audio/verbform/L38-12-te.mp3",
+        "ta": "audio/verbform/L38-12-ta.mp3",
+        "nai": "audio/verbform/L38-12-nai.mp3"
        }
       },
       {
@@ -3884,7 +4580,11 @@
        "kta": "紹介した",
        "knai": "紹介しない",
        "audio": {
-        "dict": "audio/verb/L38-13.mp3"
+        "dict": "audio/verb/L38-13.mp3",
+        "masu": "audio/verbform/L38-13-masu.mp3",
+        "te": "audio/verbform/L38-13-te.mp3",
+        "ta": "audio/verbform/L38-13-ta.mp3",
+        "nai": "audio/verbform/L38-13-nai.mp3"
        }
       },
       {
@@ -3905,7 +4605,11 @@
        "kta": "練習した",
        "knai": "練習しない",
        "audio": {
-        "dict": "audio/verb/L39-1.mp3"
+        "dict": "audio/verb/L39-1.mp3",
+        "masu": "audio/verbform/L39-1-masu.mp3",
+        "te": "audio/verbform/L39-1-te.mp3",
+        "ta": "audio/verbform/L39-1-ta.mp3",
+        "nai": "audio/verbform/L39-1-nai.mp3"
        }
       },
       {
@@ -3926,7 +4630,11 @@
        "kta": "心配した",
        "knai": "心配しない",
        "audio": {
-        "dict": "audio/verb/L39-13.mp3"
+        "dict": "audio/verb/L39-13.mp3",
+        "masu": "audio/verbform/L39-13-masu.mp3",
+        "te": "audio/verbform/L39-13-te.mp3",
+        "ta": "audio/verbform/L39-13-ta.mp3",
+        "nai": "audio/verbform/L39-13-nai.mp3"
        }
       },
       {
@@ -3947,7 +4655,11 @@
        "kta": "拝見した",
        "knai": "拝見しない",
        "audio": {
-        "dict": "audio/verb/L40-8.mp3"
+        "dict": "audio/verb/L40-8.mp3",
+        "masu": "audio/verbform/L40-8-masu.mp3",
+        "te": "audio/verbform/L40-8-te.mp3",
+        "ta": "audio/verbform/L40-8-ta.mp3",
+        "nai": "audio/verbform/L40-8-nai.mp3"
        }
       }
      ]
@@ -3973,7 +4685,11 @@
        "kta": "来た",
        "knai": "来ない",
        "audio": {
-        "dict": "audio/verb/L06-1.mp3"
+        "dict": "audio/verb/L06-1.mp3",
+        "masu": "audio/verbform/L06-1-masu.mp3",
+        "te": "audio/verbform/L06-1-te.mp3",
+        "ta": "audio/verbform/L06-1-ta.mp3",
+        "nai": "audio/verbform/L06-1-nai.mp3"
        }
       }
      ]
