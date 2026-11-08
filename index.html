@@ -438,11 +438,15 @@
     .sgrp.compact .srow .sk{grid-column:1; grid-row:1; font-size:13.5px; line-height:1.35}
     .sgrp.compact .srow .sn{grid-column:1; grid-row:2; font-size:11.5px; line-height:1.3}
     .sgrp.compact .srow .spk{grid-column:2; grid-row:1 / span 2}
-    /* 手機三欄（時間表）：空間不夠放喇叭，改為點整行播放 */
-    .sblock.b3 .srow{grid-template-columns:minmax(0,1fr); padding:6px 7px; cursor:pointer}
-    .sblock.b3 .srow .sk{font-size:12.5px}
-    .sblock.b3 .srow .sn{font-size:11px}
-    .sblock.b3 .srow .spk{display:none}
+    /* 手機三欄（數字、時間表）：喇叭浮在格子右上角，假名可用盡整格寬度，
+       不會像放成第四欄那樣把 きゅうじゅうきゅう 這類長讀音擠到換行 */
+    .sgrp.compact .sblock.b3 .srow{position:relative; grid-template-columns:minmax(0,1fr);
+      grid-template-rows:auto auto; row-gap:0; padding:5px 6px}
+    .sgrp.compact .sblock.b3 .srow .sk{grid-column:1; grid-row:1; font-size:12.5px; line-height:1.35}
+    .sgrp.compact .sblock.b3 .srow .sn{grid-column:1; grid-row:2; font-size:11px; line-height:1.3; white-space:nowrap}
+    .sgrp.compact .sblock.b3 .srow .spk{position:absolute; right:3px; top:3px;
+      width:20px; height:20px; border-width:1px}
+    .sgrp.compact .sblock.b3 .srow .spk svg{width:11px; height:11px}
   }
   /* 四欄（日數、週數、月數、年數）：每格兩行（漢字在上、假名在下），桌面與手機一致，假名才不會被擠斷 */
   .sgrp.compact .sblock.b4 .srow{grid-template-columns:minmax(0,1fr) 26px; grid-template-rows:auto auto;
@@ -539,7 +543,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v126</span>
+    <span class="ver" id="verTag">v127</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
