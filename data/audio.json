@@ -186,11 +186,9 @@
   "v40": "audio/L02-v40.mp3",
   "v41": "audio/L02-v41.mp3",
   "v42": "audio/L02-v42.mp3",
-  "v43": "audio/L02-v43.mp3",
-  "v44": "audio/L02-v44.mp3",
-  "v45": "audio/L02-v45.mp3"
+  "v43": "audio/L02-v43.mp3"
  },
- "v": 4,
+ "v": 5,
  "L03": {
   "d0-l0": "audio/L03-d0-l0.mp3",
   "d0-l1": "audio/L03-d0-l1.mp3",
