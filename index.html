@@ -411,8 +411,12 @@
   .shead span{display:block; font-size:11.5px; color:var(--muted); margin-top:2px; line-height:1.45}
   .splay{flex:0 0 auto; font-size:12px; padding:6px 11px; border-radius:999px; margin:0}
   .stable{margin:0 -14px}
-  .srow{display:grid; grid-template-columns:3.4em 1fr auto 32px; align-items:center; gap:8px;
+  .srow{display:grid; grid-template-columns:3.4em 1fr auto 26px 32px; align-items:center; gap:8px;
     padding:8px 14px; border-top:1px solid var(--line); font-size:14px}
+  /* 順序表每一行都有 ☆（加入練習本） */
+  .srow .nbk{width:26px; height:26px; flex:0 0 26px; font-size:14px; border-width:1px}
+  .srow .sk .nbk{width:20px; height:20px; font-size:12px; margin-left:4px; vertical-align:middle;
+    display:inline-flex; border-width:1px; padding:0}
   .srow .sk{color:var(--ink)}
   .srow .sn{color:var(--ink2); font-size:13px}
   .srow .sz{color:var(--muted); font-size:12.5px; text-align:right}
@@ -426,7 +430,8 @@
   .scol{min-width:0}
   .scol + .scol{border-left:1px solid var(--line)}
   .scol .srow{padding:7px 10px; gap:6px}
-  .sgrp.compact .srow{grid-template-columns:3.6em minmax(0,1fr) 26px; font-size:13.5px}
+  .sgrp.compact .srow{grid-template-columns:4.4em minmax(0,1fr) 26px; font-size:13.5px}
+  .sgrp.compact .srow .sk{white-space:nowrap}
   .sgrp.compact .srow .sn{white-space:nowrap}
   .srow .sp{font-style:normal; color:#0b5cad; font-weight:700;
     background:#e6eefb; border-radius:4px; padding:0 3px; -webkit-print-color-adjust:exact}
@@ -567,7 +572,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v135</span>
+    <span class="ver" id="verTag">v136</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -715,7 +720,8 @@
     if (at >= 0) NB.items.splice(at, 1);
     else {
       NB.items.unshift({ id:item.id, vi:item.vi, kanji:item.kanji || '', kana:item.kana,
-                         zh:item.zh || '', pos:item.pos || '', audio:item.audio || '', at:Date.now() });
+                         zh:item.zh || '', pos:item.pos || '', audio:item.audio || '',
+                         src:item.src || '', at:Date.now() });
       if (NB.items.length > 300) NB.items.length = 300;
     }
     saveNB();
@@ -2183,11 +2189,19 @@
     return out;
   }
   function seqRow(g, it, i){
+    var sid = 'SEQ:' + g.id;
+    var on = nbHas(sid, it.kana);
+    var star = '<button class="nbk' + (on ? ' on' : '') + '" data-sg="' + esc(g.id) + '" data-si="' + i +
+      '" aria-label="加入練習本">' + (on ? '★' : '☆') + '</button>';
+    /* 多欄密表（數字、時間、日數、數詞）：星星貼在生字後面，免得再加一欄把假名擠斷；
+       單欄表（星期、樓層、～つ）：星星佔行尾一格，跟喇叭並排 */
+    var tight = g.compact || g.kind === 'matrix';
     return '<div class="srow" id="srow-' + g.id + '-' + i + '"' +
       ' data-audio="' + esc(it.audio) + '" data-say="' + esc(it.kana) + '">' +
-      '<span class="sk">' + esc(it.kanji) + '</span>' +
+      '<span class="sk">' + esc(it.kanji) + (tight ? star : '') + '</span>' +
       '<span class="sn">' + seqKana(it) + '</span>' +
       (g.compact ? '' : '<span class="sz">' + esc(it.zh) + '</span>') +
+      (tight ? '' : star) +
       '<button class="spk" data-say="' + esc(it.kana) + '" data-audio="' + esc(it.audio) + '" aria-label="播放">' + SPK + '</button>' +
     '</div>';
   }
@@ -2274,7 +2288,7 @@
       '<div class="lhead">' +
         '<a class="back" href="#/">← 課程地圖</a>' +
         '<h1>順序表<span class="k">じゅんじょ</span></h1>' +
-        '<p class="secnote">藍色＝變音；括號＝另一種讀法</p>' +
+        '<p class="secnote">藍色＝變音；括號＝另一種讀法；按 ☆ 加入練習本</p>' +
       '</div><div id="seqhost"><p class="secnote">載入中…</p></div>';
     loadSeq(function(d){
       var host = document.getElementById('seqhost');
@@ -2301,6 +2315,18 @@
         });
       }
       bindSpeakers(host);
+      /* 星星：把順序表的字加入練習本（id 用 SEQ:組別，練習本顯示組名） */
+      host.addEventListener('click', function(ev){
+        var b = ev.target && ev.target.closest && ev.target.closest('.nbk');
+        if (!b || !b.getAttribute('data-sg')) return;
+        ev.preventDefault(); ev.stopPropagation();
+        var gid = b.getAttribute('data-sg'), si = +b.getAttribute('data-si'), g = null;
+        d.groups.forEach(function(x){ if (x.id === gid) g = x; });
+        if (!g || !g.items[si]) return;
+        var it = g.items[si];
+        nbToggle({ id:'SEQ:' + gid, vi:0, kanji:it.kanji || '', kana:it.kana, zh:it.zh || '',
+                   pos:'', audio:it.audio || '', src:SEQ_SHORT[gid] || '順序表' }, b);
+      });
       /* 由課堂的「相關順序表」入嚟：捲到對應那一段並短暫標示 */
       if (focusGid){
         var box = document.getElementById('sgrp-' + focusGid);
@@ -2318,7 +2344,7 @@
       /* 沒有喇叭制的表格（例如手機三欄的時間表）：點整行都可以播 */
       Array.prototype.forEach.call(host.querySelectorAll('.srow[data-audio]'), function(row){
         row.addEventListener('click', function(ev){
-          if (ev.target && ev.target.closest && ev.target.closest('.spk')) return;
+          if (ev.target && ev.target.closest && ev.target.closest('.spk, .nbk')) return;
           var url = row.getAttribute('data-audio');
           if (url) playFile(url, null, row);
         });
@@ -2579,7 +2605,7 @@
     noteRun = null;
     stopAllPlay();
     if (!NB.items.length){
-      body.innerHTML = '<p class="secnote">還沒有收藏的字。到任何一課的「單字」段，或「詞語總表」，按字右邊的 ☆ 就會加入這裡。</p>';
+      body.innerHTML = '<p class="secnote">還沒有收藏的字。到任何一課的「單字」段、「詞語總表」或「順序表」，按字旁邊的 ☆ 就會加入這裡。</p>';
       return;
     }
     body.innerHTML = NB.items.map(function(x, k){
@@ -2589,7 +2615,7 @@
           (x.kanji ? '<span>' + esc(x.kana) + '</span>' : '') + '</div>' +
         '<div class="nz"><span class="vzh">' + esc(x.zh) + '</span>' +
           (x.pos ? '<span class="pos">' + esc(x.pos) + '</span>' : '') + '</div>' +
-        '<div class="nl">' + esc(x.id) + '</div>' +
+        '<div class="nl">' + esc(x.src || x.id) + '</div>' +
         '<button class="spk" data-say="' + esc(x.kana) + '"' +
           (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放發音">' + SPK + '</button>' +
         '<button class="rm" data-rm="' + k + '" aria-label="移出練習本">✕</button>' +
