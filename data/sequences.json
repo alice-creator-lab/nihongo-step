@@ -622,6 +622,7 @@
      "kanji": "四時",
      "kana": "よじ",
      "zh": "四點",
+     "hl": "よ",
      "audio": "audio/seq/hour-3.mp3"
     },
     {
@@ -640,6 +641,7 @@
      "kanji": "七時",
      "kana": "しちじ",
      "zh": "七點",
+     "hl": "しち",
      "audio": "audio/seq/hour-6.mp3"
     },
     {
@@ -652,6 +654,7 @@
      "kanji": "九時",
      "kana": "くじ",
      "zh": "九點",
+     "hl": "く",
      "audio": "audio/seq/hour-8.mp3"
     },
     {
@@ -672,7 +675,11 @@
      "zh": "十二點",
      "audio": "audio/seq/hour-11.mp3"
     }
-   ]
+   ],
+   "cols": 2,
+   "cols_mobile": 2,
+   "compact": true,
+   "note": "藍色＝變音"
   },
   {
    "id": "minute",
@@ -682,6 +689,7 @@
      "kanji": "一分",
      "kana": "いっぷん",
      "zh": "一分鐘",
+     "hl": "っぷん",
      "audio": "audio/seq/minute-0.mp3"
     },
     {
@@ -694,12 +702,14 @@
      "kanji": "三分",
      "kana": "さんぷん",
      "zh": "三分鐘",
+     "hl": "ぷん",
      "audio": "audio/seq/minute-2.mp3"
     },
     {
      "kanji": "四分",
      "kana": "よんぷん",
      "zh": "四分鐘",
+     "hl": "ぷん",
      "audio": "audio/seq/minute-3.mp3"
     },
     {
@@ -712,6 +722,7 @@
      "kanji": "六分",
      "kana": "ろっぷん",
      "zh": "六分鐘",
+     "hl": "っぷん",
      "audio": "audio/seq/minute-5.mp3"
     },
     {
@@ -724,6 +735,7 @@
      "kanji": "八分",
      "kana": "はっぷん",
      "zh": "八分鐘",
+     "hl": "っぷん",
      "audio": "audio/seq/minute-7.mp3"
     },
     {
@@ -736,9 +748,108 @@
      "kanji": "十分",
      "kana": "じゅっぷん",
      "zh": "十分鐘",
+     "hl": "っぷん",
      "audio": "audio/seq/minute-9.mp3"
+    },
+    {
+     "kanji": "十一分",
+     "kana": "じゅういっぷん",
+     "zh": "十一分鐘",
+     "hl": "っぷん",
+     "audio": "audio/seq/minute-10.mp3"
+    },
+    {
+     "kanji": "十二分",
+     "kana": "じゅうにふん",
+     "zh": "十二分鐘",
+     "audio": "audio/seq/minute-11.mp3"
+    },
+    {
+     "kanji": "十三分",
+     "kana": "じゅうさんぷん",
+     "zh": "十三分鐘",
+     "hl": "ぷん",
+     "audio": "audio/seq/minute-12.mp3"
+    },
+    {
+     "kanji": "十四分",
+     "kana": "じゅうよんぷん",
+     "zh": "十四分鐘",
+     "hl": "ぷん",
+     "audio": "audio/seq/minute-13.mp3"
+    },
+    {
+     "kanji": "十五分",
+     "kana": "じゅうごふん",
+     "zh": "十五分鐘",
+     "audio": "audio/seq/minute-14.mp3"
+    },
+    {
+     "kanji": "十六分",
+     "kana": "じゅうろっぷん",
+     "zh": "十六分鐘",
+     "hl": "っぷん",
+     "audio": "audio/seq/minute-15.mp3"
+    },
+    {
+     "kanji": "十七分",
+     "kana": "じゅうななふん",
+     "zh": "十七分鐘",
+     "audio": "audio/seq/minute-16.mp3"
+    },
+    {
+     "kanji": "十八分",
+     "kana": "じゅうはっぷん",
+     "zh": "十八分鐘",
+     "hl": "っぷん",
+     "audio": "audio/seq/minute-17.mp3"
+    },
+    {
+     "kanji": "十九分",
+     "kana": "じゅうきゅうふん",
+     "zh": "十九分鐘",
+     "audio": "audio/seq/minute-18.mp3"
+    },
+    {
+     "kanji": "二十分",
+     "kana": "にじゅっぷん",
+     "zh": "二十分鐘",
+     "hl": "っぷん",
+     "audio": "audio/seq/minute-19.mp3"
+    },
+    {
+     "kanji": "三十分",
+     "kana": "さんじゅっぷん",
+     "zh": "三十分鐘",
+     "hl": "っぷん",
+     "audio": "audio/seq/minute-20.mp3"
+    },
+    {
+     "kanji": "四十分",
+     "kana": "よんじゅっぷん",
+     "zh": "四十分鐘",
+     "hl": "っぷん",
+     "audio": "audio/seq/minute-21.mp3"
+    },
+    {
+     "kanji": "五十分",
+     "kana": "ごじゅっぷん",
+     "zh": "五十分鐘",
+     "hl": "っぷん",
+     "audio": "audio/seq/minute-22.mp3"
+    },
+    {
+     "kanji": "六十分",
+     "kana": "ろくじゅっぷん",
+     "zh": "六十分鐘",
+     "hl": "っぷん",
+     "audio": "audio/seq/minute-23.mp3"
     }
-   ]
+   ],
+   "cols": 2,
+   "cols_mobile": 2,
+   "compact": true,
+   "note": "藍色＝變音（ふん／ぷん）"
   },
   {
    "id": "floor",
