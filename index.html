@@ -575,7 +575,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v141</span>
+    <span class="ver" id="verTag">v142</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -672,8 +672,9 @@
   function saveMistakes(){
     try{ localStorage.setItem(MKEY, JSON.stringify(M)); }catch(e){}
   }
-  /* 同一題／同一個字只留一筆：先按 key，再按內容簽名（舊資料可能 key 不同） */
-  function mistakeSig(x){ return (x.kind||'') + '|' + (x.prompt||'') + '|' + (x.answer||'') + '|' + (x.sub||''); }
+  /* 同一題／同一個字只留一筆：先按 key，再按題目＋答案（舊資料可能 key 或來源不同，
+     同一題在單字自測與階段測驗各錯一次也只算一條） */
+  function mistakeSig(x){ return (x.prompt||'') + '|' + (x.answer||''); }
   function dedupeMistakes(){
     var byKey = {}, bySig = {}, out = [];
     M.items.forEach(function(x){
@@ -2030,8 +2031,7 @@
     var rows = items.length ? items.map(function(x){
       return '<div class="mk"><div class="k"><b>'+esc(x.prompt)+'</b>' +
              '<span>'+(x.kind === 'word' ? '單字' : x.kind === 'listen' ? '聽力' : x.kind === 'exam' ? '階段測驗' : '練習') +
-             (x.sub ? ' · '+esc(x.sub) : '') + ' → '+esc(x.answer)+'</span></div>' +
-             (x.n > 1 ? '<span class="n">×'+x.n+'</span>' : '') + '</div>';
+             (x.sub ? ' · '+esc(x.sub) : '') + ' → '+esc(x.answer)+'</span></div></div>';
     }).join('') : '<p class="secnote">目前沒有錯題。</p>';
 
     box.innerHTML = '<h3>錯題簿</h3>' +
