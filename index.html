@@ -423,7 +423,8 @@
   .scol .srow{padding:7px 10px; gap:6px}
   .sgrp.compact .srow{grid-template-columns:3.6em minmax(0,1fr) 26px; font-size:13.5px}
   .sgrp.compact .srow .sn{white-space:nowrap}
-  .sgrp.compact .srow .sp{font-style:normal; color:var(--ai); font-weight:600}
+  .sgrp.compact .srow .sp{font-style:normal; color:#0b5cad; font-weight:700;
+    background:#e6eefb; border-radius:4px; padding:0 3px; -webkit-print-color-adjust:exact}
   .sgrp.compact .srow .alt{color:var(--muted); font-size:11px}
   /* 手機：兩欄、每格兩行（漢字在上、假名在下），避免假名被擠到換行 */
   @media (max-width:559px){
@@ -518,7 +519,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v113</span>
+    <span class="ver" id="verTag">v114</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2079,6 +2080,8 @@
     step();
   }
 
+  /* 順序表「播放全部」：語速略快、段與段之間不留白，方便反覆跟讀洗腦 */
+  var SEQ_RATE = 1.25;
   function playGroup(g, btn){
     var i = 0;
     SEQPLAY.on = true;
@@ -2100,7 +2103,7 @@
         if (!SEQPLAY.on) return;
         i++;
         step();
-      }, null);
+      }, null, SEQ_RATE);
       if (!ok){ if (row) row.classList.remove('playing'); stopSeq(); }
     }
     step();
@@ -2767,7 +2770,8 @@
     // 句子（會話・句型・文法・聽力）與動詞／形容詞表各自一套版本號，
     // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
     if (/audio\/(verb|adj)\//.test(url)) return 't1';
-    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e3';
+    /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
+    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e4';
     return AUDIO.v || 1;
   }
   function playFile(url, onend, el, rate){
