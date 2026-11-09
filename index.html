@@ -594,6 +594,19 @@
   .nrow .spk{width:34px; height:34px; flex:0 0 34px}
   .nrow .rm{width:34px; height:34px; flex:0 0 34px; border:0; background:none; color:var(--muted);
     font-size:15px; -webkit-appearance:none; padding:0}
+  /* 練習本：單字／句子兩個分頁 + 句子列（日文在上，中文與出處在下） */
+  .nbtabs{display:flex; width:100%; margin:0 0 10px}
+  .nbtabs button{flex:1; padding:8px 0; font-size:12.5px}
+  .nrow.sent{display:grid; grid-template-columns:minmax(0,1fr) 34px 34px; gap:3px 8px;
+    align-items:center; padding:11px 2px}
+  .nrow.sent .nsj{grid-column:1; font-family:"Hiragino Mincho ProN",serif; font-size:14.5px;
+    line-height:1.65; word-break:break-word}
+  .nrow.sent .nsj span{display:block; font-family:var(--sans); font-size:11.5px; color:var(--muted);
+    margin-top:3px; line-height:1.5}
+  .nrow.sent .nsz{grid-column:1; font-size:12.5px; color:var(--ink2)}
+  .nrow.sent .nl{grid-column:1; font-size:11px; color:var(--muted); white-space:normal}
+  .nrow.sent .spk{grid-column:2; grid-row:1 / 4; align-self:center}
+  .nrow.sent .rm{grid-column:3; grid-row:1 / 4; align-self:center}
   .arow{display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:1px solid var(--line)}
   .arow .ak{min-width:92px}
   .arow .ak b{display:block; font-size:15px; font-weight:500; font-family:"Hiragino Mincho ProN",serif}
@@ -730,6 +743,7 @@
   .gacc .gex{display:flex; gap:8px; align-items:flex-start; font-size:13.5px; margin-top:7px}
   .gacc .gex .txt{flex:1}
   .gacc .gex .zh{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+  .gacc .gex .nbk{width:28px; height:28px; flex:0 0 28px; font-size:13px}
 
 </style>
 </head>
@@ -740,7 +754,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v173</span>
+    <span class="ver" id="verTag">v174</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -878,9 +892,44 @@
   function saveNB(){ try{ localStorage.setItem(NKEY, JSON.stringify(NB)); }catch(e){} }
   function nbHas(id, kana){
     for (var i = 0; i < NB.items.length; i++){
-      if (NB.items[i].id === id && NB.items[i].kana === kana) return true;
+      var x = NB.items[i];
+      if (x.type === 'sentence') continue;
+      if (x.id === id && x.kana === kana) return true;
     }
     return false;
+  }
+  /* 文法例句：以「課號 + 日文原句」識別，同一句不會重複收藏 */
+  function nbHasSent(id, ja){
+    for (var i = 0; i < NB.items.length; i++){
+      var x = NB.items[i];
+      if (x.type === 'sentence' && x.id === id && x.ja === ja) return true;
+    }
+    return false;
+  }
+  function nbToggleSent(item, btn){
+    var at = -1;
+    for (var i = 0; i < NB.items.length; i++){
+      var x = NB.items[i];
+      if (x.type === 'sentence' && x.id === item.id && x.ja === item.ja){ at = i; break; }
+    }
+    if (at >= 0) NB.items.splice(at, 1);
+    else {
+      NB.items.unshift({ type:'sentence', id:item.id, ja:item.ja, kana:item.kana || '',
+                         zh:item.zh || '', audio:item.audio || '', src:item.src || '',
+                         at:Date.now() });
+      if (NB.items.length > 300) NB.items.length = 300;
+    }
+    saveNB();
+    var on = at < 0;
+    if (btn){ btn.classList.toggle('on', on); btn.textContent = on ? '★' : '☆'; }
+    toast(on ? '已加入練習本（' + NB.items.length + '）' : '已移出練習本');
+  }
+  function nbIsSent(x){ return !!x && x.type === 'sentence'; }
+  function nbCountLabel(){
+    var w = 0, s = 0;
+    NB.items.forEach(function(x){ if (nbIsSent(x)) s++; else w++; });
+    if (!w && !s) return '收藏字詞';
+    return (w ? w + ' 字' : '') + (w && s ? ' · ' : '') + (s ? s + ' 句' : '');
   }
   function nbToggle(item, btn){
     var at = -1;
@@ -889,7 +938,7 @@
     }
     if (at >= 0) NB.items.splice(at, 1);
     else {
-      NB.items.unshift({ id:item.id, vi:item.vi, kanji:item.kanji || '', kana:item.kana,
+      NB.items.unshift({ type:'word', id:item.id, vi:item.vi, kanji:item.kanji || '', kana:item.kana,
                          zh:item.zh || '', pos:item.pos || '', audio:item.audio || '',
                          src:item.src || '', at:Date.now() });
       if (NB.items.length > 300) NB.items.length = 300;
@@ -1181,7 +1230,7 @@
         '<a class="tool" href="#/note">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8L18.5 8v12.5H6z"/>' +
           '<path d="M13.5 3.5V8H18"/><path d="M9 12.5h6M9 16h4"/></svg>' +
-          '<div><b>練習本</b><span>' + (NB.items.length ? NB.items.length + ' 字' : '收藏字詞') + '</span></div></a>' +
+          '<div><b>練習本</b><span>' + nbCountLabel() + '</span></div></a>' +
         '<a class="tool" href="#/seq">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h14"/>' +
           '<path d="M9.5 4v4M9.5 10v4M9.5 16v4"/></svg>' +
@@ -1298,6 +1347,7 @@
     if (tab === 'exercises') renderExerciseMode(lesson);
     if (tab === 'dialogue') wireDialogue(host, lesson);
     if (tab === 'vocab'){ cardRun = null; wireVocab(host, lesson); }
+    if (tab === 'grammar') wireGrammarStars(host, lesson);
     if (tab === 'patterns') wirePatterns(host, lesson);
   }
 
@@ -1546,6 +1596,23 @@
     return h + '</div>';
   }
 
+  /* 文法例句的 ☆：同一句收藏到練習本的「句子」分頁 */
+  function wireGrammarStars(host, l){
+    if (host._gnb) host.removeEventListener('click', host._gnb);
+    host._gnb = function(e){
+      var b = e.target.closest('.nbk[data-gs]'); if (!b) return;
+      var p = b.getAttribute('data-gs').split('-');
+      var sec = (l.grammar || [])[+p[0]]; if (!sec) return;
+      var x = (sec.ex || [])[+p[1]]; if (!x) return;
+      nbToggleSent({
+        id: l.id, ja: x.ja, kana: x.kana || '', zh: x.zh || '',
+        audio: audioFor(l.id, 'g' + p[0] + '-e' + p[1]) || '',
+        src: l.id + ' · ' + sec.h
+      }, b);
+    };
+    host.addEventListener('click', host._gnb);
+  }
+
   function segGrammar(l){
     var h = '<p class="secnote">文法說明可以當作課前預習，也可以做完練習後回來對照。</p>';
     l.grammar.forEach(function(g, gi){
@@ -1559,6 +1626,8 @@
           h += '<div class="exrow"><div class="txt">' +
                '<div class="ja">'+esc(x.ja)+'</div>' +
                '<div class="zh">'+esc(x.zh)+'</div></div>' +
+               '<button class="nbk'+(nbHasSent(l.id, x.ja) ? ' on' : '')+'" data-gs="'+gi+'-'+ei+'" aria-label="加入練習本">'+
+                 (nbHasSent(l.id, x.ja) ? '★' : '☆')+'</button>' +
                '<button class="spk" data-say="'+esc(ttsText(x))+'"' +
                (au ? ' data-audio="'+esc(au)+'"' : '') +
                ' aria-label="播放例句">'+SPK+'</button></div>';
@@ -2230,7 +2299,7 @@
     var rows = items.length ? items.map(function(x, i){
       return '<div class="mk" data-i="'+i+'"><span class="tick"></span>' +
              '<div class="k"><b>'+esc(x.prompt)+'</b>' +
-             '<span>'+(x.kind === 'word' ? '單字' : x.kind === 'listen' ? '聽力' : x.kind === 'exam' ? '階段測驗' : '練習') +
+             '<span>'+(x.kind === 'word' ? '單字' : x.kind === 'sentence' ? '句子' : x.kind === 'listen' ? '聽力' : x.kind === 'exam' ? '階段測驗' : '練習') +
              (x.sub ? ' · '+esc(x.sub) : '') + ' → '+esc(x.answer)+'</span></div></div>';
     }).join('') : '<p class="secnote">目前沒有錯題。</p>';
 
@@ -2645,7 +2714,12 @@
           var ps = (g.p || []).map(function(t){ return '<p>' + esc(t) + '</p>'; }).join('');
           var ex = (g.ex || []).map(function(x, ei){
             var au = audioFor(it.id, 'g' + it.gi + '-e' + ei);
-            return '<div class="gex"><button class="spk" data-say="' + esc(ttsText(x)) + '"' +
+            var gk = it.id + ':' + it.gi + ':' + ei;
+            GSMAP[gk] = { id: it.id, ja: x.ja, kana: x.kana || '', zh: x.zh || '',
+                          audio: au || '', src: it.id + ' · ' + g.h };
+            return '<div class="gex"><button class="nbk' + (nbHasSent(it.id, x.ja) ? ' on' : '') +
+              '" data-gsx="' + gk + '" aria-label="加入練習本">' + (nbHasSent(it.id, x.ja) ? '★' : '☆') + '</button>' +
+              '<button class="spk" data-say="' + esc(ttsText(x)) + '"' +
               (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放例句">' + SPK + '</button>' +
               '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
           }).join('');
@@ -2654,6 +2728,14 @@
         }).join('');
       }
       bindSpeakers(list);
+      if (!list.dataset.gs){
+        list.dataset.gs = '1';
+        list.addEventListener('click', function(e){
+          var b = e.target.closest('.nbk[data-gsx]'); if (!b) return;
+          var it = GSMAP[b.getAttribute('data-gsx')]; if (!it) return;
+          nbToggleSent(it, b);
+        });
+      }
     }
 
     /* 先把可搜尋的文字串好，避免每次打字都重建 */
@@ -3182,57 +3264,97 @@
 
   /* ---------- 練習本 ---------- */
   var noteRun = null;
+  var nbTabSel = 'word';           /* 'word' 單字 ／ 'sent' 文法例句 */
+  function nbList(){
+    return NB.items.filter(function(x){ return nbIsSent(x) === (nbTabSel === 'sent'); });
+  }
+  function nbWordCount(){
+    var w = 0; NB.items.forEach(function(x){ if (!nbIsSent(x)) w++; }); return w;
+  }
+  function nbSentCount(){
+    var s = 0; NB.items.forEach(function(x){ if (nbIsSent(x)) s++; }); return s;
+  }
   function renderNotebook(){
     document.title = '練習本 · 日語階梯';
-    var n = NB.items.length;
+    var w = nbWordCount(), s = nbSentCount(), total = w + s, list = nbList();
     app.innerHTML =
       '<div class="lhead">' +
         '<a class="back" href="#/">← 課程地圖</a>' +
         '<h1>練習本<span class="k">れんしゅう</span></h1>' +
-        '<p class="goal">' + (n
-          ? '收藏了 ' + n + ' 個字詞。可以逐個聽、全部播放，或開始卡片練習。'
-          : '在單字表按字右邊的 ☆ 收藏，之後集中在這裡複習。') + '</p>' +
+        '<p class="goal">' + (total
+          ? '收藏了 ' + (w ? w + ' 個單字' : '') + (w && s ? '、' : '') + (s ? s + ' 句例句' : '') +
+            '。可以逐個聽、全部播放，或開始卡片練習。'
+          : '在單字表或文法例句右邊按 ☆ 收藏，之後集中在這裡複習。') + '</p>' +
       '</div>' +
-      (n ? '<div class="nbar">' +
-             '<button class="btn2" id="nbPlay">▶ 播放全部</button>' +
-             '<div class="seg2" id="noteDir">' +
-               '<button data-dir="jp2zh" class="'+(cardDir==='jp2zh'?'on':'')+'" aria-label="題目出日文，答中文">日→中</button>' +
-               '<button data-dir="zh2jp" class="'+(cardDir==='zh2jp'?'on':'')+'" aria-label="題目出中文，答日文">中→日</button>' +
-             '</div>' +
-             '<button class="btn2 pri" id="nbStart">開始練習</button>' +
-           '</div>' : '') +
+      (total ? '<div class="seg2 nbtabs" id="nbTabs">' +
+                 '<button data-t="word" class="' + (nbTabSel === 'word' ? 'on' : '') + '">單字 ' + w + '</button>' +
+                 '<button data-t="sent" class="' + (nbTabSel === 'sent' ? 'on' : '') + '">句子 ' + s + '</button>' +
+               '</div>' +
+               '<div class="nbar">' +
+                 '<button class="btn2" id="nbPlay"' + (list.length ? '' : ' disabled') + '>▶ 播放全部</button>' +
+                 '<div class="seg2" id="noteDir">' +
+                   '<button data-dir="jp2zh" class="' + (cardDir === 'jp2zh' ? 'on' : '') + '" aria-label="題目出日文，答中文">日→中</button>' +
+                   '<button data-dir="zh2jp" class="' + (cardDir === 'zh2jp' ? 'on' : '') + '" aria-label="題目出中文，答日文">中→日</button>' +
+                 '</div>' +
+                 '<button class="btn2 pri" id="nbStart"' + (list.length ? '' : ' disabled') + '>開始練習</button>' +
+               '</div>' : '') +
       '<div id="notebody"></div>';
     drawNotebook();
-    if (n){
-      var nd = $('#noteDir');
-      if (nd) nd.addEventListener('click', function(e){
-        var b = e.target.closest('[data-dir]'); if (!b) return;
-        cardDir = b.dataset.dir;
-        Array.prototype.forEach.call(nd.querySelectorAll('button'), function(x){
-          x.classList.toggle('on', x.dataset.dir === cardDir);
-        });
+    if (!total) return;
+    var tabs = $('#nbTabs');
+    if (tabs) tabs.addEventListener('click', function(e){
+      var b = e.target.closest('[data-t]'); if (!b) return;
+      if (b.getAttribute('data-t') === nbTabSel) return;
+      nbTabSel = b.getAttribute('data-t');
+      stopAudio();
+      renderNotebook();
+    });
+    var nd = $('#noteDir');
+    if (nd) nd.addEventListener('click', function(e){
+      var b = e.target.closest('[data-dir]'); if (!b) return;
+      cardDir = b.dataset.dir;
+      Array.prototype.forEach.call(nd.querySelectorAll('button'), function(x){
+        x.classList.toggle('on', x.dataset.dir === cardDir);
       });
-      $('#nbPlay').addEventListener('click', function(){
-        if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
-        var rows = document.querySelectorAll('#notebody .nrow');
-        var items = NB.items.map(function(x, k){
-          return { audio: x.audio || audioFor(x.id, 'v' + x.vi), el: rows[k] };
-        });
-        playAllQueued(items, this);
+    });
+    var playBtn = $('#nbPlay');
+    if (playBtn) playBtn.addEventListener('click', function(){
+      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+      var rows = document.querySelectorAll('#notebody .nrow');
+      var items = nbList().map(function(x, k){
+        return { audio: nbIsSent(x) ? x.audio : (x.audio || audioFor(x.id, 'v' + x.vi)), el: rows[k] };
       });
-      $('#nbStart').addEventListener('click', function(){ startNoteCards(NB.items); });
-    }
+      playAllQueued(items, this);
+    });
+    var st = $('#nbStart');
+    if (st) st.addEventListener('click', function(){ startNoteCards(nbList()); });
   }
+
   function drawNotebook(){
     var body = $('#notebody'); if (!body) return;
     noteRun = null;
     stopAllPlay();
-    if (!NB.items.length){
-      body.innerHTML = '<p class="secnote">還沒有收藏的字。到任何一課的「單字」段、「詞語總表」或「順序表」，按字旁邊的 ☆ 就會加入這裡。</p>';
+    var list = nbList();
+    if (!list.length){
+      body.innerHTML = '<p class="secnote">' + (nbTabSel === 'sent'
+        ? '還沒有收藏句子。到任何一課的「文法」段，按例句右邊的 ☆ 就會加入這裡。'
+        : '還沒有收藏的字。到任何一課的「單字」段、「詞語總表」或「順序表」，按字旁邊的 ☆ 就會加入這裡。') + '</p>';
       return;
     }
-    body.innerHTML = NB.items.map(function(x, k){
-      var au = x.audio || audioFor(x.id, 'v' + x.vi);
+    body.innerHTML = list.map(function(x){
+      var k = NB.items.indexOf(x);
+      var au = nbIsSent(x) ? x.audio : (x.audio || audioFor(x.id, 'v' + x.vi));
+      if (nbIsSent(x)){
+        return '<div class="nrow sent">' +
+          '<div class="nsj"><b>' + esc(x.ja) + '</b>' +
+            (x.kana ? '<span>' + esc(x.kana) + '</span>' : '') + '</div>' +
+          '<div class="nsz">' + esc(x.zh) + '</div>' +
+          '<div class="nl">' + esc(x.src || x.id) + '</div>' +
+          '<button class="spk" data-say="' + esc(x.kana || x.ja) + '"' +
+            (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放例句">' + SPK + '</button>' +
+          '<button class="rm" data-rm="' + k + '" aria-label="移出練習本">✕</button>' +
+        '</div>';
+      }
       return '<div class="nrow">' +
         '<div class="nk"><b>' + esc(x.kanji || x.kana) + '</b>' +
           (x.kanji ? '<span>' + esc(x.kana) + '</span>' : '') + '</div>' +
@@ -3257,28 +3379,34 @@
       });
     }
   }
+
   function startNoteCards(pool){
     stopAudio();
     noteRun = { deck: shuffle(pool).slice(0, Math.min(10, pool.length)), i:0, ok:0, miss:[], dir: cardDir };
     renderNoteCards();
   }
+
   function renderNoteCards(){
     var body = $('#notebody'), r = noteRun;
     if (!body || !r) return;
     if (r.i >= r.deck.length) return renderNoteSummary();
     var x = r.deck[r.i];
-    var jp = x.kanji || x.kana;
+    var isS = nbIsSent(x);
+    var jp = isS ? x.ja : (x.kanji || x.kana);
     var front = r.dir === 'jp2zh' ? jp : x.zh;
-    var sub = (r.dir === 'jp2zh' && x.kanji) ? x.kana : '';
-    var back = r.dir === 'jp2zh' ? x.zh : (x.kanji ? x.kanji + '　' + x.kana : x.kana);
-    var au = x.audio || audioFor(x.id, 'v' + x.vi);
+    var sub = '';
+    if (r.dir === 'jp2zh') sub = isS ? (x.kana || '') : (x.kanji ? x.kana : '');
+    var back;
+    if (r.dir === 'jp2zh') back = x.zh;
+    else back = isS ? (x.ja + (x.kana ? '　' + x.kana : '')) : (x.kanji ? x.kanji + '　' + x.kana : x.kana);
+    var au = isS ? x.audio : (x.audio || audioFor(x.id, 'v' + x.vi));
 
     body.innerHTML =
       '<div class="cardmeta nmeta"><span>練習本 · 第 ' + (r.i + 1) + ' ／ ' + r.deck.length + ' 題 · ' +
         (r.dir === 'jp2zh' ? '日→中' : '中→日') + '</span>' +
         '<button class="nquit" id="nbQuit" aria-label="離開練習，回到練習本">✕ 離開練習</button></div>' +
       '<div class="fcard" id="fcard" style="position:relative">' +
-        '<button class="spk cardspk" data-say="' + esc(x.kana) + '"' +
+        '<button class="spk cardspk" data-say="' + esc(x.kana || x.ja) + '"' +
           (au ? ' data-audio="' + esc(au) + '"' : '') +
           ' aria-label="播放發音" style="position:absolute;margin:0;right:14px;top:14px">' + SPK + '</button>' +
         '<div class="fq">' + esc(front) + '</div>' +
@@ -3290,7 +3418,7 @@
         '<button class="btn2 b-ok" id="know" style="display:none">記得</button>' +
         '<button class="btn2 b-no" id="dunno" style="display:none">不記得</button>' +
       '</div>' +
-      '<p class="secnote" style="text-align:center">不記得的字會同時收入錯題簿，並留在練習本。</p>';
+      '<p class="secnote" style="text-align:center">不記得的' + (isS ? '句子' : '字') + '會同時收入錯題簿，並留在練習本。</p>';
 
     bindSpeakers(body);
     var quit = $('#nbQuit');
@@ -3310,17 +3438,20 @@
     $('#know').addEventListener('click', function(){ r.ok++; r.i++; renderNoteCards(); });
     $('#dunno').addEventListener('click', function(){
       r.miss.push(x);
-      addMistake({ key:x.id + ':w:' + x.kana, kind:'word', prompt:jp, answer:x.zh, sub:x.kana });
+      addMistake(isS
+        ? { key:x.id + ':s:' + x.ja, kind:'sentence', prompt:jp, answer:x.zh, sub:x.kana }
+        : { key:x.id + ':w:' + x.kana, kind:'word', prompt:jp, answer:x.zh, sub:x.kana });
       r.i++; renderNoteCards();
     });
   }
+
   function renderNoteSummary(){
     var r = noteRun;
-    var missed = r.miss.map(function(x){ return '<span>' + esc(x.kanji || x.kana) + '</span>'; }).join('');
+    var missed = r.miss.map(function(x){ return '<span>' + esc(nbIsSent(x) ? x.ja : (x.kanji || x.kana)) + '</span>'; }).join('');
     $('#notebody').innerHTML =
       '<div class="sum">' +
         '<div class="big">' + r.ok + '<small> ／ ' + r.deck.length + '</small></div>' +
-        '<p class="secnote" style="margin:8px 0 0">記得 ' + r.ok + ' 個字' +
+        '<p class="secnote" style="margin:8px 0 0">記得 ' + r.ok + ' 項' +
           (r.miss.length ? '，其餘放進錯題簿。' : '，全部記得。') + '</p>' +
         (missed ? '<div class="chips">' + missed + '</div>' : '') +
         '<div class="row2" style="justify-content:center">' +
@@ -3330,7 +3461,7 @@
         '</div>' +
       '</div>';
     if (r.miss.length) $('#nbRetry').addEventListener('click', function(){ startNoteCards(r.miss.slice()); });
-    $('#nbAgain').addEventListener('click', function(){ startNoteCards(NB.items); });
+    $('#nbAgain').addEventListener('click', function(){ startNoteCards(nbList()); });
     $('#nbBack').addEventListener('click', function(){ drawNotebook(); });
   }
 
@@ -3345,6 +3476,7 @@
   function saveExam(){ try{ localStorage.setItem(EXKEY, JSON.stringify(EX)); }catch(e){} }
   function examBest(stage){ return (EX.stages || {})[stage] || null; }
   var EXCACHE = {}, exRun = null;
+  var GSMAP = {};   /* 文法總表：例句 payload，供 ☆ 收藏用 */
 
   function loadExam(stage){
     if (EXCACHE[stage]) return Promise.resolve(EXCACHE[stage]);
