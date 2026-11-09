@@ -547,7 +547,9 @@
   "v29": "audio/L06-v29.mp3",
   "v30": "audio/L06-v30.mp3",
   "p6-e0": "audio/L06-p6-e0.mp3",
-  "p6-e1": "audio/L06-p6-e1.mp3"
+  "p6-e1": "audio/L06-p6-e1.mp3",
+  "g8-e0": "audio/L06-g8-e0.mp3",
+  "g8-e1": "audio/L06-g8-e1.mp3"
  },
  "L07": {
   "d0-l0": "audio/L07-d0-l0.mp3",
@@ -658,7 +660,9 @@
   "v47": "audio/L07-v47.mp3",
   "v48": "audio/L07-v48.mp3",
   "p7-e0": "audio/L07-p7-e0.mp3",
-  "p7-e1": "audio/L07-p7-e1.mp3"
+  "p7-e1": "audio/L07-p7-e1.mp3",
+  "g8-e0": "audio/L07-g8-e0.mp3",
+  "g8-e1": "audio/L07-g8-e1.mp3"
  },
  "L08": {
   "d0-l0": "audio/L08-d0-l0.mp3",
@@ -1038,7 +1042,11 @@
   "p6-e0": "audio/L11-p6-e0.mp3",
   "p6-e1": "audio/L11-p6-e1.mp3",
   "p7-e0": "audio/L11-p7-e0.mp3",
-  "p7-e1": "audio/L11-p7-e1.mp3"
+  "p7-e1": "audio/L11-p7-e1.mp3",
+  "g7-e0": "audio/L11-g7-e0.mp3",
+  "g7-e1": "audio/L11-g7-e1.mp3",
+  "g8-e0": "audio/L11-g8-e0.mp3",
+  "g8-e1": "audio/L11-g8-e1.mp3"
  },
  "L12": {
   "d0-l0": "audio/L12-d0-l0.mp3",
@@ -1137,7 +1145,9 @@
   "v43": "audio/L12-v43.mp3",
   "v44": "audio/L12-v44.mp3",
   "p6-e0": "audio/L12-p6-e0.mp3",
-  "p6-e1": "audio/L12-p6-e1.mp3"
+  "p6-e1": "audio/L12-p6-e1.mp3",
+  "g7-e0": "audio/L12-g7-e0.mp3",
+  "g7-e1": "audio/L12-g7-e1.mp3"
  },
  "L13": {
   "d0-l0": "audio/L13-d0-l0.mp3",
@@ -1331,7 +1341,13 @@
   "p8-e0": "audio/L14-p8-e0.mp3",
   "p8-e1": "audio/L14-p8-e1.mp3",
   "p9-e0": "audio/L14-p9-e0.mp3",
-  "p9-e1": "audio/L14-p9-e1.mp3"
+  "p9-e1": "audio/L14-p9-e1.mp3",
+  "g7-e0": "audio/L14-g7-e0.mp3",
+  "g7-e1": "audio/L14-g7-e1.mp3",
+  "g8-e0": "audio/L14-g8-e0.mp3",
+  "g8-e1": "audio/L14-g8-e1.mp3",
+  "g9-e0": "audio/L14-g9-e0.mp3",
+  "g9-e1": "audio/L14-g9-e1.mp3"
  },
  "L15": {
   "d0-l0": "audio/L15-d0-l0.mp3",
@@ -1839,7 +1855,9 @@
   "l7": "audio/L20-l7.mp3",
   "v26": "audio/L20-v26.mp3",
   "p6-e0": "audio/L20-p6-e0.mp3",
-  "p6-e1": "audio/L20-p6-e1.mp3"
+  "p6-e1": "audio/L20-p6-e1.mp3",
+  "g7-e0": "audio/L20-g7-e0.mp3",
+  "g7-e1": "audio/L20-g7-e1.mp3"
  },
  "L21": {
   "d0-l0": "audio/L21-d0-l0.mp3",
@@ -1917,7 +1935,9 @@
   "l6": "audio/L21-l6.mp3",
   "l7": "audio/L21-l7.mp3",
   "p6-e0": "audio/L21-p6-e0.mp3",
-  "p6-e1": "audio/L21-p6-e1.mp3"
+  "p6-e1": "audio/L21-p6-e1.mp3",
+  "g7-e0": "audio/L21-g7-e0.mp3",
+  "g7-e1": "audio/L21-g7-e1.mp3"
  },
  "L22": {
   "d0-l0": "audio/L22-d0-l0.mp3",
@@ -2704,7 +2724,9 @@
   "v26": "audio/L31-v26.mp3",
   "v27": "audio/L31-v27.mp3",
   "p6-e0": "audio/L31-p6-e0.mp3",
-  "p6-e1": "audio/L31-p6-e1.mp3"
+  "p6-e1": "audio/L31-p6-e1.mp3",
+  "g7-e0": "audio/L31-g7-e0.mp3",
+  "g7-e1": "audio/L31-g7-e1.mp3"
  },
  "L32": {
   "d0-l0": "audio/L32-d0-l0.mp3",
