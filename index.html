@@ -652,6 +652,19 @@
   .vftbl .spk.vspk svg{width:12px; height:12px}
   .vftbl .spk.vspk:active{background:none}
   .vftbl .spk.vspk.playing{background:none; color:var(--shu); opacity:1}
+  /* 播放全部：頁頂一顆；五段 115 行太長，另加浮動「停止播放」鍵可中途停 */
+  .vfbar{display:flex; align-items:center; gap:10px; margin:12px 0 0}
+  .vfbar .btn2{padding:8px 14px; font-size:13px}
+  .vfbar .vfcnt{font-size:11.5px; color:var(--muted); line-height:1.4}
+  .vftbl tr.playnow td{background:#f8f1e7}
+  .vftbl tr.playnow td.on{background:var(--sand2)}
+  .vftbl tr.playnow td.vf.ex{background:#d3e0f7}
+  .vfstop{position:fixed; left:50%; transform:translateX(-50%); z-index:70; display:none;
+    align-items:center; gap:8px; border:0; border-radius:999px; background:var(--shu); color:#fff;
+    padding:11px 20px; font-family:var(--sans); font-size:13.5px; font-weight:600;
+    box-shadow:0 8px 22px rgba(34,30,25,.28); bottom:calc(14px + env(safe-area-inset-bottom))}
+  .vfstop.on{display:flex}
+  .vfstop .vfn{font-weight:400; font-size:12px; opacity:.86}
 
   .gacc{border-bottom:1px solid var(--line); padding:11px 2px}
   .gacc summary{display:flex; gap:8px; align-items:baseline; font-size:14.5px; font-weight:500;
@@ -672,11 +685,12 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v156</span>
+    <span class="ver" id="verTag">v157</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
 <div class="toast" id="toast"></div>
+<button class="vfstop" id="vfstop" aria-label="停止播放">■ 停止播放<span class="vfn" id="vfstopN"></span></button>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="錯題簿">
   <div class="sheetbox" id="sheetbox"></div>
 </div>
@@ -2732,40 +2746,88 @@
      欄序：辞書形 → ます形 → て形 → た形 → ない形，辞書形行頭。
      資料由 tools/build_verbforms.py 生成；て形／た形／ない形是規則推導，
      行く、ある、来る、する 等例外寫死在該工具。 */
-  var VFP = { on:false, btn:null };
+  var VFP = { on:false, btn:null, rows:[], ri:0, td:null };
+  var VFORDER = ['dict', 'masu', 'te', 'ta', 'nai'];
+  /* 浮動停止鍵：只在播放中出現，顯示「第幾行／共幾行」，一按即停 */
+  function vfBar(on, n){
+    var el = document.getElementById('vfstop');
+    if (!el) return;
+    el.classList.toggle('on', !!on);
+    var c = document.getElementById('vfstopN');
+    if (c) c.textContent = (on && n) ? '　' + n : '';
+  }
   function vfStop(){
-    VFP.on = false;
-    if (VFP.btn){ VFP.btn.classList.remove('playing'); VFP.btn = null; }
+    var btn = VFP.btn;
+    VFP.on = false; VFP.rows = []; VFP.ri = 0; VFP.td = null;
+    VFP.btn = null;
+    if (btn){
+      btn.classList.remove('playing');
+      if (btn.classList.contains('onplay')){
+        btn.classList.remove('onplay'); btn.textContent = '▶ 播放全部';
+      }
+    }
     Array.prototype.forEach.call(document.querySelectorAll('.vftbl td.on'), function(td){
       td.classList.remove('on');
     });
+    Array.prototype.forEach.call(document.querySelectorAll('.vftbl tr.playnow'), function(tr){
+      tr.classList.remove('playnow');
+    });
+    vfBar(false);
+  }
+  /* 一行的五個形（缺音檔就跳過；td 次序＝辞書形、ます、て、た、ない） */
+  function vfCells(tr){
+    var tds = tr.querySelectorAll('td'), out = [];
+    VFORDER.forEach(function(k, i){
+      var url = tr.getAttribute('data-audio-' + k);
+      if (url && tds[i]) out.push({ url:url, el:tds[i] });
+    });
+    return out;
+  }
+  /* 逐行播：每行播完五形才去下一行；中途可按浮動鍵或再按同一顆按鈕停 */
+  function vfPlayRows(rows, btn){
+    stopAudio();
+    var list = Array.prototype.slice.call(rows).filter(function(tr){ return vfCells(tr).length; });
+    if (!list.length){ toast('這頁還沒有音檔'); return; }
+    VFP.on = true; VFP.btn = btn; VFP.rows = list; VFP.ri = 0;
+    if (btn){
+      if (btn.classList.contains('vfrow')) btn.classList.add('playing');
+      else { btn.classList.add('onplay'); btn.textContent = '■ 停止'; }
+    }
+    function step(){
+      if (!VFP.on) return;
+      if (VFP.ri >= VFP.rows.length){ vfStop(); return; }
+      var tr = VFP.rows[VFP.ri], items = vfCells(tr), ci = 0;
+      Array.prototype.forEach.call(document.querySelectorAll('.vftbl tr.playnow'), function(x){
+        x.classList.remove('playnow');
+      });
+      tr.classList.add('playnow');
+      /* 長表：行離開視線才捲到中間，避免逐行平滑捲動看着頭暈 */
+      var r = tr.getBoundingClientRect();
+      if (r.top < 96 || r.bottom > window.innerHeight - 96) tr.scrollIntoView({ block:'center' });
+      vfBar(true, (VFP.ri + 1) + '／' + VFP.rows.length);
+      (function next(){
+        if (!VFP.on) return;
+        if (ci >= items.length){ VFP.ri++; step(); return; }
+        var it = items[ci];
+        if (VFP.td) VFP.td.classList.remove('on');
+        it.el.classList.add('on'); VFP.td = it.el;
+        /* 預載下一段（同頁下一形或下一行第一形），縮短段與段之間的空白 */
+        var nx = items[ci + 1] || (VFP.rows[VFP.ri + 1] ? vfCells(VFP.rows[VFP.ri + 1])[0] : null);
+        if (nx && nx.url){
+          try{ var pre = new Audio(nx.url + '?v=' + auVer(nx.url)); pre.preload = 'auto'; pre.load(); }catch(e){}
+        }
+        var ok = playFile(it.url, function(){
+          if (!VFP.on) return;
+          ci++; next();
+        }, null);
+        if (!ok){ vfStop(); }
+      })();
+    }
+    step();
   }
   function vfPlayRow(btn, tr){
     if (VFP.on && VFP.btn === btn){ stopAudio(); return; }
-    stopAudio();
-    var tds = tr.querySelectorAll('td');
-    var order = ['dict', 'masu', 'te', 'ta', 'nai'];
-    var items = [];
-    order.forEach(function(k, i){
-      var url = tr.getAttribute('data-audio-' + k);
-      if (url) items.push({ url:url, el:tds[i] });
-    });
-    if (!items.length){ toast('這行還沒有音檔'); return; }
-    VFP.on = true; VFP.btn = btn; btn.classList.add('playing');
-    var i = 0;
-    function step(){
-      if (!VFP.on) return;
-      if (i >= items.length){ vfStop(); return; }
-      var it = items[i];
-      it.el.classList.add('on');
-      var ok = playFile(it.url, function(){
-        it.el.classList.remove('on');
-        if (!VFP.on) return;
-        i++; step();
-      }, null);
-      if (!ok){ vfStop(); }
-    }
-    step();
+    vfPlayRows([tr], btn);
   }
   var VERBFORMS = null;
   function renderVerbForms(id){
@@ -2778,6 +2840,8 @@
       return;
     }
     var FORMS = [['masu','ます形'],['te','て形'],['ta','た形'],['nai','ない形']];
+    var totRows = set.blocks.reduce(function(n, b){ return n + b.rows.length; }, 0);
+
     var h = '<div class="lhead">' +
       '<a class="back" href="#/all/verbs">← 動詞表</a>' +
       '<h1>' + esc(set.title) + ' 詳細表<span class="k">' + esc(set.kana) + '</span></h1>' +
@@ -2789,6 +2853,8 @@
                '<b>' + b.rows.length + '</b></button>';
       }).join('') + '</div>';
     }
+    h += '<div class="vfbar"><button class="btn2" id="vfplayall">▶ 播放全部</button>' +
+      '<span class="vfcnt">共 ' + totRows + ' 項，逐行播五個形</span></div>';
     h += '<div class="vftblwrap"><table class="vftbl"><colgroup><col class="cd">' +
       '<col class="cf"><col class="cf"><col class="cf"><col class="cf"></colgroup><thead><tr>' +
       '<th>辞書形</th>' + FORMS.map(function(f){ return '<th>' + f[1] + '</th>'; }).join('') +
@@ -2838,7 +2904,8 @@
       return (r.kanji || r.kana) + ' 的' + labs + '是' + vals;
     }).join('；');
     h += '</tbody></table></div>' +
-      '<p class="secnote">點辞書形右邊的喇叭，會依次播放辞書形、ます形、て形、た形、ない形。</p>' +
+      '<p class="secnote">點辞書形右邊的喇叭，會依次播放辞書形、ます形、て形、た形、ない形。' +
+        '按上面的「播放全部」可以由第一行順播，中途想停就按畫面下方的「停止播放」。</p>' +
       (exRows.length ? '<p class="secnote exnote"><b class="exc">藍色</b>是這組規則的例外：' +
         exTxt + '，不照該行的規則。</p>' : '');
     app.innerHTML = h;
@@ -2852,6 +2919,12 @@
     if (tbl) tbl.addEventListener('click', function(e){
       var b = e.target.closest('.vfrow'); if (!b) return;
       vfPlayRow(b, b.closest('tr'));
+    });
+    var pa = $('#vfplayall');
+    if (pa) pa.addEventListener('click', function(){
+      /* 再按一次＝停止（與其他頁的「播放全部」一致） */
+      if (VFP.on && VFP.btn === this){ stopAudio(); return; }
+      vfPlayRows(document.querySelectorAll('.vftbl tbody tr:not(.vgrp)'), this);
     });
   }
 
@@ -3411,6 +3484,9 @@
     });
 
     window.addEventListener('hashchange', route);
+    /* 浮動停止鍵：任何播放中按一下即全部停（含長表的播放全部） */
+    var vfs = document.getElementById('vfstop');
+    if (vfs) vfs.addEventListener('click', function(){ stopAudio(); });
   }
 
   if ('serviceWorker' in navigator){
