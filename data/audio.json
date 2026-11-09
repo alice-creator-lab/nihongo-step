@@ -188,7 +188,7 @@
   "v42": "audio/L02-v42.mp3",
   "v43": "audio/L02-v43.mp3"
  },
- "v": 6,
+ "v": 7,
  "L03": {
   "d0-l0": "audio/L03-d0-l0.mp3",
   "d0-l1": "audio/L03-d0-l1.mp3",
@@ -1046,7 +1046,8 @@
   "g9-e0": "audio/L11-g9-e0.mp3",
   "g9-e1": "audio/L11-g9-e1.mp3",
   "g0-e0": "audio/L11-g0-e0.mp3",
-  "g0-e1": "audio/L11-g0-e1.mp3"
+  "g0-e1": "audio/L11-g0-e1.mp3",
+  "g6-e2": "audio/L11-g6-e2.mp3"
  },
  "L12": {
   "d0-l0": "audio/L12-d0-l0.mp3",
