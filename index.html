@@ -665,26 +665,32 @@
     box-shadow:0 8px 22px rgba(34,30,25,.28); bottom:calc(14px + env(safe-area-inset-bottom))}
   .vfstop.on{display:flex}
   .vfstop .vfn{font-weight:400; font-size:12px; opacity:.86}
-  /* 不同形態的應用：照《動詞句型練習》分形態列句型，句型與「的應用」用藍 */
+  /* 不同形態的應用：照課本分兩欄——左邊句型（藍），右邊例句，課號與喇叭貼右邊 */
   .apgrp{margin-top:20px; scroll-margin-top:104px}
   .apgrp h3{display:flex; align-items:baseline; gap:6px; margin:0 0 2px; padding:7px 10px;
     background:var(--sand2); border-radius:8px; font-size:13px; font-weight:600; color:var(--ink2)}
   .apgrp h3 .apy{color:#0b5cad}
   .apgrp h3 em{margin-left:auto; font-style:normal; font-weight:400; font-size:11px; color:var(--muted)}
-  .aprow{display:flex; align-items:flex-start; gap:8px; padding:10px 2px; border-bottom:1px solid var(--line)}
-  .aprow.playing{background:#f8f1e7}
-  .aprow .spk{width:32px; height:32px; flex:0 0 32px; margin-top:2px}
-  .aprow .apb{flex:1; min-width:0}
-  .aphead{display:flex; align-items:baseline; gap:8px}
-  .appat{flex:1; min-width:0; font-family:var(--serif); font-size:13.5px; font-weight:600;
-    line-height:1.4; color:#0b5cad; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-  .appat .apf{font-family:var(--sans); font-size:10.5px; font-weight:400; color:var(--muted);
-    margin-right:5px; letter-spacing:.02em}
-  .apex{margin-top:1px; font-family:var(--serif); font-size:14px; line-height:1.55; color:var(--ink)}
-  .apl{flex:0 0 auto; font-size:11px; color:var(--muted); text-decoration:none;
-    white-space:nowrap; -webkit-tap-highlight-color:transparent}
-  .apl:active{color:var(--shu)}
-  @media (max-width:359px){ .appat{font-size:12.5px} .apex{font-size:13px} }
+  /* 五個形態一屏放得下，跳轉鍵改為換行排（橫向捲動會在 360px 被切一半） */
+  #apjump{flex-wrap:wrap; overflow:visible; row-gap:6px}
+  .aptbl{width:100%; border-collapse:collapse; table-layout:fixed}
+  .aptbl td{border-top:1px solid var(--line); padding:9px 0; vertical-align:top}
+  .aptbl tr:first-child td{border-top:0}
+  .aptbl .appat{width:130px; padding-right:8px; font-family:var(--serif); font-size:13px;
+    font-weight:600; line-height:1.5; color:#0b5cad; white-space:nowrap}
+  .aptbl .apex{padding-right:6px; font-family:var(--serif); font-size:14px; line-height:1.5; color:var(--ink)}
+  .aptbl .aprail{width:24px; padding-left:2px; text-align:center}
+  .aptbl .aprail .spk.apspk{width:22px; height:22px; margin:0 auto; border:0; background:none; color:var(--muted)}
+  .aptbl .aprail .spk.apspk svg{width:13px; height:13px}
+  .aptbl .aprail .spk.apspk.playing{background:none; color:var(--shu)}
+  .aptbl .aprail .apl{display:block; margin-top:3px; font-size:10.5px; color:var(--muted);
+    text-decoration:none; white-space:nowrap; -webkit-tap-highlight-color:transparent}
+  .aptbl .aprail .apl:active{color:var(--shu)}
+  .aptbl tr.playing td{background:#f8f1e7}
+  @media (max-width:359px){
+    .aptbl .appat{width:118px; font-size:12px}
+    .aptbl .apex{font-size:13px}
+  }
 
   .gacc{border-bottom:1px solid var(--line); padding:11px 2px}
   .gacc summary{display:flex; gap:8px; align-items:baseline; font-size:14.5px; font-weight:500;
@@ -705,7 +711,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v158</span>
+    <span class="ver" id="verTag">v159</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2292,7 +2298,7 @@
       ALLPLAY.btn.classList.remove('onplay');
       ALLPLAY.btn = null;
     }
-    Array.prototype.forEach.call(document.querySelectorAll('.arow.playing, .vrow.playing, .exrow.playing, .aprow.playing'), function(r){
+    Array.prototype.forEach.call(document.querySelectorAll('.arow.playing, .vrow.playing, .exrow.playing, .aptbl tr.playing'), function(r){
       r.classList.remove('playing');
     });
   }
@@ -2976,23 +2982,22 @@
     d.groups.forEach(function(g, i){
       h += '<section class="apgrp" id="apg-' + i + '">' +
         '<h3>「' + esc(g.form) + '」<span class="apy">的應用</span>' +
-          '<em>' + g.rows.length + ' 個句型</em></h3>';
+          '<em>' + g.rows.length + ' 個句型</em></h3>' +
+        '<table class="aptbl"><tbody>';
       g.rows.forEach(function(r){
         var no = String(r.l || '').replace(/\D/g, '');
         var href = no ? '#/l/L' + (no.length < 2 ? '0' + no : no) : '';
-        h += '<div class="aprow">' +
-          '<button class="spk" data-say="' + esc(r.tts || r.ex) + '"' +
-            (r.a ? ' data-audio="audio/apps/' + esc(r.a) + '.mp3"' : '') +
-            ' aria-label="播放例句">' + SPK + '</button>' +
-          '<div class="apb"><div class="aphead">' +
-            '<span class="appat"><span class="apf">' + esc(g.form) + '</span>' + esc(r.pat) + '</span>' +
+        h += '<tr class="apr">' +
+          '<td class="appat">' + esc(r.pat) + '</td>' +
+          '<td class="apex">' + esc(r.ex) + '</td>' +
+          '<td class="aprail">' +
+            (r.a ? '<button class="spk apspk" data-say="' + esc(r.tts || r.ex) + '"' +
+              ' data-audio="audio/apps/' + esc(r.a) + '.mp3" aria-label="播放例句">' + SPK + '</button>' : '') +
             (href ? '<a class="apl" href="' + href + '">' + esc(r.l) + '</a>'
                   : '<span class="apl">' + esc(r.l || '') + '</span>') +
-          '</div>' +
-          '<div class="apex">' + esc(r.ex) + '</div></div>' +
-        '</div>';
+          '</td></tr>';
       });
-      h += '</section>';
+      h += '</tbody></table></section>';
     });
     h += '</div><p class="secnote">點喇叭聽示範音；按右邊的課號可以跳到那一課的句型。' +
       '「播放全部」由第一句順播，中途按畫面下方的「停止播放」，或再按一次按鈕即停。</p>';
@@ -3009,7 +3014,7 @@
     if (pa) pa.addEventListener('click', function(){
       if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
       var items = [];
-      Array.prototype.forEach.call(list.querySelectorAll('.aprow'), function(row){
+      Array.prototype.forEach.call(list.querySelectorAll('.aptbl tr.apr'), function(row){
         var b = row.querySelector('[data-audio]');
         if (b) items.push({ audio: b.getAttribute('data-audio'), el: row });
       });
