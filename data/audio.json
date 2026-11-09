@@ -1038,9 +1038,7 @@
   "p6-e0": "audio/L11-p6-e0.mp3",
   "p6-e1": "audio/L11-p6-e1.mp3",
   "p7-e0": "audio/L11-p7-e0.mp3",
-  "p7-e1": "audio/L11-p7-e1.mp3",
-  "p8-e0": "audio/L11-p8-e0.mp3",
-  "p8-e1": "audio/L11-p8-e1.mp3"
+  "p7-e1": "audio/L11-p7-e1.mp3"
  },
  "L12": {
   "d0-l0": "audio/L12-d0-l0.mp3",
@@ -1917,7 +1915,9 @@
   "l4": "audio/L21-l4.mp3",
   "l5": "audio/L21-l5.mp3",
   "l6": "audio/L21-l6.mp3",
-  "l7": "audio/L21-l7.mp3"
+  "l7": "audio/L21-l7.mp3",
+  "p6-e0": "audio/L21-p6-e0.mp3",
+  "p6-e1": "audio/L21-p6-e1.mp3"
  },
  "L22": {
   "d0-l0": "audio/L22-d0-l0.mp3",
