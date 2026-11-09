@@ -620,7 +620,7 @@
   .vftbl tr.vgrp th{background:var(--sand2); font-size:11.5px; font-weight:600; color:var(--ink2);
     text-align:left; padding:5px 8px; border-top:1px solid var(--line); scroll-margin-top:104px}
   .vftbl tr.vgrp th em{font-style:normal; font-weight:400; color:var(--muted); margin-left:6px}
-  .vftbl tr.vgrp th em.gx{color:var(--shu); font-weight:600}
+  .vftbl tr.vgrp th em.gx{color:#0b5cad; font-weight:600}
   .vftbl td{border-top:1px solid var(--line); border-left:1px solid var(--line); padding:6px 1px 5px;
     vertical-align:top; font-family:var(--serif); font-size:11px; line-height:1.4; color:var(--ink);
     letter-spacing:-.01em}
@@ -640,13 +640,13 @@
   .vftbl td.vf .fn{display:block; font-size:11.5px; line-height:1.25; overflow-wrap:anywhere}
   .vftbl td.vf .fk{display:block; font-size:9.5px; line-height:1.2; color:var(--muted);
     overflow-wrap:anywhere; letter-spacing:0}
-  /* 規則例外（行く → 行って・行った）：整格標紅，表下再加一行說明 */
-  .vftbl td.vf.ex{background:#f9e7e2}
-  .vftbl td.vf.ex .fn{color:var(--shu); font-weight:600}
-  .vftbl td.vf.ex .fk{color:#a8685c}
-  .vftbl td.vf.ex.on{background:#f2d6cf}
+  /* 規則例外（行く → 行って・行った）：跟順序表的變音同一種藍，不用紅 */
+  .vftbl td.vf.ex{background:#e6eefb}
+  .vftbl td.vf.ex .fn{color:#0b5cad; font-weight:700}
+  .vftbl td.vf.ex .fk{color:#4a7bb0}
+  .vftbl td.vf.ex.on{background:#d3e0f7}
   .exnote{margin-top:8px}
-  .exnote .exc{color:var(--shu); font-weight:600}
+  .exnote .exc{color:#0b5cad; font-weight:700}
   .vftbl .spk.vspk{width:16px; height:16px; border:0; background:none; padding:0; margin:2px auto 0;
     color:var(--muted); opacity:.85; display:flex}
   .vftbl .spk.vspk svg{width:12px; height:12px}
@@ -672,7 +672,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v155</span>
+    <span class="ver" id="verTag">v156</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2839,7 +2839,7 @@
     }).join('；');
     h += '</tbody></table></div>' +
       '<p class="secnote">點辞書形右邊的喇叭，會依次播放辞書形、ます形、て形、た形、ない形。</p>' +
-      (exRows.length ? '<p class="secnote exnote"><b class="exc">紅字</b>是這組規則的例外：' +
+      (exRows.length ? '<p class="secnote exnote"><b class="exc">藍色</b>是這組規則的例外：' +
         exTxt + '，不照該行的規則。</p>' : '');
     app.innerHTML = h;
     var jb = $('#vfjump');
