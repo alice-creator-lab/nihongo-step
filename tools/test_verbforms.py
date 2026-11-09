@@ -84,7 +84,8 @@ async def main():
         return None
 
     async def shot(name):
-        r = await call("Page.captureScreenshot", {"format": "png", "captureBeyondViewport": True}, sid, timeout=20)
+        # 只截可視區：整頁（115 行 × 2x）在低記憶體機器會 timeout
+        r = await call("Page.captureScreenshot", {"format": "png"}, sid, timeout=25)
         if r and "result" in r:
             open("/tmp/" + name, "wb").write(base64.b64decode(r["result"]["data"]))
 
@@ -134,6 +135,18 @@ async def main():
     await wait_until("document.querySelectorAll('.vftbl tbody tr').length")
     out["行く"] = await row_of("行く")
     out["行く五形正確"] = out["行く"][1:] == [["行きます","いきます"],["行って","いって"],["行った","いった"],["行かない","いかない"]]
+    out["行く標紅"] = await js("""(function(){
+      var rows=document.querySelectorAll('.vftbl tbody tr:not(.vgrp)');
+      for (var i=0;i<rows.length;i++){
+        var b=rows[i].querySelector('.vdtop b');
+        if (b && b.textContent==='行く'){
+          return Array.prototype.map.call(rows[i].querySelectorAll('td.vf'), function(td){
+            return [td.querySelector('.fn').textContent, td.classList.contains('ex')];
+          });
+        }
+      } })()""")
+    out["行く標紅正確"] = out["行く標紅"] == [["行きます", False], ["行って", True], ["行った", True], ["行かない", False]]
+    out["分組例外提示"] = await js("Array.prototype.map.call(document.querySelectorAll('.vftbl .vgrp th em.gx'),function(e){return e.textContent;})")
     await call("Page.navigate", {"url": BASE + "#/all/verbs/forms/ichidan"}, sid)
     await wait_until("document.querySelectorAll('.vftbl tbody tr').length")
     out["食べる"] = await row_of("食べる")

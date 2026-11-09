@@ -34,6 +34,10 @@ SPECIAL = {
     "くる": ("きて", "きた", "こない"),
     "する": ("して", "した", "しない"),
 }
+# 規則例外：詳細表要把這些格標紅（行く 的て形・た形不是 いて・いた）
+EXF = {
+    "いく": ["te", "ta"],
+}
 
 
 def forms(jisho, group, masu):
@@ -114,6 +118,8 @@ def main():
                 "audio": audio_for(head, f),
                 "_order": (head["id"], head["vi"]),
             })
+            if kana in EXF:
+                rows[-1]["ex"] = EXF[kana]
 
     for r in rows:
         for name in ("kana", "masu", "te", "ta", "nai"):

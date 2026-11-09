@@ -474,7 +474,11 @@
         "te": "audio/verbform/L06-0-te.mp3",
         "ta": "audio/verbform/L06-0-ta.mp3",
         "nai": "audio/verbform/L06-0-nai.mp3"
-       }
+       },
+       "ex": [
+        "te",
+        "ta"
+       ]
       },
       {
        "group": "godan",

@@ -620,6 +620,7 @@
   .vftbl tr.vgrp th{background:var(--sand2); font-size:11.5px; font-weight:600; color:var(--ink2);
     text-align:left; padding:5px 8px; border-top:1px solid var(--line); scroll-margin-top:104px}
   .vftbl tr.vgrp th em{font-style:normal; font-weight:400; color:var(--muted); margin-left:6px}
+  .vftbl tr.vgrp th em.gx{color:var(--shu); font-weight:600}
   .vftbl td{border-top:1px solid var(--line); border-left:1px solid var(--line); padding:6px 1px 5px;
     vertical-align:top; font-family:var(--serif); font-size:11px; line-height:1.4; color:var(--ink);
     letter-spacing:-.01em}
@@ -639,6 +640,13 @@
   .vftbl td.vf .fn{display:block; font-size:11.5px; line-height:1.25; overflow-wrap:anywhere}
   .vftbl td.vf .fk{display:block; font-size:9.5px; line-height:1.2; color:var(--muted);
     overflow-wrap:anywhere; letter-spacing:0}
+  /* 規則例外（行く → 行って・行った）：整格標紅，表下再加一行說明 */
+  .vftbl td.vf.ex{background:#f9e7e2}
+  .vftbl td.vf.ex .fn{color:var(--shu); font-weight:600}
+  .vftbl td.vf.ex .fk{color:#a8685c}
+  .vftbl td.vf.ex.on{background:#f2d6cf}
+  .exnote{margin-top:8px}
+  .exnote .exc{color:var(--shu); font-weight:600}
   .vftbl .spk.vspk{width:16px; height:16px; border:0; background:none; padding:0; margin:2px auto 0;
     color:var(--muted); opacity:.85; display:flex}
   .vftbl .spk.vspk svg{width:12px; height:12px}
@@ -664,7 +672,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v154</span>
+    <span class="ver" id="verTag">v155</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2788,7 +2796,14 @@
     set.blocks.forEach(function(b, bi){
       if (!b.rows.length) return;
       h += '<tr class="vgrp" id="vfg-' + bi + '"><th colspan="5">' + esc(b.title) +
-           '<em>' + b.rows.length + ' 項</em></th></tr>';
+           '<em>' + b.rows.length + ' 項</em>' +
+           (function(){
+             var exb = b.rows.filter(function(r){ return r.ex && r.ex.length; });
+             return exb.length ? '<em class="gx">例外：' + exb.map(function(r){
+               return esc(r.kanji || r.kana);
+             }).join('、') + '</em>' : '';
+           })() +
+           '</th></tr>';
       b.rows.forEach(function(r){
         var au = r.audio || {};
         var kcls = (!r.kanji && r.kana.length >= 7) ? ' class="kl"' : '';
@@ -2805,14 +2820,27 @@
           FORMS.map(function(f){
             var key = f[0];
             var kf = r['k' + key] || '';
-            return '<td class="vf"><span class="fn">' + esc(kf || r[key]) + '</span>' +
+            var isEx = !!(r.ex && r.ex.indexOf(key) >= 0);
+            return '<td class="vf' + (isEx ? ' ex' : '') + '"><span class="fn">' + esc(kf || r[key]) + '</span>' +
               (kf ? '<span class="fk">' + esc(r[key]) + '</span>' : '') + '</td>';
           }).join('') +
         '</tr>';
       });
     });
+    var exRows = [];
+    (set.blocks || []).forEach(function(b){
+      (b.rows || []).forEach(function(r){ if (r.ex && r.ex.length) exRows.push(r); });
+    });
+    var FNLAB = { masu:'ます形', te:'て形', ta:'た形', nai:'ない形' };
+    var exTxt = exRows.map(function(r){
+      var labs = r.ex.map(function(k){ return FNLAB[k] || k; }).join('、');
+      var vals = r.ex.map(function(k){ return '「' + (r['k' + k] || r[k]) + '」'; }).join('、');
+      return (r.kanji || r.kana) + ' 的' + labs + '是' + vals;
+    }).join('；');
     h += '</tbody></table></div>' +
-      '<p class="secnote">點辞書形右邊的喇叭，會依次播放辞書形、ます形、て形、た形、ない形。</p>';
+      '<p class="secnote">點辞書形右邊的喇叭，會依次播放辞書形、ます形、て形、た形、ない形。</p>' +
+      (exRows.length ? '<p class="secnote exnote"><b class="exc">紅字</b>是這組規則的例外：' +
+        exTxt + '，不照該行的規則。</p>' : '');
     app.innerHTML = h;
     var jb = $('#vfjump');
     if (jb) jb.addEventListener('click', function(e){

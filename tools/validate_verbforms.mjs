@@ -116,6 +116,25 @@ for (const kana of ['ある', 'いる', 'する', 'なる', 'わかる', 'あげ
 }
 if (!kbad) ok(`漢字 ${KANJI.length} 條與假名保留 ${12} 條全部符合`);
 
+/* 標紅的規則例外：ex 只可指向四個形，且要有對應的例外值 */
+const EXOK = { いく: ['te', 'ta'] };
+let exBad = 0;
+for (const r of rows) {
+  if (!r.ex) continue;
+  if (!Array.isArray(r.ex) || !r.ex.length) { fail(`${r.kana}: ex 空`); exBad++; continue; }
+  for (const k of r.ex) {
+    if (!['masu', 'te', 'ta', 'nai'].includes(k)) { fail(`${r.kana}: ex 指向未知形 ${k}`); exBad++; }
+  }
+  if (!EXOK[r.kana]) { fail(`${r.kana}: 不應標例外`); exBad++; }
+}
+for (const [kana, keys] of Object.entries(EXOK)) {
+  const r = rows.find((x) => x.kana === kana);
+  if (!r || !r.ex || r.ex.join() !== keys.join()) { fail(`${kana}: 例外標記應為 ${keys.join('/')}`); exBad++; }
+}
+const iku = rows.find((r) => r.kana === 'いく');
+if (iku && !(iku.te === 'いって' && iku.ta === 'いった')) { fail('行く 例外值不對'); exBad++; }
+if (!exBad) ok('例外標記 1 行（行く 的て形・た形）；行って／行った 正確');
+
 const noAudio = rows.filter((r) => !['dict', 'masu', 'te', 'ta', 'nai'].every((k) => r.audio?.[k]));
 if (noAudio.length) fail(`音檔不齊：${noAudio.length} 行，例如 ${noAudio[0].kanji || noAudio[0].kana}`);
 else ok(`每行五段音檔齊全（${rows.length * 5} 段）`);
