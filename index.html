@@ -679,6 +679,7 @@
   .aptbl .appat{width:130px; padding-right:8px; font-family:var(--serif); font-size:13px;
     font-weight:600; line-height:1.5; color:#0b5cad; white-space:nowrap}
   .aptbl .apex{padding-right:6px; font-family:var(--serif); font-size:14px; line-height:1.5; color:var(--ink)}
+  .aptbl .apex .apmk{color:#0b5cad; font-weight:600}
   .aptbl .aprail{width:24px; padding-left:2px; text-align:center}
   .aptbl .aprail .spk.apspk{width:22px; height:22px; margin:0 auto; border:0; background:none; color:var(--muted)}
   .aptbl .aprail .spk.apspk svg{width:13px; height:13px}
@@ -711,7 +712,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v159</span>
+    <span class="ver" id="verTag">v160</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2958,6 +2959,19 @@
      每行＝接續＋句型（藍）、例句、課號。資料在 data/verbapps.json，
      音檔在 audio/apps/（tools/make_apps_audio.py 生成）。 */
   var VERBAPPS = null;
+  /* 例句中屬於「句型」那一段：照課本用藍字標出來（hl 係例句內的原文片段，
+     可多段，例如「て、て～」的兩個て形）。找不到的片段直接略過。 */
+  function apEx(ex, hl){
+    var s = String(ex || ''), rest = s, out = '';
+    (hl || []).forEach(function(m){
+      if (!m) return;
+      var i = rest.indexOf(m);
+      if (i < 0) return;
+      out += esc(rest.slice(0, i)) + '<span class="apmk">' + esc(m) + '</span>';
+      rest = rest.slice(i + m.length);
+    });
+    return out + esc(rest);
+  }
   function renderVerbApps(){
     document.title = '不同形態的應用 · 日語階梯';
     var d = VERBAPPS;
@@ -2989,7 +3003,7 @@
         var href = no ? '#/l/L' + (no.length < 2 ? '0' + no : no) : '';
         h += '<tr class="apr">' +
           '<td class="appat">' + esc(r.pat) + '</td>' +
-          '<td class="apex">' + esc(r.ex) + '</td>' +
+          '<td class="apex">' + apEx(r.ex, r.hl) + '</td>' +
           '<td class="aprail">' +
             (r.a ? '<button class="spk apspk" data-say="' + esc(r.tts || r.ex) + '"' +
               ' data-audio="audio/apps/' + esc(r.a) + '.mp3" aria-label="播放例句">' + SPK + '</button>' : '') +

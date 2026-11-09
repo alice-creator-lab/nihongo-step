@@ -33,6 +33,18 @@ for (const g of d.groups || []) {
       const f = path.join(ROOT, 'audio/apps', r.a + '.mp3');
       if (!fs.existsSync(f) || fs.statSync(f).size < 2000) errs.push(`${where} 缺音檔 ${r.a}.mp3`);
     }
+    /* hl＝例句內要用藍字標出的片段（句型部分）。必須是 ex 內依序出現的原文，
+       否則畫面會靜靜地不標色。 */
+    if (!Array.isArray(r.hl) || !r.hl.length) errs.push(`${where} 缺 hl 標示片段`);
+    else {
+      let rest = r.ex || '';
+      for (const m of r.hl) {
+        if (!m) { errs.push(`${where} hl 有空字串`); continue; }
+        const i = rest.indexOf(m);
+        if (i < 0) errs.push(`${where} hl「${m}」不在例句內或次序不對：${r.ex}`);
+        else rest = rest.slice(i + m.length);
+      }
+    }
   }
 }
 
