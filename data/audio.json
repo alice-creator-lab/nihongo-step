@@ -753,11 +753,7 @@
   "v40": "audio/L08-v40.mp3",
   "v41": "audio/L08-v41.mp3",
   "v42": "audio/L08-v42.mp3",
-  "v43": "audio/L08-v43.mp3",
-  "p6-e0": "audio/L08-p6-e0.mp3",
-  "p6-e1": "audio/L08-p6-e1.mp3",
-  "p7-e0": "audio/L08-p7-e0.mp3",
-  "p7-e1": "audio/L08-p7-e1.mp3"
+  "v43": "audio/L08-v43.mp3"
  },
  "L09": {
   "d0-l0": "audio/L09-d0-l0.mp3",
@@ -1333,7 +1329,11 @@
   "p6-e0": "audio/L14-p6-e0.mp3",
   "p6-e1": "audio/L14-p6-e1.mp3",
   "p7-e0": "audio/L14-p7-e0.mp3",
-  "p7-e1": "audio/L14-p7-e1.mp3"
+  "p7-e1": "audio/L14-p7-e1.mp3",
+  "p8-e0": "audio/L14-p8-e0.mp3",
+  "p8-e1": "audio/L14-p8-e1.mp3",
+  "p9-e0": "audio/L14-p9-e0.mp3",
+  "p9-e1": "audio/L14-p9-e1.mp3"
  },
  "L15": {
   "d0-l0": "audio/L15-d0-l0.mp3",

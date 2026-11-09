@@ -9,7 +9,7 @@
       "level": "N5",
       "label": "初級Ⅰ",
       "vocab": 419,
-      "patterns": 65,
+      "patterns": 63,
       "lessons": [
         {
           "id": "L01",
@@ -78,7 +78,7 @@
       "level": "N5",
       "label": "初級Ⅱ",
       "vocab": 360,
-      "patterns": 67,
+      "patterns": 69,
       "lessons": [
         {
           "id": "L11",
