@@ -26,6 +26,32 @@ for (const g of d.groups || []) {
     if (!r.ex) errs.push(`${where} 缺例句`);
     if (!r.tts) errs.push(`${where} 缺 tts 假名讀法`);
     if (!/^L([1-9]|[1-3]\d|40)$/.test(r.l || '')) errs.push(`${where} 課號不對：${r.l}`);
+    /* 課號必須指到真的教這個句型的課：該課 patterns 內要有同一張句型卡。
+       課本的動詞句型練習課號與 app 40 課的編排不同，照抄課本課號會指錯課。 */
+    else {
+      const f = path.join(ROOT, `data/lesson-L${String(r.l.slice(1)).padStart(2, '0')}.json`);
+      let les = null;
+      try { les = JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { errs.push(`${where} 找不到課文 ${path.basename(f)}`); }
+      // 句型寫法不同的幾行：直接指定該課的句型卡原文
+      const ALIAS = {
+        'に行く': '～に行きます（目的）',
+        '方': '～方（かた）',
+        '前に、～': '～まえに',
+        'ても構いません': '～てもかまいません',
+        'た後で、～': '～たあとで',
+      };
+      if (les) {
+        const clean = (s) => String(s).replace(/[～、，\s]/g, '');
+        const pats = (les.patterns || []).map((p) => p.ja);
+        const want = ALIAS[r.pat];
+        const hit = want ? pats.includes(want)
+          : pats.some((ja) => {
+              const a = clean(ja), b = clean(r.pat);
+              return b.length >= 2 && (a.includes(b) || b.includes(a));
+            });
+        if (!hit) errs.push(`${where} 課號 ${r.l} 的句型卡沒有這個句型`);
+      }
+    }
     if (!r.a) errs.push(`${where} 缺音檔編號`);
     else {
       if (seen.has(r.a)) errs.push(`音檔編號重複：${r.a}`);
