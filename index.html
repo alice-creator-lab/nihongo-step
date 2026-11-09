@@ -665,6 +665,26 @@
     box-shadow:0 8px 22px rgba(34,30,25,.28); bottom:calc(14px + env(safe-area-inset-bottom))}
   .vfstop.on{display:flex}
   .vfstop .vfn{font-weight:400; font-size:12px; opacity:.86}
+  /* 不同形態的應用：照《動詞句型練習》分形態列句型，句型與「的應用」用藍 */
+  .apgrp{margin-top:20px; scroll-margin-top:104px}
+  .apgrp h3{display:flex; align-items:baseline; gap:6px; margin:0 0 2px; padding:7px 10px;
+    background:var(--sand2); border-radius:8px; font-size:13px; font-weight:600; color:var(--ink2)}
+  .apgrp h3 .apy{color:#0b5cad}
+  .apgrp h3 em{margin-left:auto; font-style:normal; font-weight:400; font-size:11px; color:var(--muted)}
+  .aprow{display:flex; align-items:flex-start; gap:8px; padding:10px 2px; border-bottom:1px solid var(--line)}
+  .aprow.playing{background:#f8f1e7}
+  .aprow .spk{width:32px; height:32px; flex:0 0 32px; margin-top:2px}
+  .aprow .apb{flex:1; min-width:0}
+  .aphead{display:flex; align-items:baseline; gap:8px}
+  .appat{flex:1; min-width:0; font-family:var(--serif); font-size:13.5px; font-weight:600;
+    line-height:1.4; color:#0b5cad; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .appat .apf{font-family:var(--sans); font-size:10.5px; font-weight:400; color:var(--muted);
+    margin-right:5px; letter-spacing:.02em}
+  .apex{margin-top:1px; font-family:var(--serif); font-size:14px; line-height:1.55; color:var(--ink)}
+  .apl{flex:0 0 auto; font-size:11px; color:var(--muted); text-decoration:none;
+    white-space:nowrap; -webkit-tap-highlight-color:transparent}
+  .apl:active{color:var(--shu)}
+  @media (max-width:359px){ .appat{font-size:12.5px} .apex{font-size:13px} }
 
   .gacc{border-bottom:1px solid var(--line); padding:11px 2px}
   .gacc summary{display:flex; gap:8px; align-items:baseline; font-size:14.5px; font-weight:500;
@@ -685,7 +705,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v157</span>
+    <span class="ver" id="verTag">v158</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2272,7 +2292,7 @@
       ALLPLAY.btn.classList.remove('onplay');
       ALLPLAY.btn = null;
     }
-    Array.prototype.forEach.call(document.querySelectorAll('.arow.playing, .vrow.playing, .exrow.playing'), function(r){
+    Array.prototype.forEach.call(document.querySelectorAll('.arow.playing, .vrow.playing, .exrow.playing, .aprow.playing'), function(r){
       r.classList.remove('playing');
     });
   }
@@ -2624,12 +2644,11 @@
           ? '第 1–40 課的動詞，按五段、一段、不規則分類；大字是原形，下面是ます形。'
           : '第 1–40 課的形容詞，按い形容詞、な形容詞分類。') + '</p>' +
       '</div>' +
-      (isVerb ? '' :
-        '<a class="afentry" href="#/all/adjs/forms">' +
-          '<div class="tx"><b>形容詞的變化</b>' +
-            '<span>現在・過去 ／ 肯定・否定 一覽</span></div>' +
-          '<span class="go">看一覽 →</span>' +
-        '</a>') +
+      '<a class="afentry" href="#/all/' + (isVerb ? 'verbs/apps' : 'adjs/forms') + '">' +
+        '<div class="tx"><b>' + (isVerb ? '不同形態的應用' : '形容詞的變化') + '</b>' +
+          '<span>' + (isVerb ? 'ます形・辞書形・て形・た形・ない形 的句型' : '現在・過去 ／ 肯定・否定 一覽') + '</span></div>' +
+        '<span class="go">看一覽 →</span>' +
+      '</a>' +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="搜尋原形、假名或中文"></div>' +
       '<div class="jumpbar" id="wtjump"></div>' +
@@ -2925,6 +2944,77 @@
       /* 再按一次＝停止（與其他頁的「播放全部」一致） */
       if (VFP.on && VFP.btn === this){ stopAudio(); return; }
       vfPlayRows(document.querySelectorAll('.vftbl tbody tr:not(.vgrp)'), this);
+    });
+  }
+
+  /* ---------- 不同形態的應用（入口：動詞表頂部） ----------
+     結構照《日本語 GoGoGo 2》「動詞句型練習」：按形態分組，
+     每行＝接續＋句型（藍）、例句、課號。資料在 data/verbapps.json，
+     音檔在 audio/apps/（tools/make_apps_audio.py 生成）。 */
+  var VERBAPPS = null;
+  function renderVerbApps(){
+    document.title = '不同形態的應用 · 日語階梯';
+    var d = VERBAPPS;
+    if (!d || !(d.groups || []).length){
+      app.innerHTML = '<div class="lhead"><a class="back" href="#/all/verbs">← 動詞表</a>' +
+        '<h1>不同形態的應用</h1></div><p class="secnote">資料載入失敗，請重新整理。</p>';
+      return;
+    }
+    var tot = d.groups.reduce(function(n, g){ return n + g.rows.length; }, 0);
+    var h = '<div class="lhead">' +
+      '<a class="back" href="#/all/verbs">← 動詞表</a>' +
+      '<h1>不同形態的應用<span class="k">どうし の おうよう</span></h1>' +
+      '<p class="goal">同一個動詞，換一個形態就多一種說法。左邊是接續與句型，右邊是例句，最後是課號。</p>' +
+    '</div>' +
+    '<div class="jumpbar" id="apjump">' + d.groups.map(function(g, i){
+      return '<button class="jump" data-i="' + i + '">' + esc(g.form) +
+             '<b>' + g.rows.length + '</b></button>';
+    }).join('') + '</div>' +
+    '<div class="alltop"><p class="cnt">共 ' + tot + ' 個句型 · ' + d.groups.length + ' 組</p>' +
+      '<button class="btn2" id="applay">▶ 播放全部</button></div>' +
+    '<div id="aplist">';
+    d.groups.forEach(function(g, i){
+      h += '<section class="apgrp" id="apg-' + i + '">' +
+        '<h3>「' + esc(g.form) + '」<span class="apy">的應用</span>' +
+          '<em>' + g.rows.length + ' 個句型</em></h3>';
+      g.rows.forEach(function(r){
+        var no = String(r.l || '').replace(/\D/g, '');
+        var href = no ? '#/l/L' + (no.length < 2 ? '0' + no : no) : '';
+        h += '<div class="aprow">' +
+          '<button class="spk" data-say="' + esc(r.tts || r.ex) + '"' +
+            (r.a ? ' data-audio="audio/apps/' + esc(r.a) + '.mp3"' : '') +
+            ' aria-label="播放例句">' + SPK + '</button>' +
+          '<div class="apb"><div class="aphead">' +
+            '<span class="appat"><span class="apf">' + esc(g.form) + '</span>' + esc(r.pat) + '</span>' +
+            (href ? '<a class="apl" href="' + href + '">' + esc(r.l) + '</a>'
+                  : '<span class="apl">' + esc(r.l || '') + '</span>') +
+          '</div>' +
+          '<div class="apex">' + esc(r.ex) + '</div></div>' +
+        '</div>';
+      });
+      h += '</section>';
+    });
+    h += '</div><p class="secnote">點喇叭聽示範音；按右邊的課號可以跳到那一課的句型。' +
+      '「播放全部」由第一句順播，中途按畫面下方的「停止播放」，或再按一次按鈕即停。</p>';
+    app.innerHTML = h;
+    var jb = $('#apjump');
+    if (jb) jb.addEventListener('click', function(e){
+      var b = e.target.closest('.jump'); if (!b) return;
+      var el = document.getElementById('apg-' + b.getAttribute('data-i'));
+      if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+    var list = $('#aplist');
+    bindSpeakers(list);
+    var pa = $('#applay');
+    if (pa) pa.addEventListener('click', function(){
+      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+      var items = [];
+      Array.prototype.forEach.call(list.querySelectorAll('.aprow'), function(row){
+        var b = row.querySelector('[data-audio]');
+        if (b) items.push({ audio: b.getAttribute('data-audio'), el: row });
+      });
+      if (!items.length){ toast('這頁還沒有音檔'); return; }
+      playAllQueued(items, this);
     });
   }
 
@@ -3397,6 +3487,7 @@
     var vf = h.match(/^\/all\/verbs\/forms\/(godan|ichidan|irregular)/);
     if (vf){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderVerbForms(vf[1]); return; }
     var wm = h.match(/^\/all\/(verbs|adjs)/);
+    if (h === '/all/verbs/apps'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderVerbApps(); return; }
     if (h === '/all/adjs/forms'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderAdjForms(); return; }
     if (wm){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderWordTable(wm[1]); return; }
     var m = h.match(/^\/l\/(L\d{2})(?:\/([a-z]+))?/);
@@ -3432,6 +3523,8 @@
     if (/audio\/(verb|adj)\//.test(url)) return 't1';
     /* 動詞詳細表（audio/verbform/）自成一套版本號 */
     if (/audio\/verbform\//.test(url)) return 'vf1';
+    /* 不同形態的應用（audio/apps/）自成一套版本號 */
+    if (/audio\/apps\//.test(url)) return 'ap1';
     /* 形容詞變化頁（audio/adjform/）自成一套版本號 */
     if (/audio\/adjform\//.test(url)) return 'f1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
@@ -3469,6 +3562,7 @@
     getJSON('data/audio.json').then(function(m){ AUDIO = m || {}; }).catch(function(){});
     getJSON('data/wordtables.json').then(function(m){ WT = m || null; }).catch(function(){});
     getJSON('data/verbforms.json').then(function(m){ VERBFORMS = m || null; }).catch(function(){});
+    getJSON('data/verbapps.json').then(function(m){ VERBAPPS = m || null; }).catch(function(){});
     getJSON('data/kanji-readings.json').then(function(m){ KANJI_READ = (m && m.dict) || {}; }).catch(function(){});
     getJSON('data/course.json').then(function(c){
       course = c;
