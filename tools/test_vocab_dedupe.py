@@ -67,7 +67,7 @@ async def main():
         if await js("document.querySelectorAll('#alllist .arow').length"): break
         await asyncio.sleep(1)
 
-    check("版本", await js("(document.querySelector('#verTag')||{}).innerText"), lambda s: s and s.startswith("v17"))
+    check("版本", await js("(document.querySelector('#verTag')||{}).innerText"), lambda s: s and s.startswith("v1"))
     check("項數", await js("document.querySelectorAll('#alllist .arow').length"), EXPECT)
     check("計數文字", await js("(document.querySelector('#allcnt')||{}).innerText"), "共 %d 項 · 40 課" % EXPECT)
 

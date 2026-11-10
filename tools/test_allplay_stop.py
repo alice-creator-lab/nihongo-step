@@ -157,6 +157,36 @@ async def main():
     await wait_until("document.querySelectorAll('#alllist .gacc').length")
     out["換頁後收起"] = await js("!document.getElementById('allstop').classList.contains('on')")
 
+    # 5b) 全程只用一個 <audio>：iOS Safari 每段 new Audio() 會在幾十段後卡死
+    await call("Page.navigate", {"url": BASE + "#/all/vocab"}, sid)
+    await wait_until("document.querySelectorAll('#alllist .arow').length")
+    await js("""(function(){
+      window.__audioNew = 0;
+      var O = window.Audio;
+      window.Audio = function(u){ window.__audioNew++; return new O(u); };
+      window.Audio.prototype = O.prototype;
+      var p = HTMLMediaElement.prototype.play;
+      HTMLMediaElement.prototype.play = function(){ window.__cur = this;
+        window.__played.push(String(this.src||'').split('/audio/').pop());
+        return p.apply(this, arguments); };
+      window.__played = window.__played || [];
+    })()""")
+    await js("document.getElementById('allplay').click()")
+    await asyncio.sleep(1.0)
+    out["建立音檔元素數"] = await js("window.__audioNew")
+    out["單一播放器"] = (out["建立音檔元素數"] is not None and out["建立音檔元素數"] <= 1)
+
+    # 5c) watchdog：播到一半被系統打斷（paused 又冇 ended），會自動接下一項
+    before = await js("document.getElementById('allstopN').textContent.trim()")
+    await js("if (window.__cur) window.__cur.pause()")
+    await asyncio.sleep(3.2)
+    after = await js("document.getElementById('allstopN').textContent.trim()")
+    out["打斷前後"] = [before, after]
+    out["打斷後自動續播"] = bool(before and after and before != after
+                              and await js("document.getElementById('allstop').classList.contains('on')"))
+    await js("document.getElementById('allstop').click()")
+    await asyncio.sleep(0.3)
+
     # 6) 360px 無溢出
     await viewport(360)
     await call("Page.navigate", {"url": BASE + "#/all/vocab"}, sid)

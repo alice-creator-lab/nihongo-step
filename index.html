@@ -760,7 +760,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v179</span>
+    <span class="ver" id="verTag">v180</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2455,8 +2455,18 @@
     var rows = document.querySelectorAll('.srow.playing');
     for (var i = 0; i < rows.length; i++) rows[i].classList.remove('playing');
   }
-  /* 連續播放（詞語總表／每課單字／動詞表）：底部浮動「停止播放」鍵，長表中途可停 */
-  var ALLPLAY = { on:false, btn:null, n:0 };
+  /* 連續播放（詞語總表／每課單字／動詞表）：底部浮動「停止播放」鍵，長表中途可停。
+     全程重用同一個 <audio>：iOS Safari 每段都 new Audio() 時，播到幾十段後
+     play() 會被拒（Promise reject）而且唔會派 ended／error，整條隊列就卡死。
+     另外加 watchdog：ended／error 漏發時照樣前進，唔會停在一個詞。 */
+  var ALLPLAY = { on:false, btn:null, n:0, tok:0, el:null };
+  function seqAudio(){
+    if (!ALLPLAY.el){
+      try{ var a = new Audio(); a.preload = 'auto'; ALLPLAY.el = a; }
+      catch(e){ try{ ALLPLAY.el = new Audio(); }catch(e2){ return null; } }
+    }
+    return ALLPLAY.el;
+  }
   /* 浮動停止鍵（詞語總表「播放全部」）：只在播放中出現，顯示「第幾項／共幾項」 */
   function allBar(on, n){
     var el = document.getElementById('allstop');
@@ -2469,6 +2479,8 @@
     if (!ALLPLAY) return;
     ALLPLAY.on = false;
     ALLPLAY.n = 0;
+    ALLPLAY.tok++;                 /* 令舊的 ended／error 回呼失效 */
+    if (ALLPLAY.el){ try{ ALLPLAY.el.pause(); }catch(e){} }
     if (typeof allBar === 'function') allBar(false);
 
     if (ALLPLAY.btn){
@@ -2480,13 +2492,13 @@
       r.classList.remove('playing');
     });
   }
-  /* 播放全部時，畫面跟著當前字詞走 */
-  function followRow(el){
+  /* 播放全部時，畫面跟著當前字詞走（instant：長表逐行平滑捲動會像跳來跳去） */
+  function followRow(el, instant){
     if (!el || !el.getBoundingClientRect) return;
     var r = el.getBoundingClientRect();
     var vh = window.innerHeight || 640;
     if (r.top < 96 || r.bottom > vh - 32){
-      try{ el.scrollIntoView({ behavior:'smooth', block:'center' }); }
+      try{ el.scrollIntoView(instant ? { block:'center' } : { behavior:'smooth', block:'center' }); }
       catch(e){ el.scrollIntoView(); }
     }
   }
@@ -2495,31 +2507,53 @@
     var list = items.filter(function(x){ return x && x.audio; });
     if (!list.length){ toast('這批項目還沒有音檔'); return; }
     stopAudio();
+    var token = ++ALLPLAY.tok;
     ALLPLAY.on = true;
     ALLPLAY.btn = btn;
     ALLPLAY.n = list.length;
     btn.classList.add('onplay');
     btn.textContent = '■ 停止';
-    var i = 0;
-    function step(){
-      if (!ALLPLAY.on) return;
-      if (i >= list.length){ stopAllPlay(); return; }
-      var it = list[i];
-      if (it.el){ it.el.classList.add('playing'); followRow(it.el); }
-      allBar(true, (i + 1) + '／' + list.length);
-      /* 預載下一段，縮短段與段之間空白 */
-      var nx = list[i + 1];
-      if (nx && nx.audio){
-        try{ var pre = new Audio(nx.audio + '?v=' + auVer(nx.audio)); pre.preload = 'auto'; pre.load(); }catch(e){}
-      }
-      var ok = playFile(it.audio, function(){
-        if (it.el) it.el.classList.remove('playing');
-        if (!ALLPLAY.on) return;
-        i++;
-        step();
-      });
-      if (!ok){ if (it.el) it.el.classList.remove('playing'); stopAllPlay(); }
+    var a = seqAudio();
+    var i = 0, poll = null, fails = 0, cur = null;
+
+    function clearPoll(){ if (poll){ clearInterval(poll); poll = null; } }
+    function endItem(ok){
+      clearPoll();
+      if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
+      if (cur && cur.el) cur.el.classList.remove('playing');
+      fails = ok ? 0 : fails + 1;
+      if (fails >= 3){ stopAllPlay(); toast('播放中斷，請再按一次「播放全部」'); return; }
+      i++;
+      step();
     }
+    function step(){
+      if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
+      if (i >= list.length){ stopAllPlay(); return; }
+      cur = list[i];
+      if (cur.el){ cur.el.classList.add('playing'); followRow(cur.el, true); }
+      allBar(true, (i + 1) + '／' + list.length);
+      if (!a){ endItem(false); return; }
+      try{
+        a.pause();
+        a.src = cur.audio + '?v=' + auVer(cur.audio);
+        try{ a.currentTime = 0; }catch(e){}
+      }catch(e2){}
+      try{ var pr = a.play(); if (pr && pr.catch) pr.catch(function(){}); }catch(e3){}
+      clearPoll();
+      var zero = 0, stall = 0;
+      poll = setInterval(function(){
+        if (!ALLPLAY.on || ALLPLAY.tok !== token){ clearPoll(); return; }
+        var st = 0, dur = 0, paused = true;
+        try{ st = a.currentTime || 0; dur = a.duration || 0; paused = a.paused; }catch(e){}
+        if (a.ended || (dur && st >= dur - 0.25)){ endItem(true); return; }
+        if (st <= 0.05){ zero++; } else { zero = 0; }
+        if (zero >= 10){ endItem(false); return; }              /* 4 秒完全冇開始播＝失敗 */
+        if (paused && st > 0.05){ stall++; } else { stall = 0; }
+        if (stall >= 4){ endItem(false); return; }              /* 播到一半停住 1.6 秒＝被系統打斷 */
+      }, 400);
+    }
+    a.onended = function(){ endItem(true); };
+    a.onerror = function(){ endItem(false); };
     step();
   }
 
