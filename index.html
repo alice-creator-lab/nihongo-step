@@ -754,7 +754,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v175</span>
+    <span class="ver" id="verTag">v176</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1112,6 +1112,41 @@
   }
 
   /* ---------- map ---------- */
+  /* ---------- 詞語去重：同一詞（不同課重複出現）只保留最早一課 ----------
+     1. 同一 kanji＋kana＝同一詞。
+     2. 動詞的「ます形／辞書形」要當同一詞（かえります＝かえる、ねます＝ねる）。
+     3. 無漢字時靠詞性分辨：コピー（名詞）不是 コピーします（動詞）、もう（副詞）不是 もうします。 */
+  var VROW = { 'い':'う','き':'く','ぎ':'ぐ','し':'す','ち':'つ','に':'ぬ','ひ':'ふ',
+               'び':'ぶ','み':'む','り':'る' };
+  function vocabIsVerb(v){ return (v.pos || '').indexOf('動詞') === 0; }
+  function sameVerbKana(a, b){
+    if (a === b) return true;
+    var stem, other;
+    if (a.slice(-2) === 'ます'){ stem = a.slice(0, -2); other = b; }
+    else if (b.slice(-2) === 'ます'){ stem = b.slice(0, -2); other = a; }
+    else return false;
+    if (!stem || other.slice(-2) === 'ます') return false;
+    if (other === stem + 'る') return true;                       /* 一段：ね→ねる */
+    var last = stem.slice(-1);
+    return !!(VROW[last] && other === stem.slice(0, -1) + VROW[last]);  /* 五段：かえり→かえる */
+  }
+  function sameVocab(a, b){
+    if (a.kana !== b.kana){
+      if (!(vocabIsVerb(a) && vocabIsVerb(b) && sameVerbKana(a.kana, b.kana))) return false;
+    }
+    if (a.kanji || b.kanji) return (a.kanji || '') === (b.kanji || '');
+    return (a.pos || '') === (b.pos || '');
+  }
+  /* 回傳 true 代表這個詞已經出現過（應略過）；否則記錄下來 */
+  function vocabSeenPush(store, v){
+    var key = v.kanji || ((v.pos || '') + '|' + v.kana);
+    var arr = store[key];
+    if (!arr){ store[key] = [v]; return false; }
+    for (var i = 0; i < arr.length; i++) if (sameVocab(arr[i], v)) return true;
+    arr.push(v);
+    return false;
+  }
+
   function availableLessons(){
     var out = [];
     course.books.forEach(function(b){ b.lessons.forEach(function(l){ if (l.available) out.push(l); }); });
@@ -1162,9 +1197,8 @@
       if (!j) return;
       (j.vocab || []).forEach(function(v){
         if (v.seqOnly) return;   /* 同詞語總表一致：數字＋量詞的整組只放順序表 */
-        var sig = (v.kanji || '') + '|' + v.kana + '|' + v.zh;
-        if (vocabSeen[sig]) return;
-        vocabSeen[sig] = 1; vocabTotal++;
+        if (vocabSeenPush(vocabSeen, v)) return;   /* 同一詞只保留最早出現的一課 */
+        vocabTotal++;
       });
       grammarTotal += (j.grammar || []).length;
     });
@@ -2365,16 +2399,14 @@
   /* ---------- router ---------- */
   /* ---------- 綜合頁：詞語總表／文法總表 ---------- */
   function allVocabItems(){
-    var out = [], seen = {};
+    var out = [], vocabSeen = {};
     availableLessons().forEach(function(meta){
       var l = lessons[meta.id]; if (!l || !l.vocab) return;
       l.vocab.forEach(function(v){
         /* seqOnly：整組數字＋量詞（一階～十階…）只放進「順序表」，
            詞語總表只保留量詞本身（例如「階」），免得兩邊重疊 */
         if (v.seqOnly) return;
-        var sig = (v.kanji || '') + '|' + v.kana + '|' + v.zh;
-        if (seen[sig]) return;
-        seen[sig] = 1;
+        if (vocabSeenPush(vocabSeen, v)) return;   /* 同一詞只保留最早出現的一課 */
         out.push({ v: v, id: meta.id, no: meta.no, title: meta.title, vi: l.vocab.indexOf(v) });
       });
     });
@@ -2672,7 +2704,7 @@
         '<h1>' + (isVocab ? '詞語總表' : '文法總表') +
           '<span class="k">' + (isVocab ? 'たんご' : 'ぶんぽう') + '</span></h1>' +
         '<p class="goal">' + (isVocab
-          ? '第 1–40 課的全部單字，可依假名、漢字或中文搜尋；點喇叭聽讀音。'
+          ? '第 1–40 課的單字，同一詞重複出現時只列最早的一課；可依假名、漢字或中文搜尋，點喇叭聽讀音。'
           : '第 1–40 課的全部文法，點標題展開說明與例句。') + '</p>' +
       '</div>' +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
