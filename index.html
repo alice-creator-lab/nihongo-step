@@ -652,6 +652,20 @@
   .aftbl td .afspk svg{width:13px; height:13px}
   .aftbl td .afspk.on{color:var(--shu); opacity:1}
   @media (max-width:359px){ .aftbl td{font-size:10px} }
+  /* 第18課：普通形 ⇄ ます形 對照（入口：第18課頁頂） */
+  .aftbl.pl td{font-size:12px; line-height:1.8; padding:8px 4px 7px; letter-spacing:-.01em}
+  .aftbl.pl .tense{width:20px; font-size:11.5px}
+  .aftbl.pl .pol{width:26px; font-size:10.5px}
+  .aftbl.pl td .f{white-space:normal; overflow-wrap:anywhere}
+  .aftbl.pl td .f.alt{font-size:11px; color:var(--muted); margin-top:2px}
+  .gsec h3 .wk{font-family:var(--sans); font-size:11px; font-weight:400; color:var(--muted);
+    margin-left:7px; letter-spacing:0}
+  .prule{margin:2px 0 0; padding-left:20px}
+  .prule li{font-size:13.5px; color:var(--ink2); line-height:1.9; margin-bottom:9px}
+  .prule li:last-child{margin-bottom:0}
+  .prule li b{color:var(--ink); font-weight:600}
+  .prule li b.exw{color:#0b5cad}
+  @media (max-width:359px){ .aftbl.pl td{font-size:11.5px} }
   /* 動詞詳細表：辞書形行頭，ます形・て形・た形・ない形五欄，按語尾的行分組 */
   .wth .vfentry{flex:0 0 auto; border:1px solid var(--line); border-radius:999px; background:var(--card);
     padding:3px 9px; font-size:11px; font-weight:500; color:var(--shu); text-decoration:none; white-space:nowrap}
@@ -760,7 +774,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v189</span>
+    <span class="ver" id="verTag">v190</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1347,6 +1361,12 @@
         '<h1>'+esc(lesson.title)+'<span class="k">'+esc(lesson.titleJa)+'</span></h1>' +
         '<p class="goal">'+esc(lesson.goal)+'</p>' +
       '</div>' +
+      (lesson.id === 'L18'
+        ? '<a class="afentry" href="#/plain">' +
+            '<div class="tx"><b>普通形 ⇄ ます形 對照表</b>' +
+              '<span>四種形式一覽，含轉換規律與例外</span></div>' +
+            '<span class="go">看一覽 →</span></a>'
+        : '') +
       '<nav class="tabs" id="tabs">'+segs+'</nav>' +
       '<section class="sec" id="seg"></section>' +
       '<div class="lfoot">' +
@@ -3605,6 +3625,76 @@
     });
   }
 
+  /* ---------- 第18課：普通形 ⇄ ます形 對照（入口：第18課頁頂） ----------
+     每組一張表：欄＝普通形／ます形（形容詞與名詞是です形），
+     列＝現在·過去 × 肯定·否定，跟「形容詞的變化」同一款表格。 */
+  var PLAINGRID = [
+    { h:'動詞（五段）', w:'書く', k:'かく', col:'ます形', rows:[
+      ['書く','書きます'], ['書かない','書きません'],
+      ['書いた','書きました'], ['書かなかった','書きませんでした'] ] },
+    { h:'動詞（一段）', w:'食べる', k:'たべる', col:'ます形', rows:[
+      ['食べる','食べます'], ['食べない','食べません'],
+      ['食べた','食べました'], ['食べなかった','食べませんでした'] ] },
+    { h:'動詞（不規則）', w:'する', k:'', col:'ます形', rows:[
+      ['する','します'], ['しない','しません'],
+      ['した','しました'], ['しなかった','しませんでした'] ] },
+    { h:'動詞（不規則）', w:'来る', k:'くる', col:'ます形', rows:[
+      ['来る','来ます'], ['来ない','来ません'],
+      ['来た','来ました'], ['来なかった','来ませんでした'] ] },
+    { h:'い形容詞', w:'高い', k:'たかい', col:'です形', rows:[
+      ['高い','高いです'], ['高くない','高くないです','高くありません'],
+      ['高かった','高かったです'], ['高くなかった','高くなかったです','高くありませんでした'] ] },
+    { h:'な形容詞', w:'静か', k:'しずか', col:'です形', rows:[
+      ['静かだ','静かです'], ['静かじゃない','静かじゃありません','静かではありません'],
+      ['静かだった','静かでした'], ['静かじゃなかった','静かじゃありませんでした','静かではありませんでした'] ] },
+    { h:'名詞', w:'学生', k:'がくせい', col:'です形', rows:[
+      ['学生だ','学生です'], ['学生じゃない','学生じゃありません','学生ではありません'],
+      ['学生だった','学生でした'], ['学生じゃなかった','学生じゃありませんでした','学生ではありませんでした'] ] }
+  ];
+
+  function renderPlainForms(){
+    document.title = '普通形與ます形對照 · 日語階梯';
+    var h = '<div class="lhead">' +
+      '<a class="back" href="#/l/L18/grammar">← 第18課</a>' +
+      '<h1>普通形 ⇄ ます形<span class="k">ふつうけい と ますけい</span></h1>' +
+      '<p class="goal">同一個意思的兩種說法：左邊普通形（常體），右邊禮貌形。每一組按現在肯定、現在否定、過去肯定、過去否定排列。</p>' +
+      '</div>' +
+      '<p class="secnote">「ます形」只有動詞才有；形容詞與名詞的禮貌形是在後面接「です」，所以右欄寫「です形」。四格一一對應——換的是語尾，不是意思。</p>';
+
+    PLAINGRID.forEach(function(b){
+      h += '<section class="gsec"><h3>' + b.h + '　' + b.w +
+             (b.k ? '<span class="wk">' + b.k + '</span>' : '') + '</h3>' +
+        '<div class="aftblwrap"><table class="aftbl pl">' +
+          '<thead><tr><th class="cnr" colspan="2"></th><th>普通形</th><th>' + b.col + '</th></tr></thead><tbody>';
+      b.rows.forEach(function(r, i){
+        h += '<tr>' +
+          (i % 2 === 0 ? '<th class="tense" rowspan="2">' + (i < 2 ? '現在' : '過去') + '</th>' : '') +
+          '<th class="pol">' + (i % 2 === 0 ? '肯定' : '否定') + '</th>' +
+          '<td><span class="f">' + r[0] + '</span></td>' +
+          '<td><span class="f">' + r[1] + '</span>' +
+            (r[2] ? '<span class="f alt">' + r[2] + '</span>' : '') + '</td>' +
+        '</tr>';
+      });
+      h += '</tbody></table></div></section>';
+    });
+
+    h += '<section class="gsec"><h3>轉換規律</h3><ol class="prule">' +
+      '<li><b>動詞四格對應：</b>ます ↔ 辞書形、ません ↔ ない形、ました ↔ た形、ませんでした ↔ なかった形。四個位置一一對應，記住左邊一種，右邊就推得出來。</li>' +
+      '<li><b>な形容詞與名詞：</b>肯定時只差一個「だ」與「です」；否定與過去只是把 です 換成相應的禮貌形（じゃない ↔ じゃありません、だった ↔ でした）。</li>' +
+      '<li><b>い形容詞：</b>後面不加「だ」，禮貌形直接在後面接「です」。否定有兩種說法：〜くないです（口語常用）與 〜くありません（較正式），意思一樣。</li>' +
+      '<li><b>四個形式只靠兩個來源：</b>ない形與た形。なかった形＝ない形變過去（ない→なかった），所以會了ない形與た形，四格就齊。</li>' +
+      '</ol></section>';
+
+    h += '<section class="gsec"><h3>例外</h3><ol class="prule">' +
+      '<li><b class="exw">いい</b>（好）：よくない／よかった／よくなかった。變化用「よ」，不是「い」。</li>' +
+      '<li><b class="exw">ある</b>（有）：否定直接是「ない」，沒有「あらない」。</li>' +
+      '<li><b class="exw">行く</b>：て形、た形是 行って／行った，不是 行いて。</li>' +
+      '<li><b class="exw">来る</b>：ます形寫「来ます」但讀「きます」，否定「来ない」讀「こない」——漢字照寫，讀音換掉。</li>' +
+      '</ol></section>';
+
+    app.innerHTML = h;
+  }
+
   /* ---------- 練習本 ---------- */
   var noteRun = null;
   var nbTabSel = 'word';           /* 'word' 單字 ／ 'sent' 文法例句 */
@@ -4032,6 +4122,7 @@
     if (h === '/all/verbs/apps'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderVerbApps(); return; }
     if (h === '/all/adjs/forms'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderAdjForms(); return; }
     if (wm){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderWordTable(wm[1]); return; }
+    if (h === '/plain'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderPlainForms(); return; }
     var m = h.match(/^\/l\/(L\d{2})(?:\/([a-z]+))?/);
     if (m && lessons[m[1]]){
       VIEW = 'lesson';
