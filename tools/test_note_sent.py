@@ -162,14 +162,8 @@ async def main():
     await call("Page.navigate", {"url": BASE + "index.html#/note"}, sid)
     await call("Page.reload", {"ignoreCache": True}, sid)
     for _ in range(30):
-        if await js("!!document.querySelector('#nbTabs')"): break
-        await asyncio.sleep(1)
-    for _ in range(10):
         if await js("document.querySelectorAll('#nbTabs button').length"):
             break
-        await asyncio.sleep(0.5)
-    for _ in range(20):
-        if await js("!!document.querySelector('#nbTabs')"): break
         await asyncio.sleep(1)
     check("練習本句子 1", await js("((document.querySelectorAll('#nbTabs button')[1]||{}).innerText||'').trim()"), "句子 1")
 
