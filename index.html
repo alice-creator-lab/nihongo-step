@@ -760,13 +760,14 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v188</span>
+    <span class="ver" id="verTag">v189</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
 <div class="toast" id="toast"></div>
 <button class="vfstop" id="vfstop" aria-label="停止播放">■ 停止播放<span class="vfn" id="vfstopN"></span></button>
 <button class="vfstop" id="allstop" aria-label="停止播放">■ 停止播放<span class="vfn" id="allstopN"></span></button>
+<button class="vfstop" id="dlgstop" aria-label="停止播放">■ 停止播放<span class="vfn" id="dlgstopN"></span></button>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="錯題簿">
   <div class="sheetbox" id="sheetbox"></div>
 </div>
@@ -1991,8 +1992,17 @@
     });
   }
   var PLAYSEQ = { on:false, btn:null };
+  /* 浮動停止鍵（會話「播放整段」）：段落長也可以中途停，顯示第幾句／共幾句 */
+  function dlgBar(on, n){
+    var el = document.getElementById('dlgstop');
+    if (!el) return;
+    el.classList.toggle('on', !!on);
+    var c = document.getElementById('dlgstopN');
+    if (c) c.textContent = (on && n) ? '　' + n : '';
+  }
   function stopSequence(){
     PLAYSEQ.on = false;
+    dlgBar(false);
     if (PLAYSEQ.btn){
       PLAYSEQ.btn.textContent = '▶ 播放整段';
       PLAYSEQ.btn.classList.remove('onplay');
@@ -2000,9 +2010,11 @@
     PLAYSEQ.btn = null;
   }
   function playLines(lines, box, i){
-    if (!PLAYSEQ.on || i >= lines.length || !box){ return; }
+    if (!PLAYSEQ.on || !box){ dlgBar(false); return; }
+    if (i >= lines.length){ stopSequence(); return; }   /* 播完要還原按鈕與收起浮動鍵 */
     var row = box.querySelector('.line[data-line="'+i+'"]');
     if (row) row.classList.add('playing');
+    dlgBar(true, (i + 1) + '／' + lines.length);
     var au = lines[i].audio;
     if (au && playFile(au, function(){
       if (row) row.classList.remove('playing');
@@ -2013,8 +2025,9 @@
       playLines(lines, box, i + 1);
     });
     if (!u){
+      /* 這一句沒有可用語音：跳過，不要整段卡住 */
       if (row) row.classList.remove('playing');
-      return;
+      playLines(lines, box, i + 1);
     }
   }
 
@@ -4112,6 +4125,8 @@
     if (vfs) vfs.addEventListener('click', function(){ stopAudio(); });
     var als = document.getElementById('allstop');
     if (als) als.addEventListener('click', function(){ stopAudio(); });
+    var dgs = document.getElementById('dlgstop');
+    if (dgs) dgs.addEventListener('click', function(){ stopAudio(); });
   }
 
   if ('serviceWorker' in navigator){
