@@ -2949,7 +2949,7 @@
   ]
  },
  "adjs": {
-  "total": 128,
+  "total": 87,
   "groups": [
    {
     "id": "i",
@@ -3094,7 +3094,7 @@
       "id": "L08",
       "vi": 26,
       "group": "i",
-      "kanji": "いい",
+      "kanji": "",
       "kana": "いい",
       "zh": "好的",
       "audio": "audio/adj/L08-26.mp3"
@@ -3166,7 +3166,7 @@
       "id": "L08",
       "vi": 35,
       "group": "i",
-      "kanji": "かわいい",
+      "kanji": "",
       "kana": "かわいい",
       "zh": "可愛的",
       "audio": "audio/adj/L08-35.mp3"
@@ -3281,15 +3281,6 @@
      },
      {
       "id": "L09",
-      "vi": 12,
-      "group": "i",
-      "kanji": "楽しい",
-      "kana": "たのしい",
-      "zh": "愉快的",
-      "audio": "audio/adj/L09-12.mp3"
-     },
-     {
-      "id": "L09",
       "vi": 26,
       "group": "i",
       "kanji": "暗い",
@@ -3355,7 +3346,7 @@
       "id": "L09",
       "vi": 33,
       "group": "i",
-      "kanji": "まずい",
+      "kanji": "",
       "kana": "まずい",
       "zh": "難吃的",
       "audio": "audio/adj/L09-33.mp3"
@@ -3433,51 +3424,6 @@
       "audio": "audio/adj/L09-41.mp3"
      },
      {
-      "id": "L14",
-      "vi": 13,
-      "group": "i",
-      "kanji": "",
-      "kana": "さむい",
-      "zh": "冷",
-      "audio": "audio/adj/L14-13.mp3"
-     },
-     {
-      "id": "L14",
-      "vi": 14,
-      "group": "i",
-      "kanji": "",
-      "kana": "はやい",
-      "zh": "早、快",
-      "audio": "audio/adj/L14-14.mp3"
-     },
-     {
-      "id": "L15",
-      "vi": 24,
-      "group": "i",
-      "kanji": "",
-      "kana": "つめたい",
-      "zh": "冰的、冷的",
-      "audio": "audio/adj/L15-24.mp3"
-     },
-     {
-      "id": "L18",
-      "vi": 19,
-      "group": "i",
-      "kanji": "難しい",
-      "kana": "むずかしい",
-      "zh": "難",
-      "audio": "audio/adj/L18-19.mp3"
-     },
-     {
-      "id": "L18",
-      "vi": 22,
-      "group": "i",
-      "kanji": "忙しい",
-      "kana": "いそがしい",
-      "zh": "忙",
-      "audio": "audio/adj/L18-22.mp3"
-     },
-     {
       "id": "L19",
       "vi": 3,
       "group": "i",
@@ -3514,33 +3460,6 @@
       "audio": "audio/adj/L22-20.mp3"
      },
      {
-      "id": "L22",
-      "vi": 21,
-      "group": "i",
-      "kanji": "",
-      "kana": "はやい",
-      "zh": "快",
-      "audio": "audio/adj/L22-21.mp3"
-     },
-     {
-      "id": "L22",
-      "vi": 22,
-      "group": "i",
-      "kanji": "",
-      "kana": "おそい",
-      "zh": "慢、晚",
-      "audio": "audio/adj/L22-22.mp3"
-     },
-     {
-      "id": "L22",
-      "vi": 23,
-      "group": "i",
-      "kanji": "",
-      "kana": "ひろい",
-      "zh": "寬廣",
-      "audio": "audio/adj/L22-23.mp3"
-     },
-     {
       "id": "L23",
       "vi": 23,
       "group": "i",
@@ -3551,48 +3470,12 @@
      },
      {
       "id": "L36",
-      "vi": 10,
-      "group": "i",
-      "kanji": "",
-      "kana": "おいしい",
-      "zh": "好吃",
-      "audio": "audio/adj/L36-10.mp3"
-     },
-     {
-      "id": "L36",
-      "vi": 11,
-      "group": "i",
-      "kanji": "",
-      "kana": "あまい",
-      "zh": "甜",
-      "audio": "audio/adj/L36-11.mp3"
-     },
-     {
-      "id": "L36",
-      "vi": 12,
-      "group": "i",
-      "kanji": "",
-      "kana": "からい",
-      "zh": "辣、鹹",
-      "audio": "audio/adj/L36-12.mp3"
-     },
-     {
-      "id": "L36",
       "vi": 13,
       "group": "i",
       "kanji": "",
       "kana": "やわらかい",
       "zh": "柔軟",
       "audio": "audio/adj/L36-13.mp3"
-     },
-     {
-      "id": "L36",
-      "vi": 14,
-      "group": "i",
-      "kanji": "",
-      "kana": "おもい",
-      "zh": "重",
-      "audio": "audio/adj/L36-14.mp3"
      }
     ]
    },
@@ -3745,46 +3628,10 @@
       "audio": "audio/adj/L09-18.mp3"
      },
      {
-      "id": "L14",
-      "vi": 10,
-      "group": "na",
-      "kanji": "静か",
-      "kana": "しずか",
-      "zh": "安靜",
-      "audio": "audio/adj/L14-10.mp3"
-     },
-     {
-      "id": "L14",
-      "vi": 11,
-      "group": "na",
-      "kanji": "便利",
-      "kana": "べんり",
-      "zh": "方便",
-      "audio": "audio/adj/L14-11.mp3"
-     },
-     {
-      "id": "L14",
-      "vi": 12,
-      "group": "na",
-      "kanji": "大変",
-      "kana": "たいへん",
-      "zh": "辛苦、吃力",
-      "audio": "audio/adj/L14-12.mp3"
-     },
-     {
-      "id": "L15",
-      "vi": 25,
-      "group": "na",
-      "kanji": "暇",
-      "kana": "ひま",
-      "zh": "空閒的",
-      "audio": "audio/adj/L15-25.mp3"
-     },
-     {
       "id": "L16",
       "vi": 37,
       "group": "na",
-      "kanji": "りっぱ",
+      "kanji": "",
       "kana": "りっぱ",
       "zh": "出色、了不起",
       "audio": "audio/adj/L16-37.mp3"
@@ -3797,33 +3644,6 @@
       "kana": "かんたん",
       "zh": "簡單",
       "audio": "audio/adj/L18-20.mp3"
-     },
-     {
-      "id": "L18",
-      "vi": 21,
-      "group": "na",
-      "kanji": "元気",
-      "kana": "げんき",
-      "zh": "有精神、健康",
-      "audio": "audio/adj/L18-21.mp3"
-     },
-     {
-      "id": "L18",
-      "vi": 23,
-      "group": "na",
-      "kanji": "暇",
-      "kana": "ひま",
-      "zh": "空閒",
-      "audio": "audio/adj/L18-23.mp3"
-     },
-     {
-      "id": "L19",
-      "vi": 18,
-      "group": "na",
-      "kanji": "大丈夫",
-      "kana": "だいじょうぶ",
-      "zh": "沒問題",
-      "audio": "audio/adj/L19-18.mp3"
      },
      {
       "id": "L20",
@@ -3862,96 +3682,6 @@
       "audio": "audio/adj/L21-14.mp3"
      },
      {
-      "id": "L21",
-      "vi": 15,
-      "group": "na",
-      "kanji": "便利",
-      "kana": "べんり",
-      "zh": "方便",
-      "audio": "audio/adj/L21-15.mp3"
-     },
-     {
-      "id": "L21",
-      "vi": 16,
-      "group": "na",
-      "kanji": "特別",
-      "kana": "とくべつ",
-      "zh": "特別",
-      "audio": "audio/adj/L21-16.mp3"
-     },
-     {
-      "id": "L21",
-      "vi": 17,
-      "group": "na",
-      "kanji": "親切",
-      "kana": "しんせつ",
-      "zh": "親切、熱心",
-      "audio": "audio/adj/L21-17.mp3"
-     },
-     {
-      "id": "L21",
-      "vi": 18,
-      "group": "na",
-      "kanji": "有名",
-      "kana": "ゆうめい",
-      "zh": "有名",
-      "audio": "audio/adj/L21-18.mp3"
-     },
-     {
-      "id": "L21",
-      "vi": 19,
-      "group": "na",
-      "kanji": "上手",
-      "kana": "じょうず",
-      "zh": "擅長",
-      "audio": "audio/adj/L21-19.mp3"
-     },
-     {
-      "id": "L21",
-      "vi": 20,
-      "group": "na",
-      "kanji": "下手",
-      "kana": "へた",
-      "zh": "不擅長",
-      "audio": "audio/adj/L21-20.mp3"
-     },
-     {
-      "id": "L21",
-      "vi": 21,
-      "group": "na",
-      "kanji": "好き",
-      "kana": "すき",
-      "zh": "喜歡",
-      "audio": "audio/adj/L21-21.mp3"
-     },
-     {
-      "id": "L21",
-      "vi": 22,
-      "group": "na",
-      "kanji": "嫌い",
-      "kana": "きらい",
-      "zh": "討厭",
-      "audio": "audio/adj/L21-22.mp3"
-     },
-     {
-      "id": "L22",
-      "vi": 14,
-      "group": "na",
-      "kanji": "静か",
-      "kana": "しずか",
-      "zh": "安靜",
-      "audio": "audio/adj/L22-14.mp3"
-     },
-     {
-      "id": "L22",
-      "vi": 15,
-      "group": "na",
-      "kanji": "",
-      "kana": "にぎやか",
-      "zh": "熱鬧",
-      "audio": "audio/adj/L22-15.mp3"
-     },
-     {
       "id": "L22",
       "vi": 16,
       "group": "na",
@@ -3959,42 +3689,6 @@
       "kana": "おなじ",
       "zh": "一樣、相同",
       "audio": "audio/adj/L22-16.mp3"
-     },
-     {
-      "id": "L22",
-      "vi": 17,
-      "group": "na",
-      "kanji": "大変",
-      "kana": "たいへん",
-      "zh": "辛苦、不得了",
-      "audio": "audio/adj/L22-17.mp3"
-     },
-     {
-      "id": "L22",
-      "vi": 18,
-      "group": "na",
-      "kanji": "便利",
-      "kana": "べんり",
-      "zh": "方便",
-      "audio": "audio/adj/L22-18.mp3"
-     },
-     {
-      "id": "L30",
-      "vi": 19,
-      "group": "na",
-      "kanji": "有名",
-      "kana": "ゆうめい",
-      "zh": "有名",
-      "audio": "audio/adj/L30-19.mp3"
-     },
-     {
-      "id": "L30",
-      "vi": 20,
-      "group": "na",
-      "kanji": "元気",
-      "kana": "げんき",
-      "zh": "精神好、健康",
-      "audio": "audio/adj/L30-20.mp3"
      },
      {
       "id": "L31",
@@ -4024,15 +3718,6 @@
       "audio": "audio/adj/L31-17.mp3"
      },
      {
-      "id": "L31",
-      "vi": 18,
-      "group": "na",
-      "kanji": "心配",
-      "kana": "しんぱい",
-      "zh": "擔心",
-      "audio": "audio/adj/L31-18.mp3"
-     },
-     {
       "id": "L32",
       "vi": 16,
       "group": "na",
@@ -4040,15 +3725,6 @@
       "kana": "ざんねん",
       "zh": "可惜、遺憾",
       "audio": "audio/adj/L32-16.mp3"
-     },
-     {
-      "id": "L32",
-      "vi": 17,
-      "group": "na",
-      "kanji": "大変",
-      "kana": "たいへん",
-      "zh": "辛苦、嚴重",
-      "audio": "audio/adj/L32-17.mp3"
      },
      {
       "id": "L32",
@@ -4061,57 +3737,12 @@
      },
      {
       "id": "L36",
-      "vi": 15,
-      "group": "na",
-      "kanji": "元気",
-      "kana": "げんき",
-      "zh": "有精神",
-      "audio": "audio/adj/L36-15.mp3"
-     },
-     {
-      "id": "L36",
-      "vi": 16,
-      "group": "na",
-      "kanji": "残念",
-      "kana": "ざんねん",
-      "zh": "可惜、遺憾",
-      "audio": "audio/adj/L36-16.mp3"
-     },
-     {
-      "id": "L36",
-      "vi": 17,
-      "group": "na",
-      "kanji": "大変",
-      "kana": "たいへん",
-      "zh": "辛苦、不得了",
-      "audio": "audio/adj/L36-17.mp3"
-     },
-     {
-      "id": "L36",
       "vi": 18,
       "group": "na",
       "kanji": "丈夫",
       "kana": "じょうぶ",
       "zh": "結實、耐用",
       "audio": "audio/adj/L36-18.mp3"
-     },
-     {
-      "id": "L37",
-      "vi": 24,
-      "group": "na",
-      "kanji": "有名",
-      "kana": "ゆうめい",
-      "zh": "有名的",
-      "audio": "audio/adj/L37-24.mp3"
-     },
-     {
-      "id": "L37",
-      "vi": 25,
-      "group": "na",
-      "kanji": "大切",
-      "kana": "たいせつ",
-      "zh": "重要的",
-      "audio": "audio/adj/L37-25.mp3"
      }
     ]
    }

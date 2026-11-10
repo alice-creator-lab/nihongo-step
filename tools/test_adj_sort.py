@@ -5,7 +5,8 @@
   選擇寫入 localStorage `ngs-wsort`，重載後保留。
 - 五十音順：整份次序與測試內獨立算出的五十音鍵逐項比對，並插入「X行」分段標題。
 - 課程順序：右邊課號單調不減。
-- 點字詞本身（不是 ☆、不是喇叭）由該項播到最後，浮動停止鍵出現並顯示「第幾項／128」，
+- 表內同一分類沒有重複讀音（あまい、忙しい 之類只出現一次）。
+- 點字詞本身（不是 ☆、不是喇叭）由該項播到最後，浮動停止鍵出現並顯示「第幾項／總數」，
   一按即停。
 - 390 / 360px 排序 chips 與浮動鍵都不橫向溢出。
 
@@ -89,6 +90,16 @@ FLAT = [x for _, items in GROUPS for x in items]
 TOTAL = len(FLAT)
 GROUP_TITLES = [t for t, _ in GROUPS]
 GROUP_SIZES = [len(items) for _, items in GROUPS]
+
+# 同一分類（い形／な形）不應有重複讀音：重複多數是同一詞在不同課再教一次
+_DUPS = []
+for _t, _items in GROUPS:
+    _seen = {}
+    for _x in _items:
+        _seen[_x["kana"]] = _seen.get(_x["kana"], 0) + 1
+    _DUPS += [(_t, k, v) for k, v in _seen.items() if v > 1]
+if _DUPS:
+    sys.exit("形容詞表有重複：" + ", ".join("%s %s x%d" % d for d in _DUPS))
 
 def sorted_in(group_items, keyf):
     return [x["audio"] for _, x in sorted(enumerate(group_items),

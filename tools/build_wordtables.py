@@ -159,7 +159,7 @@ def main():
                              "kanji": kanji, "kana": kana, "zh": zh,
                              "audio": "audio/adj/%s-%d.mp3" % (les["id"], vi)})
 
-    # 去重（同一課同一個字只留一次；不同課重複的照留，方便對照）
+    # 去重（同一課同一個字只留一次）
     def uniq(items):
         seen, out = set(), []
         for x in items:
@@ -171,6 +171,21 @@ def main():
         return out
 
     verbs, adjs = uniq(verbs), uniq(adjs)
+
+    # 形容詞表再按「分類＋讀音」去重：同一個詞在不同課再出現只留最早那一課，
+    # 免得表內出現兩次あまい、忙しい之類的重複項。動詞表維持原樣（同一動詞
+    # 不同課可能是不同用法，暫不動）。
+    def uniq_adj(items):
+        seen, out = set(), []
+        for x in items:
+            sig = x["group"] + "|" + x["kana"]
+            if sig in seen:
+                continue
+            seen.add(sig)
+            out.append(x)
+        return out
+
+    adjs = uniq_adj(adjs)
 
     vgroups = [("godan", "五段動詞"), ("ichidan", "一段動詞"), ("irregular", "不規則（する・来る）")]
     agroups = [("i", "い形容詞"), ("na", "な形容詞")]
