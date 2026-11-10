@@ -9,7 +9,7 @@
 用法： python3 tools/test_vocab_sort.py [http://127.0.0.1:8934/]
 環境變數：SHOT=/path/x.png 截圖；CDP_PORT 換 port。
 """
-import asyncio, json, os, shutil, subprocess, sys, time, urllib.request
+import asyncio, json, os, re, shutil, subprocess, sys, time, urllib.request
 import websockets
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -103,6 +103,25 @@ def same_verb_kana(a, b):
     return other == stem[:-1] + VSTEM.get(stem[-1], '')
 
 
+def zh_tokens(z):
+    out = []
+    for t in re.split(r'[、，,／/（）()\s。・]+', z or ''):
+        t = t.replace('的', '')
+        if t:
+            out.append(t)
+    return out
+
+
+def zh_alike(a, b):
+    for x in zh_tokens(a):
+        for y in zh_tokens(b):
+            if x == y or x in y or y in x:
+                return True
+            if sorted(x) == sorted(y):
+                return True
+    return False
+
+
 def same_vocab(a, b):
     if a['kana'] != b['kana']:
         if not (is_verb(a) and is_verb(b) and same_verb_kana(a['kana'], b['kana'])):
@@ -114,7 +133,7 @@ def same_vocab(a, b):
         # 一邊寫漢字、另一邊只寫假名：同詞性＋同中文意思才算同一詞（明後日／あさって）
         if ka and kb:
             return False
-        return (a.get('pos') or '') == (b.get('pos') or '') and (a.get('zh') or '') == (b.get('zh') or '')
+        return (a.get('pos') or '') == (b.get('pos') or '') and zh_alike(a.get('zh'), b.get('zh'))
     return (a.get('pos') or '') == (b.get('pos') or '')
 
 
@@ -122,6 +141,7 @@ def vocab_items():
     course = json.load(open(os.path.join(HERE, 'data/course.json')))
     avail = [l for b in course['books'] for l in b['lessons'] if l.get('available')]
     store, out = {'kana': {}, 'kanji': {}}, []
+    by_kana = {}
     for m in avail:
         d = json.load(open(os.path.join(HERE, 'data', 'lesson-%s.json' % m['id'])))
         for v in (d.get('vocab') or []):
@@ -132,11 +152,20 @@ def vocab_items():
             if kanji:
                 cand += store['kanji'].get(kanji, [])
             if any(same_vocab(x, v) for x in cand):
+                # 同一詞：把後來那筆的漢字補到保留的那一筆（ときどき → 時々）
+                for item in by_kana.get(kana, []):
+                    pv = item[1]
+                    if (pv.get('kanji') or '') == kanji or zh_alike(pv.get('zh'), v.get('zh')):
+                        if not pv.get('kanji') and kanji:
+                            pv['kanji'] = kanji
+                        break
                 continue
-            store['kana'].setdefault(kana, []).append(v)
+            keep = dict(v)
+            store['kana'].setdefault(kana, []).append(keep)
             if kanji:
-                store['kanji'].setdefault(kanji, []).append(v)
-            out.append((m['id'], v))
+                store['kanji'].setdefault(kanji, []).append(keep)
+            by_kana.setdefault(kana, []).append((m['id'], keep))
+            out.append((m['id'], keep))
     return out
 
 

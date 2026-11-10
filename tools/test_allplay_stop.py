@@ -187,6 +187,36 @@ async def main():
     await js("document.getElementById('allstop').click()")
     await asyncio.sleep(0.3)
 
+    # 7) 由某一項開始順播：點字詞本身（不是 ☆、不是喇叭）
+    await viewport(390)
+    await call("Page.navigate", {"url": BASE + "#/all/vocab"}, sid)
+    await wait_until("document.querySelectorAll('#alllist .arow').length")
+    picked = await js("""(function(){
+      window.__played = [];
+      var rows = document.querySelectorAll('#alllist .arow');
+      var r = rows[99] || rows[rows.length-1];
+      var sp = r.querySelector('.spk');
+      r.querySelector('.ak').click();
+      return { total: rows.length,
+               audio: sp ? sp.getAttribute('data-audio') : null,
+               text: (r.querySelector('.ak b')||{}).innerText };
+    })()""")
+    await asyncio.sleep(1.2)
+    out["點字詞起播"] = {
+        "所點字詞": picked["text"],
+        "第一段": await js("window.__played[0]"),
+        "該行音檔": picked["audio"],
+        "進度": await js("document.getElementById('allstopN').textContent.trim()"),
+        "浮動鍵": await js("document.getElementById('allstop').classList.contains('on')"),
+        "頁頂按鈕": await js("document.getElementById('allplay').textContent.trim()"),
+    }
+    t = out["點字詞起播"]
+    first = (t["第一段"] or "").split("?")[0]
+    rowfile = (t["該行音檔"] or "").split("/")[-1]
+    out["由所點那項開始"] = bool(rowfile and first == rowfile and t["進度"].startswith("100／"))
+    await js("document.getElementById('allstop').click()")
+    await asyncio.sleep(0.3)
+
     # 6) 360px 無溢出
     await viewport(360)
     await call("Page.navigate", {"url": BASE + "#/all/vocab"}, sid)

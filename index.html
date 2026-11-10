@@ -760,7 +760,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v180</span>
+    <span class="ver" id="verTag">v181</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1137,17 +1137,36 @@
     var last = stem.slice(-1);
     return !!(VROW[last] && other === stem.slice(0, -1) + VROW[last]);  /* 五段：かえり→かえる */
   }
+  /* 中文意思只用來判斷「一課寫漢字、一課只寫假名」時是否同一個詞：
+     按「、／，」切成幾個意思，逐個比對（甜的＝甜、辣＝辣、鹹、有時、偶爾＝有時候） */
+  function zhTokens(z){
+    return String(z || '').split(/[、，,／\/（）()\s。・]+/)
+      .map(function(t){ return t.replace(/的/g, ''); })
+      .filter(function(t){ return !!t; });
+  }
+  function zhAlike(a, b){
+    var ta = zhTokens(a), tb = zhTokens(b);
+    for (var i = 0; i < ta.length; i++){
+      for (var j = 0; j < tb.length; j++){
+        var x = ta[i], y = tb[j];
+        if (x === y) return true;
+        if (x.indexOf(y) > -1 || y.indexOf(x) > -1) return true;
+        if (x.split('').sort().join('') === y.split('').sort().join('')) return true;
+      }
+    }
+    return false;
+  }
   function sameVocab(a, b){
     if (a.kana !== b.kana){
       if (!(vocabIsVerb(a) && vocabIsVerb(b) && sameVerbKana(a.kana, b.kana))) return false;
     }
     if (a.kanji || b.kanji){
       if ((a.kanji || '') === (b.kanji || '')) return true;
-      /* 一邊寫漢字、另一邊只寫假名：同讀音、同詞性、中文意思也一樣才算同一詞
-         （L06「明後日」與 L13「あさって」都是後天）。はやい（早い／速い）
-         這類同音異字意思有別，中文不同就各自保留。 */
+      /* 一邊寫漢字、另一邊只寫假名：同讀音、同詞性、中文意思也對得上才算同一詞
+         （甘い／あまい、時々／ときどき、明後日／あさって）。
+         はやい 早い／速い 這類同音異字兩邊都有漢字，中文不同就各自保留。 */
       if (a.kanji && b.kanji) return false;
-      return (a.pos || '') === (b.pos || '') && (a.zh || '') === (b.zh || '');
+      return (a.pos || '') === (b.pos || '') && zhAlike(a.zh, b.zh);
     }
     return (a.pos || '') === (b.pos || '');
   }
@@ -2415,15 +2434,31 @@
   /* ---------- router ---------- */
   /* ---------- 綜合頁：詞語總表／文法總表 ---------- */
   function allVocabItems(){
-    var out = [], vocabSeen = { kana:{}, kanji:{} };
+    var out = [], vocabSeen = { kana:{}, kanji:{} }, byKana = {};
     availableLessons().forEach(function(meta){
       var l = lessons[meta.id]; if (!l || !l.vocab) return;
       l.vocab.forEach(function(v){
         /* seqOnly：整組數字＋量詞（一階～十階…）只放進「順序表」，
            詞語總表只保留量詞本身（例如「階」），免得兩邊重疊 */
         if (v.seqOnly) return;
-        if (vocabSeenPush(vocabSeen, v)) return;   /* 同一詞只保留最早出現的一課 */
-        out.push({ v: v, id: meta.id, no: meta.no, title: meta.title, vi: l.vocab.indexOf(v) });
+        if (vocabSeenPush(vocabSeen, v)){
+          /* 同一詞已在較早一課出現：把後來那筆的漢字補到總表那一行，
+             免得「ときどき」這種先出現的假名寫法蓋掉後面的「時々」 */
+          var cands = byKana[v.kana] || [];
+          for (var ci = 0; ci < cands.length; ci++){
+            var prev = cands[ci].v;
+            if (prev.kanji === v.kanji || zhAlike(prev.zh, v.zh)){
+              if (!prev.kanji && v.kanji) prev.kanji = v.kanji;
+              break;
+            }
+          }
+          return;
+        }
+        var copy = {};
+        for (var key in v) if (Object.prototype.hasOwnProperty.call(v, key)) copy[key] = v[key];
+        var item = { v: copy, id: meta.id, no: meta.no, title: meta.title, vi: l.vocab.indexOf(v) };
+        (byKana[v.kana] = byKana[v.kana] || []).push(item);
+        out.push(item);
       });
     });
     return out;
@@ -2503,18 +2538,26 @@
     }
   }
 
-  function playAllQueued(items, btn){
-    var list = items.filter(function(x){ return x && x.audio; });
+  /* from：由第幾項開始（長表可以從中間某一項開始順播；進度仍顯示全表的第幾項） */
+  function playAllQueued(items, btn, from){
+    var list = [], startAt = 0, want = from || 0;
+    items.forEach(function(x, k){
+      if (!x || !x.audio) return;
+      if (k <= want) startAt = list.length;
+      list.push(x);
+    });
     if (!list.length){ toast('這批項目還沒有音檔'); return; }
     stopAudio();
     var token = ++ALLPLAY.tok;
     ALLPLAY.on = true;
     ALLPLAY.btn = btn;
     ALLPLAY.n = list.length;
-    btn.classList.add('onplay');
-    btn.textContent = '■ 停止';
+    if (btn){
+      btn.classList.add('onplay');
+      btn.textContent = '■ 停止';
+    }
     var a = seqAudio();
-    var i = 0, poll = null, fails = 0, cur = null;
+    var i = startAt, poll = null, fails = 0, cur = null;
 
     function clearPoll(){ if (poll){ clearInterval(poll); poll = null; } }
     function endItem(ok){
@@ -2830,7 +2873,7 @@
         '<h1>' + (isVocab ? '詞語總表' : '文法總表') +
           '<span class="k">' + (isVocab ? 'たんご' : 'ぶんぽう') + '</span></h1>' +
         '<p class="goal">' + (isVocab
-          ? '第 1–40 課的單字，同一詞重複出現時只列最早的一課；可依假名、漢字或中文搜尋，點喇叭聽讀音。'
+          ? '第 1–40 課的單字，同一詞重複出現時只列最早的一課；可依假名、漢字或中文搜尋，點喇叭聽讀音；點字詞可由該項開始順播到最後。'
           : '第 1–40 課的全部文法，點標題展開說明與例句。') + '</p>' +
       '</div>' +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
@@ -2958,13 +3001,24 @@
     });
 
     var pa = $('#allplay');
-    if (pa) pa.addEventListener('click', function(){
-      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
-      var rows = list.querySelectorAll('.arow');
-      var items2 = curHit.map(function(it, k){
+    var rowsOf = function(){ return list.querySelectorAll('.arow'); };
+    var queueOf = function(){
+      var rows = rowsOf();
+      return curHit.map(function(it, k){
         return { audio: audioFor(it.id, 'v' + it.vi), el: rows[k] };
       });
-      playAllQueued(items2, this);
+    };
+    if (pa) pa.addEventListener('click', function(){
+      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+      playAllQueued(queueOf(), this);
+    });
+    /* 長表可以由中間開始：點字詞本身（不是 ☆、不是喇叭）就由那一項順播到最後 */
+    list.addEventListener('click', function(e){
+      var t = e.target.closest('.arow .ak'); if (!t) return;
+      var row = t.closest('.arow'); if (!row) return;
+      var k = Array.prototype.indexOf.call(rowsOf(), row);
+      if (k < 0) return;
+      playAllQueued(queueOf(), pa, k);
     });
   }
 

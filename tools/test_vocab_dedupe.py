@@ -11,7 +11,7 @@ if not os.path.exists(CHROME):
     CHROME = "/home/admin/.cache/ms-playwright/chromium-1223/chrome-linux64/chrome"
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8934/"
 PORT = int(os.environ.get("CDP_PORT", "9381"))
-EXPECT = int(os.environ.get("EXPECT", "983"))
+EXPECT = int(os.environ.get("EXPECT", "975"))
 
 
 async def main():
@@ -122,6 +122,31 @@ async def main():
       });
       return n;
     })()"""), 2)
+
+    # 形容詞／副詞：一課漢字、一課假名，中文寫法略有不同也算同一詞
+    def rows_of_kana(kana):
+        return """(function(){
+          var n = 0;
+          document.querySelectorAll('#alllist .arow').forEach(function(r){
+            var k = (r.querySelector('.ak b')||{}).innerText || '';
+            var s = (r.querySelector('.ak span')||{}).innerText || '';
+            if (k === '%s' || s === '%s') n++;
+          });
+          return n;
+        })()""" % (kana, kana)
+
+    check("あまい 只一條", await js(rows_of_kana("あまい")), 1)
+    check("ひろい 只一條", await js(rows_of_kana("ひろい")), 1)
+    check("おそい 只一條", await js(rows_of_kana("おそい")), 1)
+    check("ときどき 只一條", await js(rows_of_kana("ときどき")), 1)
+    check("ときどき 保留漢字", await js("""(function(){
+      var rows = document.querySelectorAll('#alllist .arow');
+      for (var i=0;i<rows.length;i++){
+        var b=(rows[i].querySelector('.ak b')||{}).innerText||'';
+        if (b === '時々') return (rows[i].querySelector('.al')||{}).innerText;
+      }
+      return null;
+    })()"""), "L07")
 
     # 搜尋只回一條
     await js("var q=document.querySelector('#allq'); q.value='かえります'; q.dispatchEvent(new Event('input',{bubbles:true})); 1")
