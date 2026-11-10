@@ -760,7 +760,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v186</span>
+    <span class="ver" id="verTag">v187</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2808,13 +2808,13 @@
   var VSK = 'ngs-vsort';
   var VSORT = 'lesson';
   try { if (localStorage.getItem(VSK) === 'kana') VSORT = 'kana'; } catch(e){}
-  /* 形容詞表排序：い形／な形 的分組不動，只在每組內部按課程順序或五十音順排 */
-  var WSK = 'ngs-wsort';
-  var WSORT = 'lesson';
-  try {
-    var wsv = localStorage.getItem(WSK);
-    if (wsv === 'kana') WSORT = 'kana';
-  } catch(e){}
+  /* 動詞表／形容詞表排序：五段・一段・不規則／い形・な形 的分組不動，
+     只在每組內部按課程順序或五十音順排。兩張表各自記住自己的選擇。 */
+  var WSK = { verbs: 'ngs-wvsort', adjs: 'ngs-wsort' };
+  var WSORTS = { verbs: 'lesson', adjs: 'lesson' };
+  Object.keys(WSK).forEach(function(k){
+    try { if (localStorage.getItem(WSK[k]) === 'kana') WSORTS[k] = 'kana'; } catch(e){}
+  });
   var KROWS = ['あいうえお', 'かきくけこ', 'さしすせそ', 'たちつてと', 'なにぬねの',
                'はひふへほ', 'まみむめも', 'やゆよ', 'らりるれろ', 'わを', 'ん'];
   var KROWLET = 'あかさたなはまやらわん'.split('');
@@ -3030,6 +3030,7 @@
   /* ---------- 動詞表／形容詞表 ---------- */
   function renderWordTable(kind){
     var isVerb = kind === 'verbs';
+    var TAB = isVerb ? 'verbs' : 'adjs';
     var title = isVerb ? '動詞表' : '形容詞表';
     var data = WT && WT[kind];
     document.title = title + ' · 日語階梯';
@@ -3051,10 +3052,11 @@
       '<div class="jumpbar" id="wtjump"></div>' +
       '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
         '<button class="btn2" id="allplay">▶ 播放全部</button></div>' +
-      (isVerb ? '' : '<div class="sortrow"><div class="seg2" id="wsort">' +
-        '<button data-s="lesson" class="' + (WSORT === 'lesson' ? 'on' : '') + '">課程順序</button>' +
-        '<button data-s="kana" class="' + (WSORT === 'kana' ? 'on' : '') + '">五十音順</button>' +
-      '</div></div>') +
+      (function(){ var s = WSORTS[TAB];
+        return '<div class="sortrow"><div class="seg2" id="wsort">' +
+        '<button data-s="lesson" class="' + (s === 'lesson' ? 'on' : '') + '">課程順序</button>' +
+        '<button data-s="kana" class="' + (s === 'kana' ? 'on' : '') + '">五十音順</button>' +
+      '</div></div>'; })() +
       '<div id="alllist"></div>';
 
     var list = $('#alllist'), cnt = $('#allcnt');
@@ -3110,7 +3112,7 @@
       q = (q || '').trim().toLowerCase();
       var shown = blocks.map(function(b){
         var rows = b.rows;
-        if (!isVerb && WSORT === 'kana') rows = rows.slice().sort(wcmpKana);
+        if (WSORTS[TAB] === 'kana') rows = rows.slice().sort(wcmpKana);
         if (q) rows = rows.filter(function(r){ return r.search.indexOf(q) > -1; });
         return { g: b.g, rows: rows };
       });
@@ -3120,8 +3122,8 @@
       jump.style.display = q ? 'none' : '';
       cnt.textContent = q
         ? '找到 ' + hit.length + ' 項（共 ' + data.total + ' 項）'
-        : '共 ' + data.total + ' 項 · ' + (isVerb ? data.groups.length + ' 類'
-            : (WSORT === 'kana' ? '五十音順' : '課程順序'));
+        : '共 ' + data.total + ' 項 · ' + (isVerb ? data.groups.length + ' 類 · ' : '') +
+          (WSORTS[TAB] === 'kana' ? '五十音順' : '課程順序');
       if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
       var h = '', k = 0;
       shown.forEach(function(b){
@@ -3145,14 +3147,14 @@
     var q = $('#allq');
     q.addEventListener('input', function(){ if (ALLPLAY.on) stopAllPlay(); draw(this.value); });
 
-    /* 排序切換：只在い形／な形 每組內部排（課程順序 ↔ 五十音順），選擇記在 localStorage */
+    /* 排序切換：只在每個分類內部排（課程順序 ↔ 五十音順），選擇按表記在 localStorage */
     var sw = $('#wsort');
     if (sw) sw.addEventListener('click', function(e){
       var b = e.target.closest('[data-s]'); if (!b) return;
       var s = b.getAttribute('data-s');
-      if (s === WSORT) return;
-      WSORT = s;
-      try { localStorage.setItem(WSK, s); } catch(err){}
+      if (s === WSORTS[TAB]) return;
+      WSORTS[TAB] = s;
+      try { localStorage.setItem(WSK[TAB], s); } catch(err){}
       if (ALLPLAY.on) stopAllPlay();
       stopAudio();
       Array.prototype.forEach.call(sw.querySelectorAll('[data-s]'), function(x){
