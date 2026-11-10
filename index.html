@@ -760,7 +760,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v187</span>
+    <span class="ver" id="verTag">v188</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2813,8 +2813,14 @@
   var WSK = { verbs: 'ngs-wvsort', adjs: 'ngs-wsort' };
   var WSORTS = { verbs: 'lesson', adjs: 'lesson' };
   Object.keys(WSK).forEach(function(k){
-    try { if (localStorage.getItem(WSK[k]) === 'kana') WSORTS[k] = 'kana'; } catch(e){}
+    try {
+      var wv = localStorage.getItem(WSK[k]);
+      if (wv === 'kana' || wv === 'gobi') WSORTS[k] = wv;
+    } catch(e){}
   });
+  /* 動詞語尾順：按辞書形最後一個音的五十音段排（う→く→ぐ→す→つ→ぬ→ぶ→む→る），
+     同一個語尾再按五十音。一段全部是「る」，所以那段就等於五十音順。 */
+  var WGOBI = 'うくぐすつぬぶむる';
   var KROWS = ['あいうえお', 'かきくけこ', 'さしすせそ', 'たちつてと', 'なにぬねの',
                'はひふへほ', 'まみむめも', 'やゆよ', 'らりるれろ', 'わを', 'ん'];
   var KROWLET = 'あかさたなはまやらわん'.split('');
@@ -3056,6 +3062,7 @@
         return '<div class="sortrow"><div class="seg2" id="wsort">' +
         '<button data-s="lesson" class="' + (s === 'lesson' ? 'on' : '') + '">課程順序</button>' +
         '<button data-s="kana" class="' + (s === 'kana' ? 'on' : '') + '">五十音順</button>' +
+        (isVerb ? '<button data-s="gobi" class="' + (s === 'gobi' ? 'on' : '') + '">語尾順</button>' : '') +
       '</div></div>'; })() +
       '<div id="alllist"></div>';
 
@@ -3107,12 +3114,24 @@
       for (var j = 0; j < n; j++) if (x[j] !== y[j]) return x[j] - y[j];
       return x.length - y.length;
     }
+    /* 語尾順：先比辞書形最後一個音（う→く→ぐ→す→つ→ぬ→ぶ→む→る，認不到排最後），
+       同一個語尾再按整串五十音，所以同一語尾之內仍然易讀。 */
+    function gobiOf(r){
+      if (r._g != null) return r._g;
+      var s = String(r.x.kana || ''), ch = s.charAt(s.length - 1), i = WGOBI.indexOf(ch);
+      return (r._g = i < 0 ? WGOBI.length : i);
+    }
+    function wcmpGobi(a, b){
+      var d = gobiOf(a) - gobiOf(b);
+      return d || wcmpKana(a, b);
+    }
     /* 只重排每組的陣列，資料與音檔不動；每次 draw 重算，切換排序後不可沿用上一次的結果。 */
     function draw(q){
       q = (q || '').trim().toLowerCase();
       var shown = blocks.map(function(b){
         var rows = b.rows;
         if (WSORTS[TAB] === 'kana') rows = rows.slice().sort(wcmpKana);
+        else if (isVerb && WSORTS[TAB] === 'gobi') rows = rows.slice().sort(wcmpGobi);
         if (q) rows = rows.filter(function(r){ return r.search.indexOf(q) > -1; });
         return { g: b.g, rows: rows };
       });
@@ -3123,7 +3142,7 @@
       cnt.textContent = q
         ? '找到 ' + hit.length + ' 項（共 ' + data.total + ' 項）'
         : '共 ' + data.total + ' 項 · ' + (isVerb ? data.groups.length + ' 類 · ' : '') +
-          (WSORTS[TAB] === 'kana' ? '五十音順' : '課程順序');
+          ({ lesson: '課程順序', kana: '五十音順', gobi: '語尾順' }[WSORTS[TAB]] || '課程順序');
       if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
       var h = '', k = 0;
       shown.forEach(function(b){

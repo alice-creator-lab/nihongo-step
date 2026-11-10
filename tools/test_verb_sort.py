@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """驗證動詞表（#/all/verbs）的排序與「由中間開始順播」。
+（排序：課程順序／五十音順／語尾順）
 
-- 兩個排序：課程順序（預設）／五十音順；只在五段／一段／不規則 每組內部排，
+- 三個排序：課程順序（預設）／五十音順／語尾順；只在五段／一段／不規則 每組內部排，
   分組標題、項數、詳細表入口與「本組」一律保留。
 - 選擇寫入 localStorage `ngs-wvsort`（與形容詞表 `ngs-wsort` 各自獨立）。
 - 五十音順：整份次序與測試內獨立算出的五十音鍵逐項比對，不插入「X行」分段標題。
+- 語尾順：按辞書形最後一個音（う→く→ぐ→す→つ→ぬ→ぶ→む→る），同一語尾再按五十音；
+  一段全部是「る」，所以一段的次序應與五十音順完全相同。
 - 課程順序：各組右邊課號單調不減。
 - 點字詞本身（不是 ☆、不是喇叭）由該項播到最後，浮動停止鍵出現並顯示進度，一按即停。
 - 390 / 360px 排序 chips 與浮動鍵都不橫向溢出。
@@ -98,6 +101,24 @@ def sorted_in(group_items, keyf):
 
 KANA_ORDER = [a for _, items in GROUPS for a in sorted_in(items, lambda x: kana_key(x["kana"]))]
 LESSON_ORDER = [x["audio"] for _, items in GROUPS for x in items]
+
+GOBI = "うくぐすつぬぶむる"
+
+
+def gobi_key(x):
+    ch = x["kana"][-1] if x["kana"] else ""
+    i = GOBI.find(ch)
+    return (i if i >= 0 else len(GOBI), kana_key(x["kana"]))
+
+
+GOBI_ORDER = [a for _, items in GROUPS for a in sorted_in(items, gobi_key)]
+# 一段那一組的語尾次序要與五十音順完全相同
+_ich = [i for i, t in enumerate(GROUP_TITLES) if t.startswith("一段")]
+ICHIDAN_MATCHES_KANA = True
+if _ich:
+    i0 = sum(GROUP_SIZES[: _ich[0]])
+    n = GROUP_SIZES[_ich[0]]
+    ICHIDAN_MATCHES_KANA = GOBI_ORDER[i0:i0 + n] == KANA_ORDER[i0:i0 + n]
 
 INSTR = ("(function(){ window.__played=[];"
          "var p=HTMLMediaElement.prototype.play;"
@@ -206,7 +227,21 @@ async def main():
     out["五十音詳細表入口"] = await js("document.querySelectorAll('#alllist .vfentry').length")
     await shot("verbsort-kana-390.png")
 
-    # 3) 課程順序
+    # 3) 語尾順：五段／一段／不規則 分組照舊，組內按辞書形最後一個音
+    await js("document.querySelector('#wsort [data-s=gobi]').click()")
+    await asyncio.sleep(0.5)
+    out["語尾次序正確"] = (await js(ORDER_JS)) == GOBI_ORDER
+    out["語尾分類標題"] = await js("[...document.querySelectorAll('#alllist .wth .wtn')].map(x=>x.textContent.trim())")
+    out["語尾計數"] = await js("document.getElementById('allcnt').textContent.trim()")
+    out["語尾樣本"] = await js("""[...document.querySelectorAll('#alllist .arow')].slice(0,6).map(r=>{
+        var s=r.querySelector('.ak span'); return (s?s.textContent.trim():'')||((r.querySelector('.ak b')||{}).textContent||'');
+      })""")
+    out["語尾一段等於五十音"] = ICHIDAN_MATCHES_KANA
+    out["語尾localStorage"] = await js("localStorage.getItem('ngs-wvsort')")
+    out["語尾詳細表入口"] = await js("document.querySelectorAll('#alllist .vfentry').length")
+    await shot("verbsort-gobi-390.png")
+
+    # 4) 課程順序
     await js("document.querySelector('#wsort [data-s=lesson]').click()")
     await asyncio.sleep(0.5)
     out["課程次序正確"] = (await js(ORDER_JS)) == LESSON_ORDER
@@ -302,6 +337,7 @@ async def main():
     await shot("verbsort-360.png")
 
     checks = ["預設次序", "五十音次序正確", "五十音分類標題", "五十音無行標題",
+              "語尾次序正確", "語尾一段等於五十音",
               "課程次序正確", "課號組內單調", "回課程次序", "重載後次序正確",
               "由所點那項開始", "浮動鍵即停", "360無溢出"]
     bad = [k for k in checks if not out.get(k)]
@@ -319,6 +355,16 @@ async def main():
         bad.append("本組鍵")
     if out.get("localStorage") != "lesson":
         bad.append("localStorage")
+    if out.get("語尾localStorage") != "gobi":
+        bad.append("語尾localStorage")
+    if out.get("語尾分類標題") != GROUP_TITLES:
+        bad.append("語尾分類標題")
+    if out.get("語尾計數") != ("共 %d 項 · 3 類 · 語尾順" % TOTAL):
+        bad.append("語尾計數")
+    if out.get("語尾詳細表入口") != len(GROUP_TITLES):
+        bad.append("語尾詳細表入口")
+    if [t[0] for t in (out.get("排序選項") or [])] != ["lesson", "kana", "gobi"]:
+        bad.append("排序選項")
     print(json.dumps(out, ensure_ascii=False, indent=1))
     print(("FAIL: " + ", ".join(bad)) if bad else "PASS 全部通過")
     if SHOT:
