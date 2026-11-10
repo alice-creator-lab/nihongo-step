@@ -760,7 +760,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v181</span>
+    <span class="ver" id="verTag">v182</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2872,9 +2872,7 @@
         '<a class="back" href="#/">← 課程地圖</a>' +
         '<h1>' + (isVocab ? '詞語總表' : '文法總表') +
           '<span class="k">' + (isVocab ? 'たんご' : 'ぶんぽう') + '</span></h1>' +
-        '<p class="goal">' + (isVocab
-          ? '第 1–40 課的單字，同一詞重複出現時只列最早的一課；可依假名、漢字或中文搜尋，點喇叭聽讀音；點字詞可由該項開始順播到最後。'
-          : '第 1–40 課的全部文法，點標題展開說明與例句。') + '</p>' +
+        (isVocab ? '' : '<p class="goal">第 1–40 課的全部文法，點標題展開說明與例句。</p>') +
       '</div>' +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="' + (isVocab ? '搜尋假名、漢字或中文' : '搜尋文法標題或例句') + '"></div>' +
