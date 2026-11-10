@@ -1,6 +1,6 @@
 {
  "verbs": {
-  "total": 266,
+  "total": 181,
   "groups": [
    {
     "id": "godan",
@@ -15,7 +15,10 @@
       "jisho": "いく",
       "masu": "いきます",
       "zh": "去",
-      "audio": "audio/verb/L06-0.mp3"
+      "audio": "audio/verb/L06-0.mp3",
+      "lessons": [
+       "L06"
+      ]
      },
      {
       "id": "L06",
@@ -26,7 +29,11 @@
       "jisho": "かえる",
       "masu": "かえります",
       "zh": "回去、返回",
-      "audio": "audio/verb/L06-2.mp3"
+      "audio": "audio/verb/L06-2.mp3",
+      "lessons": [
+       "L06",
+       "L13"
+      ]
      },
      {
       "id": "L06",
@@ -37,7 +44,11 @@
       "jisho": "あるく",
       "masu": "あるきます",
       "zh": "走路",
-      "audio": "audio/verb/L06-3.mp3"
+      "audio": "audio/verb/L06-3.mp3",
+      "lessons": [
+       "L06",
+       "L12"
+      ]
      },
      {
       "id": "L06",
@@ -48,7 +59,13 @@
       "jisho": "はしる",
       "masu": "はしります",
       "zh": "跑",
-      "audio": "audio/verb/L06-4.mp3"
+      "audio": "audio/verb/L06-4.mp3",
+      "lessons": [
+       "L06",
+       "L12",
+       "L24",
+       "L39"
+      ]
      },
      {
       "id": "L07",
@@ -59,7 +76,11 @@
       "jisho": "のむ",
       "masu": "のみます",
       "zh": "喝",
-      "audio": "audio/verb/L07-1.mp3"
+      "audio": "audio/verb/L07-1.mp3",
+      "lessons": [
+       "L07",
+       "L11"
+      ]
      },
      {
       "id": "L07",
@@ -70,7 +91,14 @@
       "jisho": "きく",
       "masu": "ききます",
       "zh": "聽、問",
-      "audio": "audio/verb/L07-3.mp3"
+      "audio": "audio/verb/L07-3.mp3",
+      "lessons": [
+       "L07",
+       "L11",
+       "L18",
+       "L24",
+       "L30"
+      ]
      },
      {
       "id": "L07",
@@ -81,7 +109,12 @@
       "jisho": "よむ",
       "masu": "よみます",
       "zh": "讀",
-      "audio": "audio/verb/L07-4.mp3"
+      "audio": "audio/verb/L07-4.mp3",
+      "lessons": [
+       "L07",
+       "L11",
+       "L24"
+      ]
      },
      {
       "id": "L07",
@@ -92,7 +125,12 @@
       "jisho": "かく",
       "masu": "かきます",
       "zh": "寫",
-      "audio": "audio/verb/L07-5.mp3"
+      "audio": "audio/verb/L07-5.mp3",
+      "lessons": [
+       "L07",
+       "L11",
+       "L24"
+      ]
      },
      {
       "id": "L07",
@@ -103,7 +141,10 @@
       "jisho": "かう",
       "masu": "かいます",
       "zh": "買",
-      "audio": "audio/verb/L07-6.mp3"
+      "audio": "audio/verb/L07-6.mp3",
+      "lessons": [
+       "L07"
+      ]
      },
      {
       "id": "L07",
@@ -114,7 +155,14 @@
       "jisho": "つくる",
       "masu": "つくります",
       "zh": "做、製作",
-      "audio": "audio/verb/L07-7.mp3"
+      "audio": "audio/verb/L07-7.mp3",
+      "lessons": [
+       "L07",
+       "L15",
+       "L17",
+       "L24",
+       "L38"
+      ]
      },
      {
       "id": "L07",
@@ -125,7 +173,12 @@
       "jisho": "はなす",
       "masu": "はなします",
       "zh": "說、交談",
-      "audio": "audio/verb/L07-8.mp3"
+      "audio": "audio/verb/L07-8.mp3",
+      "lessons": [
+       "L07",
+       "L18",
+       "L24"
+      ]
      },
      {
       "id": "L07",
@@ -136,7 +189,10 @@
       "jisho": "あう",
       "masu": "あいます",
       "zh": "見面",
-      "audio": "audio/verb/L07-9.mp3"
+      "audio": "audio/verb/L07-9.mp3",
+      "lessons": [
+       "L07"
+      ]
      },
      {
       "id": "L10",
@@ -147,7 +203,10 @@
       "jisho": "ある",
       "masu": "あります",
       "zh": "有、存在（事物）",
-      "audio": "audio/verb/L10-0.mp3"
+      "audio": "audio/verb/L10-0.mp3",
+      "lessons": [
+       "L10"
+      ]
      },
      {
       "id": "L11",
@@ -158,7 +217,11 @@
       "jisho": "はたらく",
       "masu": "はたらきます",
       "zh": "工作",
-      "audio": "audio/verb/L11-2.mp3"
+      "audio": "audio/verb/L11-2.mp3",
+      "lessons": [
+       "L11",
+       "L39"
+      ]
      },
      {
       "id": "L11",
@@ -169,7 +232,12 @@
       "jisho": "やすむ",
       "masu": "やすみます",
       "zh": "休息、請假",
-      "audio": "audio/verb/L11-3.mp3"
+      "audio": "audio/verb/L11-3.mp3",
+      "lessons": [
+       "L11",
+       "L19",
+       "L31"
+      ]
      },
      {
       "id": "L11",
@@ -180,7 +248,10 @@
       "jisho": "おわる",
       "masu": "おわります",
       "zh": "結束",
-      "audio": "audio/verb/L11-4.mp3"
+      "audio": "audio/verb/L11-4.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L11",
@@ -191,51 +262,10 @@
       "jisho": "はじまる",
       "masu": "はじまります",
       "zh": "開始",
-      "audio": "audio/verb/L11-5.mp3"
-     },
-     {
-      "id": "L11",
-      "vi": 6,
-      "group": "godan",
-      "kanji": "読む",
-      "kana": "よむ",
-      "jisho": "よむ",
-      "masu": "よみます",
-      "zh": "讀",
-      "audio": "audio/verb/L11-6.mp3"
-     },
-     {
-      "id": "L11",
-      "vi": 7,
-      "group": "godan",
-      "kanji": "書く",
-      "kana": "かく",
-      "jisho": "かく",
-      "masu": "かきます",
-      "zh": "寫",
-      "audio": "audio/verb/L11-7.mp3"
-     },
-     {
-      "id": "L11",
-      "vi": 8,
-      "group": "godan",
-      "kanji": "聞く",
-      "kana": "きく",
-      "jisho": "きく",
-      "masu": "ききます",
-      "zh": "聽、問",
-      "audio": "audio/verb/L11-8.mp3"
-     },
-     {
-      "id": "L11",
-      "vi": 11,
-      "group": "godan",
-      "kanji": "飲む",
-      "kana": "のむ",
-      "jisho": "のむ",
-      "masu": "のみます",
-      "zh": "喝",
-      "audio": "audio/verb/L11-11.mp3"
+      "audio": "audio/verb/L11-5.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L11",
@@ -246,7 +276,10 @@
       "jisho": "なる",
       "masu": "なります",
       "zh": "變成",
-      "audio": "audio/verb/L11-27.mp3"
+      "audio": "audio/verb/L11-27.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L11",
@@ -257,7 +290,10 @@
       "jisho": "うる",
       "masu": "うります",
       "zh": "賣",
-      "audio": "audio/verb/L11-28.mp3"
+      "audio": "audio/verb/L11-28.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L11",
@@ -268,7 +304,10 @@
       "jisho": "たつ",
       "masu": "たちます",
       "zh": "站",
-      "audio": "audio/verb/L11-29.mp3"
+      "audio": "audio/verb/L11-29.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L11",
@@ -279,7 +318,10 @@
       "jisho": "たのむ",
       "masu": "たのみます",
       "zh": "請求、拜託",
-      "audio": "audio/verb/L11-30.mp3"
+      "audio": "audio/verb/L11-30.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L11",
@@ -290,7 +332,10 @@
       "jisho": "やる",
       "masu": "やります",
       "zh": "做（口語）",
-      "audio": "audio/verb/L11-32.mp3"
+      "audio": "audio/verb/L11-32.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L12",
@@ -301,7 +346,11 @@
       "jisho": "まつ",
       "masu": "まちます",
       "zh": "等、等待",
-      "audio": "audio/verb/L12-0.mp3"
+      "audio": "audio/verb/L12-0.mp3",
+      "lessons": [
+       "L12",
+       "L39"
+      ]
      },
      {
       "id": "L12",
@@ -312,7 +361,10 @@
       "jisho": "とる",
       "masu": "とります",
       "zh": "拍（照）、拿",
-      "audio": "audio/verb/L12-1.mp3"
+      "audio": "audio/verb/L12-1.mp3",
+      "lessons": [
+       "L12"
+      ]
      },
      {
       "id": "L12",
@@ -323,7 +375,13 @@
       "jisho": "かえす",
       "masu": "かえします",
       "zh": "歸還",
-      "audio": "audio/verb/L12-2.mp3"
+      "audio": "audio/verb/L12-2.mp3",
+      "lessons": [
+       "L12",
+       "L20",
+       "L31",
+       "L38"
+      ]
      },
      {
       "id": "L12",
@@ -334,7 +392,11 @@
       "jisho": "かす",
       "masu": "かします",
       "zh": "借出、出借",
-      "audio": "audio/verb/L12-3.mp3"
+      "audio": "audio/verb/L12-3.mp3",
+      "lessons": [
+       "L12",
+       "L38"
+      ]
      },
      {
       "id": "L12",
@@ -345,7 +407,11 @@
       "jisho": "ならう",
       "masu": "ならいます",
       "zh": "學習（向人學）",
-      "audio": "audio/verb/L12-5.mp3"
+      "audio": "audio/verb/L12-5.mp3",
+      "lessons": [
+       "L12",
+       "L38"
+      ]
      },
      {
       "id": "L12",
@@ -356,29 +422,11 @@
       "jisho": "よぶ",
       "masu": "よびます",
       "zh": "呼叫、叫（人）",
-      "audio": "audio/verb/L12-6.mp3"
-     },
-     {
-      "id": "L12",
-      "vi": 7,
-      "group": "godan",
-      "kanji": "歩く",
-      "kana": "あるく",
-      "jisho": "あるく",
-      "masu": "あるきます",
-      "zh": "走路",
-      "audio": "audio/verb/L12-7.mp3"
-     },
-     {
-      "id": "L12",
-      "vi": 8,
-      "group": "godan",
-      "kanji": "走る",
-      "kana": "はしる",
-      "jisho": "はしる",
-      "masu": "はしります",
-      "zh": "跑",
-      "audio": "audio/verb/L12-8.mp3"
+      "audio": "audio/verb/L12-6.mp3",
+      "lessons": [
+       "L12",
+       "L37"
+      ]
      },
      {
       "id": "L12",
@@ -389,7 +437,13 @@
       "jisho": "つかう",
       "masu": "つかいます",
       "zh": "使用",
-      "audio": "audio/verb/L12-9.mp3"
+      "audio": "audio/verb/L12-9.mp3",
+      "lessons": [
+       "L12",
+       "L14",
+       "L20",
+       "L31"
+      ]
      },
      {
       "id": "L12",
@@ -400,7 +454,13 @@
       "jisho": "けす",
       "masu": "けします",
       "zh": "關掉（燈、電源）",
-      "audio": "audio/verb/L12-12.mp3"
+      "audio": "audio/verb/L12-12.mp3",
+      "lessons": [
+       "L12",
+       "L20",
+       "L26",
+       "L34"
+      ]
      },
      {
       "id": "L12",
@@ -411,7 +471,11 @@
       "jisho": "まがる",
       "masu": "まがります",
       "zh": "轉彎",
-      "audio": "audio/verb/L12-14.mp3"
+      "audio": "audio/verb/L12-14.mp3",
+      "lessons": [
+       "L12",
+       "L35"
+      ]
      },
      {
       "id": "L12",
@@ -422,7 +486,11 @@
       "jisho": "わたる",
       "masu": "わたります",
       "zh": "穿過、過（馬路）",
-      "audio": "audio/verb/L12-15.mp3"
+      "audio": "audio/verb/L12-15.mp3",
+      "lessons": [
+       "L12",
+       "L35"
+      ]
      },
      {
       "id": "L12",
@@ -433,7 +501,10 @@
       "jisho": "わたす",
       "masu": "わたします",
       "zh": "交給",
-      "audio": "audio/verb/L12-27.mp3"
+      "audio": "audio/verb/L12-27.mp3",
+      "lessons": [
+       "L12"
+      ]
      },
      {
       "id": "L12",
@@ -444,7 +515,10 @@
       "jisho": "ひく",
       "masu": "ひきます",
       "zh": "拉、抽",
-      "audio": "audio/verb/L12-28.mp3"
+      "audio": "audio/verb/L12-28.mp3",
+      "lessons": [
+       "L12"
+      ]
      },
      {
       "id": "L12",
@@ -455,7 +529,10 @@
       "jisho": "はいる",
       "masu": "はいります",
       "zh": "進入",
-      "audio": "audio/verb/L12-29.mp3"
+      "audio": "audio/verb/L12-29.mp3",
+      "lessons": [
+       "L12"
+      ]
      },
      {
       "id": "L12",
@@ -466,7 +543,10 @@
       "jisho": "はく",
       "masu": "はきます",
       "zh": "穿（褲、鞋、襪）",
-      "audio": "audio/verb/L12-30.mp3"
+      "audio": "audio/verb/L12-30.mp3",
+      "lessons": [
+       "L12"
+      ]
      },
      {
       "id": "L12",
@@ -477,7 +557,10 @@
       "jisho": "ひく",
       "masu": "ひきます",
       "zh": "彈（弦樂器、鋼琴）",
-      "audio": "audio/verb/L12-31.mp3"
+      "audio": "audio/verb/L12-31.mp3",
+      "lessons": [
+       "L12"
+      ]
      },
      {
       "id": "L13",
@@ -488,7 +571,10 @@
       "jisho": "あそぶ",
       "masu": "あそびます",
       "zh": "玩、遊玩",
-      "audio": "audio/verb/L13-0.mp3"
+      "audio": "audio/verb/L13-0.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L13",
@@ -499,7 +585,12 @@
       "jisho": "およぐ",
       "masu": "およぎます",
       "zh": "游泳",
-      "audio": "audio/verb/L13-1.mp3"
+      "audio": "audio/verb/L13-1.mp3",
+      "lessons": [
+       "L13",
+       "L24",
+       "L39"
+      ]
      },
      {
       "id": "L13",
@@ -510,7 +601,12 @@
       "jisho": "うたう",
       "masu": "うたいます",
       "zh": "唱歌",
-      "audio": "audio/verb/L13-2.mp3"
+      "audio": "audio/verb/L13-2.mp3",
+      "lessons": [
+       "L13",
+       "L24",
+       "L39"
+      ]
      },
      {
       "id": "L13",
@@ -521,18 +617,12 @@
       "jisho": "おどる",
       "masu": "おどります",
       "zh": "跳舞",
-      "audio": "audio/verb/L13-3.mp3"
-     },
-     {
-      "id": "L13",
-      "vi": 4,
-      "group": "godan",
-      "kanji": "帰る",
-      "kana": "かえる",
-      "jisho": "かえる",
-      "masu": "かえります",
-      "zh": "回去、回家",
-      "audio": "audio/verb/L13-4.mp3"
+      "audio": "audio/verb/L13-3.mp3",
+      "lessons": [
+       "L13",
+       "L24",
+       "L39"
+      ]
      },
      {
       "id": "L13",
@@ -543,7 +633,13 @@
       "jisho": "いそぐ",
       "masu": "いそぎます",
       "zh": "急忙、趕",
-      "audio": "audio/verb/L13-5.mp3"
+      "audio": "audio/verb/L13-5.mp3",
+      "lessons": [
+       "L13",
+       "L14",
+       "L31",
+       "L32"
+      ]
      },
      {
       "id": "L13",
@@ -554,7 +650,13 @@
       "jisho": "ふる",
       "masu": "ふります",
       "zh": "下（雨、雪）",
-      "audio": "audio/verb/L13-13.mp3"
+      "audio": "audio/verb/L13-13.mp3",
+      "lessons": [
+       "L13",
+       "L18",
+       "L29",
+       "L33"
+      ]
      },
      {
       "id": "L13",
@@ -565,7 +667,10 @@
       "jisho": "とぶ",
       "masu": "とびます",
       "zh": "飛",
-      "audio": "audio/verb/L13-39.mp3"
+      "audio": "audio/verb/L13-39.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L13",
@@ -576,7 +681,10 @@
       "jisho": "ならぶ",
       "masu": "ならびます",
       "zh": "排隊",
-      "audio": "audio/verb/L13-40.mp3"
+      "audio": "audio/verb/L13-40.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L13",
@@ -587,7 +695,10 @@
       "jisho": "のぼる",
       "masu": "のぼります",
       "zh": "攀登",
-      "audio": "audio/verb/L13-41.mp3"
+      "audio": "audio/verb/L13-41.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L13",
@@ -598,7 +709,10 @@
       "jisho": "さく",
       "masu": "さきます",
       "zh": "開花",
-      "audio": "audio/verb/L13-42.mp3"
+      "audio": "audio/verb/L13-42.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L13",
@@ -609,7 +723,10 @@
       "jisho": "しぬ",
       "masu": "しにます",
       "zh": "死",
-      "audio": "audio/verb/L13-43.mp3"
+      "audio": "audio/verb/L13-43.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L14",
@@ -620,7 +737,10 @@
       "jisho": "あらう",
       "masu": "あらいます",
       "zh": "洗",
-      "audio": "audio/verb/L14-19.mp3"
+      "audio": "audio/verb/L14-19.mp3",
+      "lessons": [
+       "L14"
+      ]
      },
      {
       "id": "L14",
@@ -631,29 +751,13 @@
       "jisho": "まにあう",
       "masu": "まにあいます",
       "zh": "趕得上",
-      "audio": "audio/verb/L14-22.mp3"
-     },
-     {
-      "id": "L14",
-      "vi": 23,
-      "group": "godan",
-      "kanji": "急ぐ",
-      "kana": "いそぐ",
-      "jisho": "いそぐ",
-      "masu": "いそぎます",
-      "zh": "趕、急",
-      "audio": "audio/verb/L14-23.mp3"
-     },
-     {
-      "id": "L14",
-      "vi": 24,
-      "group": "godan",
-      "kanji": "使う",
-      "kana": "つかう",
-      "jisho": "つかう",
-      "masu": "つかいます",
-      "zh": "使用",
-      "audio": "audio/verb/L14-24.mp3"
+      "audio": "audio/verb/L14-22.mp3",
+      "lessons": [
+       "L14",
+       "L31",
+       "L32",
+       "L33"
+      ]
      },
      {
       "id": "L14",
@@ -664,7 +768,10 @@
       "jisho": "かかる",
       "masu": "かかります",
       "zh": "花費（時間、金錢）",
-      "audio": "audio/verb/L14-35.mp3"
+      "audio": "audio/verb/L14-35.mp3",
+      "lessons": [
+       "L14"
+      ]
      },
      {
       "id": "L14",
@@ -675,7 +782,10 @@
       "jisho": "さす",
       "masu": "さします",
       "zh": "撐（傘）",
-      "audio": "audio/verb/L14-36.mp3"
+      "audio": "audio/verb/L14-36.mp3",
+      "lessons": [
+       "L14"
+      ]
      },
      {
       "id": "L15",
@@ -686,7 +796,10 @@
       "jisho": "しる",
       "masu": "しります",
       "zh": "知道",
-      "audio": "audio/verb/L15-14.mp3"
+      "audio": "audio/verb/L15-14.mp3",
+      "lessons": [
+       "L15"
+      ]
      },
      {
       "id": "L15",
@@ -697,7 +810,10 @@
       "jisho": "もつ",
       "masu": "もちます",
       "zh": "拿、持有",
-      "audio": "audio/verb/L15-15.mp3"
+      "audio": "audio/verb/L15-15.mp3",
+      "lessons": [
+       "L15"
+      ]
      },
      {
       "id": "L15",
@@ -708,18 +824,10 @@
       "jisho": "すむ",
       "masu": "すみます",
       "zh": "居住",
-      "audio": "audio/verb/L15-16.mp3"
-     },
-     {
-      "id": "L15",
-      "vi": 17,
-      "group": "godan",
-      "kanji": "作る",
-      "kana": "つくる",
-      "jisho": "つくる",
-      "masu": "つくります",
-      "zh": "做、製作",
-      "audio": "audio/verb/L15-17.mp3"
+      "audio": "audio/verb/L15-16.mp3",
+      "lessons": [
+       "L15"
+      ]
      },
      {
       "id": "L15",
@@ -730,18 +838,10 @@
       "jisho": "みがく",
       "masu": "みがきます",
       "zh": "刷、擦亮",
-      "audio": "audio/verb/L15-18.mp3"
-     },
-     {
-      "id": "L17",
-      "vi": 13,
-      "group": "godan",
-      "kanji": "作る",
-      "kana": "つくる",
-      "jisho": "つくる",
-      "masu": "つくります",
-      "zh": "做、製作",
-      "audio": "audio/verb/L17-13.mp3"
+      "audio": "audio/verb/L15-18.mp3",
+      "lessons": [
+       "L15"
+      ]
      },
      {
       "id": "L17",
@@ -752,7 +852,10 @@
       "jisho": "のる",
       "masu": "のります",
       "zh": "搭乘",
-      "audio": "audio/verb/L17-18.mp3"
+      "audio": "audio/verb/L17-18.mp3",
+      "lessons": [
+       "L17"
+      ]
      },
      {
       "id": "L18",
@@ -763,7 +866,10 @@
       "jisho": "いう",
       "masu": "いいます",
       "zh": "說",
-      "audio": "audio/verb/L18-0.mp3"
+      "audio": "audio/verb/L18-0.mp3",
+      "lessons": [
+       "L18"
+      ]
      },
      {
       "id": "L18",
@@ -774,29 +880,10 @@
       "jisho": "おもう",
       "masu": "おもいます",
       "zh": "想、認為",
-      "audio": "audio/verb/L18-1.mp3"
-     },
-     {
-      "id": "L18",
-      "vi": 2,
-      "group": "godan",
-      "kanji": "聞く",
-      "kana": "きく",
-      "jisho": "きく",
-      "masu": "ききます",
-      "zh": "聽、問",
-      "audio": "audio/verb/L18-2.mp3"
-     },
-     {
-      "id": "L18",
-      "vi": 4,
-      "group": "godan",
-      "kanji": "話す",
-      "kana": "はなす",
-      "jisho": "はなす",
-      "masu": "はなします",
-      "zh": "說話、交談",
-      "audio": "audio/verb/L18-4.mp3"
+      "audio": "audio/verb/L18-1.mp3",
+      "lessons": [
+       "L18"
+      ]
      },
      {
       "id": "L18",
@@ -807,7 +894,10 @@
       "jisho": "さそう",
       "masu": "さそいます",
       "zh": "邀約",
-      "audio": "audio/verb/L18-6.mp3"
+      "audio": "audio/verb/L18-6.mp3",
+      "lessons": [
+       "L18"
+      ]
      },
      {
       "id": "L18",
@@ -818,29 +908,10 @@
       "jisho": "ことわる",
       "masu": "ことわります",
       "zh": "拒絕",
-      "audio": "audio/verb/L18-7.mp3"
-     },
-     {
-      "id": "L18",
-      "vi": 9,
-      "group": "godan",
-      "kanji": "降る",
-      "kana": "ふる",
-      "jisho": "ふる",
-      "masu": "ふります",
-      "zh": "下（雨、雪）",
-      "audio": "audio/verb/L18-9.mp3"
-     },
-     {
-      "id": "L19",
-      "vi": 7,
-      "group": "godan",
-      "kanji": "休む",
-      "kana": "やすむ",
-      "jisho": "やすむ",
-      "masu": "やすみます",
-      "zh": "休息、請假",
-      "audio": "audio/verb/L19-7.mp3"
+      "audio": "audio/verb/L18-7.mp3",
+      "lessons": [
+       "L18"
+      ]
      },
      {
       "id": "L19",
@@ -851,7 +922,10 @@
       "jisho": "すく",
       "masu": "すきます",
       "zh": "（肚子）餓",
-      "audio": "audio/verb/L19-16.mp3"
+      "audio": "audio/verb/L19-16.mp3",
+      "lessons": [
+       "L19"
+      ]
      },
      {
       "id": "L20",
@@ -862,7 +936,10 @@
       "jisho": "すう",
       "masu": "すいます",
       "zh": "抽（菸）、吸",
-      "audio": "audio/verb/L20-8.mp3"
+      "audio": "audio/verb/L20-8.mp3",
+      "lessons": [
+       "L20"
+      ]
      },
      {
       "id": "L20",
@@ -873,7 +950,10 @@
       "jisho": "とる",
       "masu": "とります",
       "zh": "拍（照）",
-      "audio": "audio/verb/L20-11.mp3"
+      "audio": "audio/verb/L20-11.mp3",
+      "lessons": [
+       "L20"
+      ]
      },
      {
       "id": "L20",
@@ -884,7 +964,10 @@
       "jisho": "さわる",
       "masu": "さわります",
       "zh": "觸摸",
-      "audio": "audio/verb/L20-12.mp3"
+      "audio": "audio/verb/L20-12.mp3",
+      "lessons": [
+       "L20"
+      ]
      },
      {
       "id": "L20",
@@ -895,29 +978,10 @@
       "jisho": "すわる",
       "masu": "すわります",
       "zh": "坐",
-      "audio": "audio/verb/L20-13.mp3"
-     },
-     {
-      "id": "L20",
-      "vi": 14,
-      "group": "godan",
-      "kanji": "使う",
-      "kana": "つかう",
-      "jisho": "つかう",
-      "masu": "つかいます",
-      "zh": "使用",
-      "audio": "audio/verb/L20-14.mp3"
-     },
-     {
-      "id": "L20",
-      "vi": 16,
-      "group": "godan",
-      "kanji": "返す",
-      "kana": "かえす",
-      "jisho": "かえす",
-      "masu": "かえします",
-      "zh": "歸還",
-      "audio": "audio/verb/L20-16.mp3"
+      "audio": "audio/verb/L20-13.mp3",
+      "lessons": [
+       "L20"
+      ]
      },
      {
       "id": "L20",
@@ -928,18 +992,10 @@
       "jisho": "ぬぐ",
       "masu": "ぬぎます",
       "zh": "脫（衣、鞋）",
-      "audio": "audio/verb/L20-17.mp3"
-     },
-     {
-      "id": "L20",
-      "vi": 25,
-      "group": "godan",
-      "kanji": "消す",
-      "kana": "けす",
-      "jisho": "けす",
-      "masu": "けします",
-      "zh": "關掉、消除",
-      "audio": "audio/verb/L20-25.mp3"
+      "audio": "audio/verb/L20-17.mp3",
+      "lessons": [
+       "L20"
+      ]
      },
      {
       "id": "L21",
@@ -950,7 +1006,10 @@
       "jisho": "わかる",
       "masu": "わかります",
       "zh": "明白、懂",
-      "audio": "audio/verb/L21-23.mp3"
+      "audio": "audio/verb/L21-23.mp3",
+      "lessons": [
+       "L21"
+      ]
      },
      {
       "id": "L22",
@@ -961,7 +1020,10 @@
       "jisho": "ちがう",
       "masu": "ちがいます",
       "zh": "不同",
-      "audio": "audio/verb/L22-24.mp3"
+      "audio": "audio/verb/L22-24.mp3",
+      "lessons": [
+       "L22"
+      ]
      },
      {
       "id": "L23",
@@ -972,7 +1034,10 @@
       "jisho": "ほしがる",
       "masu": "ほしがります",
       "zh": "想要（第三人稱）",
-      "audio": "audio/verb/L23-24.mp3"
+      "audio": "audio/verb/L23-24.mp3",
+      "lessons": [
+       "L23"
+      ]
      },
      {
       "id": "L23",
@@ -983,106 +1048,10 @@
       "jisho": "たがる",
       "masu": "たがります",
       "zh": "想做（第三人稱）",
-      "audio": "audio/verb/L23-25.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 14,
-      "group": "godan",
-      "kanji": "話す",
-      "kana": "はなす",
-      "jisho": "はなす",
-      "masu": "はなします",
-      "zh": "說、交談",
-      "audio": "audio/verb/L24-14.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 15,
-      "group": "godan",
-      "kanji": "読む",
-      "kana": "よむ",
-      "jisho": "よむ",
-      "masu": "よみます",
-      "zh": "讀",
-      "audio": "audio/verb/L24-15.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 16,
-      "group": "godan",
-      "kanji": "書く",
-      "kana": "かく",
-      "jisho": "かく",
-      "masu": "かきます",
-      "zh": "寫",
-      "audio": "audio/verb/L24-16.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 17,
-      "group": "godan",
-      "kanji": "聞く",
-      "kana": "きく",
-      "jisho": "きく",
-      "masu": "ききます",
-      "zh": "聽",
-      "audio": "audio/verb/L24-17.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 19,
-      "group": "godan",
-      "kanji": "作る",
-      "kana": "つくる",
-      "jisho": "つくる",
-      "masu": "つくります",
-      "zh": "做、製作",
-      "audio": "audio/verb/L24-19.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 21,
-      "group": "godan",
-      "kanji": "泳ぐ",
-      "kana": "およぐ",
-      "jisho": "およぐ",
-      "masu": "およぎます",
-      "zh": "游泳",
-      "audio": "audio/verb/L24-21.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 22,
-      "group": "godan",
-      "kanji": "走る",
-      "kana": "はしる",
-      "jisho": "はしる",
-      "masu": "はしります",
-      "zh": "跑",
-      "audio": "audio/verb/L24-22.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 23,
-      "group": "godan",
-      "kanji": "踊る",
-      "kana": "おどる",
-      "jisho": "おどる",
-      "masu": "おどります",
-      "zh": "跳舞",
-      "audio": "audio/verb/L24-23.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 24,
-      "group": "godan",
-      "kanji": "歌う",
-      "kana": "うたう",
-      "jisho": "うたう",
-      "masu": "うたいます",
-      "zh": "唱歌",
-      "audio": "audio/verb/L24-24.mp3"
+      "audio": "audio/verb/L23-25.mp3",
+      "lessons": [
+       "L23"
+      ]
      },
      {
       "id": "L26",
@@ -1093,7 +1062,10 @@
       "jisho": "あく",
       "masu": "あきます",
       "zh": "（門窗）打開、空出",
-      "audio": "audio/verb/L26-0.mp3"
+      "audio": "audio/verb/L26-0.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -1104,7 +1076,10 @@
       "jisho": "しまる",
       "masu": "しまります",
       "zh": "（門窗）關上",
-      "audio": "audio/verb/L26-2.mp3"
+      "audio": "audio/verb/L26-2.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -1115,7 +1090,10 @@
       "jisho": "おとす",
       "masu": "おとします",
       "zh": "弄掉、使落下",
-      "audio": "audio/verb/L26-5.mp3"
+      "audio": "audio/verb/L26-5.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -1126,7 +1104,10 @@
       "jisho": "とまる",
       "masu": "とまります",
       "zh": "停止、（機器）停住",
-      "audio": "audio/verb/L26-6.mp3"
+      "audio": "audio/verb/L26-6.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -1137,18 +1118,10 @@
       "jisho": "つく",
       "masu": "つきます",
       "zh": "（燈、電器）亮起、開啟",
-      "audio": "audio/verb/L26-8.mp3"
-     },
-     {
-      "id": "L26",
-      "vi": 11,
-      "group": "godan",
-      "kanji": "消す",
-      "kana": "けす",
-      "jisho": "けす",
-      "masu": "けします",
-      "zh": "關掉、消除",
-      "audio": "audio/verb/L26-11.mp3"
+      "audio": "audio/verb/L26-8.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -1159,7 +1132,11 @@
       "jisho": "こわす",
       "masu": "こわします",
       "zh": "弄壞",
-      "audio": "audio/verb/L26-13.mp3"
+      "audio": "audio/verb/L26-13.mp3",
+      "lessons": [
+       "L26",
+       "L37"
+      ]
      },
      {
       "id": "L26",
@@ -1170,7 +1147,10 @@
       "jisho": "よごす",
       "masu": "よごします",
       "zh": "弄髒",
-      "audio": "audio/verb/L26-15.mp3"
+      "audio": "audio/verb/L26-15.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -1181,7 +1161,10 @@
       "jisho": "なくす",
       "masu": "なくします",
       "zh": "弄丟",
-      "audio": "audio/verb/L26-16.mp3"
+      "audio": "audio/verb/L26-16.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -1192,7 +1175,10 @@
       "jisho": "みつかる",
       "masu": "みつかります",
       "zh": "被找到",
-      "audio": "audio/verb/L26-17.mp3"
+      "audio": "audio/verb/L26-17.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -1203,7 +1189,11 @@
       "jisho": "かざる",
       "masu": "かざります",
       "zh": "裝飾、擺設",
-      "audio": "audio/verb/L26-18.mp3"
+      "audio": "audio/verb/L26-18.mp3",
+      "lessons": [
+       "L26",
+       "L34"
+      ]
      },
      {
       "id": "L28",
@@ -1214,18 +1204,10 @@
       "jisho": "がんばる",
       "masu": "がんばります",
       "zh": "努力、加油",
-      "audio": "audio/verb/L28-21.mp3"
-     },
-     {
-      "id": "L29",
-      "vi": 15,
-      "group": "godan",
-      "kanji": "降る",
-      "kana": "ふる",
-      "jisho": "ふる",
-      "masu": "ふります",
-      "zh": "下（雨、雪）",
-      "audio": "audio/verb/L29-15.mp3"
+      "audio": "audio/verb/L28-21.mp3",
+      "lessons": [
+       "L28"
+      ]
      },
      {
       "id": "L29",
@@ -1236,7 +1218,10 @@
       "jisho": "くもる",
       "masu": "くもります",
       "zh": "轉陰",
-      "audio": "audio/verb/L29-17.mp3"
+      "audio": "audio/verb/L29-17.mp3",
+      "lessons": [
+       "L29"
+      ]
      },
      {
       "id": "L29",
@@ -1247,7 +1232,10 @@
       "jisho": "ふく",
       "masu": "ふきます",
       "zh": "吹（風）",
-      "audio": "audio/verb/L29-18.mp3"
+      "audio": "audio/verb/L29-18.mp3",
+      "lessons": [
+       "L29"
+      ]
      },
      {
       "id": "L29",
@@ -1258,7 +1246,10 @@
       "jisho": "あがる",
       "masu": "あがります",
       "zh": "上升",
-      "audio": "audio/verb/L29-19.mp3"
+      "audio": "audio/verb/L29-19.mp3",
+      "lessons": [
+       "L29"
+      ]
      },
      {
       "id": "L29",
@@ -1269,18 +1260,10 @@
       "jisho": "さがる",
       "masu": "さがります",
       "zh": "下降",
-      "audio": "audio/verb/L29-20.mp3"
-     },
-     {
-      "id": "L30",
-      "vi": 21,
-      "group": "godan",
-      "kanji": "聞く",
-      "kana": "きく",
-      "jisho": "きく",
-      "masu": "ききます",
-      "zh": "聽、問",
-      "audio": "audio/verb/L30-21.mp3"
+      "audio": "audio/verb/L29-20.mp3",
+      "lessons": [
+       "L29"
+      ]
      },
      {
       "id": "L30",
@@ -1291,7 +1274,10 @@
       "jisho": "ひろがる",
       "masu": "ひろがります",
       "zh": "傳開、擴散",
-      "audio": "audio/verb/L30-24.mp3"
+      "audio": "audio/verb/L30-24.mp3",
+      "lessons": [
+       "L30"
+      ]
      },
      {
       "id": "L31",
@@ -1302,7 +1288,10 @@
       "jisho": "だす",
       "masu": "だします",
       "zh": "交出、寄出",
-      "audio": "audio/verb/L31-19.mp3"
+      "audio": "audio/verb/L31-19.mp3",
+      "lessons": [
+       "L31"
+      ]
      },
      {
       "id": "L31",
@@ -1313,106 +1302,10 @@
       "jisho": "のこる",
       "masu": "のこります",
       "zh": "留下、加班",
-      "audio": "audio/verb/L31-20.mp3"
-     },
-     {
-      "id": "L31",
-      "vi": 21,
-      "group": "godan",
-      "kanji": "間に合う",
-      "kana": "まにあう",
-      "jisho": "まにあう",
-      "masu": "まにあいます",
-      "zh": "趕上",
-      "audio": "audio/verb/L31-21.mp3"
-     },
-     {
-      "id": "L31",
-      "vi": 22,
-      "group": "godan",
-      "kanji": "急ぐ",
-      "kana": "いそぐ",
-      "jisho": "いそぐ",
-      "masu": "いそぎます",
-      "zh": "趕快",
-      "audio": "audio/verb/L31-22.mp3"
-     },
-     {
-      "id": "L31",
-      "vi": 23,
-      "group": "godan",
-      "kanji": "返す",
-      "kana": "かえす",
-      "jisho": "かえす",
-      "masu": "かえします",
-      "zh": "歸還",
-      "audio": "audio/verb/L31-23.mp3"
-     },
-     {
-      "id": "L31",
-      "vi": 24,
-      "group": "godan",
-      "kanji": "使う",
-      "kana": "つかう",
-      "jisho": "つかう",
-      "masu": "つかいます",
-      "zh": "使用",
-      "audio": "audio/verb/L31-24.mp3"
-     },
-     {
-      "id": "L31",
-      "vi": 25,
-      "group": "godan",
-      "kanji": "休む",
-      "kana": "やすむ",
-      "jisho": "やすむ",
-      "masu": "やすみます",
-      "zh": "休息、請假",
-      "audio": "audio/verb/L31-25.mp3"
-     },
-     {
-      "id": "L32",
-      "vi": 20,
-      "group": "godan",
-      "kanji": "間に合う",
-      "kana": "まにあう",
-      "jisho": "まにあう",
-      "masu": "まにあいます",
-      "zh": "趕上",
-      "audio": "audio/verb/L32-20.mp3"
-     },
-     {
-      "id": "L32",
-      "vi": 23,
-      "group": "godan",
-      "kanji": "急ぐ",
-      "kana": "いそぐ",
-      "jisho": "いそぐ",
-      "masu": "いそぎます",
-      "zh": "趕快",
-      "audio": "audio/verb/L32-23.mp3"
-     },
-     {
-      "id": "L33",
-      "vi": 23,
-      "group": "godan",
-      "kanji": "降る",
-      "kana": "ふる",
-      "jisho": "ふる",
-      "masu": "ふります",
-      "zh": "（雨雪）下",
-      "audio": "audio/verb/L33-23.mp3"
-     },
-     {
-      "id": "L33",
-      "vi": 25,
-      "group": "godan",
-      "kanji": "間に合う",
-      "kana": "まにあう",
-      "jisho": "まにあう",
-      "masu": "まにあいます",
-      "zh": "趕得上",
-      "audio": "audio/verb/L33-25.mp3"
+      "audio": "audio/verb/L31-20.mp3",
+      "lessons": [
+       "L31"
+      ]
      },
      {
       "id": "L34",
@@ -1423,18 +1316,10 @@
       "jisho": "おす",
       "masu": "おします",
       "zh": "按、推",
-      "audio": "audio/verb/L34-15.mp3"
-     },
-     {
-      "id": "L34",
-      "vi": 19,
-      "group": "godan",
-      "kanji": "飾る",
-      "kana": "かざる",
-      "jisho": "かざる",
-      "masu": "かざります",
-      "zh": "裝飾、擺設",
-      "audio": "audio/verb/L34-19.mp3"
+      "audio": "audio/verb/L34-15.mp3",
+      "lessons": [
+       "L34"
+      ]
      },
      {
       "id": "L34",
@@ -1445,40 +1330,10 @@
       "jisho": "はる",
       "masu": "はります",
       "zh": "貼",
-      "audio": "audio/verb/L34-20.mp3"
-     },
-     {
-      "id": "L34",
-      "vi": 23,
-      "group": "godan",
-      "kanji": "消す",
-      "kana": "けす",
-      "jisho": "けす",
-      "masu": "けします",
-      "zh": "關掉、熄滅",
-      "audio": "audio/verb/L34-23.mp3"
-     },
-     {
-      "id": "L35",
-      "vi": 17,
-      "group": "godan",
-      "kanji": "曲がる",
-      "kana": "まがる",
-      "jisho": "まがる",
-      "masu": "まがります",
-      "zh": "轉彎",
-      "audio": "audio/verb/L35-17.mp3"
-     },
-     {
-      "id": "L35",
-      "vi": 18,
-      "group": "godan",
-      "kanji": "渡る",
-      "kana": "わたる",
-      "jisho": "わたる",
-      "masu": "わたります",
-      "zh": "穿越、過（橋、馬路）",
-      "audio": "audio/verb/L35-18.mp3"
+      "audio": "audio/verb/L34-20.mp3",
+      "lessons": [
+       "L34"
+      ]
      },
      {
       "id": "L35",
@@ -1489,7 +1344,10 @@
       "jisho": "とおる",
       "masu": "とおります",
       "zh": "通過、經過",
-      "audio": "audio/verb/L35-19.mp3"
+      "audio": "audio/verb/L35-19.mp3",
+      "lessons": [
+       "L35"
+      ]
      },
      {
       "id": "L35",
@@ -1500,7 +1358,10 @@
       "jisho": "そう",
       "masu": "そいます",
       "zh": "沿著",
-      "audio": "audio/verb/L35-20.mp3"
+      "audio": "audio/verb/L35-20.mp3",
+      "lessons": [
+       "L35"
+      ]
      },
      {
       "id": "L35",
@@ -1511,7 +1372,10 @@
       "jisho": "すすむ",
       "masu": "すすみます",
       "zh": "前進",
-      "audio": "audio/verb/L35-21.mp3"
+      "audio": "audio/verb/L35-21.mp3",
+      "lessons": [
+       "L35"
+      ]
      },
      {
       "id": "L35",
@@ -1522,7 +1386,10 @@
       "jisho": "つく",
       "masu": "つきます",
       "zh": "抵達",
-      "audio": "audio/verb/L35-22.mp3"
+      "audio": "audio/verb/L35-22.mp3",
+      "lessons": [
+       "L35"
+      ]
      },
      {
       "id": "L36",
@@ -1533,7 +1400,10 @@
       "jisho": "やむ",
       "masu": "やみます",
       "zh": "（雨雪）停",
-      "audio": "audio/verb/L36-19.mp3"
+      "audio": "audio/verb/L36-19.mp3",
+      "lessons": [
+       "L36"
+      ]
      },
      {
       "id": "L36",
@@ -1544,7 +1414,11 @@
       "jisho": "なく",
       "masu": "なきます",
       "zh": "哭",
-      "audio": "audio/verb/L36-23.mp3"
+      "audio": "audio/verb/L36-23.mp3",
+      "lessons": [
+       "L36",
+       "L39"
+      ]
      },
      {
       "id": "L36",
@@ -1555,7 +1429,11 @@
       "jisho": "わらう",
       "masu": "わらいます",
       "zh": "笑",
-      "audio": "audio/verb/L36-24.mp3"
+      "audio": "audio/verb/L36-24.mp3",
+      "lessons": [
+       "L36",
+       "L39"
+      ]
      },
      {
       "id": "L37",
@@ -1566,7 +1444,10 @@
       "jisho": "しかる",
       "masu": "しかります",
       "zh": "責罵",
-      "audio": "audio/verb/L37-1.mp3"
+      "audio": "audio/verb/L37-1.mp3",
+      "lessons": [
+       "L37"
+      ]
      },
      {
       "id": "L37",
@@ -1577,29 +1458,10 @@
       "jisho": "ぬすむ",
       "masu": "ぬすみます",
       "zh": "偷",
-      "audio": "audio/verb/L37-2.mp3"
-     },
-     {
-      "id": "L37",
-      "vi": 3,
-      "group": "godan",
-      "kanji": "壊す",
-      "kana": "こわす",
-      "jisho": "こわす",
-      "masu": "こわします",
-      "zh": "弄壞",
-      "audio": "audio/verb/L37-3.mp3"
-     },
-     {
-      "id": "L37",
-      "vi": 6,
-      "group": "godan",
-      "kanji": "呼ぶ",
-      "kana": "よぶ",
-      "jisho": "よぶ",
-      "masu": "よびます",
-      "zh": "呼叫、邀請",
-      "audio": "audio/verb/L37-6.mp3"
+      "audio": "audio/verb/L37-2.mp3",
+      "lessons": [
+       "L37"
+      ]
      },
      {
       "id": "L37",
@@ -1610,7 +1472,10 @@
       "jisho": "おどろく",
       "masu": "おどろきます",
       "zh": "吃驚",
-      "audio": "audio/verb/L37-7.mp3"
+      "audio": "audio/verb/L37-7.mp3",
+      "lessons": [
+       "L37"
+      ]
      },
      {
       "id": "L37",
@@ -1621,7 +1486,10 @@
       "jisho": "こまる",
       "masu": "こまります",
       "zh": "感到困擾",
-      "audio": "audio/verb/L37-8.mp3"
+      "audio": "audio/verb/L37-8.mp3",
+      "lessons": [
+       "L37"
+      ]
      },
      {
       "id": "L37",
@@ -1632,7 +1500,10 @@
       "jisho": "よろこぶ",
       "masu": "よろこびます",
       "zh": "高興",
-      "audio": "audio/verb/L37-9.mp3"
+      "audio": "audio/verb/L37-9.mp3",
+      "lessons": [
+       "L37"
+      ]
      },
      {
       "id": "L38",
@@ -1643,40 +1514,10 @@
       "jisho": "もらう",
       "masu": "もらいます",
       "zh": "得到、收到",
-      "audio": "audio/verb/L38-1.mp3"
-     },
-     {
-      "id": "L38",
-      "vi": 3,
-      "group": "godan",
-      "kanji": "貸す",
-      "kana": "かす",
-      "jisho": "かす",
-      "masu": "かします",
-      "zh": "借出",
-      "audio": "audio/verb/L38-3.mp3"
-     },
-     {
-      "id": "L38",
-      "vi": 6,
-      "group": "godan",
-      "kanji": "習う",
-      "kana": "ならう",
-      "jisho": "ならう",
-      "masu": "ならいます",
-      "zh": "（向人）學習",
-      "audio": "audio/verb/L38-6.mp3"
-     },
-     {
-      "id": "L38",
-      "vi": 7,
-      "group": "godan",
-      "kanji": "返す",
-      "kana": "かえす",
-      "jisho": "かえす",
-      "masu": "かえします",
-      "zh": "歸還",
-      "audio": "audio/verb/L38-7.mp3"
+      "audio": "audio/verb/L38-1.mp3",
+      "lessons": [
+       "L38"
+      ]
      },
      {
       "id": "L38",
@@ -1687,18 +1528,10 @@
       "jisho": "おくる",
       "masu": "おくります",
       "zh": "寄送",
-      "audio": "audio/verb/L38-9.mp3"
-     },
-     {
-      "id": "L38",
-      "vi": 10,
-      "group": "godan",
-      "kanji": "作る",
-      "kana": "つくる",
-      "jisho": "つくる",
-      "masu": "つくります",
-      "zh": "做、製作",
-      "audio": "audio/verb/L38-10.mp3"
+      "audio": "audio/verb/L38-9.mp3",
+      "lessons": [
+       "L38"
+      ]
      },
      {
       "id": "L38",
@@ -1709,95 +1542,10 @@
       "jisho": "てつだう",
       "masu": "てつだいます",
       "zh": "幫忙",
-      "audio": "audio/verb/L38-11.mp3"
-     },
-     {
-      "id": "L39",
-      "vi": 0,
-      "group": "godan",
-      "kanji": "働く",
-      "kana": "はたらく",
-      "jisho": "はたらく",
-      "masu": "はたらきます",
-      "zh": "工作",
-      "audio": "audio/verb/L39-0.mp3"
-     },
-     {
-      "id": "L39",
-      "vi": 4,
-      "group": "godan",
-      "kanji": "待つ",
-      "kana": "まつ",
-      "jisho": "まつ",
-      "masu": "まちます",
-      "zh": "等待",
-      "audio": "audio/verb/L39-4.mp3"
-     },
-     {
-      "id": "L39",
-      "vi": 5,
-      "group": "godan",
-      "kanji": "走る",
-      "kana": "はしる",
-      "jisho": "はしる",
-      "masu": "はしります",
-      "zh": "跑",
-      "audio": "audio/verb/L39-5.mp3"
-     },
-     {
-      "id": "L39",
-      "vi": 6,
-      "group": "godan",
-      "kanji": "泳ぐ",
-      "kana": "およぐ",
-      "jisho": "およぐ",
-      "masu": "およぎます",
-      "zh": "游泳",
-      "audio": "audio/verb/L39-6.mp3"
-     },
-     {
-      "id": "L39",
-      "vi": 7,
-      "group": "godan",
-      "kanji": "歌う",
-      "kana": "うたう",
-      "jisho": "うたう",
-      "masu": "うたいます",
-      "zh": "唱歌",
-      "audio": "audio/verb/L39-7.mp3"
-     },
-     {
-      "id": "L39",
-      "vi": 8,
-      "group": "godan",
-      "kanji": "踊る",
-      "kana": "おどる",
-      "jisho": "おどる",
-      "masu": "おどります",
-      "zh": "跳舞",
-      "audio": "audio/verb/L39-8.mp3"
-     },
-     {
-      "id": "L39",
-      "vi": 9,
-      "group": "godan",
-      "kanji": "泣く",
-      "kana": "なく",
-      "jisho": "なく",
-      "masu": "なきます",
-      "zh": "哭",
-      "audio": "audio/verb/L39-9.mp3"
-     },
-     {
-      "id": "L39",
-      "vi": 10,
-      "group": "godan",
-      "kanji": "笑う",
-      "kana": "わらう",
-      "jisho": "わらう",
-      "masu": "わらいます",
-      "zh": "笑",
-      "audio": "audio/verb/L39-10.mp3"
+      "audio": "audio/verb/L38-11.mp3",
+      "lessons": [
+       "L38"
+      ]
      },
      {
       "id": "L39",
@@ -1808,7 +1556,10 @@
       "jisho": "ゆるす",
       "masu": "ゆるします",
       "zh": "原諒",
-      "audio": "audio/verb/L39-12.mp3"
+      "audio": "audio/verb/L39-12.mp3",
+      "lessons": [
+       "L39"
+      ]
      },
      {
       "id": "L40",
@@ -1819,7 +1570,10 @@
       "jisho": "いらっしゃる",
       "masu": "いらっしゃいます",
       "zh": "在、去、來（尊敬）",
-      "audio": "audio/verb/L40-0.mp3"
+      "audio": "audio/verb/L40-0.mp3",
+      "lessons": [
+       "L40"
+      ]
      },
      {
       "id": "L40",
@@ -1830,7 +1584,10 @@
       "jisho": "めしあがる",
       "masu": "めしあがります",
       "zh": "吃、喝（尊敬）",
-      "audio": "audio/verb/L40-1.mp3"
+      "audio": "audio/verb/L40-1.mp3",
+      "lessons": [
+       "L40"
+      ]
      },
      {
       "id": "L40",
@@ -1841,7 +1598,10 @@
       "jisho": "おっしゃる",
       "masu": "おっしゃいます",
       "zh": "說（尊敬）",
-      "audio": "audio/verb/L40-2.mp3"
+      "audio": "audio/verb/L40-2.mp3",
+      "lessons": [
+       "L40"
+      ]
      },
      {
       "id": "L40",
@@ -1852,7 +1612,10 @@
       "jisho": "ごらんになる",
       "masu": "ごらんになります",
       "zh": "看（尊敬）",
-      "audio": "audio/verb/L40-3.mp3"
+      "audio": "audio/verb/L40-3.mp3",
+      "lessons": [
+       "L40"
+      ]
      },
      {
       "id": "L40",
@@ -1863,7 +1626,10 @@
       "jisho": "うかがう",
       "masu": "うかがいます",
       "zh": "拜訪、請教（謙讓）",
-      "audio": "audio/verb/L40-5.mp3"
+      "audio": "audio/verb/L40-5.mp3",
+      "lessons": [
+       "L40"
+      ]
      },
      {
       "id": "L40",
@@ -1874,7 +1640,10 @@
       "jisho": "いたす",
       "masu": "いたします",
       "zh": "做（謙讓）",
-      "audio": "audio/verb/L40-6.mp3"
+      "audio": "audio/verb/L40-6.mp3",
+      "lessons": [
+       "L40"
+      ]
      },
      {
       "id": "L40",
@@ -1885,7 +1654,10 @@
       "jisho": "もうす",
       "masu": "もうします",
       "zh": "說、叫做（謙讓）",
-      "audio": "audio/verb/L40-7.mp3"
+      "audio": "audio/verb/L40-7.mp3",
+      "lessons": [
+       "L40"
+      ]
      },
      {
       "id": "L40",
@@ -1896,7 +1668,10 @@
       "jisho": "おる",
       "masu": "おります",
       "zh": "在（謙讓）",
-      "audio": "audio/verb/L40-10.mp3"
+      "audio": "audio/verb/L40-10.mp3",
+      "lessons": [
+       "L40"
+      ]
      }
     ]
    },
@@ -1913,7 +1688,12 @@
       "jisho": "たべる",
       "masu": "たべます",
       "zh": "吃",
-      "audio": "audio/verb/L07-0.mp3"
+      "audio": "audio/verb/L07-0.mp3",
+      "lessons": [
+       "L07",
+       "L11",
+       "L24"
+      ]
      },
      {
       "id": "L07",
@@ -1924,7 +1704,11 @@
       "jisho": "みる",
       "masu": "みます",
       "zh": "看",
-      "audio": "audio/verb/L07-2.mp3"
+      "audio": "audio/verb/L07-2.mp3",
+      "lessons": [
+       "L07",
+       "L11"
+      ]
      },
      {
       "id": "L10",
@@ -1935,7 +1719,10 @@
       "jisho": "いる",
       "masu": "います",
       "zh": "有、存在（人與動物）",
-      "audio": "audio/verb/L10-1.mp3"
+      "audio": "audio/verb/L10-1.mp3",
+      "lessons": [
+       "L10"
+      ]
      },
      {
       "id": "L11",
@@ -1946,7 +1733,10 @@
       "jisho": "おきる",
       "masu": "おきます",
       "zh": "起床",
-      "audio": "audio/verb/L11-0.mp3"
+      "audio": "audio/verb/L11-0.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L11",
@@ -1957,29 +1747,11 @@
       "jisho": "ねる",
       "masu": "ねます",
       "zh": "睡覺",
-      "audio": "audio/verb/L11-1.mp3"
-     },
-     {
-      "id": "L11",
-      "vi": 9,
-      "group": "ichidan",
-      "kanji": "見る",
-      "kana": "みる",
-      "jisho": "みる",
-      "masu": "みます",
-      "zh": "看",
-      "audio": "audio/verb/L11-9.mp3"
-     },
-     {
-      "id": "L11",
-      "vi": 10,
-      "group": "ichidan",
-      "kanji": "食べる",
-      "kana": "たべる",
-      "jisho": "たべる",
-      "masu": "たべます",
-      "zh": "吃",
-      "audio": "audio/verb/L11-10.mp3"
+      "audio": "audio/verb/L11-1.mp3",
+      "lessons": [
+       "L11",
+       "L15"
+      ]
      },
      {
       "id": "L11",
@@ -1990,7 +1762,10 @@
       "jisho": "でかける",
       "masu": "でかけます",
       "zh": "外出",
-      "audio": "audio/verb/L11-31.mp3"
+      "audio": "audio/verb/L11-31.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L11",
@@ -2001,7 +1776,10 @@
       "jisho": "つとめる",
       "masu": "つとめます",
       "zh": "任職於",
-      "audio": "audio/verb/L11-33.mp3"
+      "audio": "audio/verb/L11-33.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L12",
@@ -2012,7 +1790,11 @@
       "jisho": "おしえる",
       "masu": "おしえます",
       "zh": "教、告訴",
-      "audio": "audio/verb/L12-4.mp3"
+      "audio": "audio/verb/L12-4.mp3",
+      "lessons": [
+       "L12",
+       "L38"
+      ]
      },
      {
       "id": "L12",
@@ -2023,7 +1805,12 @@
       "jisho": "あける",
       "masu": "あけます",
       "zh": "打開",
-      "audio": "audio/verb/L12-10.mp3"
+      "audio": "audio/verb/L12-10.mp3",
+      "lessons": [
+       "L12",
+       "L26",
+       "L34"
+      ]
      },
      {
       "id": "L12",
@@ -2034,7 +1821,12 @@
       "jisho": "しめる",
       "masu": "しめます",
       "zh": "關上",
-      "audio": "audio/verb/L12-11.mp3"
+      "audio": "audio/verb/L12-11.mp3",
+      "lessons": [
+       "L12",
+       "L26",
+       "L34"
+      ]
      },
      {
       "id": "L12",
@@ -2045,7 +1837,12 @@
       "jisho": "つける",
       "masu": "つけます",
       "zh": "打開（燈、電源）",
-      "audio": "audio/verb/L12-13.mp3"
+      "audio": "audio/verb/L12-13.mp3",
+      "lessons": [
+       "L12",
+       "L26",
+       "L34"
+      ]
      },
      {
       "id": "L12",
@@ -2056,7 +1853,10 @@
       "jisho": "いれる",
       "masu": "いれます",
       "zh": "放入",
-      "audio": "audio/verb/L12-26.mp3"
+      "audio": "audio/verb/L12-26.mp3",
+      "lessons": [
+       "L12"
+      ]
      },
      {
       "id": "L13",
@@ -2067,7 +1867,13 @@
       "jisho": "つかれる",
       "masu": "つかれます",
       "zh": "累、疲勞",
-      "audio": "audio/verb/L13-11.mp3"
+      "audio": "audio/verb/L13-11.mp3",
+      "lessons": [
+       "L13",
+       "L19",
+       "L32",
+       "L36"
+      ]
      },
      {
       "id": "L13",
@@ -2078,7 +1884,11 @@
       "jisho": "はれる",
       "masu": "はれます",
       "zh": "放晴",
-      "audio": "audio/verb/L13-12.mp3"
+      "audio": "audio/verb/L13-12.mp3",
+      "lessons": [
+       "L13",
+       "L29"
+      ]
      },
      {
       "id": "L14",
@@ -2089,7 +1899,10 @@
       "jisho": "すてる",
       "masu": "すてます",
       "zh": "丟掉",
-      "audio": "audio/verb/L14-20.mp3"
+      "audio": "audio/verb/L14-20.mp3",
+      "lessons": [
+       "L14"
+      ]
      },
      {
       "id": "L14",
@@ -2100,7 +1913,11 @@
       "jisho": "わすれる",
       "masu": "わすれます",
       "zh": "忘記",
-      "audio": "audio/verb/L14-21.mp3"
+      "audio": "audio/verb/L14-21.mp3",
+      "lessons": [
+       "L14",
+       "L32"
+      ]
      },
      {
       "id": "L14",
@@ -2111,18 +1928,10 @@
       "jisho": "あびる",
       "masu": "あびます",
       "zh": "淋浴、泡（澡）",
-      "audio": "audio/verb/L14-34.mp3"
-     },
-     {
-      "id": "L15",
-      "vi": 19,
-      "group": "ichidan",
-      "kanji": "寝る",
-      "kana": "ねる",
-      "jisho": "ねる",
-      "masu": "ねます",
-      "zh": "睡覺",
-      "audio": "audio/verb/L15-19.mp3"
+      "audio": "audio/verb/L14-34.mp3",
+      "lessons": [
+       "L14"
+      ]
      },
      {
       "id": "L15",
@@ -2133,7 +1942,10 @@
       "jisho": "はじめる",
       "masu": "はじめます",
       "zh": "開始",
-      "audio": "audio/verb/L15-20.mp3"
+      "audio": "audio/verb/L15-20.mp3",
+      "lessons": [
+       "L15"
+      ]
      },
      {
       "id": "L16",
@@ -2144,7 +1956,10 @@
       "jisho": "うまれる",
       "masu": "うまれます",
       "zh": "出生",
-      "audio": "audio/verb/L16-36.mp3"
+      "audio": "audio/verb/L16-36.mp3",
+      "lessons": [
+       "L16"
+      ]
      },
      {
       "id": "L18",
@@ -2155,7 +1970,11 @@
       "jisho": "こたえる",
       "masu": "こたえます",
       "zh": "回答",
-      "audio": "audio/verb/L18-3.mp3"
+      "audio": "audio/verb/L18-3.mp3",
+      "lessons": [
+       "L18",
+       "L39"
+      ]
      },
      {
       "id": "L18",
@@ -2166,7 +1985,11 @@
       "jisho": "つたえる",
       "masu": "つたえます",
       "zh": "傳達",
-      "audio": "audio/verb/L18-5.mp3"
+      "audio": "audio/verb/L18-5.mp3",
+      "lessons": [
+       "L18",
+       "L30"
+      ]
      },
      {
       "id": "L19",
@@ -2177,18 +2000,12 @@
       "jisho": "おくれる",
       "masu": "おくれます",
       "zh": "遲到、延誤",
-      "audio": "audio/verb/L19-8.mp3"
-     },
-     {
-      "id": "L19",
-      "vi": 13,
-      "group": "ichidan",
-      "kanji": "疲れる",
-      "kana": "つかれる",
-      "jisho": "つかれる",
-      "masu": "つかれます",
-      "zh": "疲倦",
-      "audio": "audio/verb/L19-13.mp3"
+      "audio": "audio/verb/L19-8.mp3",
+      "lessons": [
+       "L19",
+       "L32",
+       "L33"
+      ]
      },
      {
       "id": "L20",
@@ -2199,7 +2016,11 @@
       "jisho": "かりる",
       "masu": "かります",
       "zh": "借（入）",
-      "audio": "audio/verb/L20-15.mp3"
+      "audio": "audio/verb/L20-15.mp3",
+      "lessons": [
+       "L20",
+       "L38"
+      ]
      },
      {
       "id": "L21",
@@ -2210,7 +2031,10 @@
       "jisho": "きこえる",
       "masu": "きこえます",
       "zh": "聽得見",
-      "audio": "audio/verb/L21-24.mp3"
+      "audio": "audio/verb/L21-24.mp3",
+      "lessons": [
+       "L21"
+      ]
      },
      {
       "id": "L21",
@@ -2221,7 +2045,10 @@
       "jisho": "みえる",
       "masu": "みえます",
       "zh": "看得見",
-      "audio": "audio/verb/L21-25.mp3"
+      "audio": "audio/verb/L21-25.mp3",
+      "lessons": [
+       "L21"
+      ]
      },
      {
       "id": "L24",
@@ -2232,18 +2059,10 @@
       "jisho": "できる",
       "masu": "できます",
       "zh": "會、能（可能）",
-      "audio": "audio/verb/L24-13.mp3"
-     },
-     {
-      "id": "L24",
-      "vi": 18,
-      "group": "ichidan",
-      "kanji": "食べる",
-      "kana": "たべる",
-      "jisho": "たべる",
-      "masu": "たべます",
-      "zh": "吃",
-      "audio": "audio/verb/L24-18.mp3"
+      "audio": "audio/verb/L24-13.mp3",
+      "lessons": [
+       "L24"
+      ]
      },
      {
       "id": "L24",
@@ -2254,29 +2073,10 @@
       "jisho": "おぼえる",
       "masu": "おぼえます",
       "zh": "記住",
-      "audio": "audio/verb/L24-25.mp3"
-     },
-     {
-      "id": "L26",
-      "vi": 1,
-      "group": "ichidan",
-      "kanji": "開ける",
-      "kana": "あける",
-      "jisho": "あける",
-      "masu": "あけます",
-      "zh": "打開",
-      "audio": "audio/verb/L26-1.mp3"
-     },
-     {
-      "id": "L26",
-      "vi": 3,
-      "group": "ichidan",
-      "kanji": "閉める",
-      "kana": "しめる",
-      "jisho": "しめる",
-      "masu": "しめます",
-      "zh": "關上、收緊",
-      "audio": "audio/verb/L26-3.mp3"
+      "audio": "audio/verb/L24-25.mp3",
+      "lessons": [
+       "L24"
+      ]
      },
      {
       "id": "L26",
@@ -2287,7 +2087,11 @@
       "jisho": "おちる",
       "masu": "おちます",
       "zh": "掉落",
-      "audio": "audio/verb/L26-4.mp3"
+      "audio": "audio/verb/L26-4.mp3",
+      "lessons": [
+       "L26",
+       "L36"
+      ]
      },
      {
       "id": "L26",
@@ -2298,18 +2102,10 @@
       "jisho": "とめる",
       "masu": "とめます",
       "zh": "使停止、把車停下",
-      "audio": "audio/verb/L26-7.mp3"
-     },
-     {
-      "id": "L26",
-      "vi": 9,
-      "group": "ichidan",
-      "kanji": "",
-      "kana": "つける",
-      "jisho": "つける",
-      "masu": "つけます",
-      "zh": "打開（燈、電器）",
-      "audio": "audio/verb/L26-9.mp3"
+      "audio": "audio/verb/L26-7.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -2320,7 +2116,10 @@
       "jisho": "きえる",
       "masu": "きえます",
       "zh": "熄滅、消失",
-      "audio": "audio/verb/L26-10.mp3"
+      "audio": "audio/verb/L26-10.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -2331,7 +2130,12 @@
       "jisho": "こわれる",
       "masu": "こわれます",
       "zh": "壞掉",
-      "audio": "audio/verb/L26-12.mp3"
+      "audio": "audio/verb/L26-12.mp3",
+      "lessons": [
+       "L26",
+       "L32",
+       "L36"
+      ]
      },
      {
       "id": "L26",
@@ -2342,7 +2146,10 @@
       "jisho": "よごれる",
       "masu": "よごれます",
       "zh": "變髒",
-      "audio": "audio/verb/L26-14.mp3"
+      "audio": "audio/verb/L26-14.mp3",
+      "lessons": [
+       "L26"
+      ]
      },
      {
       "id": "L26",
@@ -2353,7 +2160,11 @@
       "jisho": "ならべる",
       "masu": "ならべます",
       "zh": "排列、擺放",
-      "audio": "audio/verb/L26-19.mp3"
+      "audio": "audio/verb/L26-19.mp3",
+      "lessons": [
+       "L26",
+       "L34"
+      ]
      },
      {
       "id": "L28",
@@ -2364,7 +2175,11 @@
       "jisho": "つづける",
       "masu": "つづけます",
       "zh": "繼續",
-      "audio": "audio/verb/L28-22.mp3"
+      "audio": "audio/verb/L28-22.mp3",
+      "lessons": [
+       "L28",
+       "L34"
+      ]
      },
      {
       "id": "L28",
@@ -2375,7 +2190,10 @@
       "jisho": "あきらめる",
       "masu": "あきらめます",
       "zh": "放棄",
-      "audio": "audio/verb/L28-23.mp3"
+      "audio": "audio/verb/L28-23.mp3",
+      "lessons": [
+       "L28"
+      ]
      },
      {
       "id": "L28",
@@ -2386,29 +2204,10 @@
       "jisho": "きめる",
       "masu": "きめます",
       "zh": "決定",
-      "audio": "audio/verb/L28-24.mp3"
-     },
-     {
-      "id": "L29",
-      "vi": 16,
-      "group": "ichidan",
-      "kanji": "晴れる",
-      "kana": "はれる",
-      "jisho": "はれる",
-      "masu": "はれます",
-      "zh": "放晴",
-      "audio": "audio/verb/L29-16.mp3"
-     },
-     {
-      "id": "L30",
-      "vi": 22,
-      "group": "ichidan",
-      "kanji": "伝える",
-      "kana": "つたえる",
-      "jisho": "つたえる",
-      "masu": "つたえます",
-      "zh": "傳達",
-      "audio": "audio/verb/L30-22.mp3"
+      "audio": "audio/verb/L28-24.mp3",
+      "lessons": [
+       "L28"
+      ]
      },
      {
       "id": "L30",
@@ -2419,95 +2218,10 @@
       "jisho": "しんじる",
       "masu": "しんじます",
       "zh": "相信",
-      "audio": "audio/verb/L30-23.mp3"
-     },
-     {
-      "id": "L32",
-      "vi": 19,
-      "group": "ichidan",
-      "kanji": "遅れる",
-      "kana": "おくれる",
-      "jisho": "おくれる",
-      "masu": "おくれます",
-      "zh": "遲到、延誤",
-      "audio": "audio/verb/L32-19.mp3"
-     },
-     {
-      "id": "L32",
-      "vi": 21,
-      "group": "ichidan",
-      "kanji": "壊れる",
-      "kana": "こわれる",
-      "jisho": "こわれる",
-      "masu": "こわれます",
-      "zh": "壞掉",
-      "audio": "audio/verb/L32-21.mp3"
-     },
-     {
-      "id": "L32",
-      "vi": 22,
-      "group": "ichidan",
-      "kanji": "忘れる",
-      "kana": "わすれる",
-      "jisho": "わすれる",
-      "masu": "わすれます",
-      "zh": "忘記",
-      "audio": "audio/verb/L32-22.mp3"
-     },
-     {
-      "id": "L32",
-      "vi": 24,
-      "group": "ichidan",
-      "kanji": "疲れる",
-      "kana": "つかれる",
-      "jisho": "つかれる",
-      "masu": "つかれます",
-      "zh": "累",
-      "audio": "audio/verb/L32-24.mp3"
-     },
-     {
-      "id": "L33",
-      "vi": 24,
-      "group": "ichidan",
-      "kanji": "遅れる",
-      "kana": "おくれる",
-      "jisho": "おくれる",
-      "masu": "おくれます",
-      "zh": "遲到、延誤",
-      "audio": "audio/verb/L33-24.mp3"
-     },
-     {
-      "id": "L34",
-      "vi": 16,
-      "group": "ichidan",
-      "kanji": "開ける",
-      "kana": "あける",
-      "jisho": "あける",
-      "masu": "あけます",
-      "zh": "打開",
-      "audio": "audio/verb/L34-16.mp3"
-     },
-     {
-      "id": "L34",
-      "vi": 17,
-      "group": "ichidan",
-      "kanji": "閉める",
-      "kana": "しめる",
-      "jisho": "しめる",
-      "masu": "しめます",
-      "zh": "關上",
-      "audio": "audio/verb/L34-17.mp3"
-     },
-     {
-      "id": "L34",
-      "vi": 18,
-      "group": "ichidan",
-      "kanji": "並べる",
-      "kana": "ならべる",
-      "jisho": "ならべる",
-      "masu": "ならべます",
-      "zh": "排列",
-      "audio": "audio/verb/L34-18.mp3"
+      "audio": "audio/verb/L30-23.mp3",
+      "lessons": [
+       "L30"
+      ]
      },
      {
       "id": "L34",
@@ -2518,29 +2232,10 @@
       "jisho": "かける",
       "masu": "かけます",
       "zh": "掛",
-      "audio": "audio/verb/L34-21.mp3"
-     },
-     {
-      "id": "L34",
-      "vi": 22,
-      "group": "ichidan",
-      "kanji": "",
-      "kana": "つける",
-      "jisho": "つける",
-      "masu": "つけます",
-      "zh": "打開（電器）",
-      "audio": "audio/verb/L34-22.mp3"
-     },
-     {
-      "id": "L34",
-      "vi": 24,
-      "group": "ichidan",
-      "kanji": "続ける",
-      "kana": "つづける",
-      "jisho": "つづける",
-      "masu": "つづけます",
-      "zh": "繼續",
-      "audio": "audio/verb/L34-24.mp3"
+      "audio": "audio/verb/L34-21.mp3",
+      "lessons": [
+       "L34"
+      ]
      },
      {
       "id": "L34",
@@ -2551,7 +2246,10 @@
       "jisho": "なれる",
       "masu": "なれます",
       "zh": "習慣、熟悉",
-      "audio": "audio/verb/L34-25.mp3"
+      "audio": "audio/verb/L34-25.mp3",
+      "lessons": [
+       "L34"
+      ]
      },
      {
       "id": "L35",
@@ -2562,7 +2260,10 @@
       "jisho": "でる",
       "masu": "でます",
       "zh": "出去、出來",
-      "audio": "audio/verb/L35-23.mp3"
+      "audio": "audio/verb/L35-23.mp3",
+      "lessons": [
+       "L35"
+      ]
      },
      {
       "id": "L36",
@@ -2573,40 +2274,10 @@
       "jisho": "われる",
       "masu": "われます",
       "zh": "破裂",
-      "audio": "audio/verb/L36-20.mp3"
-     },
-     {
-      "id": "L36",
-      "vi": 21,
-      "group": "ichidan",
-      "kanji": "壊れる",
-      "kana": "こわれる",
-      "jisho": "こわれる",
-      "masu": "こわれます",
-      "zh": "壞掉",
-      "audio": "audio/verb/L36-21.mp3"
-     },
-     {
-      "id": "L36",
-      "vi": 22,
-      "group": "ichidan",
-      "kanji": "落ちる",
-      "kana": "おちる",
-      "jisho": "おちる",
-      "masu": "おちます",
-      "zh": "掉落",
-      "audio": "audio/verb/L36-22.mp3"
-     },
-     {
-      "id": "L36",
-      "vi": 25,
-      "group": "ichidan",
-      "kanji": "疲れる",
-      "kana": "つかれる",
-      "jisho": "つかれる",
-      "masu": "つかれます",
-      "zh": "疲倦",
-      "audio": "audio/verb/L36-25.mp3"
+      "audio": "audio/verb/L36-20.mp3",
+      "lessons": [
+       "L36"
+      ]
      },
      {
       "id": "L37",
@@ -2617,7 +2288,10 @@
       "jisho": "ほめる",
       "masu": "ほめます",
       "zh": "稱讚",
-      "audio": "audio/verb/L37-0.mp3"
+      "audio": "audio/verb/L37-0.mp3",
+      "lessons": [
+       "L37"
+      ]
      },
      {
       "id": "L37",
@@ -2628,7 +2302,10 @@
       "jisho": "たてる",
       "masu": "たてます",
       "zh": "建造",
-      "audio": "audio/verb/L37-4.mp3"
+      "audio": "audio/verb/L37-4.mp3",
+      "lessons": [
+       "L37"
+      ]
      },
      {
       "id": "L37",
@@ -2639,7 +2316,10 @@
       "jisho": "つかまえる",
       "masu": "つかまえます",
       "zh": "抓住",
-      "audio": "audio/verb/L37-5.mp3"
+      "audio": "audio/verb/L37-5.mp3",
+      "lessons": [
+       "L37"
+      ]
      },
      {
       "id": "L37",
@@ -2650,7 +2330,10 @@
       "jisho": "かんがえる",
       "masu": "かんがえます",
       "zh": "思考",
-      "audio": "audio/verb/L37-10.mp3"
+      "audio": "audio/verb/L37-10.mp3",
+      "lessons": [
+       "L37"
+      ]
      },
      {
       "id": "L38",
@@ -2661,7 +2344,10 @@
       "jisho": "あげる",
       "masu": "あげます",
       "zh": "給（別人）",
-      "audio": "audio/verb/L38-0.mp3"
+      "audio": "audio/verb/L38-0.mp3",
+      "lessons": [
+       "L38"
+      ]
      },
      {
       "id": "L38",
@@ -2672,29 +2358,10 @@
       "jisho": "くれる",
       "masu": "くれます",
       "zh": "（別人）給我",
-      "audio": "audio/verb/L38-2.mp3"
-     },
-     {
-      "id": "L38",
-      "vi": 4,
-      "group": "ichidan",
-      "kanji": "借りる",
-      "kana": "かりる",
-      "jisho": "かりる",
-      "masu": "かります",
-      "zh": "借入",
-      "audio": "audio/verb/L38-4.mp3"
-     },
-     {
-      "id": "L38",
-      "vi": 5,
-      "group": "ichidan",
-      "kanji": "教える",
-      "kana": "おしえる",
-      "jisho": "おしえる",
-      "masu": "おしえます",
-      "zh": "教",
-      "audio": "audio/verb/L38-5.mp3"
+      "audio": "audio/verb/L38-2.mp3",
+      "lessons": [
+       "L38"
+      ]
      },
      {
       "id": "L38",
@@ -2705,7 +2372,10 @@
       "jisho": "みせる",
       "masu": "みせます",
       "zh": "給人看",
-      "audio": "audio/verb/L38-8.mp3"
+      "audio": "audio/verb/L38-8.mp3",
+      "lessons": [
+       "L38"
+      ]
      },
      {
       "id": "L39",
@@ -2716,7 +2386,10 @@
       "jisho": "しらべる",
       "masu": "しらべます",
       "zh": "調查、查詢",
-      "audio": "audio/verb/L39-2.mp3"
+      "audio": "audio/verb/L39-2.mp3",
+      "lessons": [
+       "L39"
+      ]
      },
      {
       "id": "L39",
@@ -2727,18 +2400,10 @@
       "jisho": "かたづける",
       "masu": "かたづけます",
       "zh": "收拾、整理",
-      "audio": "audio/verb/L39-3.mp3"
-     },
-     {
-      "id": "L39",
-      "vi": 11,
-      "group": "ichidan",
-      "kanji": "答える",
-      "kana": "こたえる",
-      "jisho": "こたえる",
-      "masu": "こたえます",
-      "zh": "回答",
-      "audio": "audio/verb/L39-11.mp3"
+      "audio": "audio/verb/L39-3.mp3",
+      "lessons": [
+       "L39"
+      ]
      },
      {
       "id": "L40",
@@ -2749,7 +2414,10 @@
       "jisho": "ぞんじる",
       "masu": "ぞんじます",
       "zh": "知道（謙讓）",
-      "audio": "audio/verb/L40-9.mp3"
+      "audio": "audio/verb/L40-9.mp3",
+      "lessons": [
+       "L40"
+      ]
      }
     ]
    },
@@ -2766,7 +2434,10 @@
       "jisho": "くる",
       "masu": "きます",
       "zh": "來",
-      "audio": "audio/verb/L06-1.mp3"
+      "audio": "audio/verb/L06-1.mp3",
+      "lessons": [
+       "L06"
+      ]
      },
      {
       "id": "L07",
@@ -2777,7 +2448,11 @@
       "jisho": "べんきょうする",
       "masu": "べんきょうします",
       "zh": "讀書、學習",
-      "audio": "audio/verb/L07-10.mp3"
+      "audio": "audio/verb/L07-10.mp3",
+      "lessons": [
+       "L07",
+       "L11"
+      ]
      },
      {
       "id": "L07",
@@ -2788,18 +2463,11 @@
       "jisho": "そうじする",
       "masu": "そうじします",
       "zh": "打掃",
-      "audio": "audio/verb/L07-11.mp3"
-     },
-     {
-      "id": "L11",
-      "vi": 12,
-      "group": "irregular",
-      "kanji": "勉強する",
-      "kana": "べんきょうする",
-      "jisho": "べんきょうする",
-      "masu": "べんきょうします",
-      "zh": "讀書、學習",
-      "audio": "audio/verb/L11-12.mp3"
+      "audio": "audio/verb/L07-11.mp3",
+      "lessons": [
+       "L07",
+       "L13"
+      ]
      },
      {
       "id": "L11",
@@ -2810,7 +2478,10 @@
       "jisho": "する",
       "masu": "します",
       "zh": "做",
-      "audio": "audio/verb/L11-26.mp3"
+      "audio": "audio/verb/L11-26.mp3",
+      "lessons": [
+       "L11"
+      ]
      },
      {
       "id": "L13",
@@ -2821,7 +2492,10 @@
       "jisho": "よやくする",
       "masu": "よやくします",
       "zh": "預約",
-      "audio": "audio/verb/L13-6.mp3"
+      "audio": "audio/verb/L13-6.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L13",
@@ -2832,18 +2506,10 @@
       "jisho": "せんたくする",
       "masu": "せんたくします",
       "zh": "洗衣服",
-      "audio": "audio/verb/L13-7.mp3"
-     },
-     {
-      "id": "L13",
-      "vi": 8,
-      "group": "irregular",
-      "kanji": "掃除する",
-      "kana": "そうじする",
-      "jisho": "そうじする",
-      "masu": "そうじします",
-      "zh": "打掃",
-      "audio": "audio/verb/L13-8.mp3"
+      "audio": "audio/verb/L13-7.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L13",
@@ -2854,7 +2520,10 @@
       "jisho": "さんぽする",
       "masu": "さんぽします",
       "zh": "散步",
-      "audio": "audio/verb/L13-9.mp3"
+      "audio": "audio/verb/L13-9.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L13",
@@ -2865,7 +2534,10 @@
       "jisho": "コピーする",
       "masu": "コピーします",
       "zh": "影印",
-      "audio": "audio/verb/L13-10.mp3"
+      "audio": "audio/verb/L13-10.mp3",
+      "lessons": [
+       "L13"
+      ]
      },
      {
       "id": "L24",
@@ -2876,7 +2548,10 @@
       "jisho": "うんてんする",
       "masu": "うんてんします",
       "zh": "開車",
-      "audio": "audio/verb/L24-20.mp3"
+      "audio": "audio/verb/L24-20.mp3",
+      "lessons": [
+       "L24"
+      ]
      },
      {
       "id": "L30",
@@ -2887,7 +2562,10 @@
       "jisho": "かくにんする",
       "masu": "かくにんします",
       "zh": "確認",
-      "audio": "audio/verb/L30-25.mp3"
+      "audio": "audio/verb/L30-25.mp3",
+      "lessons": [
+       "L30"
+      ]
      },
      {
       "id": "L38",
@@ -2898,7 +2576,10 @@
       "jisho": "せつめいする",
       "masu": "せつめいします",
       "zh": "說明",
-      "audio": "audio/verb/L38-12.mp3"
+      "audio": "audio/verb/L38-12.mp3",
+      "lessons": [
+       "L38"
+      ]
      },
      {
       "id": "L38",
@@ -2909,7 +2590,10 @@
       "jisho": "しょうかいする",
       "masu": "しょうかいします",
       "zh": "介紹",
-      "audio": "audio/verb/L38-13.mp3"
+      "audio": "audio/verb/L38-13.mp3",
+      "lessons": [
+       "L38"
+      ]
      },
      {
       "id": "L39",
@@ -2920,7 +2604,10 @@
       "jisho": "れんしゅうする",
       "masu": "れんしゅうします",
       "zh": "練習",
-      "audio": "audio/verb/L39-1.mp3"
+      "audio": "audio/verb/L39-1.mp3",
+      "lessons": [
+       "L39"
+      ]
      },
      {
       "id": "L39",
@@ -2931,7 +2618,10 @@
       "jisho": "しんぱいする",
       "masu": "しんぱいします",
       "zh": "擔心",
-      "audio": "audio/verb/L39-13.mp3"
+      "audio": "audio/verb/L39-13.mp3",
+      "lessons": [
+       "L39"
+      ]
      },
      {
       "id": "L40",
@@ -2942,7 +2632,10 @@
       "jisho": "はいけんする",
       "masu": "はいけんします",
       "zh": "看（謙讓）",
-      "audio": "audio/verb/L40-8.mp3"
+      "audio": "audio/verb/L40-8.mp3",
+      "lessons": [
+       "L40"
+      ]
      }
     ]
    }

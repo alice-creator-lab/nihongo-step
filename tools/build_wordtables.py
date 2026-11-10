@@ -187,6 +187,31 @@ def main():
 
     adjs = uniq_adj(adjs)
 
+    # 動詞表同樣收掉跨課重複：以（分類＋讀音＋漢字）為鍵，同一字只留最早一課，
+    # 課號全列在 lessons。同音不同字（ひく＝引く／弾く、つく＝着く／点く、
+    # とる＝取る／撮る）漢字不同，各自保留成一行。
+    def norm_kanji(kana, kanji):
+        return "" if (kanji or "") == kana else (kanji or "")
+
+    def uniq_verb(items):
+        seen, out = set(), []
+        for x in items:
+            sig = x["group"] + "|" + x["kana"] + "|" + norm_kanji(x["kana"], x.get("kanji"))
+            if sig in seen:
+                out_by_sig[sig]["lessons"].append(x["id"])
+                continue
+            seen.add(sig)
+            x = dict(x)
+            x["lessons"] = [x["id"]]
+            out_by_sig[sig] = x
+            out.append(x)
+        return out
+
+    out_by_sig = {}
+    verbs = uniq_verb(verbs)
+    for x in verbs:
+        x["lessons"] = sorted(set(x["lessons"]))
+
     vgroups = [("godan", "五段動詞"), ("ichidan", "一段動詞"), ("irregular", "不規則（する・来る）")]
     agroups = [("i", "い形容詞"), ("na", "な形容詞")]
     data = {
