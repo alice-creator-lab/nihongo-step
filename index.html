@@ -561,6 +561,12 @@
   .alltop{display:flex; align-items:center; justify-content:space-between; gap:10px}
   .alltop .cnt{margin:6px 0}
   .alltop .btn2{padding:8px 14px; font-size:13px; flex:0 0 auto}
+  .sortrow{display:flex; justify-content:flex-end; margin:2px 0 6px}
+  .sortrow .seg2 button{padding:6px 12px}
+  /* 五十音順的分段標題（あ行／か行…）：淺底一條，掃視時做定位 */
+  .khead{font-size:11.5px; font-weight:600; letter-spacing:.14em; color:var(--ink2);
+    background:var(--sand); border:1px solid var(--line); border-radius:8px;
+    padding:5px 10px; margin:14px 0 2px}
   .arow.playing, .vrow.playing, .exrow.playing{background:var(--sand2)}
   .vplaybar{display:flex; align-items:center; gap:10px; margin:0 0 6px}
   .vplaybar .btn2{padding:8px 14px; font-size:13px}
@@ -754,7 +760,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v176</span>
+    <span class="ver" id="verTag">v177</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2694,6 +2700,69 @@
     });
   }
 
+  /* ---------- 詞語總表排序 ----------
+     lesson＝課程順序（預設，跟課號與課內原序）；kana＝五十音順。
+     五十音用具備讀音的 kana 欄位排序：片假名先轉平假名再比，
+     所以 ホンコン 排在「ほ」行、コピーします 這類混合詞也排得到。
+     同一格清音→濁音→半濁音（か→が→き→ぎ），完全同音再按課號。 */
+  var VSK = 'ngs-vsort';
+  var VSORT = 'lesson';
+  try { if (localStorage.getItem(VSK) === 'kana') VSORT = 'kana'; } catch(e){}
+  var KROWS = ['あいうえお', 'かきくけこ', 'さしすせそ', 'たちつてと', 'なにぬねの',
+               'はひふへほ', 'まみむめも', 'やゆよ', 'らりるれろ', 'わを', 'ん'];
+  var KROWLET = 'あかさたなはまやらわん'.split('');
+  var KBASE = {}, KROW = {}, KVOICE = {};
+  var KSMALL = { 'ぁ':'あ', 'ぃ':'い', 'ぅ':'う', 'ぇ':'え', 'ぉ':'お',
+                 'っ':'つ', 'ゃ':'や', 'ゅ':'ゆ', 'ょ':'よ', 'ゎ':'わ' };
+  (function(){
+    var slot = 0;
+    KROWS.forEach(function(row, ri){
+      for (var i = 0; i < row.length; i++){
+        var ch = row.charAt(i);
+        KBASE[ch] = slot++; KROW[ch] = KROWLET[ri]; KVOICE[ch] = 0;
+      }
+    });
+    /* 濁音／半濁音佔同一個格子，只加聲調層級 */
+    [['か','が',1],['き','ぎ',1],['く','ぐ',1],['け','げ',1],['こ','ご',1],
+     ['さ','ざ',1],['し','じ',1],['す','ず',1],['せ','ぜ',1],['そ','ぞ',1],
+     ['た','だ',1],['ち','ぢ',1],['つ','づ',1],['て','で',1],['と','ど',1],
+     ['は','ば',1],['ひ','び',1],['ふ','ぶ',1],['へ','べ',1],['ほ','ぼ',1],
+     ['は','ぱ',2],['ひ','ぴ',2],['ふ','ぷ',2],['へ','ぺ',2],['ほ','ぽ',2]
+    ].forEach(function(p){
+      KBASE[p[1]] = KBASE[p[0]]; KVOICE[p[1]] = p[2]; KROW[p[1]] = KROW[p[0]];
+    });
+  })();
+  /* 逐字轉成排序權重；「ー」與空白不參與比較 */
+  function kanaKey(s){
+    var out = [], str = String(s || '');
+    for (var i = 0; i < str.length; i++){
+      var ch = str.charAt(i), c = ch.charCodeAt(0);
+      if (c >= 0x30a1 && c <= 0x30f6) ch = String.fromCharCode(c - 0x60);   /* 片假名 → 平假名 */
+      if (ch === 'ー' || ch === '〜' || ch === ' ' || ch === '　') continue;
+      var sm = KSMALL[ch];
+      if (sm){ out.push(KBASE[sm] * 8 + 1); continue; }                     /* 拗音排在正字之後 */
+      if (KBASE[ch] == null){ out.push(9999); continue; }                   /* 認不到就排最後 */
+      out.push(KBASE[ch] * 8 + KVOICE[ch] * 2);
+    }
+    return out;
+  }
+  function kanaKeyOf(it){ return it._k || (it._k = kanaKey(it.v.kana)); }
+  function kanaCmp(a, b){
+    var x = kanaKeyOf(a), y = kanaKeyOf(b), n = Math.min(x.length, y.length);
+    for (var i = 0; i < n; i++) if (x[i] !== y[i]) return x[i] - y[i];
+    return x.length - y.length;
+  }
+  function kanaRow(s){
+    var str = String(s || '');
+    for (var i = 0; i < str.length; i++){
+      var ch = str.charAt(i), c = ch.charCodeAt(0);
+      if (c >= 0x30a1 && c <= 0x30f6) ch = String.fromCharCode(c - 0x60);
+      var r = KROW[ch] || KROW[KSMALL[ch]];
+      if (r) return r === 'ん' ? 'ん' : r + '行';
+    }
+    return '其他';
+  }
+
   function renderAll(kind){
     var isVocab = kind === 'vocab';
     var items = isVocab ? allVocabItems() : allGrammarItems();
@@ -2711,35 +2780,59 @@
         'placeholder="' + (isVocab ? '搜尋假名、漢字或中文' : '搜尋文法標題或例句') + '"></div>' +
       '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
         (isVocab ? '<button class="btn2" id="allplay">▶ 播放全部</button>' : '') +
-      '</div><div id="alllist"></div>';
+      '</div>' +
+      (isVocab ? '<div class="sortrow"><div class="seg2" id="allsort">' +
+        '<button data-s="lesson" class="' + (VSORT === 'lesson' ? 'on' : '') + '">課程順序</button>' +
+        '<button data-s="kana" class="' + (VSORT === 'kana' ? 'on' : '') + '">五十音順</button>' +
+      '</div></div>' : '') +
+      '<div id="alllist"></div>';
 
     var list = $('#alllist'), cnt = $('#allcnt'), curHit = [];
 
+    /* 五十音順只重排陣列，資料與音檔不動；items 本身是課程順序，
+       sort 是穩定排序，所以完全同音（はし 橋／箸）仍按課號先後。
+       每次 draw 都重算：切換排序時 VSORT 已變，不能再沿用 render 時的結果。 */
+    function baseList(){
+      return (isVocab && VSORT === 'kana') ? items.slice().sort(kanaCmp) : items;
+    }
+
+    function vrow(it, k){
+      var v = it.v;
+      return '<div class="arow">' +
+        '<button class="nbk' + (nbHas(it.id, v.kana) ? ' on' : '') + '" data-k="' + k + '" aria-label="加入練習本">' +
+          (nbHas(it.id, v.kana) ? '★' : '☆') + '</button>' +
+        '<button class="spk" data-say="' + esc(v.kana) + '"' +
+          (audioFor(it.id, 'v' + it.vi) ? ' data-audio="' + esc(audioFor(it.id, 'v' + it.vi)) + '"' : '') +
+          ' aria-label="播放讀音">' + SPK + '</button>' +
+        '<div class="ak"><b>' + esc((v.kanji && v.kanji !== v.kana) ? v.kanji : v.kana) + '</b>' +
+          ((v.kanji && v.kanji !== v.kana) ? '<span>' + esc(v.kana) + '</span>' : '') + '</div>' +
+        '<div class="az"><span class="vzh">' + esc(v.zh) + '</span>' +
+          (v.pos ? '<span class="pos">' + esc(v.pos) + '</span>' : '') + '</div>' +
+        '<div class="al">' + it.id + '</div></div>';
+    }
+
     function draw(q){
       q = (q || '').trim().toLowerCase();
-      var hit = q ? items.filter(function(it){
+      var base = baseList();
+      var hit = q ? base.filter(function(it){
         return it.search.indexOf(q) > -1;
-      }) : items;
+      }) : base;
       curHit = hit;
       cnt.textContent = q
-        ? '找到 ' + hit.length + ' 項（共 ' + items.length + ' 項）'
-        : '共 ' + items.length + ' 項 · 40 課';
+        ? '找到 ' + hit.length + ' 項（共 ' + base.length + ' 項）'
+        : '共 ' + base.length + ' 項 · ' + (isVocab && VSORT === 'kana' ? '五十音順' : '40 課');
       if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
-      if (isVocab){
-        list.innerHTML = hit.map(function(it, k){
-          var v = it.v;
-          return '<div class="arow">' +
-            '<button class="nbk' + (nbHas(it.id, v.kana) ? ' on' : '') + '" data-k="' + k + '" aria-label="加入練習本">' +
-              (nbHas(it.id, v.kana) ? '★' : '☆') + '</button>' +
-            '<button class="spk" data-say="' + esc(v.kana) + '"' +
-              (audioFor(it.id, 'v' + it.vi) ? ' data-audio="' + esc(audioFor(it.id, 'v' + it.vi)) + '"' : '') +
-              ' aria-label="播放讀音">' + SPK + '</button>' +
-            '<div class="ak"><b>' + esc((v.kanji && v.kanji !== v.kana) ? v.kanji : v.kana) + '</b>' +
-              ((v.kanji && v.kanji !== v.kana) ? '<span>' + esc(v.kana) + '</span>' : '') + '</div>' +
-            '<div class="az"><span class="vzh">' + esc(v.zh) + '</span>' +
-              (v.pos ? '<span class="pos">' + esc(v.pos) + '</span>' : '') + '</div>' +
-            '<div class="al">' + it.id + '</div></div>';
-        }).join('');
+      if (isVocab && VSORT === 'kana' && !q){
+        /* 五十音順：每行一個分段標題（あ行／か行…），在 984 項裡掃視時做定位 */
+        var h = '', prev = '';
+        hit.forEach(function(it, k){
+          var r = kanaRow(it.v.kana);
+          if (r !== prev){ h += '<h3 class="khead">' + r + '</h3>'; prev = r; }
+          h += vrow(it, k);
+        });
+        list.innerHTML = h;
+      } else if (isVocab){
+        list.innerHTML = hit.map(vrow).join('');
       } else {
         list.innerHTML = hit.map(function(it){
           var g = it.g;
@@ -2781,6 +2874,24 @@
     draw('');
     var q = $('#allq');
     q.addEventListener('input', function(){ if (ALLPLAY.on) stopAllPlay(); draw(this.value); });
+
+    /* 排序切換：課程順序 ↔ 五十音順，選擇記在 localStorage */
+    var sw = $('#allsort');
+    if (sw) sw.addEventListener('click', function(e){
+      var b = e.target.closest('[data-s]'); if (!b) return;
+      var s = b.getAttribute('data-s');
+      if (s === VSORT) return;
+      VSORT = s;
+      try { localStorage.setItem(VSK, s); } catch(err){}
+      if (ALLPLAY.on) stopAllPlay();
+      stopAudio();
+      Array.prototype.forEach.call(sw.querySelectorAll('[data-s]'), function(x){
+        x.classList.toggle('on', x === b);
+      });
+      var qq = $('#allq');
+      draw(qq ? qq.value : '');
+      window.scrollTo(0, 0);
+    });
 
     list.addEventListener('click', function(e){
       var b = e.target.closest('.nbk'); if (!b) return;
