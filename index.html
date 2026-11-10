@@ -760,12 +760,13 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v177</span>
+    <span class="ver" id="verTag">v178</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
 <div class="toast" id="toast"></div>
 <button class="vfstop" id="vfstop" aria-label="停止播放">■ 停止播放<span class="vfn" id="vfstopN"></span></button>
+<button class="vfstop" id="allstop" aria-label="停止播放">■ 停止播放<span class="vfn" id="allstopN"></span></button>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="錯題簿">
   <div class="sheetbox" id="sheetbox"></div>
 </div>
@@ -2445,11 +2446,22 @@
     var rows = document.querySelectorAll('.srow.playing');
     for (var i = 0; i < rows.length; i++) rows[i].classList.remove('playing');
   }
-  /* ---------- 連續播放（詞語總表／每課單字） ---------- */
-  var ALLPLAY = { on:false, btn:null };
+  /* 連續播放（詞語總表／每課單字／動詞表）：底部浮動「停止播放」鍵，長表中途可停 */
+  var ALLPLAY = { on:false, btn:null, n:0 };
+  /* 浮動停止鍵（詞語總表「播放全部」）：只在播放中出現，顯示「第幾項／共幾項」 */
+  function allBar(on, n){
+    var el = document.getElementById('allstop');
+    if (!el) return;
+    el.classList.toggle('on', !!on);
+    var c = document.getElementById('allstopN');
+    if (c) c.textContent = (on && n) ? '　' + n : '';
+  }
   function stopAllPlay(){
     if (!ALLPLAY) return;
     ALLPLAY.on = false;
+    ALLPLAY.n = 0;
+    if (typeof allBar === 'function') allBar(false);
+
     if (ALLPLAY.btn){
       ALLPLAY.btn.textContent = ALLPLAY.btn.getAttribute('data-label') || '▶ 播放全部';
       ALLPLAY.btn.classList.remove('onplay');
@@ -2476,6 +2488,7 @@
     stopAudio();
     ALLPLAY.on = true;
     ALLPLAY.btn = btn;
+    ALLPLAY.n = list.length;
     btn.classList.add('onplay');
     btn.textContent = '■ 停止';
     var i = 0;
@@ -2484,6 +2497,7 @@
       if (i >= list.length){ stopAllPlay(); return; }
       var it = list[i];
       if (it.el){ it.el.classList.add('playing'); followRow(it.el); }
+      allBar(true, (i + 1) + '／' + list.length);
       /* 預載下一段，縮短段與段之間空白 */
       var nx = list[i + 1];
       if (nx && nx.audio){
@@ -3923,6 +3937,8 @@
     /* 浮動停止鍵：任何播放中按一下即全部停（含長表的播放全部） */
     var vfs = document.getElementById('vfstop');
     if (vfs) vfs.addEventListener('click', function(){ stopAudio(); });
+    var als = document.getElementById('allstop');
+    if (als) als.addEventListener('click', function(){ stopAudio(); });
   }
 
   if ('serviceWorker' in navigator){
