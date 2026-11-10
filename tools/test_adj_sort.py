@@ -84,20 +84,19 @@ def row_of(s):
 
 
 data = json.load(open(os.path.join(HERE, "data", "wordtables.json")))["adjs"]
-FLAT = [x for g in data["groups"] for x in g["items"]]
+GROUPS = [(g["title"], g["items"]) for g in data["groups"] if g["items"]]
+FLAT = [x for _, items in GROUPS for x in items]
 TOTAL = len(FLAT)
-BY_AUDIO = {x["audio"]: x for x in FLAT}
-KANA_ORDER = [x["audio"] for _, x in sorted(enumerate(FLAT),
-                                            key=lambda p: (kana_key(p[1]["kana"]), p[0]))]
-LESSON_ORDER = [x["audio"] for _, x in sorted(enumerate(FLAT),
-                                              key=lambda p: (int(p[1]["id"][1:]), p[0]))]
-KANA_HEADS = []
-_prev = None
-for a in KANA_ORDER:
-    r = row_of(BY_AUDIO[a]["kana"])
-    if r != _prev:
-        KANA_HEADS.append(r)
-        _prev = r
+GROUP_TITLES = [t for t, _ in GROUPS]
+GROUP_SIZES = [len(items) for _, items in GROUPS]
+
+def sorted_in(group_items, keyf):
+    return [x["audio"] for _, x in sorted(enumerate(group_items),
+                                         key=lambda p: (keyf(p[1]), p[0]))]
+
+# 組內排序：い形一組、な形一組，組與組的次序不動
+KANA_ORDER = [a for _, items in GROUPS for a in sorted_in(items, lambda x: kana_key(x["kana"]))]
+LESSON_ORDER = [x["audio"] for x in FLAT]
 
 INSTR = ("(function(){ window.__played=[];"
          "var p=HTMLMediaElement.prototype.play;"
@@ -184,18 +183,20 @@ async def main():
     out["版本"] = await js("document.getElementById('verTag').textContent.trim()")
     out["排序選項"] = await js("[...document.querySelectorAll('#wsort [data-s]')].map(b=>[b.getAttribute('data-s'),b.textContent.trim(),b.classList.contains('on')])")
     out["分類標題"] = await js("[...document.querySelectorAll('#alllist .wth .wtn')].map(x=>x.textContent.trim())")
+    out["預期分類標題"] = GROUP_TITLES
     out["跳轉列可見"] = await js("(function(){var j=document.getElementById('wtjump');return j.offsetHeight>0})()")
-    out["預設次序"] = (await js(ORDER_JS)) == [x["audio"] for x in FLAT]
+    out["預設次序"] = (await js(ORDER_JS)) == LESSON_ORDER
     await shot("adjsort-group-390.png")
 
-    # 2) 五十音順
+    # 2) 五十音順：い形／な形 分組照舊，只在組內依五十音重排
     await js("document.querySelector('#wsort [data-s=kana]').click()")
     await asyncio.sleep(0.5)
     out["五十音次序正確"] = (await js(ORDER_JS)) == KANA_ORDER
-    out["五十音分段標題"] = await js("[...document.querySelectorAll('#alllist .khead')].map(x=>x.textContent.trim())")
-    out["預期分段標題"] = KANA_HEADS
+    out["五十音分類標題"] = await js("[...document.querySelectorAll('#alllist .wth .wtn')].map(x=>x.textContent.trim())")
+    out["五十音無行標題"] = await js("document.querySelectorAll('#alllist .khead').length") == 0
+    out["組內次序樣本"] = await js("[...document.querySelectorAll('#alllist .arow .ak b')].slice(0,4).map(x=>x.textContent.trim())")
     out["五十音計數"] = await js("document.getElementById('allcnt').textContent.trim()")
-    out["跳轉列收起"] = await js("(function(){var j=document.getElementById('wtjump');return j.offsetHeight===0})()")
+    out["跳轉列保持"] = await js("(function(){var j=document.getElementById('wtjump');return j.offsetHeight>0})()")
     await shot("adjsort-kana-390.png")
 
     # 3) 課程順序
@@ -204,16 +205,18 @@ async def main():
     out["課程次序正確"] = (await js(ORDER_JS)) == LESSON_ORDER
     ids = await js("[...document.querySelectorAll('#alllist .arow .al')].map(x=>x.textContent.trim())")
     nums = [int(s[1:]) for s in ids]
-    out["課號單調"] = nums == sorted(nums)
+    cuts, prev = [], 0
+    for n in GROUP_SIZES:
+        cuts.append(nums[prev:prev + n])
+        prev += n
+    out["課號組內單調"] = all(seg == sorted(seg) for seg in cuts)
     out["課程計數"] = await js("document.getElementById('allcnt').textContent.trim()")
     out["localStorage"] = await js("localStorage.getItem('ngs-wsort')")
 
-    # 4) 回到分類
-    await js("document.querySelector('#wsort [data-s=group]').click()")
-    await asyncio.sleep(0.4)
-    out["回分類"] = await js("[...document.querySelectorAll('#alllist .wth')].length") == len(
-        [g for g in data["groups"] if g["items"]])
+    # 4) 切換後分組與「本組」仍在，次序回到課程順序
+    out["分組數"] = await js("document.querySelectorAll('#alllist .wth').length")
     out["本組鍵"] = await js("document.querySelectorAll('#alllist .gplay').length")
+    out["回課程次序"] = (await js(ORDER_JS)) == LESSON_ORDER
 
     # 5) 重載後保留選擇（先切五十音再重載）
     await js("document.querySelector('#wsort [data-s=kana]').click()")
@@ -222,7 +225,7 @@ async def main():
     await wait_until("document.querySelectorAll('#alllist .arow').length")
     out["重載後on"] = await js("(document.querySelector('#wsort [data-s=kana]')||{}).className")
     out["重載後次序正確"] = (await js(ORDER_JS)) == KANA_ORDER
-    await js("document.querySelector('#wsort [data-s=group]').click()")
+    await js("document.querySelector('#wsort [data-s=lesson]').click()")
     await asyncio.sleep(0.4)
 
     # 6) 由中間開始順播
@@ -291,9 +294,16 @@ async def main():
                           and out["360"]["right"] <= out["360"]["iw"])
     await shot("adjsort-360.png")
 
-    checks = ["行數", "預設次序", "五十音次序正確", "五十音分段標題", "課程次序正確",
-              "課號單調", "回分類", "重載後次序正確", "由所點那項開始", "浮動鍵即停", "360無溢出"]
+    checks = ["行數", "預設次序", "五十音次序正確", "五十音分類標題", "五十音無行標題",
+              "跳轉列保持", "課程次序正確", "課號組內單調", "回課程次序",
+              "重載後次序正確", "由所點那項開始", "浮動鍵即停", "360無溢出"]
     bad = [k for k in checks if not out.get(k)]
+    if out.get("分組數") != len(GROUP_TITLES):
+        bad.append("分組數")
+    if out.get("本組鍵") != len(GROUP_TITLES):
+        bad.append("本組鍵")
+    if out.get("分類標題") != GROUP_TITLES:
+        bad.append("分類標題")
     print(json.dumps(out, ensure_ascii=False, indent=1))
     print(("FAIL: " + ", ".join(bad)) if bad else "PASS 全部通過")
     if SHOT:

@@ -760,7 +760,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v183</span>
+    <span class="ver" id="verTag">v184</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2808,12 +2808,12 @@
   var VSK = 'ngs-vsort';
   var VSORT = 'lesson';
   try { if (localStorage.getItem(VSK) === 'kana') VSORT = 'kana'; } catch(e){}
-  /* 形容詞表排序：分類（い形／な形，預設）／課程順序／五十音順 */
+  /* 形容詞表排序：い形／な形 的分組不動，只在每組內部按課程順序或五十音順排 */
   var WSK = 'ngs-wsort';
-  var WSORT = 'group';
+  var WSORT = 'lesson';
   try {
     var wsv = localStorage.getItem(WSK);
-    if (wsv === 'lesson' || wsv === 'kana') WSORT = wsv;
+    if (wsv === 'kana') WSORT = 'kana';
   } catch(e){}
   var KROWS = ['あいうえお', 'かきくけこ', 'さしすせそ', 'たちつてと', 'なにぬねの',
                'はひふへほ', 'まみむめも', 'やゆよ', 'らりるれろ', 'わを', 'ん'];
@@ -3052,7 +3052,6 @@
       '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
         '<button class="btn2" id="allplay">▶ 播放全部</button></div>' +
       (isVerb ? '' : '<div class="sortrow"><div class="seg2" id="wsort">' +
-        '<button data-s="group" class="' + (WSORT === 'group' ? 'on' : '') + '">分類</button>' +
         '<button data-s="lesson" class="' + (WSORT === 'lesson' ? 'on' : '') + '">課程順序</button>' +
         '<button data-s="kana" class="' + (WSORT === 'kana' ? 'on' : '') + '">五十音順</button>' +
       '</div></div>') +
@@ -3074,12 +3073,12 @@
       if (h) h.scrollIntoView({ behavior:'smooth', block:'start' });
     });
 
-    var flat = [];
-    data.groups.forEach(function(g){
-      g.items.forEach(function(x){
-        flat.push({ x:x,
-          search:((x.kanji || '') + ' ' + x.kana + ' ' + (x.masu || '') + ' ' + x.zh + ' ' + x.id).toLowerCase() });
-      });
+    /* 每個分類一組 wrapper（搜尋字串先串好）。排序只在組內做，い形／な形 的分組永遠保留。 */
+    var blocks = data.groups.map(function(g){
+      return { g: g, rows: g.items.map(function(x){
+        return { x: x,
+          search: ((x.kanji || '') + ' ' + x.kana + ' ' + (x.masu || '') + ' ' + x.zh + ' ' + x.id).toLowerCase() };
+      }) };
     });
 
     function rowHtml(x, k){
@@ -3098,7 +3097,7 @@
         '<div class="al">' + esc(x.id) + '</div></div>';
     }
 
-    var curHit = flat;
+    var curHit = [];
 
     function wcmpKana(a, b){
       var x = a.k || (a.k = kanaKey(a.x.kana)), y = b.k || (b.k = kanaKey(b.x.kana));
@@ -3106,54 +3105,39 @@
       for (var j = 0; j < n; j++) if (x[j] !== y[j]) return x[j] - y[j];
       return x.length - y.length;
     }
-    function wLesson(x){ return parseInt(String(x.id).replace(/\D+/g, ''), 10) || 0; }
-    /* 排序只重排陣列，資料與音檔不動；預設保留い形／な形分類（有跳轉 chips）。
-       每次 draw 重算，切換排序後不能沿用上一次的結果。 */
-    function wordBase(){
-      if (isVerb || WSORT === 'group') return flat;
-      var arr = flat.slice();
-      if (WSORT === 'kana') arr.sort(wcmpKana);
-      else arr.sort(function(a, b){ return wLesson(a.x) - wLesson(b.x); });
-      return arr;
-    }
+    /* 只重排每組的陣列，資料與音檔不動；每次 draw 重算，切換排序後不可沿用上一次的結果。 */
     function draw(q){
       q = (q || '').trim().toLowerCase();
-      var base = wordBase();
-      var hit = q ? base.filter(function(it){ return it.search.indexOf(q) > -1; }) : base;
-      var byGroup = !q && (isVerb || WSORT === 'group');
+      var shown = blocks.map(function(b){
+        var rows = b.rows;
+        if (!isVerb && WSORT === 'kana') rows = rows.slice().sort(wcmpKana);
+        if (q) rows = rows.filter(function(r){ return r.search.indexOf(q) > -1; });
+        return { g: b.g, rows: rows };
+      });
+      var hit = [];
+      shown.forEach(function(b){ b.rows.forEach(function(r){ hit.push(r); }); });
       curHit = hit;
-      jump.style.display = (q || !byGroup) ? 'none' : '';
+      jump.style.display = q ? 'none' : '';
       cnt.textContent = q
-        ? '找到 ' + hit.length + ' 項（共 ' + base.length + ' 項）'
-        : '共 ' + data.total + ' 項 · ' + (byGroup ? data.groups.length + ' 類'
+        ? '找到 ' + hit.length + ' 項（共 ' + data.total + ' 項）'
+        : '共 ' + data.total + ' 項 · ' + (isVerb ? data.groups.length + ' 類'
             : (WSORT === 'kana' ? '五十音順' : '課程順序'));
       if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
-      if (!byGroup){
-        /* 五十音順：每行一個分段標題（あ行／か行…）；課程順序不插標題，靠右邊課號定位 */
-        var hf = '', prev = '';
-        hit.forEach(function(it, k){
-          if (!isVerb && !q && WSORT === 'kana'){
-            var r = kanaRow(it.x.kana);
-            if (r !== prev){ hf += '<h3 class="khead">' + r + '</h3>'; prev = r; }
-          }
-          hf += rowHtml(it.x, k);
-        });
-        list.innerHTML = hf;
-      } else {
-        var h = '', k = 0;
-        data.groups.forEach(function(g){
-          if (!g.items.length) return;
-          h += '<h3 class="wth" id="wt-g-' + g.id + '">' +
-                 '<span class="wtn">' + esc(g.title) + '</span>' +
+      var h = '', k = 0;
+      shown.forEach(function(b){
+        if (!b.rows.length) return;
+        if (!q){
+          h += '<h3 class="wth" id="wt-g-' + b.g.id + '">' +
+                 '<span class="wtn">' + esc(b.g.title) + '</span>' +
                  '<span class="wtr">' +
-                   (isVerb ? '<a class="vfentry" href="#/all/verbs/forms/' + g.id + '">詳細表 →</a>' : '') +
-                   '<em>' + g.items.length + ' 項</em>' +
+                   (isVerb ? '<a class="vfentry" href="#/all/verbs/forms/' + b.g.id + '">詳細表 →</a>' : '') +
+                   '<em>' + b.rows.length + ' 項</em>' +
                  '<button class="gplay" data-start="' + k + '" data-label="▶ 本組" ' +
                    'aria-label="由本組開始播放">▶ 本組</button></span></h3>';
-          h += g.items.map(function(x){ return rowHtml(x, k++); }).join('');
-        });
-        list.innerHTML = h;
-      }
+        }
+        h += b.rows.map(function(r){ return rowHtml(r.x, k++); }).join('');
+      });
+      list.innerHTML = h;
       bindSpeakers(list);
     }
 
@@ -3161,7 +3145,7 @@
     var q = $('#allq');
     q.addEventListener('input', function(){ if (ALLPLAY.on) stopAllPlay(); draw(this.value); });
 
-    /* 排序切換：分類／課程順序／五十音順，選擇記在 localStorage */
+    /* 排序切換：只在い形／な形 每組內部排（課程順序 ↔ 五十音順），選擇記在 localStorage */
     var sw = $('#wsort');
     if (sw) sw.addEventListener('click', function(e){
       var b = e.target.closest('[data-s]'); if (!b) return;
