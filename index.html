@@ -292,6 +292,10 @@
   .mk .k b{display:block; font-family:var(--serif); font-size:15px; font-weight:500}
   .mk .k span{font-size:12px; color:var(--muted)}
   .mk .n{font-size:11px; color:var(--shu); white-space:nowrap}
+  /* 匯出列（錯題簿／練習本共用）：左邊說明，右邊兩顆格式鍵 */
+  .expbar{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:12px 0 2px}
+  .expbar .exl{flex:1; min-width:64px; font-size:12px; color:var(--muted)}
+  .expbar .btn2{padding:7px 13px; font-size:12.5px}
 
   /* role play + listening */
   .rolecard{background:linear-gradient(160deg,#fffdf8,#f7f0e2); border:1px solid var(--line);
@@ -765,6 +769,25 @@
   .gacc .gex .zh{display:block; font-size:12px; color:var(--muted); margin-top:2px}
   .gacc .gex .nbk{width:28px; height:28px; flex:0 0 28px; font-size:13px}
 
+  /* 匯出的 PDF：畫面上隱藏，只有列印（分享 → 儲存到檔案 → PDF）時才出現 */
+  #printout{display:none}
+  @media print{
+    @page{margin:12mm}
+    .hdr, #app, #sheet, #toast, .vfstop, noscript{display:none !important}
+    html, body{background:#fff; overflow:visible !important}
+    #printout{display:block; color:#000;
+      font-family:"Hiragino Mincho ProN","Noto Serif CJK TC",serif}
+    #printout h1{font-size:16pt; font-weight:600; margin:0 0 1.5mm}
+    #printout .pm{font-size:9pt; color:#444; margin:0 0 4mm}
+    #printout table{width:100%; border-collapse:collapse}
+    #printout th, #printout td{border:.4pt solid #999; padding:1.8mm 2mm; font-size:10pt;
+      line-height:1.5; text-align:left; vertical-align:top; word-break:break-word}
+    #printout thead th{background:#f0ece4; font-weight:600;
+      -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    #printout thead{display:table-header-group}
+    #printout tr{page-break-inside:avoid}
+  }
+
 </style>
 </head>
 <body>
@@ -774,7 +797,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v190</span>
+    <span class="ver" id="verTag">v191</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2384,6 +2407,88 @@
     return h;
   }
 
+  /* ---------- 匯出 CSV／PDF ---------- */
+  function pad2(n){ return (n < 10 ? '0' : '') + n; }
+  function dateStr(ts){
+    var d = ts ? new Date(ts) : new Date();
+    if (isNaN(d.getTime())) d = new Date();
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+  }
+  function mkKindLabel(kind){
+    return kind === 'word' ? '單字' : kind === 'sentence' ? '句子'
+         : kind === 'listen' ? '聽力' : kind === 'exam' ? '階段測驗' : '練習';
+  }
+  /* CSV 加 UTF-8 BOM，Excel／Numbers 直接開都不會亂碼 */
+  function exportCsv(name, head, rows){
+    var cell = function(c){
+      var s = (c == null ? '' : String(c));
+      return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    var csv = [head].concat(rows).map(function(r){
+      return r.map(cell).join(',');
+    }).join('\r\n');
+    var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+    var url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = name + '.csv'; a.style.display = 'none';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){
+      URL.revokeObjectURL(url);
+      if (a.parentNode) a.parentNode.removeChild(a);
+    }, 5000);
+    toast('已匯出 ' + name + '.csv');
+  }
+  /* PDF 走系統列印：先砌一份只在列印時可見的表格，再叫出列印預覽
+     （iPhone：分享 → 儲存到檔案 → 儲存成 PDF） */
+  function exportPdf(title, meta, head, rows){
+    var old = document.getElementById('printout');
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    var el = document.createElement('div');
+    el.id = 'printout';
+    el.innerHTML = '<h1>' + esc(title) + '</h1><p class="pm">' + esc(meta) + '</p>' +
+      '<table><thead><tr>' + head.map(function(c){ return '<th>' + esc(c) + '</th>'; }).join('') +
+      '</tr></thead><tbody>' + rows.map(function(r){
+        return '<tr>' + r.map(function(c){ return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>';
+      }).join('') + '</tbody></table>';
+    document.body.appendChild(el);
+    var done = function(){
+      window.removeEventListener('afterprint', done);
+      if (el.parentNode) el.parentNode.removeChild(el);
+    };
+    window.addEventListener('afterprint', done);
+    toast('在列印預覽選「儲存到檔案」即可存成 PDF');
+    setTimeout(function(){ window.print(); }, 150);
+  }
+  function exportMistakes(fmt){
+    var items = M.items;
+    if (!items.length) return;
+    var head = ['#', '類型', '題目', '正確答案', '補充', '最後答錯'];
+    var rows = items.map(function(x, i){
+      return [i + 1, mkKindLabel(x.kind), x.prompt || '', x.answer || '', x.sub || '',
+              x.at ? dateStr(x.at) : ''];
+    });
+    var name = '錯題簿-' + dateStr();
+    if (fmt === 'csv') exportCsv(name, head, rows);
+    else exportPdf('錯題簿', name + '　共 ' + items.length + ' 條　日本語階梯', head, rows);
+  }
+  function exportNotebook(fmt){
+    var list = nbList();
+    if (!list.length) return;
+    var sent = nbTabSel === 'sent';
+    var head = sent ? ['#', '日文', '假名', '中文', '出處', '加入日期']
+                    : ['#', '漢字', '假名', '中文', '詞性', '出處', '加入日期'];
+    var rows = list.map(function(x, i){
+      var base = sent
+        ? [i + 1, x.ja || '', x.kana || '', x.zh || '', x.src || x.id || '']
+        : [i + 1, x.kanji || '', x.kana || '', x.zh || '', x.pos || '', x.src || x.id || ''];
+      base.push(x.at ? dateStr(x.at) : '');
+      return base;
+    });
+    var name = '練習本-' + (sent ? '句子' : '單字') + '-' + dateStr();
+    if (fmt === 'csv') exportCsv(name, head, rows);
+    else exportPdf('練習本・' + (sent ? '句子' : '單字'),
+                   name + '　共 ' + list.length + ' 項　日本語階梯', head, rows);
+  }
+
   /* ---------- 錯題簿 ---------- */
   /* 錯題簿頂部的錯題數徽章：移除單項後即時同步，清零就收起 */
   function syncMkPill(){
@@ -2401,12 +2506,15 @@
     var rows = items.length ? items.map(function(x, i){
       return '<div class="mk" data-i="'+i+'"><span class="tick"></span>' +
              '<div class="k"><b>'+esc(x.prompt)+'</b>' +
-             '<span>'+(x.kind === 'word' ? '單字' : x.kind === 'sentence' ? '句子' : x.kind === 'listen' ? '聽力' : x.kind === 'exam' ? '階段測驗' : '練習') +
+             '<span>'+mkKindLabel(x.kind) +
              (x.sub ? ' · '+esc(x.sub) : '') + ' → '+esc(x.answer)+'</span></div></div>';
     }).join('') : '<p class="secnote">目前沒有錯題。</p>';
 
     box.innerHTML = '<h3>錯題簿</h3>' +
       '<p class="secnote">答錯的單字與題目會自動記在這裡；進度只存在這部裝置。選取後可逐項移除。</p>' +
+      (items.length ? '<div class="expbar"><span class="exl">匯出全部 ' + items.length + ' 條</span>' +
+        '<button class="btn2" data-exp="csv">Excel（CSV）</button>' +
+        '<button class="btn2" data-exp="pdf">PDF</button></div>' : '') +
       rows +
       '<div class="mkfoot">' +
         '<button class="btn2" id="sheetClose">關閉</button>' +
@@ -2424,6 +2532,9 @@
         delBtn.disabled = !n;
         delBtn.textContent = n ? '移除已選 '+n+' 項' : '移除已選';
       };
+      Array.prototype.forEach.call(box.querySelectorAll('[data-exp]'), function(b){
+        b.addEventListener('click', function(){ exportMistakes(b.getAttribute('data-exp')); });
+      });
       Array.prototype.forEach.call(box.querySelectorAll('.mk'), function(el){
         el.addEventListener('click', function(){
           var i = +el.getAttribute('data-i');
@@ -3730,7 +3841,10 @@
                    '<button data-dir="zh2jp" class="' + (cardDir === 'zh2jp' ? 'on' : '') + '" aria-label="題目出中文，答日文">中→日</button>' +
                  '</div>' +
                  '<button class="btn2 pri" id="nbStart"' + (list.length ? '' : ' disabled') + '>開始練習</button>' +
-               '</div>' : '') +
+               '</div>' +
+               (list.length ? '<div class="expbar"><span class="exl">匯出這頁 ' + list.length + ' 項</span>' +
+                 '<button class="btn2" data-exp="csv">Excel（CSV）</button>' +
+                 '<button class="btn2" data-exp="pdf">PDF</button></div>' : '') : '') +
       '<div id="notebody"></div>';
     drawNotebook();
     if (!total) return;
@@ -3761,6 +3875,9 @@
     });
     var st = $('#nbStart');
     if (st) st.addEventListener('click', function(){ startNoteCards(nbList()); });
+    Array.prototype.forEach.call(document.querySelectorAll('#app [data-exp]'), function(b){
+      b.addEventListener('click', function(){ exportNotebook(b.getAttribute('data-exp')); });
+    });
   }
 
   function drawNotebook(){
