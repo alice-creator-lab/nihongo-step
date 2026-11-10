@@ -760,7 +760,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v182</span>
+    <span class="ver" id="verTag">v183</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2808,6 +2808,13 @@
   var VSK = 'ngs-vsort';
   var VSORT = 'lesson';
   try { if (localStorage.getItem(VSK) === 'kana') VSORT = 'kana'; } catch(e){}
+  /* 形容詞表排序：分類（い形／な形，預設）／課程順序／五十音順 */
+  var WSK = 'ngs-wsort';
+  var WSORT = 'group';
+  try {
+    var wsv = localStorage.getItem(WSK);
+    if (wsv === 'lesson' || wsv === 'kana') WSORT = wsv;
+  } catch(e){}
   var KROWS = ['あいうえお', 'かきくけこ', 'さしすせそ', 'たちつてと', 'なにぬねの',
                'はひふへほ', 'まみむめも', 'やゆよ', 'らりるれろ', 'わを', 'ん'];
   var KROWLET = 'あかさたなはまやらわん'.split('');
@@ -3044,6 +3051,11 @@
       '<div class="jumpbar" id="wtjump"></div>' +
       '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
         '<button class="btn2" id="allplay">▶ 播放全部</button></div>' +
+      (isVerb ? '' : '<div class="sortrow"><div class="seg2" id="wsort">' +
+        '<button data-s="group" class="' + (WSORT === 'group' ? 'on' : '') + '">分類</button>' +
+        '<button data-s="lesson" class="' + (WSORT === 'lesson' ? 'on' : '') + '">課程順序</button>' +
+        '<button data-s="kana" class="' + (WSORT === 'kana' ? 'on' : '') + '">五十音順</button>' +
+      '</div></div>') +
       '<div id="alllist"></div>';
 
     var list = $('#alllist'), cnt = $('#allcnt');
@@ -3087,17 +3099,46 @@
     }
 
     var curHit = flat;
+
+    function wcmpKana(a, b){
+      var x = a.k || (a.k = kanaKey(a.x.kana)), y = b.k || (b.k = kanaKey(b.x.kana));
+      var n = Math.min(x.length, y.length);
+      for (var j = 0; j < n; j++) if (x[j] !== y[j]) return x[j] - y[j];
+      return x.length - y.length;
+    }
+    function wLesson(x){ return parseInt(String(x.id).replace(/\D+/g, ''), 10) || 0; }
+    /* 排序只重排陣列，資料與音檔不動；預設保留い形／な形分類（有跳轉 chips）。
+       每次 draw 重算，切換排序後不能沿用上一次的結果。 */
+    function wordBase(){
+      if (isVerb || WSORT === 'group') return flat;
+      var arr = flat.slice();
+      if (WSORT === 'kana') arr.sort(wcmpKana);
+      else arr.sort(function(a, b){ return wLesson(a.x) - wLesson(b.x); });
+      return arr;
+    }
     function draw(q){
       q = (q || '').trim().toLowerCase();
-      var hit = q ? flat.filter(function(it){ return it.search.indexOf(q) > -1; }) : flat;
+      var base = wordBase();
+      var hit = q ? base.filter(function(it){ return it.search.indexOf(q) > -1; }) : base;
+      var byGroup = !q && (isVerb || WSORT === 'group');
       curHit = hit;
-      jump.style.display = q ? 'none' : '';
+      jump.style.display = (q || !byGroup) ? 'none' : '';
       cnt.textContent = q
-        ? '找到 ' + hit.length + ' 項（共 ' + flat.length + ' 項）'
-        : '共 ' + data.total + ' 項 · ' + data.groups.length + ' 類';
+        ? '找到 ' + hit.length + ' 項（共 ' + base.length + ' 項）'
+        : '共 ' + data.total + ' 項 · ' + (byGroup ? data.groups.length + ' 類'
+            : (WSORT === 'kana' ? '五十音順' : '課程順序'));
       if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
-      if (q){
-        list.innerHTML = hit.map(function(it, k){ return rowHtml(it.x, k); }).join('');
+      if (!byGroup){
+        /* 五十音順：每行一個分段標題（あ行／か行…）；課程順序不插標題，靠右邊課號定位 */
+        var hf = '', prev = '';
+        hit.forEach(function(it, k){
+          if (!isVerb && !q && WSORT === 'kana'){
+            var r = kanaRow(it.x.kana);
+            if (r !== prev){ hf += '<h3 class="khead">' + r + '</h3>'; prev = r; }
+          }
+          hf += rowHtml(it.x, k);
+        });
+        list.innerHTML = hf;
       } else {
         var h = '', k = 0;
         data.groups.forEach(function(g){
@@ -3120,6 +3161,24 @@
     var q = $('#allq');
     q.addEventListener('input', function(){ if (ALLPLAY.on) stopAllPlay(); draw(this.value); });
 
+    /* 排序切換：分類／課程順序／五十音順，選擇記在 localStorage */
+    var sw = $('#wsort');
+    if (sw) sw.addEventListener('click', function(e){
+      var b = e.target.closest('[data-s]'); if (!b) return;
+      var s = b.getAttribute('data-s');
+      if (s === WSORT) return;
+      WSORT = s;
+      try { localStorage.setItem(WSK, s); } catch(err){}
+      if (ALLPLAY.on) stopAllPlay();
+      stopAudio();
+      Array.prototype.forEach.call(sw.querySelectorAll('[data-s]'), function(x){
+        x.classList.toggle('on', x === b);
+      });
+      var qq = $('#allq');
+      draw(qq ? qq.value : '');
+      window.scrollTo(0, 0);
+    });
+
     function playFrom(n, btn){
       if (ALLPLAY.on && ALLPLAY.btn === btn){ stopAllPlay(); stopAudio(); return; }
       var rows = list.querySelectorAll('.arow'), items = [];
@@ -3131,6 +3190,20 @@
     }
 
     list.addEventListener('click', function(e){
+      /* 由中間某一項開始順播：點字詞本身（不是 ☆、不是喇叭）就播到最後 */
+      var ak = e.target.closest('.arow .ak');
+      if (ak){
+        var rowEl = ak.closest('.arow');
+        var rowsAll = list.querySelectorAll('.arow');
+        var idx = Array.prototype.indexOf.call(rowsAll, rowEl);
+        if (idx > -1){
+          var qItems = curHit.map(function(it, j){
+            return { audio: it.x.audio, el: rowsAll[j] };
+          });
+          playAllQueued(qItems, pa, idx);
+        }
+        return;
+      }
       var gb = e.target.closest('.gplay');
       if (gb){ playFrom(+gb.getAttribute('data-start'), gb); return; }
       var b = e.target.closest('.nbk'); if (!b) return;
