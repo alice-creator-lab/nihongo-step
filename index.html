@@ -2846,7 +2846,7 @@
         : '共 ' + base.length + ' 項 · ' + (isVocab && VSORT === 'kana' ? '五十音順' : '40 課');
       if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
       if (isVocab && VSORT === 'kana' && !q){
-        /* 五十音順：每行一個分段標題（あ行／か行…），在 984 項裡掃視時做定位 */
+        /* 五十音順：每行一個分段標題（あ行／か行…），在 983 項裡掃視時做定位 */
         var h = '', prev = '';
         hit.forEach(function(it, k){
           var r = kanaRow(it.v.kana);
