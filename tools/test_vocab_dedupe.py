@@ -11,7 +11,7 @@ if not os.path.exists(CHROME):
     CHROME = "/home/admin/.cache/ms-playwright/chromium-1223/chrome-linux64/chrome"
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8934/"
 PORT = int(os.environ.get("CDP_PORT", "9381"))
-EXPECT = int(os.environ.get("EXPECT", "984"))
+EXPECT = int(os.environ.get("EXPECT", "983"))
 
 
 async def main():
@@ -100,6 +100,28 @@ async def main():
     check("傘 在 L02", await js(lesson_of("傘")), "L02")
     check("料理 在 L07", await js(lesson_of("料理")), "L07")
     check("時計 在 L02", await js(lesson_of("時計")), "L02")
+
+    # 一課寫漢字、一課只寫假名：同一個詞只留最早一課（L06 明後日 / L13 あさって）
+    check("明後日 在 L06", await js(lesson_of("明後日")), "L06")
+    check("あさって 只一條", await js("""(function(){
+      var n = 0;
+      document.querySelectorAll('#alllist .arow').forEach(function(r){
+        var k = (r.querySelector('.ak b')||{}).innerText || '';
+        var s = (r.querySelector('.ak span')||{}).innerText || '';
+        if (k === 'あさって' || s === 'あさって') n++;
+      });
+      return n;
+    })()"""), 1)
+    # 同音異字不算同一詞（早い／速い はやい 各自保留）
+    check("はやい 兩條", await js("""(function(){
+      var n = 0;
+      document.querySelectorAll('#alllist .arow').forEach(function(r){
+        var k = (r.querySelector('.ak b')||{}).innerText || '';
+        var s = (r.querySelector('.ak span')||{}).innerText || '';
+        if (k === 'はやい' || s === 'はやい') n++;
+      });
+      return n;
+    })()"""), 2)
 
     # 搜尋只回一條
     await js("var q=document.querySelector('#allq'); q.value='かえります'; q.dispatchEvent(new Event('input',{bubbles:true})); 1")

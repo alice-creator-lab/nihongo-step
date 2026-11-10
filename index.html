@@ -760,7 +760,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v178</span>
+    <span class="ver" id="verTag">v179</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1141,16 +1141,25 @@
     if (a.kana !== b.kana){
       if (!(vocabIsVerb(a) && vocabIsVerb(b) && sameVerbKana(a.kana, b.kana))) return false;
     }
-    if (a.kanji || b.kanji) return (a.kanji || '') === (b.kanji || '');
+    if (a.kanji || b.kanji){
+      if ((a.kanji || '') === (b.kanji || '')) return true;
+      /* 一邊寫漢字、另一邊只寫假名：同讀音、同詞性、中文意思也一樣才算同一詞
+         （L06「明後日」與 L13「あさって」都是後天）。はやい（早い／速い）
+         這類同音異字意思有別，中文不同就各自保留。 */
+      if (a.kanji && b.kanji) return false;
+      return (a.pos || '') === (b.pos || '') && (a.zh || '') === (b.zh || '');
+    }
     return (a.pos || '') === (b.pos || '');
   }
-  /* 回傳 true 代表這個詞已經出現過（應略過）；否則記錄下來 */
+  /* 回傳 true 代表這個詞已經出現過（應略過）；否則記錄下來。
+     假名、漢字各一個索引找候選：同一詞可能一課寫漢字、另一課只寫假名。 */
   function vocabSeenPush(store, v){
-    var key = v.kanji || ((v.pos || '') + '|' + v.kana);
-    var arr = store[key];
-    if (!arr){ store[key] = [v]; return false; }
-    for (var i = 0; i < arr.length; i++) if (sameVocab(arr[i], v)) return true;
-    arr.push(v);
+    var kana = v.kana || '', kanji = v.kanji || '';
+    var cand = (store.kana[kana] || []).slice();
+    if (kanji) cand = cand.concat(store.kanji[kanji] || []);
+    for (var i = 0; i < cand.length; i++) if (sameVocab(cand[i], v)) return true;
+    (store.kana[kana] = store.kana[kana] || []).push(v);
+    if (kanji) (store.kanji[kanji] = store.kanji[kanji] || []).push(v);
     return false;
   }
 
@@ -1198,7 +1207,7 @@
     var pct = overallPct();
     var resumeId = (P.last && av.some(function(l){ return l.id === P.last; })) ? P.last : (av[0] && av[0].id);
     var resumeLabel = '開始第一課';
-    var vocabSeen = {}, vocabTotal = 0, grammarTotal = 0;
+    var vocabSeen = { kana:{}, kanji:{} }, vocabTotal = 0, grammarTotal = 0;
     av.forEach(function(l){
       var j = lessons[l.id];
       if (!j) return;
@@ -2406,7 +2415,7 @@
   /* ---------- router ---------- */
   /* ---------- 綜合頁：詞語總表／文法總表 ---------- */
   function allVocabItems(){
-    var out = [], vocabSeen = {};
+    var out = [], vocabSeen = { kana:{}, kanji:{} };
     availableLessons().forEach(function(meta){
       var l = lessons[meta.id]; if (!l || !l.vocab) return;
       l.vocab.forEach(function(v){

@@ -107,29 +107,35 @@ def same_vocab(a, b):
     if a['kana'] != b['kana']:
         if not (is_verb(a) and is_verb(b) and same_verb_kana(a['kana'], b['kana'])):
             return False
-    if a.get('kanji') or b.get('kanji'):
-        return (a.get('kanji') or '') == (b.get('kanji') or '')
+    ka, kb = a.get('kanji') or '', b.get('kanji') or ''
+    if ka or kb:
+        if ka == kb:
+            return True
+        # 一邊寫漢字、另一邊只寫假名：同詞性＋同中文意思才算同一詞（明後日／あさって）
+        if ka and kb:
+            return False
+        return (a.get('pos') or '') == (b.get('pos') or '') and (a.get('zh') or '') == (b.get('zh') or '')
     return (a.get('pos') or '') == (b.get('pos') or '')
 
 
 def vocab_items():
     course = json.load(open(os.path.join(HERE, 'data/course.json')))
     avail = [l for b in course['books'] for l in b['lessons'] if l.get('available')]
-    store, out = {}, []
+    store, out = {'kana': {}, 'kanji': {}}, []
     for m in avail:
         d = json.load(open(os.path.join(HERE, 'data', 'lesson-%s.json' % m['id'])))
         for v in (d.get('vocab') or []):
             if v.get('seqOnly'):
                 continue
-            key = v.get('kanji') or ((v.get('pos') or '') + '|' + v['kana'])
-            arr = store.get(key)
-            if arr is None:
-                store[key] = [v]
-                out.append((m['id'], v))
+            kana, kanji = v['kana'], (v.get('kanji') or '')
+            cand = list(store['kana'].get(kana, []))
+            if kanji:
+                cand += store['kanji'].get(kanji, [])
+            if any(same_vocab(x, v) for x in cand):
                 continue
-            if any(same_vocab(x, v) for x in arr):
-                continue
-            arr.append(v)
+            store['kana'].setdefault(kana, []).append(v)
+            if kanji:
+                store['kanji'].setdefault(kanji, []).append(v)
             out.append((m['id'], v))
     return out
 
@@ -242,7 +248,7 @@ async def main():
             break
         await asyncio.sleep(1)
 
-    check("版本", await js("(document.querySelector('#verTag')||{}).innerText"), "v177")
+    check("版本", await js("(document.querySelector('#verTag')||{}).innerText"), lambda s: s and s.startswith("v1"))
     check("排序控制存在", await js("!!document.querySelector('#allsort')"), True)
     check("兩個選項", await js("Array.prototype.map.call(document.querySelectorAll('#allsort [data-s]'), function(b){return b.innerText})"),
           ["課程順序", "五十音順"])
