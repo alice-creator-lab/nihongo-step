@@ -1,0 +1,44 @@
+name: Deploy Pages
+
+# 用 GitHub Actions 直接發佈 repo 根目錄（純靜態：index.html ＋ data/ ＋ audio/）。
+# 原本的 legacy Jekyll builder 由 2026-11 起每次都卡到 10 分鐘 timeout 才報
+# 「Page build failed」，改用這條路徑後約 1 分鐘完成。
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # 不要把 .git（154MB）與 workflow 本身放進發佈產物
+      - name: 準備發佈目錄
+        run: |
+          mkdir -p _site
+          rsync -a --exclude '.git' --exclude '.github' ./ _site/
+          du -sh _site
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
