@@ -24,6 +24,15 @@ for (const g of d.groups || []) {
     const where = `${g.form} ${r.pat || '(缺 pat)'}`;
     if (!r.pat) errs.push(`${g.id} 有行缺 pat`);
     if (!r.ex) errs.push(`${where} 缺例句`);
+    /* zh＝例句下面的中文翻譯（畫面必須有，繁體）。不可殘留假名，也不要照抄日文原句。 */
+    if (!r.zh) errs.push(`${where} 缺中文翻譯 zh`);
+    else {
+      if (/[\u3040-\u30ff]/.test(r.zh)) errs.push(`${where} 中文翻譯含假名：${r.zh}`);
+      if (r.zh === r.ex) errs.push(`${where} 中文翻譯與例句相同：${r.zh}`);
+      const SIMP = '这个说语时学应为见现电话车买东问题边过还开关门风飞机马鸟鱼龙岁万与专业员团长门书头汉让认识请谢对难爱点热无发个作业声色笑话读听读写丽丰临为乐习乡书买乱争亏云亚产亩亲亿仅从仑仓仪们价众优会伤伟传伪体余佣侠侣侥侧侨侩俩债倾偿储儿党兰关兴养兽内冈册写军农冯冲决况冻净凉减凑凛几凤凭凯击凿刍划刘则刚创删别刹刬刭刽刿剀剂剐剑剥剧劝办务动励劲劳势勋勐';
+      const bad = [...r.zh].filter((c) => SIMP.includes(c));
+      if (bad.length) errs.push(`${where} 中文翻譯有簡體字：${bad.join('')}（${r.zh}）`);
+    }
     if (!r.tts) errs.push(`${where} 缺 tts 假名讀法`);
     if (!/^L([1-9]|[1-3]\d|40)$/.test(r.l || '')) errs.push(`${where} 課號不對：${r.l}`);
     /* 課號必須指到真的教這個句型的課：該課 patterns 內要有同一張句型卡。
