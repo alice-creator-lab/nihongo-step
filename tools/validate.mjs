@@ -81,15 +81,15 @@ for (const book of course.books || []) {
 
     (les.patterns || []).forEach((p, i) => {
       if (!p.ja || !p.zh) errors.push(`${rel} patterns[${i}] 需要 ja 與 zh`);
-      /* form 只可以是四種形之一：masu／te／ta／nai；一個句型同屬兩個形時寫成陣列
+      /* form 只可以是五種形之一：masu／te／ta／nai／dict；一個句型同屬兩個形時寫成陣列
          （前端 PAT_FORM 對應顯示文字，每個標籤都連去五段動詞詳細表） */
       const pforms = 'form' in p ? (Array.isArray(p.form) ? p.form : [p.form]) : [];
       if (Array.isArray(p.form) && !p.form.length) {
         errors.push(`${rel} patterns[${i}].form 是空陣列`);
       }
       pforms.forEach((f) => {
-        if (!['masu', 'te', 'ta', 'nai'].includes(f)) {
-          errors.push(`${rel} patterns[${i}].form「${f}」不在 masu／te／ta／nai 之內`);
+        if (!['masu', 'te', 'ta', 'nai', 'dict'].includes(f)) {
+          errors.push(`${rel} patterns[${i}].form「${f}」不在 masu／te／ta／nai／dict 之內`);
         }
       });
       (p.ex || []).forEach((x, j) => {
