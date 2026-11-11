@@ -753,6 +753,7 @@
     font-weight:600; line-height:1.45; color:#0b5cad; word-break:break-word}
   .aptbl .apex{padding-right:6px; font-family:var(--serif); font-size:14px; line-height:1.5; color:var(--ink)}
   .aptbl .apex .apmk{color:#0b5cad; font-weight:600}
+  .aptbl tr.apr .apex{cursor:pointer}
   .aptbl .aprail{width:24px; padding-left:2px; text-align:center}
   .aptbl .aprail .spk.apspk{width:22px; height:22px; margin:0 auto; border:0; background:none; color:var(--muted)}
   .aptbl .aprail .spk.apspk svg{width:13px; height:13px}
@@ -805,7 +806,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v196</span>
+    <span class="ver" id="verTag">v197</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2661,7 +2662,7 @@
      全程重用同一個 <audio>：iOS Safari 每段都 new Audio() 時，播到幾十段後
      play() 會被拒（Promise reject）而且唔會派 ended／error，整條隊列就卡死。
      另外加 watchdog：ended／error 漏發時照樣前進，唔會停在一個詞。 */
-  var ALLPLAY = { on:false, btn:null, n:0, tok:0, el:null };
+  var ALLPLAY = { on:false, btn:null, n:0, from:0, tok:0, el:null };
   function seqAudio(){
     if (!ALLPLAY.el){
       try{ var a = new Audio(); a.preload = 'auto'; ALLPLAY.el = a; }
@@ -2681,6 +2682,7 @@
     if (!ALLPLAY) return;
     ALLPLAY.on = false;
     ALLPLAY.n = 0;
+    ALLPLAY.from = 0;
     ALLPLAY.tok++;                 /* 令舊的 ended／error 回呼失效 */
     if (ALLPLAY.el){ try{ ALLPLAY.el.pause(); }catch(e){} }
     if (typeof allBar === 'function') allBar(false);
@@ -2719,6 +2721,7 @@
     ALLPLAY.on = true;
     ALLPLAY.btn = btn;
     ALLPLAY.n = list.length;
+    ALLPLAY.from = startAt;
     if (btn){
       btn.classList.add('onplay');
       btn.textContent = '■ 停止';
@@ -3640,8 +3643,8 @@
       });
       h += '</tbody></table></section>';
     });
-    h += '</div><p class="secnote">點喇叭聽示範音；按右邊的課號可以跳到那一課的句型。' +
-      '「播放全部」由第一句順播，中途按畫面下方的「停止播放」，或再按一次按鈕即停。</p>';
+    h += '</div><p class="secnote">點喇叭聽單句示範；點任何一句例句，就由那句開始順播到最後（再點同一句即停）。' +
+      '按右邊的課號可以跳到那一課的句型。「播放全部」由第一句開始，中途按畫面下方的「停止播放」，或再按一次按鈕即停。</p>';
     app.innerHTML = h;
     var jb = $('#apjump');
     if (jb) jb.addEventListener('click', function(e){
@@ -3651,16 +3654,34 @@
     });
     var list = $('#aplist');
     bindSpeakers(list);
-    var pa = $('#applay');
-    if (pa) pa.addEventListener('click', function(){
-      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+    /* 順播隊列：每一行一句，缺音檔的行留空位（playAllQueued 會自己跳過，
+       但索引要保持原行號，由中間開始時進度才顯示全表的第幾句）。 */
+    function apItems(){
       var items = [];
       Array.prototype.forEach.call(list.querySelectorAll('.aptbl tr.apr'), function(row){
         var b = row.querySelector('[data-audio]');
-        if (b) items.push({ audio: b.getAttribute('data-audio'), el: row });
+        items.push({ audio: b ? b.getAttribute('data-audio') : '', el: row });
       });
-      if (!items.length){ toast('這頁還沒有音檔'); return; }
+      return items;
+    }
+    var pa = $('#applay');
+    if (pa) pa.addEventListener('click', function(){
+      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+      var items = apItems();
+      if (!items.length || !items.some(function(x){ return x.audio; })){ toast('這頁還沒有音檔'); return; }
       playAllQueued(items, this);
+    });
+    /* 由中間開始：點任何一句例句，就由那句順播到最後。
+       喇叭（單句）與課號連結各自照舊，不要攔。 */
+    list.addEventListener('click', function(e){
+      if (e.target.closest('[data-audio]') || e.target.closest('a')) return;
+      var row = e.target.closest('tr.apr');
+      if (!row) return;
+      var items = apItems(), idx = -1;
+      items.forEach(function(x, k){ if (x.el === row) idx = k; });
+      if (idx < 0 || !items[idx].audio) return;
+      if (ALLPLAY.on && ALLPLAY.btn === pa && ALLPLAY.from === idx) { stopAllPlay(); stopAudio(); return; }
+      playAllQueued(items, pa, idx);
     });
   }
 

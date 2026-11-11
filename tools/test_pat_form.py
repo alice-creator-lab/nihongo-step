@@ -22,7 +22,15 @@ if not CHROME:
     sys.exit("找不 chromium")
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8899/"
 PORT = int(os.environ.get("CDP_PORT", "9351"))
-EXPECT_VERSION = os.environ.get("EXPECT_VERSION", "v196")
+def _ver_from_index():
+    """頁面版本號直接讀 index.html 的 #verTag，版本升級時不用每次改測試。"""
+    import re
+    f = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "index.html")
+    m = re.search(r'id="verTag">([^<]+)<', open(f, encoding="utf-8").read())
+    return m.group(1) if m else "v0"
+
+
+EXPECT_VERSION = os.environ.get("EXPECT_VERSION") or _ver_from_index()
 EXPECT_VER_ROWS = int(os.environ.get("EXPECT_VER_ROWS", "115"))
 
 
