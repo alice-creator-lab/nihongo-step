@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""驗證「句型屬於某個形」的小框標示（v194：全 40 課已標 69 個句型、70 個標籤）：
+"""驗證「句型屬於某個形」的小框標示（v195：全 40 課已標 75 個句型、76 個標籤）：
 
 - 第20課 7 卡 7 框（て形×5、ない形×2）。
 - 第17課 6 卡 7 框（た形×6 ＋ て形×1）：第 4 張「もう～ました／まだ～ていません」屬兩個形，兩個框並排。
 - 第12課 7 框含「ます形」；第07課（未標）0 框。
-- 第11／15／21課的辞書形句型（のが好き、ことです、まえに、のは）標「辞書形」。
+- 辞書形共 10 個：L11 のが好き／ことです、L15 まえに、L21 のは、L24 ことができる、L28 つもりです／予定です／ことにしました、L35 ～と、～（兩張）。
 - 每個框連去五段動詞詳細表（#/all/verbs/forms/godan），藍色 #0b5cad、1px 框、無底線。
 - 390／375／360px：小框落在句型第一行的垂直範圍內、不溢出、頁面不需橫向捲動。
 
@@ -22,7 +22,7 @@ if not CHROME:
     sys.exit("找不 chromium")
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8899/"
 PORT = int(os.environ.get("CDP_PORT", "9351"))
-EXPECT_VERSION = os.environ.get("EXPECT_VERSION", "v194")
+EXPECT_VERSION = os.environ.get("EXPECT_VERSION", "v195")
 EXPECT_VER_ROWS = int(os.environ.get("EXPECT_VER_ROWS", "115"))
 
 
@@ -151,6 +151,12 @@ async def main():
     check("L21 辞書形", await js(CHIPS), ["辞書形"])
     await lesson("L15")
     check("L15 有辞書形", await js("Array.prototype.filter.call(document.querySelectorAll('.pat .pfrm'), function(a){return a.textContent==='辞書形';}).length"), 1)
+    await lesson("L24")
+    check("L24 辞書形", await js(CHIPS), ["辞書形"])
+    await lesson("L28")
+    check("L28 小框文字", await js(CHIPS), ["辞書形", "ない形", "辞書形", "辞書形"])
+    await lesson("L35")
+    check("L35 小框文字", await js(CHIPS), ["辞書形", "辞書形", "ない形"])
     await lesson("L07")
     check("L07 無小框", await js("document.querySelectorAll('.pat .pfrm').length"), 0)
     check("L07 句型仍在", await js("document.querySelector('.pat .pja').textContent.length > 0"), True)
