@@ -81,6 +81,10 @@ for (const book of course.books || []) {
 
     (les.patterns || []).forEach((p, i) => {
       if (!p.ja || !p.zh) errors.push(`${rel} patterns[${i}] 需要 ja 與 zh`);
+      /* form 只可以是四種形之一：masu／te／ta／nai（前端 PAT_FORM 對應顯示文字，連去五段動詞詳細表） */
+      if ('form' in p && !['masu', 'te', 'ta', 'nai'].includes(p.form)) {
+        errors.push(`${rel} patterns[${i}].form「${p.form}」不在 masu／te／ta／nai 之內`);
+      }
       (p.ex || []).forEach((x, j) => {
         if (!x.ja || !x.zh) errors.push(`${rel} patterns[${i}].ex[${j}] 需要 ja 與 zh`);
       });

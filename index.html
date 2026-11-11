@@ -120,6 +120,13 @@
 
   .pat{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 16px 14px; margin-bottom:11px}
   .pat .pja{font-family:var(--serif); font-size:19px; line-height:1.5; letter-spacing:.02em}
+  .pat .phead{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .pat .phead .pja{flex:1 1 auto; min-width:0}
+  /* 句型屬於某個形：小框標示，點擊去五段動詞詳細表（與句型應用同一個藍，紅只留給答錯） */
+  .pat .pfrm{flex:0 0 auto; display:inline-block; font-family:var(--sans); font-size:11px; font-weight:600;
+    line-height:1; padding:6px 8px; border:1px solid #0b5cad; border-radius:7px; background:#e6eefb;
+    color:#0b5cad; text-decoration:none; letter-spacing:.04em; white-space:nowrap}
+  .pat .pfrm:active{background:#d3e2f8}
   .pat .pzh{font-size:13px; color:var(--shu); margin-top:5px}
   .pat .pnote{font-size:13px; color:var(--ink2); line-height:1.85; margin-top:9px}
   .pat .ex{border-top:1px dashed var(--line); margin-top:12px; padding-top:10px}
@@ -797,7 +804,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v191</span>
+    <span class="ver" id="verTag">v192</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -826,6 +833,10 @@
     ['patterns','句型'], ['vocab','單字'], ['grammar','文法'],
     ['exercises','練習'], ['dialogue','會話'], ['culture','文化']
   ];
+
+  /* 句型若係某個形的應用（資料的 form 欄），在卡片左上顯示可點的形名，連去五段動詞詳細表 */
+  var PAT_FORM = { masu:'ます形', te:'て形', ta:'た形', nai:'ない形' };
+  var PAT_FORM_HREF = '#/all/verbs/forms/godan';
 
   var VOICE = { ja: null };
   /* iOS 把「增強版」人聲的名字列成跟基本版一樣（都是 Kyoko），
@@ -1482,7 +1493,9 @@
               '<span class="cnt">共 '+nex+' 句例句</span></div>' +
             '<p class="secnote">先看句型，再聽例句。點右邊的喇叭可以聽示範發音。</p>';
     l.patterns.forEach(function(p){
-      h += '<article class="pat"><div class="pja">'+esc(p.ja)+'</div>' +
+      h += '<article class="pat"><div class="phead">' +
+           (PAT_FORM[p.form] ? '<a class="pfrm" href="'+PAT_FORM_HREF+'" title="五段動詞 詳細表">'+PAT_FORM[p.form]+'</a>' : '') +
+           '<div class="pja">'+esc(p.ja)+'</div></div>' +
            '<div class="pzh">'+esc(p.zh)+'</div>' +
            '<div class="pnote">'+esc(p.note)+'</div>';
       if (p.ex && p.ex.length){
