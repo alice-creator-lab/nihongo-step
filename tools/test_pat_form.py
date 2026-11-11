@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""驗證「句型屬於某個形」的小框標示（第20課先行）：
+"""驗證「句型屬於某個形」的小框標示（v193：全 40 課已標 65 個句型、66 個標籤）：
 
-第20課 7 個句型全部有 form（て形 ×5、ない形 ×2），卡片左上出現可點的小框，
-按下去連到五段動詞詳細表（#/all/verbs/forms/godan）；未標 form 的課（如第19課）不出現小框；
-390／375／360px 小框與句型同一行、不爆版；小框用藍色（#0b5cad），不是紅色。
+- 第20課 7 卡 7 框（て形×5、ない形×2）。
+- 第17課 6 卡 7 框（た形×6 ＋ て形×1）：第 4 張「もう～ました／まだ～ていません」屬兩個形，兩個框並排。
+- 第12課 7 框含「ます形」；第07課（未標）0 框。
+- 每個框連去五段動詞詳細表（#/all/verbs/forms/godan），藍色 #0b5cad、1px 框、無底線。
+- 390／375／360px：小框落在句型第一行的垂直範圍內、不溢出、頁面不需橫向捲動。
 
 用法： python3 tools/test_pat_form.py [http://127.0.0.1:8899/]
 """
@@ -19,7 +21,7 @@ if not CHROME:
     sys.exit("找不 chromium")
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8899/"
 PORT = int(os.environ.get("CDP_PORT", "9351"))
-EXPECT_VERSION = os.environ.get("EXPECT_VERSION", "v192")
+EXPECT_VERSION = os.environ.get("EXPECT_VERSION", "v193")
 EXPECT_VER_ROWS = int(os.environ.get("EXPECT_VER_ROWS", "115"))
 
 
@@ -87,17 +89,29 @@ async def main():
         if not ok:
             fails.append(name)
 
+    CHIPS = "Array.prototype.map.call(document.querySelectorAll('.pat .pfrm'), function(a){return a.textContent;})"
+
+    async def lesson(lid):
+        await js(f"location.hash='#/l/{lid}/patterns'; 1")
+        await asyncio.sleep(1.2)
+        await wait_until("document.querySelectorAll('.pat').length && document.querySelector('.pat .pja')")
+
     await viewport(390)
     await call("Page.navigate", {"url": BASE + "#/l/L20/patterns"}, sid)
     await wait_until("document.querySelectorAll('.pat').length")
 
     check("版本", await js("document.getElementById('verTag').textContent"), EXPECT_VERSION)
-    check("第20課句型卡數", await js("document.querySelectorAll('.pat').length"), 7)
-    check("小框數目", await js("document.querySelectorAll('.pat .pfrm').length"), 7)
-    check("小框文字", await js("Array.prototype.map.call(document.querySelectorAll('.pat .pfrm'), function(a){return a.textContent;})"),
+
+    # 1. 第20課：7 卡 7 框
+    check("L20 句型卡數", await js("document.querySelectorAll('.pat').length"), 7)
+    check("L20 小框數目", await js("document.querySelectorAll('.pat .pfrm').length"), 7)
+    check("L20 小框文字", await js(CHIPS),
           ["て形", "て形", "て形", "ない形", "ない形", "て形", "て形"])
     check("小框連結", await js("Array.prototype.every.call(document.querySelectorAll('.pat .pfrm'), function(a){return a.getAttribute('href')==='#/all/verbs/forms/godan';})"), True)
-    check("小框在卡片內、句型之上", await js("Array.prototype.every.call(document.querySelectorAll('.pat'), function(c){var a=c.querySelector('.pfrm'); if(!a) return true; var p=c.querySelector('.pja'); return a.parentNode===p.parentNode && a.nextElementSibling===p;})"), True)
+    check("小框包在 .pfrmg、在句型之前", await js("""Array.prototype.every.call(document.querySelectorAll('.pat'), function(c){
+        var g=c.querySelector('.pfrmg'), p=c.querySelector('.pja');
+        if(!g) return true;
+        return g.nextElementSibling===p && g.querySelectorAll('.pfrm').length>0;})"""), True)
 
     style = await js("""(function(){var a=document.querySelector('.pat .pfrm'); var s=getComputedStyle(a);
       return {color:s.color, bg:s.backgroundColor, border:s.borderTopColor, bw:s.borderTopWidth,
@@ -107,40 +121,63 @@ async def main():
     check("小框有框線", ((style or {}).get("border"), (style or {}).get("bw")), ("rgb(11, 92, 173)", "1px"))
     check("小框無底線", ((style or {}).get("deco"), (style or {}).get("radius")), ("none", "7px"))
 
-    # 未標 form 的課不出現小框
-    await js("location.hash='#/l/L19/patterns'; 1")
-    await wait_until("document.querySelectorAll('.pat').length")
-    check("第19課無小框", await js("document.querySelectorAll('.pat .pfrm').length"), 0)
-    check("第19課句型仍在", await js("document.querySelector('.pat .pja').textContent.length > 0"), True)
+    # 2. 第17課：一個句型同屬兩個形
+    await lesson("L17")
+    check("L17 句型卡數", await js("document.querySelectorAll('.pat').length"), 6)
+    check("L17 小框數目", await js("document.querySelectorAll('.pat .pfrm').length"), 7)
+    check("L17 小框文字", await js(CHIPS),
+          ["た形", "た形", "た形", "た形", "て形", "た形", "た形"])
+    check("L17 第4張兩個框", await js("Array.prototype.map.call(document.querySelectorAll('.pat')[3].querySelectorAll('.pfrm'), function(a){return a.textContent;})"),
+          ["た形", "て形"])
+    check("L17 第4張兩個框同組", await js("document.querySelectorAll('.pat')[3].querySelectorAll('.pfrmg .pfrm').length"), 2)
 
-    # 窄螢幕：小框與句型同一行、不溢出
-    await js("location.hash='#/l/L20/patterns'; 1")
-    await wait_until("document.querySelectorAll('.pat').length")
+    lay = await js("""(function(){var c=document.querySelectorAll('.pat')[3];
+        var g=c.querySelector('.pfrmg').getBoundingClientRect(), p=c.querySelector('.pja').getBoundingClientRect();
+        return {兩框並排: Math.abs(c.querySelectorAll('.pfrm')[0].getBoundingClientRect().top - c.querySelectorAll('.pfrm')[1].getBoundingClientRect().top) < 1,
+                在句型之上: g.bottom <= p.top + 2, 間距: Math.round(p.top - g.bottom)};})()""") or {}
+    print("   第4張排版", json.dumps(lay, ensure_ascii=False))
+    check("L17 兩框並排", lay.get("兩框並排"), True)
+    check("L17 兩框在句型之上", lay.get("在句型之上"), True)
+
+    # 3. 第12課有ます形；第07課未標
+    await lesson("L12")
+    check("L12 小框數目", await js("document.querySelectorAll('.pat .pfrm').length"), 7)
+    check("L12 有ます形", await js("Array.prototype.filter.call(document.querySelectorAll('.pat .pfrm'), function(a){return a.textContent==='ます形';}).length"), 1)
+    await lesson("L07")
+    check("L07 無小框", await js("document.querySelectorAll('.pat .pfrm').length"), 0)
+    check("L07 句型仍在", await js("document.querySelector('.pat .pja').textContent.length > 0"), True)
+
+    # 4. 窄螢幕（用有兩個框的第17課量）
+    await lesson("L17")
     for w in (390, 375, 360):
         await viewport(w)
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.6)
         r = await js("""(function(){
-          var bad=[], sameLine=[];
+          var bad=[], offLine=[];
           Array.prototype.forEach.call(document.querySelectorAll('.pat'), function(c){
-            var a=c.querySelector('.pfrm'), p=c.querySelector('.pja');
-            if(!a||!p) return;
-            var ar=a.getBoundingClientRect(), pr=p.getBoundingClientRect();
-            if (Math.abs((ar.top+ar.height/2) - (pr.top+pr.height/2)) > 3) sameLine.push(p.textContent);
-            var cr=c.getBoundingClientRect();
-            if (a.getBoundingClientRect().right > cr.right - 8) bad.push([a.textContent, a.getBoundingClientRect().right, cr.right]);
+            var g=c.querySelector('.pfrmg'), p=c.querySelector('.pja');
+            if(!g||!p) return;
+            var gr=g.getBoundingClientRect(), pr=p.getBoundingClientRect(), cr=c.getBoundingClientRect();
+            /* 小框可以：(a) 在句型第一行旁邊，或 (b) 句型太長時自成一行、排在句型之上。
+               兩種都不可以壓住句型文字。 */
+            var lineTop = pr.top, lineBot = pr.top + parseFloat(getComputedStyle(p).lineHeight);
+            var beside = (gr.top >= lineTop - 6 && gr.bottom <= lineBot + 6);
+            var above = (gr.bottom <= lineTop + 2);
+            if (!beside && !above) offLine.push([p.textContent, gr.top, lineTop, gr.bottom, lineBot]);
+            if (gr.right > cr.right - 8) bad.push([p.textContent, gr.right, cr.right]);
             if (p.scrollWidth > p.clientWidth + 1) bad.push([p.textContent, p.scrollWidth, p.clientWidth]);
           });
-          return {同行: sameLine, 溢出: bad, body:[document.body.scrollWidth, window.innerWidth]};
+          return {跑出第一行: offLine, 溢出: bad, body:[document.body.scrollWidth, window.innerWidth]};
         })()""") or {}
         print(f"--- {w}px", json.dumps(r, ensure_ascii=False))
-        check(f"{w}px 小框與句型同行", r.get("同行"), [])
+        check(f"{w}px 小框與句型不重疊", r.get("跑出第一行"), [])
         check(f"{w}px 無溢出", r.get("溢出"), [])
         check(f"{w}px 頁面不需橫向捲動", r.get("body"), [w, w])
 
-    # 點小框 → 五段動詞詳細表
+    # 5. 點小框 → 五段動詞詳細表
     await viewport(390)
     await asyncio.sleep(0.3)
-    await js("document.querySelectorAll('.pat .pfrm')[3].click(); 1")
+    await js("document.querySelectorAll('.pat')[3].querySelectorAll('.pfrm')[1].click(); 1")
     await wait_until("document.querySelectorAll('.vftbl tbody tr.vgrp').length")
     check("點小框後 hash", await js("location.hash"), "#/all/verbs/forms/godan")
     check("詳細表標題", await js("document.querySelector('.lhead h1').textContent.indexOf('五段動詞') === 0"), True)

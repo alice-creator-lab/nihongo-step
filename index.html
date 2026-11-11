@@ -123,6 +123,7 @@
   .pat .phead{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
   .pat .phead .pja{flex:1 1 auto; min-width:0}
   /* 句型屬於某個形：小框標示，點擊去五段動詞詳細表（與句型應用同一個藍，紅只留給答錯） */
+  .pat .pfrmg{display:flex; gap:6px; flex:0 0 auto}
   .pat .pfrm{flex:0 0 auto; display:inline-block; font-family:var(--sans); font-size:11px; font-weight:600;
     line-height:1; padding:6px 8px; border:1px solid #0b5cad; border-radius:7px; background:#e6eefb;
     color:#0b5cad; text-decoration:none; letter-spacing:.04em; white-space:nowrap}
@@ -804,7 +805,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v192</span>
+    <span class="ver" id="verTag">v193</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1487,14 +1488,23 @@
     });
   }
 
+  /* 一個句型可以屬於多個形（資料寫成陣列，例如「もう～ました／まだ～ていません」是た形＋て形） */
+  function patFormChips(p){
+    var fs = p.form ? (Array.isArray(p.form) ? p.form : [p.form]) : [];
+    fs = fs.filter(function(f){ return PAT_FORM[f]; });
+    if (!fs.length) return '';
+    return '<span class="pfrmg">' + fs.map(function(f){
+      return '<a class="pfrm" href="'+PAT_FORM_HREF+'" title="五段動詞 詳細表">'+PAT_FORM[f]+'</a>';
+    }).join('') + '</span>';
+  }
+
   function segPatterns(l){
     var nex = l.patterns.reduce(function(s, p){ return s + ((p.ex || []).length); }, 0);
     var h = '<div class="vplaybar"><button class="btn2" id="pplayall">▶ 播放全部</button>' +
               '<span class="cnt">共 '+nex+' 句例句</span></div>' +
             '<p class="secnote">先看句型，再聽例句。點右邊的喇叭可以聽示範發音。</p>';
     l.patterns.forEach(function(p){
-      h += '<article class="pat"><div class="phead">' +
-           (PAT_FORM[p.form] ? '<a class="pfrm" href="'+PAT_FORM_HREF+'" title="五段動詞 詳細表">'+PAT_FORM[p.form]+'</a>' : '') +
+      h += '<article class="pat"><div class="phead">' + patFormChips(p) +
            '<div class="pja">'+esc(p.ja)+'</div></div>' +
            '<div class="pzh">'+esc(p.zh)+'</div>' +
            '<div class="pnote">'+esc(p.note)+'</div>';
