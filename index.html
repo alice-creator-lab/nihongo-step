@@ -809,7 +809,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v199</span>
+    <span class="ver" id="verTag">v200</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1108,6 +1108,7 @@
     if (typeof vfStop === 'function') vfStop();
     if ('speechSynthesis' in window) speechSynthesis.cancel();
     if (typeof curAudio !== 'undefined' && curAudio){ curAudio.pause(); curAudio = null; }
+    if (curEl){ curEl.classList.remove('playing'); curEl = null; }
     if (playingEl) playingEl.classList.remove('playing');
     playingEl = null;
     Array.prototype.forEach.call(document.querySelectorAll('.spk.playing'), function(b){ b.classList.remove('playing'); });
@@ -2102,7 +2103,7 @@
   }
 
   /* ---------- 朗讀與播放 ---------- */
-  var curAudio = null;
+  var curAudio = null, curEl = null;
 
   function speakAt(text, rate){
     stopAudio();
@@ -4332,26 +4333,38 @@
   function playFile(url, onend, el, rate){
     /* 不呼叫 stopAudio：連續播放時要保留 PLAYSEQ 狀態 */
     if (curAudio){ try{ curAudio.pause(); }catch(e){} curAudio = null; }
+    /* 被 pause() 中斷的上一段不會觸發 ended，若只靠 onended 收尾，
+       每按一顆喇叭就會多留一顆長著黑色；所以開新的一段前先主動收乾淨 */
+    if (curEl){ curEl.classList.remove('playing'); curEl = null; }
+    if (playingEl){ playingEl.classList.remove('playing'); playingEl = null; }
+    Array.prototype.forEach.call(document.querySelectorAll('.spk.playing'), function(b){ b.classList.remove('playing'); });
     if ('speechSynthesis' in window) speechSynthesis.cancel();
     try{
       /* 音檔加了版本查詢字串，避免瀏覽器沿用舊快取 */
       var a = new Audio(url + (url.indexOf('?') < 0 ? '?' : '&') + 'v=' + auVer(url));
       /* 一律原速播放預製人聲 */
       a.playbackRate = (rate && rate > 0) ? rate : 1;
-      curAudio = a;
+      curAudio = a; curEl = el || null;
       if (el) el.classList.add('playing');
       a.onended = function(){
         if (el) el.classList.remove('playing');
+        if (curEl === el) curEl = null;
         if (curAudio === a) curAudio = null;
         if (onend) onend();
       };
       a.onerror = function(){
         if (el) el.classList.remove('playing');
+        if (curEl === el) curEl = null;
         if (curAudio === a) curAudio = null;
         if (onend) onend();
       };
       var pr = a.play();
-      if (pr && pr.catch) pr.catch(function(){});
+      if (pr && pr.catch) pr.catch(function(){
+        /* iOS 擋自動播放時 play() 會 reject：不要留下永遠黑色的按鈕 */
+        if (el) el.classList.remove('playing');
+        if (curEl === el) curEl = null;
+        if (curAudio === a) curAudio = null;
+      });
       return true;
     }catch(e){ return false; }
   }

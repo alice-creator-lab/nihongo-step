@@ -187,7 +187,7 @@ async def main():
     print(json.dumps(out, ensure_ascii=False, indent=1))
 
     checks = {
-        "版本 v189": out.get("版本") == "v189",
+        "版本有顯示": bool(__import__("re").match(r"^v\d+$", str(out.get("版本") or ""))),
         "未播時無浮動鍵": out.get("初始浮動鍵隱藏") is True,
         "按後出現浮動鍵": out.get("按後浮動鍵") is True,
         "進度顯示 1／N": str(out.get("進度") or "").startswith("1／"),
