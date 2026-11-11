@@ -39,6 +39,7 @@ for (const g of d.groups || []) {
         '前に、～': '～まえに',
         'ても構いません': '～てもかまいません',
         'た後で、～': '～たあとで',
+        'と、～': '～と、～',
       };
       if (les) {
         const clean = (s) => String(s).replace(/[～、，\s]/g, '');
@@ -74,7 +75,7 @@ for (const g of d.groups || []) {
   }
 }
 
-const want = { masu: 10, dict: 4, te: 11, ta: 4, nai: 2 };
+const want = { masu: 14, dict: 10, te: 26, ta: 10, nai: 7 };
 for (const g of d.groups || []) {
   if (want[g.id] && g.rows.length !== want[g.id]) {
     errs.push(`${g.form} 應有 ${want[g.id]} 個句型，實為 ${g.rows.length}`);

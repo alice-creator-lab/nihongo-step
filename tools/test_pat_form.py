@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""驗證「句型屬於某個形」的小框標示（v195：全 40 課已標 75 個句型、76 個標籤）：
+"""驗證「句型屬於某個形」的小框標示（全 40 課已標 75 個句型、76 個標籤）：
 
 - 第20課 7 卡 7 框（て形×5、ない形×2）。
 - 第17課 6 卡 7 框（た形×6 ＋ て形×1）：第 4 張「もう～ました／まだ～ていません」屬兩個形，兩個框並排。
@@ -22,7 +22,7 @@ if not CHROME:
     sys.exit("找不 chromium")
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8899/"
 PORT = int(os.environ.get("CDP_PORT", "9351"))
-EXPECT_VERSION = os.environ.get("EXPECT_VERSION", "v195")
+EXPECT_VERSION = os.environ.get("EXPECT_VERSION", "v196")
 EXPECT_VER_ROWS = int(os.environ.get("EXPECT_VER_ROWS", "115"))
 
 
