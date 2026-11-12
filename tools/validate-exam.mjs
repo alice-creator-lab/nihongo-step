@@ -51,6 +51,15 @@ for (const stage of stages) {
         fail(tag + ': ★ 應是 order[2]＝' + it.order[2] + '，但 answer＝' + it.answer);
       }
     }
+    /* 熟字訓（整詞固定讀法）不可以逐字當成通則教：解釋要說明這一點。 */
+    if (it.part === 'moji' && it.q) {
+      const word = (it.q.match(/「(.+?)」/) || [])[1] || '';
+      const JUKUJIKUN = ['浴衣', '眼鏡', '今日', '昨日', '明日', '今朝', '一人', '二人', '大人',
+                         '田舎', '梅雨', '相撲', '土産', '紅葉', '上手', '下手'];
+      if (JUKUJIKUN.includes(word) && !String(it.why).includes('熟字訓')) {
+        fail(tag + ': 「' + word + '」是熟字訓，解釋要說明整詞讀法，不能逐字當通則');
+      }
+    }
     if (it.audio) {
       if (!existsSync(join(root, it.audio))) fail(tag + ': 音檔不存在 ' + it.audio);
       if (!it.script) fail(tag + ': 有音檔但缺 script（檢討時要看原文）');
