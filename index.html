@@ -823,7 +823,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v217</span>
+    <span class="ver" id="verTag">v218</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1556,16 +1556,26 @@
     return r;
   }
 
-  /* 每課只顯示跟這一課教過的內容相關的順序表；冇相關項目就唔放入口 */
+  /* 每課只顯示跟這一課教過的內容相關的順序表；冇相關項目就唔放入口。
+     對應以「邊一課真正教這個量詞」為準：L10 教人・枚・台・冊・個・匹，
+     所以掛數詞（一）（二）（三）；數詞（五）足・頭・羽 全課程未教，不掛。
+     12 月：入口放到播放列下面（原本埋在單字表最尾，等於冇人見到）。 */
   var SEQ_FOR_LESSON = {
     3: ['time'], 4: ['num', 'hitotsu', 'cnt4'], 5: ['dmy', 'week'],
-    7: ['floor'], 10: ['cnt3', 'cnt5'], 16: ['cnt1', 'cnt3'], 17: ['cnt4']
+    7: ['floor'], 10: ['cnt1', 'cnt2', 'cnt3'], 16: ['cnt1', 'cnt3'], 17: ['cnt4']
   };
   var SEQ_SHORT = { num:'數字', dmy:'日數', week:'星期', time:'時間', floor:'樓層',
     hitotsu:'～つ', cnt1:'數詞（一）', cnt2:'數詞（二）', cnt3:'數詞（三）', cnt4:'數詞（四）',
     cnt5:'數詞（五）' };
 
   function segVocab(l){
+    /* 相關順序表入口：放在播放列下面，一入詞語頁就見到（之前放單字表最尾） */
+    var relSeq = SEQ_FOR_LESSON[l.no] || [];
+    var seqLinks = relSeq.length
+      ? '<div class="seqlinks"><span>相關順序表</span>' + relSeq.map(function(gid){
+          return '<a href="#/seq/' + gid + '">' + esc(SEQ_SHORT[gid] || gid) + ' →</a>';
+        }).join('') + '</div>'
+      : '';
     var h = '<div class="quizbar"><div class="qinfo"><b>單字自測</b><span>抽 10 個字，先回想再看答案</span></div>' +
               '<div class="seg2" id="cardDir">' +
                 '<button data-dir="jp2zh" class="'+(cardDir==='jp2zh'?'on':'')+'">日→中</button>' +
@@ -1574,6 +1584,7 @@
               '<button class="btn2 pri" id="startCards">開始</button></div>' +
             '<div class="vplaybar"><button class="btn2" id="vplayall">▶ 播放全部</button>' +
               '<span class="cnt">共 '+l.vocab.length+' 個字詞</span></div>' +
+            seqLinks +
             '<p class="secnote">點單字右邊的喇叭聽發音。</p><div class="vlist">';
     var lastGroup = '';
     l.vocab.forEach(function(v, vi){
@@ -1595,13 +1606,6 @@
              ' aria-label="播放發音">'+SPK+'</button></div>';
     });
     h += '</div>';
-    /* 只放跟這一課相關的順序表入口，直接跳到那一段 */
-    var rel = SEQ_FOR_LESSON[l.no] || [];
-    if (rel.length){
-      h += '<div class="seqlinks"><span>相關順序表</span>' + rel.map(function(gid){
-        return '<a href="#/seq/' + gid + '">' + esc(SEQ_SHORT[gid] || gid) + ' →</a>';
-      }).join('') + '</div>';
-    }
     return h;
   }
 
