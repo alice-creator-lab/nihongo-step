@@ -366,6 +366,12 @@
   .expart b{font-size:14px; font-weight:600; flex:0 0 auto}
   .expart .n{font-size:11.5px; color:var(--muted); margin-left:auto; text-align:right; line-height:1.6}
   .expart .n i{display:block; font-style:normal; font-size:11px; color:var(--muted)}
+  /* 測驗中「離開測驗」：44px 觸控高度，獨立一顆藥丸，不再是一行 18px 的細字 */
+  .exquit{display:inline-flex; align-items:center; min-height:44px; padding:0 16px 0 12px;
+    margin:6px 0 2px; border:1px solid var(--line); border-radius:999px; background:var(--sand);
+    color:var(--ink2); font-size:13px; text-decoration:none; touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent}
+  .exquit:active{background:var(--sand2)}
   .exbar{display:flex; align-items:center; justify-content:space-between; gap:10px;
     font-size:11.5px; color:var(--muted); letter-spacing:.06em; margin-top:8px}
   .exprog{margin:8px 0 14px; height:4px; border-radius:99px; background:#e9e0ce; overflow:hidden}
@@ -809,7 +815,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v202</span>
+    <span class="ver" id="verTag">v203</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -4142,7 +4148,7 @@
     var part = d.parts.filter(function(p){ return p.key === it.part; })[0] || { label: it.part };
     var answered = examAnswered();
     var html =
-      '<a class="back" href="#/exam/' + d.stage + '" id="exQuit" style="display:inline-block;margin:8px 0 4px">← 離開測驗</a>' +
+      '<a class="exquit" href="#/exam/' + d.stage + '" id="exQuit" aria-label="離開測驗，返回測驗說明">← 離開測驗</a>' +
       '<div class="exbar"><span>' + esc(part.label) + ' · ' + esc(it.kind) + '</span>' +
         '<span>第 ' + (exRun.i + 1) + ' ／ ' + items.length + ' 題 · 已答 ' + answered + '</span></div>' +
       '<div class="exprog"><i id="exbar" style="width:' + Math.round(answered / items.length * 100) + '%"></i></div>' +
@@ -4164,6 +4170,15 @@
         '<button class="btn2 pri" id="exNext">' + (exRun.i === items.length - 1 ? '交卷 →' : '下一題 →') + '</button>' +
       '</div>';
     app.innerHTML = html;
+
+    /* 測驗進行中的網址本身已經是 #/exam/N，單靠 href 不會觸發 hashchange，
+       按「離開測驗」會冇反應；所以直接返回測驗說明頁 */
+    var qt = $('#exQuit');
+    if (qt) qt.addEventListener('click', function(e){
+      e.preventDefault();
+      if (history.replaceState) history.replaceState(null, '', '#/exam/' + d.stage);
+      renderExam(d.stage);
+    });
 
     if (it.audio){
       $('#exPlay').addEventListener('click', function(){
