@@ -56,6 +56,23 @@ for (const stage of stages) {
       if (!it.script) fail(tag + ': 有音檔但缺 script（檢討時要看原文）');
     }
     if (!it.lesson) fail(tag + ': 缺 lesson 出處');
+
+    /* 漢字読み題：解釋若逐字列出讀音（「生」は しょう…），串起來必須等於正確答案。
+       讀音寫錯（例如「誕生日」的「生」寫成 しょう 而不是 じょう）就在這裡擋住。
+       只在「每個漢字都講到」且沒有「ではなく」否定句時檢查，其餘留給人手看。 */
+    if (it.part === 'moji' && it.why && it.options) {
+      const KANA = /^[ぁ-ゖァ-ヺー]+$/;
+      const ans = String(it.options[it.answer] || '').replace(/\s/g, '');
+      const head = it.why.split('＝')[0];
+      const kanji = (head.match(/[\u4e00-\u9fff]/g) || []).length;
+      const pairs = [...it.why.matchAll(/「(.+?)」は\s*([ぁ-ゖァ-ヺー]+)(?:\s*が\s*濁って\s*([ぁ-ゖァ-ヺー]+))?/g)];
+      if (KANA.test(ans) && !it.why.includes('ではなく') && pairs.length && pairs.length === kanji) {
+        const rebuilt = pairs.map((m) => m[3] || m[2]).join('');
+        if (rebuilt !== ans) {
+          fail(tag + ': 解釋的逐字讀音串起來是「' + rebuilt + '」，與答案「' + ans + '」不符');
+        }
+      }
+    }
   }
 
   const total = (d.items || []).length;
