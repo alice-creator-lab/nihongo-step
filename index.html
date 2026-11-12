@@ -823,7 +823,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v218</span>
+    <span class="ver" id="verTag">v219</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1567,13 +1567,25 @@
   var SEQ_SHORT = { num:'數字', dmy:'日數', week:'星期', time:'時間', floor:'樓層',
     hitotsu:'～つ', cnt1:'數詞（一）', cnt2:'數詞（二）', cnt3:'數詞（三）', cnt4:'數詞（四）',
     cnt5:'數詞（五）' };
+  /* 入口不要逐個「數詞（一）（二）（三）」列出來（390px 會換行、又重覆）：
+     同一課的多張數詞表合併成一個「數詞」掣，跳去最早那一張，其餘在順序表同頁順著往下看。 */
+  function seqLinkItems(rel){
+    var out = [], seen = {};
+    rel.forEach(function(gid){
+      var label = gid.indexOf('cnt') === 0 ? '數詞' : (SEQ_SHORT[gid] || gid);
+      if (seen[label]) return;
+      seen[label] = 1;
+      out.push({ gid: gid, label: label });
+    });
+    return out;
+  }
 
   function segVocab(l){
     /* 相關順序表入口：放在播放列下面，一入詞語頁就見到（之前放單字表最尾） */
-    var relSeq = SEQ_FOR_LESSON[l.no] || [];
+    var relSeq = seqLinkItems(SEQ_FOR_LESSON[l.no] || []);
     var seqLinks = relSeq.length
-      ? '<div class="seqlinks"><span>相關順序表</span>' + relSeq.map(function(gid){
-          return '<a href="#/seq/' + gid + '">' + esc(SEQ_SHORT[gid] || gid) + ' →</a>';
+      ? '<div class="seqlinks"><span>相關順序表</span>' + relSeq.map(function(it){
+          return '<a href="#/seq/' + it.gid + '">' + esc(it.label) + ' →</a>';
         }).join('') + '</div>'
       : '';
     var h = '<div class="quizbar"><div class="qinfo"><b>單字自測</b><span>抽 10 個字，先回想再看答案</span></div>' +

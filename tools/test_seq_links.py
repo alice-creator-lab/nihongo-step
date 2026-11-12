@@ -25,12 +25,12 @@ PORT = int(os.environ.get("CDP_PORT", "9337"))
 
 EXPECT = {
     "L03": ["時間"],
-    "L04": ["數字", "～つ", "數詞（四）"],
+    "L04": ["數字", "～つ", "數詞"],
     "L05": ["日數", "星期"],
     "L07": ["樓層"],
-    "L10": ["數詞（一）", "數詞（二）", "數詞（三）"],
-    "L16": ["數詞（一）", "數詞（三）"],
-    "L17": ["數詞（四）"],
+    "L10": ["數詞"],
+    "L16": ["數詞"],
+    "L17": ["數詞"],
 }
 NONE = ["L01", "L19", "L40"]
 
@@ -138,12 +138,12 @@ async def main():
 
     # 4. 深層連結
     await open_hash("#/l/L10/vocab")
-    await js("(function(){var a=document.querySelector('.seqlinks a[href=\"#/seq/cnt2\"]'); a && a.click();})()")
-    ok = await wait_until("document.querySelector('#sgrp-cnt2') ? 1 : 0")
-    check("跳去 #/seq/cnt2", ok is not None)
+    await js("(function(){var a=document.querySelector('.seqlinks a'); a && a.click();})()")
+    ok = await wait_until("document.querySelector('#sgrp-cnt1') ? 1 : 0")
+    check("跳去 #/seq/cnt1", ok is not None)
     await asyncio.sleep(1.2)
-    focus = await js("!!document.querySelector('#sgrp-cnt2.focus')")
-    check("cnt2 section 有 focus 邊框", focus is True)
+    focus = await js("!!document.querySelector('#sgrp-cnt1.focus')")
+    check("cnt1 section 有 focus 邊框", focus is True)
     sy = await js("window.scrollY")
     check("有捲到該段", isinstance(sy, (int, float)) and sy > 200, str(sy))
 
