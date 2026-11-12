@@ -412,6 +412,14 @@
   .excard .q{margin-top:6px; font-family:var(--serif); font-size:15px; line-height:1.85}
   .excard .a{margin-top:7px; font-size:12.5px; color:var(--ink2); line-height:1.75}
   .excard .w{margin-top:3px; font-size:12.5px; color:var(--muted); line-height:1.75}
+  /* 檢討頁：四個選項全文（○ 正解、× 自己揀錯）與排序題語序 */
+  .excard .ol{margin-top:8px; font-size:12.5px; line-height:1.75; color:var(--muted)}
+  .excard .ol div{display:flex; gap:7px}
+  .excard .ol .m{flex:0 0 12px}
+  .excard .ol .ok{color:#4a7a52}
+  .excard .ol .no{color:var(--shu)}
+  .excard .ord{margin-top:6px; font-size:12.5px; line-height:1.9; color:var(--ink2)}
+  .excard .ord .star{color:var(--shu); font-weight:600}
 
   .spkprog{font-size:12.5px; color:var(--ink2); text-align:center; min-height:18px; line-height:1.6}
   .qinput{width:100%; box-sizing:border-box; margin-top:12px; padding:12px 14px; min-height:80px;
@@ -815,7 +823,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v206</span>
+    <span class="ver" id="verTag">v207</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -4251,12 +4259,27 @@
 
     var review = items.map(function(it, k){
       var mine = exRun.ans[k], right = mine === it.answer;
+      /* 檢討要見到四個選項本身：正解 ○、自己揀錯的 ×，其餘淡化 */
+      var ol = '<div class="ol">' + (it.options || []).map(function(o, oi){
+        var cls = oi === it.answer ? 'ok' : (oi === mine ? 'no' : '');
+        var mk  = oi === it.answer ? '○' : (oi === mine ? '×' : '·');
+        return '<div class="' + cls + '"><span class="m">' + mk + '</span><span>' + esc(o) + '</span></div>';
+      }).join('') + '</div>';
+      /* 排序題：重畫 ①〜④ 空格，並列出正確語序（★ 是第三格） */
+      var ord = '';
+      if (it.kind === '文の組み立て' && it.order && it.order.length === 4){
+        ord = '<div class="exslots" style="margin-top:10px"><span>①</span><span>②</span>' +
+              '<span class="star">★</span><span>④</span></div>' +
+              '<div class="ord">' + it.order.map(function(oi, n){
+                var lab = '①②③④'.charAt(n), txt = esc(it.options[oi]);
+                return n === 2 ? '<span class="star">' + lab + ' ' + txt + '</span>' : lab + ' ' + txt;
+              }).join('　·　') + '</div>';
+      }
       return '<div class="excard">' +
         '<div class="h"><b class="' + (right ? 'ok' : '') + '">' + (right ? '○' : '×') + '</b>' +
           '<span>問 ' + (k + 1) + ' · ' + esc(it.kind) + '</span></div>' +
-        '<div class="q">' + esc(it.q) + '</div>' +
-        '<div class="a">正解：' + esc(it.options[it.answer]) + '</div>' +
-        (right ? '' : '<div class="w">你的答案：' + (mine >= 0 ? esc(it.options[mine]) : '未答') + '</div>') +
+        '<div class="q">' + esc(it.q) + '</div>' + ol +
+        (mine < 0 ? '<div class="w">未答</div>' : '') + ord +
         '<div class="w">' + esc(it.why) + '</div>' +
         (it.script ? '<div class="w">音檔原文：' + esc(it.script) + '</div>' : '') +
       '</div>';
