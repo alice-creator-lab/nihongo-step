@@ -1,5 +1,5 @@
 /* 日語階梯 — 網路優先的快取策略：先取最新版本，離線時才用快取。 */
-const VERSION = 'ngs-v229';
+const VERSION = 'ngs-v230';
 const SHELL = [
   './',
   './index.html',
