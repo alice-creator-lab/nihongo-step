@@ -277,7 +277,10 @@ async def main():
             break
         await asyncio.sleep(1)
 
-    check("版本", await js("(document.querySelector('#verTag')||{}).innerText"), lambda s: s and s.startswith("v1"))
+    # 版本號由 sw.js 的 VERSION 推導，避免每次 bump 都要改這支測試
+    sw_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "sw.js")
+    want_ver = "v" + re.search(r"VERSION = 'ngs-v(\d+)'", open(sw_path, encoding="utf-8").read()).group(1)
+    check("版本", await js("(document.querySelector('#verTag')||{}).innerText"), lambda s: s == want_ver)
     check("排序控制存在", await js("!!document.querySelector('#allsort')"), True)
     check("兩個選項", await js("Array.prototype.map.call(document.querySelectorAll('#allsort [data-s]'), function(b){return b.innerText})"),
           ["課程順序", "五十音順"])

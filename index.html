@@ -783,6 +783,27 @@
   .aptbl tr.playing td{background:#e7eefb; transition:background .18s ease}
   .aptbl tr.playing td:first-child{box-shadow:inset 3px 0 0 #0b5cad}
   .aptbl tr.playing .appat, .aptbl tr.playing .apex{color:#0b3f7a}
+  /* 助詞一覧（#/all/particles）：照課本助詞整理的分組，一個助詞一張卡 */
+  .pgc{margin-top:16px; padding-top:13px; border-top:1px solid var(--line); scroll-margin-top:104px}
+  #pgjump{flex-wrap:wrap; overflow:visible; row-gap:6px}
+  .pgc:first-child{border-top:0; padding-top:2px; margin-top:8px}
+  .pgh{display:flex; align-items:baseline; gap:7px; margin:0}
+  .pgh b{font-family:var(--serif); font-size:19px; font-weight:600; color:#0b5cad; line-height:1.25}
+  .pgh .pk{font-size:11px; color:var(--muted)}
+  .pgh em{margin-left:auto; font-style:normal; font-size:11px; color:var(--muted)}
+  .pgz{margin:3px 0 2px; font-size:12px; line-height:1.6; color:var(--ink2)}
+  .puse{margin-top:11px}
+  .pul{display:inline-block; font-size:11.5px; font-weight:600; color:#0b5cad;
+    background:#e6eefb; border-radius:999px; padding:2px 9px; line-height:1.6}
+  .pnote{display:block; margin:4px 0 0 2px; font-size:11px; color:var(--muted); line-height:1.5}
+  .pex{display:flex; align-items:flex-start; gap:7px; margin-top:6px}
+  .pex .spk{width:26px; height:26px; flex:0 0 26px}
+  .pex .ptx{flex:1; min-width:0}
+  .pex .pja{font-family:var(--serif); font-size:13.5px; line-height:1.5; color:var(--ink)}
+  .pex .pzh{display:block; font-family:var(--sans); font-size:11px; line-height:1.45; color:var(--muted)}
+  .pex .pl{flex:0 0 auto; padding-top:3px; font-size:10.5px; color:var(--muted);
+    text-decoration:none; white-space:nowrap}
+  .pex .pl:active{color:var(--shu)}
   @media (max-width:359px){
     .aptbl .appat{width:118px; font-size:12px}
     .aptbl .apex{font-size:13px}
@@ -827,7 +848,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v220</span>
+    <span class="ver" id="verTag">v221</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3095,6 +3116,12 @@
           '<span class="k">' + (isVocab ? 'たんご' : 'ぶんぽう') + '</span></h1>' +
         (isVocab ? '' : '<p class="goal">第 1–40 課的全部文法，點標題展開說明與例句。</p>') +
       '</div>' +
+      (isVocab ? '' :
+        '<a class="afentry" href="#/all/particles">' +
+          '<div class="tx"><b>助詞一覧</b>' +
+            '<span>19 個助詞 · 每個用法標示是哪一課教</span></div>' +
+          '<span class="go">看一覧 →</span>' +
+        '</a>') +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="' + (isVocab ? '搜尋假名、漢字或中文' : '搜尋文法標題或例句') + '"></div>' +
       '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
@@ -3724,6 +3751,88 @@
     });
   }
 
+  /* ---------- 助詞一覧（入口：文法總表頂部） ----------
+     資料 data/particles.json，分組與次序依課本「助詞整理」（p240–243）。
+     每個用法有 label（簡單中文）＋ ex，ex 有兩種寫法：
+       { l, g } / { l, p } / { l, d } + e → 指去現有課堂的例句，沿用它的音檔
+       { ja, kana, zh, a }                → app 原本沒有的用法，用 audio/particles/<a>.mp3
+     不複製既有例句的文字，課文改動會自動反映。 */
+  var PARTICLES = null;
+  function pgRef(r){
+    var d = lessons[r.l];
+    if (!d) return null;
+    var x = null, key = '';
+    if ('g' in r){
+      var sec = (d.grammar || [])[r.g]; if (!sec) return null;
+      x = (sec.ex || [])[r.e]; key = 'g' + r.g + '-e' + r.e;
+    } else if ('p' in r){
+      var pat = (d.patterns || [])[r.p]; if (!pat) return null;
+      x = (pat.ex || [])[r.e]; key = 'p' + r.p + '-e' + r.e;
+    } else if ('d' in r){
+      var dg = (d.dialogues || [])[r.d]; if (!dg) return null;
+      x = (dg.lines || [])[r.e]; key = 'd' + r.d + '-l' + r.e;
+    }
+    if (!x) return null;
+    return { ja: x.ja, kana: x.kana || '', zh: x.zh || '', audio: audioFor(r.l, key) };
+  }
+  function renderParticles(){
+    document.title = '助詞一覧 · 日語階梯';
+    var d = PARTICLES;
+    if (!d || !(d.groups || []).length){
+      app.innerHTML = '<div class="lhead"><a class="back" href="#/all/grammar">← 文法總表</a>' +
+        '<h1>助詞一覧</h1></div><p class="secnote">資料載入失敗，請重新整理。</p>';
+      return;
+    }
+    var h = '<div class="lhead">' +
+      '<a class="back" href="#/all/grammar">← 文法總表</a>' +
+      '<h1>助詞一覧<span class="k">じょし</span></h1>' +
+      '<p class="goal">照課本「助詞整理」的分組與次序；每個用法標示 webapp 哪一課教。</p>' +
+    '</div>' +
+    '<div class="jumpbar" id="pgjump">' + d.groups.map(function(g, i){
+      return '<button class="jump" data-i="' + i + '">' + esc(g.p) + '</button>';
+    }).join('') + '</div>' +
+    '<div id="pglist">';
+    d.groups.forEach(function(g, i){
+      h += '<section class="pgc" id="pgg-' + i + '">' +
+        '<h3 class="pgh"><b>' + esc(g.p) + '</b>' +
+          (g.kana && g.kana !== g.p ? '<span class="pk">' + esc(g.kana) + '</span>' : '') +
+          '<em>' + g.uses.length + ' 個用法</em></h3>' +
+        (g.zh ? '<p class="pgz">' + esc(g.zh) + '</p>' : '');
+      g.uses.forEach(function(u){
+        h += '<div class="puse"><span class="pul">' + esc(u.label) + '</span>' +
+          (u.note ? '<span class="pnote">' + esc(u.note) + '</span>' : '');
+        (u.ex || []).forEach(function(r){
+          var x = ('ja' in r)
+            ? { ja: r.ja, kana: r.kana || '', zh: r.zh || '',
+                audio: r.a ? 'audio/particles/' + r.a + '.mp3' : null }
+            : pgRef(r);
+          if (!x) return;
+          h += '<div class="pex">' +
+            '<button class="spk" data-say="' + esc(x.kana || x.ja) + '"' +
+              (x.audio ? ' data-audio="' + esc(x.audio) + '"' : '') +
+              ' aria-label="播放例句">' + SPK + '</button>' +
+            '<div class="ptx"><div class="pja">' + esc(x.ja) + '</div>' +
+              (x.zh ? '<span class="pzh">' + esc(x.zh) + '</span>' : '') + '</div>' +
+            (r.l ? '<a class="pl" href="#/l/' + r.l + '">' + esc(r.l) + '</a>' : '') +
+          '</div>';
+        });
+        h += '</div>';
+      });
+      h += '</section>';
+    });
+    h += '</div><p class="secnote">點喇叭聽示範，右邊的課號跳到那一課。部分用法課本有列而 webapp 原本沒有教，' +
+      '那些例句是照同一個用法補寫的。</p>';
+    app.innerHTML = h;
+    var list = $('#pglist');
+    if (list) bindSpeakers(list);
+    var jb = $('#pgjump');
+    if (jb) jb.addEventListener('click', function(e){
+      var b = e.target.closest('.jump'); if (!b) return;
+      var el = document.getElementById('pgg-' + b.getAttribute('data-i'));
+      if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  }
+
   /* ---------- 形容詞的變化（入口：形容詞表頂部） ----------
      照課本的表格排：欄＝い形容詞／な形容詞，列＝現在・過去 × 肯定・否定。
      每一格右上角的喇叭依次播放該格所有說法（同一格可以有 1–4 句）。 */
@@ -4340,6 +4449,7 @@
     if (em){ VIEW = 'exam'; renderExam(+em[1]); return; }
     var am = h.match(/^\/all\/(vocab|grammar)/);
     if (am){ VIEW = 'all'; stopAudio(); window.scrollTo(0, 0); renderAll(am[1]); return; }
+    if (h === '/all/particles'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderParticles(); return; }
     var vf = h.match(/^\/all\/verbs\/forms\/(godan|ichidan|irregular)/);
     if (vf){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderVerbForms(vf[1]); return; }
     var wm = h.match(/^\/all\/(verbs|adjs)/);
@@ -4382,6 +4492,8 @@
     if (/audio\/verbform\//.test(url)) return 'vf1';
     /* 不同形態的應用（audio/apps/）自成一套版本號 */
     if (/audio\/apps\//.test(url)) return 'ap1';
+    /* 助詞一覧的新增例句（audio/particles/）自成一套版本號 */
+    if (/audio\/particles\//.test(url)) return 'pa1';
     /* 形容詞變化頁（audio/adjform/）自成一套版本號 */
     if (/audio\/adjform\//.test(url)) return 'f1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
@@ -4432,6 +4544,7 @@
     getJSON('data/wordtables.json').then(function(m){ WT = m || null; }).catch(function(){});
     getJSON('data/verbforms.json').then(function(m){ VERBFORMS = m || null; }).catch(function(){});
     getJSON('data/verbapps.json').then(function(m){ VERBAPPS = m || null; }).catch(function(){});
+    getJSON('data/particles.json').then(function(m){ PARTICLES = m || null; }).catch(function(){});
     getJSON('data/kanji-readings.json').then(function(m){ KANJI_READ = (m && m.dict) || {}; }).catch(function(){});
     getJSON('data/course.json').then(function(c){
       course = c;
