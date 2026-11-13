@@ -29,6 +29,12 @@
     padding-bottom:env(safe-area-inset-bottom);
   }
   .wrap{max-width:760px; margin:0 auto; padding:0 16px 40px}
+  /* 桌面網頁版整體放大 150%（使用者指定：電腦睇字太細）。手機不受影響：
+     ≥900px 才觸發，再用 hover/pointer 排除觸控平板（iPad 仍用原本字級）。
+     全部尺寸都是 px，用 zoom 一次放大最省事，固定／貼頂元素亦一齊縮放。 */
+  @media (min-width:900px) and (hover:hover) and (pointer:fine){
+    html{zoom:1.5}
+  }
   .jp, .serif{font-family:var(--serif)}
   a{color:inherit}
 
@@ -853,7 +859,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v223</span>
+    <span class="ver" id="verTag">v224</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>

@@ -99,6 +99,7 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 ## 技術說明
 
 - 純前端，無建置步驟、無外部依賴；字體使用系統的日文與繁中字型。
+- 桌面網頁版整體放大 150%：`@media (min-width:900px) and (hover:hover) and (pointer:fine){ html{zoom:1.5} }`。版面尺寸全部寫死 px，用 `zoom` 一次放大字級、行高、按鈕與表格欄寬；手機（≤899px）與觸控平板（無 hover／fine pointer）不受影響。舊版 Firefox（<126）不支援 `zoom`，只會維持原大小。驗收：`python3 tools/test_desktop_zoom.py <url>`。
 - 發音優先用預製人聲：`tools/make_audio.py` 以 edge-tts（ja-JP-KeitaNeural／NanamiNeural）合成，音檔放在 `audio/`，索引在 `data/audio.json`（key 分 `d`會話、`v`單字、`p`句型例句、`g`文法例句、`l`聽力）。只有缺音檔時才退回 `speechSynthesis`。
 - 朗讀文字由 `tools/speech.py` 產生：以句子自己的 `kana` 為準（「町」一定是 まち，不會被 TTS 讀成 ちょう），再把助詞 は／へ／を 改寫成 わ／え／お，因為整句假名時 edge-tts 會把助詞「は」讀成 ha（實測：漢字句讀 wa，假名句讀 ha）。整句一律用假名合成，不留漢字給 TTS 猜（對齊失敗的句子也退回全假名）。
 - 改動 `kana` 之後要跑 `python3 tools/make_audio.py --force-ex` 重生句子音檔（會話、句型例句、文法例句、聽力；單字不動），它會把 `data/audio.json` 的 `v` 加一，令瀏覽器重抓音檔。
