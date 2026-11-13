@@ -197,6 +197,25 @@ async def main():
         want = [u["label"] for u in GROUPS[gi]["uses"]]
         check(labels.get(str(gi)) == want, f"{GROUPS[gi]['p']} 用法標籤", f"{labels.get(str(gi))} ≠ {want}")
 
+    # 2a) 簡潔（使用者指定刪掉說明與計數）
+    lean = await js("""(function(){
+      return { goal: document.querySelectorAll('.lhead p.goal').length,
+               em: document.querySelectorAll('.pgh em').length,
+               pk: document.querySelectorAll('.pgh .pk').length,
+               pgz: document.querySelectorAll('.pgz').length,
+               note: document.querySelectorAll('.pgnt').length,
+               chips: document.querySelectorAll('#pgjump .jump').length,
+               rows: (function(){var t={};document.querySelectorAll('#pgjump .jump').forEach(function(b){
+                       t[Math.round(b.getBoundingClientRect().top)]=1;});return Object.keys(t).length;})() };
+    })()""") or {}
+    check(lean.get("goal") == 0, "不應有標題下的說明句", str(lean.get("goal")))
+    check(lean.get("em") == 0, "不應有「N 個用法」", str(lean.get("em")))
+    check(lean.get("pk") == 0, "不應有細字讀音", str(lean.get("pk")))
+    check(lean.get("pgz") == 0, "不應有助詞下方的長解說", str(lean.get("pgz")))
+    check(lean.get("note") == 0, "不應有右欄長解說", str(lean.get("note")))
+    check(lean.get("chips") == len(GROUPS), "跳轉 chip 數", str(lean.get("chips")))
+    check(lean.get("rows", 9) <= 3, "390px 跳轉 chip 應 ≤3 行", str(lean.get("rows")))
+
     # 2b) 例句中的助詞上色（不是紅）
     mk = await js("""(function(){
       var all=document.querySelectorAll('#pglist .pex .pja .pgmk');

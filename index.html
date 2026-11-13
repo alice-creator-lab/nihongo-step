@@ -790,22 +790,20 @@
   .aptbl tr.playing td:first-child{box-shadow:inset 3px 0 0 #0b5cad}
   .aptbl tr.playing .appat, .aptbl tr.playing .apex{color:#0b3f7a}
   /* 助詞一覧（#/all/particles）：照課本助詞整理的分組，一個助詞一張卡 */
-  .pgc{margin-top:16px; padding-top:13px; border-top:1px solid var(--line); scroll-margin-top:104px}
-  #pgjump{flex-wrap:wrap; overflow:visible; row-gap:6px}
+  .pgc{margin-top:14px; padding-top:11px; border-top:1px solid var(--line); scroll-margin-top:96px}
+  /* 助詞跳轉：19 個 chip 要在 iPhone 上排得密（使用者要求「唔好分太多行」） */
+  #pgjump{flex-wrap:wrap; overflow:visible; gap:4px; row-gap:4px; padding:0 0 2px}
+  #pgjump .jump{padding:2px 5px; font-size:10.5px; border-radius:999px; line-height:1.7}
   .pgc:first-child{border-top:0; padding-top:2px; margin-top:8px}
-  .pgh{display:flex; align-items:baseline; gap:7px; margin:0}
+  .pgh{margin:0}
   .pgh b{font-family:var(--serif); font-size:19px; font-weight:600; color:#0b5cad; line-height:1.25}
-  .pgh .pk{font-size:11px; color:var(--muted)}
-  .pgh em{margin-left:auto; font-style:normal; font-size:11px; color:var(--muted)}
-  .pgz{margin:3px 0 2px; font-size:12px; line-height:1.6; color:var(--ink2)}
   /* 每個助詞的用法表：左邊簡單中文標籤，右邊例句＋中譯（照課本兩欄的感覺） */
   .pgtbl{width:100%; border-collapse:collapse; table-layout:fixed}
   .pgtbl td{border-top:1px solid var(--line); padding:9px 0; vertical-align:top}
   .pgtbl tr:first-child td{border-top:0}
   .pglb{width:100px; padding-right:8px; font-size:11.5px; font-weight:600; color:#0b5cad; line-height:1.5}
-  .pgnt{margin:0 0 5px; font-size:11px; line-height:1.5; color:var(--muted)}
   .pex{display:flex; align-items:flex-start; gap:7px; margin-top:6px}
-  .pex:first-child, .pgnt + .pex{margin-top:0}
+  .pex:first-child{margin-top:0}
   .pex .spk{width:26px; height:26px; flex:0 0 26px}
   .pex .ptx{flex:1; min-width:0}
   .pex .pja{font-family:var(--serif); font-size:13.5px; line-height:1.5; color:var(--ink)}
@@ -859,7 +857,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v224</span>
+    <span class="ver" id="verTag">v225</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3824,7 +3822,6 @@
     var h = '<div class="lhead">' +
       '<a class="back" href="#/all/grammar">← 文法總表</a>' +
       '<h1>助詞一覧<span class="k">じょし</span></h1>' +
-      '<p class="goal">照課本「助詞整理」的分組與次序；每個用法標示 webapp 哪一課教。</p>' +
     '</div>' +
     '<div class="jumpbar" id="pgjump">' + d.groups.map(function(g, i){
       return '<button class="jump" data-i="' + i + '">' + esc(g.p) + '</button>';
@@ -3832,16 +3829,12 @@
     '<div id="pglist">';
     d.groups.forEach(function(g, i){
       h += '<section class="pgc" id="pgg-' + i + '">' +
-        '<h3 class="pgh"><b>' + esc(g.p) + '</b>' +
-          (g.kana && g.kana !== g.p ? '<span class="pk">' + esc(g.kana) + '</span>' : '') +
-          '<em>' + g.uses.length + ' 個用法</em></h3>' +
-        (g.zh ? '<p class="pgz">' + esc(g.zh) + '</p>' : '');
+        '<h3 class="pgh"><b>' + esc(g.p) + '</b></h3>';
       h += '<table class="pgtbl"><tbody>';
       var toks = pgTokens(g.p);
       g.uses.forEach(function(u){
         var mk = u.hl || toks.map(function(t){ return { t: t, i: 1 }; });
-        h += '<tr><td class="pglb">' + esc(u.label) + '</td><td class="pgex">' +
-          (u.note ? '<p class="pgnt">' + esc(u.note) + '</p>' : '');
+        h += '<tr><td class="pglb">' + esc(u.label) + '</td><td class="pgex">';
         (u.ex || []).forEach(function(r){
           var x = ('ja' in r)
             ? { ja: r.ja, kana: r.kana || '', zh: r.zh || '',
@@ -3862,8 +3855,7 @@
       h += '</tbody></table>';
       h += '</section>';
     });
-    h += '</div><p class="secnote">點喇叭聽示範，右邊的課號跳到那一課。部分用法課本有列而 webapp 原本沒有教，' +
-      '那些例句是照同一個用法補寫的。</p>';
+    h += '</div><p class="secnote">點喇叭聽示範；右邊的課號跳到那一課。</p>';
     app.innerHTML = h;
     var list = $('#pglist');
     if (list) bindSpeakers(list);
