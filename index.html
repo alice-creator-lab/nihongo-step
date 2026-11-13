@@ -778,7 +778,11 @@
   .aptbl .aprail .apl{display:block; margin-top:3px; font-size:10.5px; color:var(--muted);
     text-decoration:none; white-space:nowrap; -webkit-tap-highlight-color:transparent}
   .aptbl .aprail .apl:active{color:var(--shu)}
-  .aptbl tr.playing td{background:#f8f1e7}
+  /* 正在讀的那一句：淺藍底＋左邊藍色豎線（原本 #f8f1e7 與卡片底 #fffdf8 幾乎一樣，
+     使用者回報「播放全部時睇唔到讀到邊句」；藍色跟句型同一個色系，紅只留給答錯） */
+  .aptbl tr.playing td{background:#e7eefb; transition:background .18s ease}
+  .aptbl tr.playing td:first-child{box-shadow:inset 3px 0 0 #0b5cad}
+  .aptbl tr.playing .appat, .aptbl tr.playing .apex{color:#0b3f7a}
   @media (max-width:359px){
     .aptbl .appat{width:118px; font-size:12px}
     .aptbl .apex{font-size:13px}
@@ -823,7 +827,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v219</span>
+    <span class="ver" id="verTag">v220</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>

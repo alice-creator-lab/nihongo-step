@@ -137,6 +137,15 @@ async def main():
     check(out.get("n") == f"33／{TOTAL}", "進度應為 33／共", str(out.get("n")))
     check(out.get("btn") == "■ 停止", "頁頂按鈕應變停止", str(out.get("btn")))
     check(out.get("playing") == 1, "應剛好一行高亮", str(out.get("playing")))
+    # 高亮要肉眼睇得到：淺藍底＋左邊藍色豎線（原本 #f8f1e7 與卡片底幾乎一樣）
+    style = await js("""(function(){
+      var td = document.querySelector('.aptbl tr.apr.playing td');
+      if (!td) return null;
+      var cs = getComputedStyle(td);
+      return { bg: cs.backgroundColor, sh: cs.boxShadow || '' };
+    })()""") or {}
+    check(style.get("bg") == "rgb(231, 238, 251)", "高亮底色應為淺藍", str(style.get("bg")))
+    check("rgb(11, 92, 173)" in (style.get("sh") or ""), "高亮行應有左邊藍色豎線", str(style.get("sh")))
     first = (out.get("first") or "").split("?")[0].split("/")[-1]
     rowfile = (picked["audio"] or "").split("/")[-1]
     check(first == rowfile, "第一段應是所點那一行", f"{first} ≠ {rowfile}")
