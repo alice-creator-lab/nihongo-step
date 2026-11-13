@@ -129,6 +129,15 @@ async def main():
     except ValueError:
         fs = 0
     check(fs and out.get("h1h", 0) >= fs * 1.3, "字高應按比例放大", f"h1 {out.get('h1h')} vs font-size {out.get('fs')}")
+    # 滑鼠游標：點得到的元素要手指（<button> 瀏覽器預設是箭頭）
+    cur = await js("""(function(){
+      var sels=['#pgjump .jump','.pgtbl .spk','.tab','#pglist summary'];
+      var o={};
+      sels.forEach(function(s){var e=document.querySelector(s); if(e) o[s]=getComputedStyle(e).cursor;});
+      return o;})()""") or {}
+    check(len(cur) >= 2, "游標檢查找不到元素", str(cur))
+    for k, v in cur.items():
+        check(v == "pointer", f"滑鼠游標應為手指：{k}", str(v))
     if SHOT:
         await shot(SHOT)
 

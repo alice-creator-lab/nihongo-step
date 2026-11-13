@@ -37,6 +37,9 @@
   }
   .jp, .serif{font-family:var(--serif)}
   a{color:inherit}
+  /* 滑鼠游標：<button> 預設是箭頭，凡點得到的都要手指 */
+  button:not(:disabled), summary, [role="button"]{cursor:pointer}
+  button:disabled{cursor:default}
 
   /* header */
   .hdr{position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:10px;
@@ -857,7 +860,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v238</span>
+    <span class="ver" id="verTag">v239</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
