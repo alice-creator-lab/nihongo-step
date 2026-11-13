@@ -860,7 +860,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v244</span>
+    <span class="ver" id="verTag">v245</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2798,9 +2798,17 @@
       btn.textContent = '■ 停止';
     }
     var a = seqAudio();
-    var i = startAt, poll = null, fails = 0, cur = null;
+    var i = startAt, poll = null, fails = 0, cur = null, gapTimer = null, readyTimer = null;
+    /* 電腦版載入太快，音檔又剪走前後靜音，句與句會黏在一起變成「機關槍」；
+       固定留 400ms 換氣位，並等 canplay 才播（避免開頭爆音）。 */
+    var PLAY_GAP = 400;
 
     function clearPoll(){ if (poll){ clearInterval(poll); poll = null; } }
+    function clearTimers(){
+      clearPoll();
+      if (gapTimer){ clearTimeout(gapTimer); gapTimer = null; }
+      if (readyTimer){ clearTimeout(readyTimer); readyTimer = null; }
+    }
     function endItem(ok){
       clearPoll();
       if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
@@ -2808,7 +2816,12 @@
       fails = ok ? 0 : fails + 1;
       if (fails >= 3){ stopAllPlay(); toast('播放中斷，請再按一次「播放全部」'); return; }
       i++;
-      step();
+      clearTimers();
+      gapTimer = setTimeout(function(){
+        gapTimer = null;
+        if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
+        step();
+      }, PLAY_GAP);
     }
     function step(){
       if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
@@ -2817,24 +2830,33 @@
       if (cur.el){ cur.el.classList.add('playing'); followRow(cur.el, true); }
       allBar(true, (i + 1) + '／' + list.length);
       if (!a){ endItem(false); return; }
+      clearTimers();
       try{
         a.pause();
         a.src = cur.audio + '?v=' + auVer(cur.audio);
         try{ a.currentTime = 0; }catch(e){}
       }catch(e2){}
-      try{ var pr = a.play(); if (pr && pr.catch) pr.catch(function(){}); }catch(e3){}
-      clearPoll();
-      var zero = 0, stall = 0;
-      poll = setInterval(function(){
-        if (!ALLPLAY.on || ALLPLAY.tok !== token){ clearPoll(); return; }
-        var st = 0, dur = 0, paused = true;
-        try{ st = a.currentTime || 0; dur = a.duration || 0; paused = a.paused; }catch(e){}
-        if (a.ended || (dur && st >= dur - 0.25)){ endItem(true); return; }
-        if (st <= 0.05){ zero++; } else { zero = 0; }
-        if (zero >= 10){ endItem(false); return; }              /* 4 秒完全冇開始播＝失敗 */
-        if (paused && st > 0.05){ stall++; } else { stall = 0; }
-        if (stall >= 4){ endItem(false); return; }              /* 播到一半停住 1.6 秒＝被系統打斷 */
-      }, 400);
+      var fired = false;
+      function begin(){
+        if (fired) return;
+        fired = true;
+        if (readyTimer){ clearTimeout(readyTimer); readyTimer = null; }
+        if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
+        try{ var pr = a.play(); if (pr && pr.catch) pr.catch(function(){}); }catch(e3){}
+        var zero = 0, stall = 0;
+        poll = setInterval(function(){
+          if (!ALLPLAY.on || ALLPLAY.tok !== token){ clearPoll(); return; }
+          var st = 0, dur = 0, paused = true;
+          try{ st = a.currentTime || 0; dur = a.duration || 0; paused = a.paused; }catch(e){}
+          if (a.ended){ endItem(true); return; }   /* 等真正播完才計 400ms 換氣位，唔好提早 0.25 秒收 */
+          if (st <= 0.05){ zero++; } else { zero = 0; }
+          if (zero >= 10){ endItem(false); return; }            /* 4 秒完全冇開始播＝失敗 */
+          if (paused && st > 0.05){ stall++; } else { stall = 0; }
+          if (stall >= 4){ endItem(false); return; }            /* 播到一半停住 1.6 秒＝被系統打斷 */
+        }, 400);
+      }
+      a.addEventListener('canplay', begin, {once:true});
+      readyTimer = setTimeout(begin, 4000);   /* 網絡慢／快取失效時唔好卡死，4 秒照播 */
     }
     a.onended = function(){ endItem(true); };
     a.onerror = function(){ endItem(false); };
@@ -3492,6 +3514,7 @@
   }
   function vfStop(){
     var btn = VFP.btn;
+    if (VFP.gapT){ clearTimeout(VFP.gapT); VFP.gapT = null; }
     VFP.on = false; VFP.rows = []; VFP.ri = 0; VFP.td = null;
     VFP.btn = null;
     if (btn){
@@ -3552,7 +3575,13 @@
         }
         var ok = playFile(it.url, function(){
           if (!VFP.on) return;
-          ci++; next();
+          /* 音檔已剪走前後靜音，電腦版換段近乎零延遲；固定留 400ms 換氣位 */
+          if (VFP.gapT){ clearTimeout(VFP.gapT); }
+          VFP.gapT = setTimeout(function(){
+            VFP.gapT = null;
+            if (!VFP.on) return;
+            ci++; next();
+          }, 400);
         }, null);
         if (!ok){ vfStop(); }
       })();
