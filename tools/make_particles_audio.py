@@ -47,7 +47,8 @@ def main():
         if os.path.exists(path) and os.path.getsize(path) > 2000 and not force:
             skip += 1
             continue
-        text = speech(x["ja"], x.get("kana") or "")[0]
+        # 有 "tts" 就照用（假名有歧義時，例如「と話しました」的 は 會被讀成助詞 wa）
+        text = x.get("tts") or speech(x["ja"], x.get("kana") or "")[0]
         if synth(VOICE, text, path):
             ok += 1
             print("ok  ", x["a"], x["ja"], "→", text, flush=True)
