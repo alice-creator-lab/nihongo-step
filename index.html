@@ -860,7 +860,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v245</span>
+    <span class="ver" id="verTag">v246</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3540,12 +3540,14 @@
     });
     return out;
   }
-  /* 逐行播：每行播完五形才去下一行；中途可按浮動鍵或再按同一顆按鈕停 */
-  function vfPlayRows(rows, btn){
+  /* 逐行播：每行播完五形才去下一行；中途可按浮動鍵或再按同一顆按鈕停
+     startAt：由第幾行開始（點中間任何一行就由該行順播到最後） */
+  function vfPlayRows(rows, btn, startAt){
     stopAudio();
     var list = Array.prototype.slice.call(rows).filter(function(tr){ return vfCells(tr).length; });
     if (!list.length){ toast('這頁還沒有音檔'); return; }
-    VFP.on = true; VFP.btn = btn; VFP.rows = list; VFP.ri = 0;
+    var st = (startAt > 0 && startAt < list.length) ? startAt : 0;
+    VFP.on = true; VFP.btn = btn; VFP.rows = list; VFP.ri = st;
     if (btn){
       if (btn.classList.contains('vfrow')) btn.classList.add('playing');
       else { btn.classList.add('onplay'); btn.textContent = '■ 停止'; }
@@ -3588,9 +3590,9 @@
     }
     step();
   }
-  function vfPlayRow(btn, tr){
+  function vfPlayRow(btn, tr, all, idx){
     if (VFP.on && VFP.btn === btn){ stopAudio(); return; }
-    vfPlayRows([tr], btn);
+    vfPlayRows(all || [tr], btn, idx || 0);
   }
   var VERBFORMS = null;
   function renderVerbForms(id){
@@ -3667,8 +3669,8 @@
       return (r.kanji || r.kana) + ' 的' + labs + '是' + vals;
     }).join('；');
     h += '</tbody></table></div>' +
-      '<p class="secnote">點辞書形右邊的喇叭，會依次播放辞書形、ます形、て形、た形、ない形。' +
-        '按上面的「播放全部」可以由第一行順播，中途想停就按畫面下方的「停止播放」。</p>' +
+      '<p class="secnote">點任何一行，會由該行開始順播（先辞書形、ます形、て形、た形、ない形，然後下一行）到尾；' +
+        '再點同一行即停。按上面的「播放全部」就由第一行開始。</p>' +
       (exRows.length ? '<p class="secnote exnote"><b class="exc">藍色</b>是這組規則的例外：' +
         exTxt + '，不照該行的規則。</p>' : '');
     app.innerHTML = h;
@@ -3680,8 +3682,16 @@
     });
     var tbl = document.querySelector('.vftbl');
     if (tbl) tbl.addEventListener('click', function(e){
-      var b = e.target.closest('.vfrow'); if (!b) return;
-      vfPlayRow(b, b.closest('tr'));
+      var tr = e.target.closest('tr');
+      if (!tr || tr.classList.contains('vgrp')) return;
+      if (!tr.querySelector('td') || !vfCells(tr).length) return;
+      /* 由這一行開始順播到最尾：行清單要同「播放全部」一致（跳過分組標題列） */
+      var all = Array.prototype.slice.call(tbl.querySelectorAll('tbody tr')).filter(function(r){
+        return !r.classList.contains('vgrp') && vfCells(r).length;
+      });
+      var idx = all.indexOf(tr); if (idx < 0) idx = 0;
+      var btn = tr.querySelector('.vfrow') || tr;
+      vfPlayRow(btn, tr, all, idx);
     });
     var pa = $('#vfplayall');
     if (pa) pa.addEventListener('click', function(){
