@@ -415,7 +415,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v35</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v36</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -719,6 +719,16 @@
   const emptyPanel=$('emptyPanel'), listenType=$('listenType'), writeType=$('writeType');
   const speakPanel=$('speakPanel'), speakKana=$('speakKana'), speakType=$('speakType');
   const speakInput=$('speakInput'), speakCheck=$('speakCheck'), speakReplay=$('speakReplay');
+  /* 電腦版（有滑鼠、無觸控）才自動把游標放回輸入框；手機／平板不自動聚焦，避免鍵盤自己彈出 */
+  const deskFine = ()=> !!(window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches);
+  function focusAnswer(){
+    if(!deskFine()) return;
+    setTimeout(()=>{
+      if(!inputEl.disabled && inputEl.offsetParent!==null){
+        try{ inputEl.focus({preventScroll:true}); inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length); }catch(e){}
+      }
+    }, 0);
+  }
   const fbSpeak=$('fbSpeak'), speakNote=$('speakNote');
   const emptyTitle=$('emptyTitle'), emptySub=$('emptySub'), emptyBtn=$('emptyBtn');
   const writeNextBtn=$('writeNextBtn');
@@ -1063,7 +1073,8 @@
       typeEl.textContent = typeName(current.type);
       inputEl.value=''; inputEl.className=''; inputEl.disabled=false;
       checkBtn.textContent='檢查'; checkBtn.className='btn-main';
-      // 不自動聚焦：鍵盤要用戶自己按輸入框才彈出
+      // 手機不自動聚焦（鍵盤會自己彈出）；電腦版游標預設留在輸入框
+      focusAnswer();
     }else if(mode==='listen'){
       listenPanel.classList.add('active'); readPanel.classList.remove('active'); writePanel.classList.remove('active'); speakPanel.classList.remove('active');
       listenType.textContent = typeName(current.type);
@@ -1588,6 +1599,8 @@
   writeNextBtn.addEventListener('click', ()=>{ if(answered) newQuestion(); });
   document.addEventListener('keydown', e=>{
     if(!sheetEl.hidden) return;               // 管理 sheet 開住時不好觸發練習快捷鍵
+    // 輸入框有自己的 Enter 處理（核對）；這裏再處理會即刻跳去下一題，令答案一閃即逝
+    if(e.target && (e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA')) return;
     if(mode==='write' && e.key==='Enter' && !answered && !revealed){ e.preventDefault(); doReveal(); return; }
     if(answered && e.key==='Enter'){ e.preventDefault(); newQuestion(); }
   });
