@@ -365,6 +365,9 @@
     font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; cursor:pointer;
     transition:.18s; white-space:nowrap; margin-left:auto;}
   .slowbtn.on{background:var(--indigo); border-color:var(--indigo); color:#fff; box-shadow:0 3px 10px rgba(44,62,107,.20);}
+  /* 羅馬拼音／鍵盤輸入：看字作答，顯示拼音就等於給答案 → 灰掉 */
+  .slowbtn:disabled{background:var(--card); color:var(--ink-soft); border-color:var(--line);
+    opacity:.35; cursor:not-allowed; box-shadow:none;}
 
   .voicerow{display:flex; align-items:center; gap:6px; padding:0 4px; flex-wrap:wrap; row-gap:6px;}
   #romajiBtn{margin-left:0;}
@@ -415,7 +418,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v37</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v38</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -1493,6 +1496,7 @@
     document.body.classList.toggle('m-write', m==='write');   // 手寫模式用較緊湊的版面
     document.body.classList.toggle('m-listen', m==='listen'); // 聽音選字同樣用緊湊版面
     [...modeSeg.children].forEach(b=>b.classList.toggle('active', b.dataset.mode===m));
+    applyRomaji();                          // 看字作答的模式（羅馬拼音／鍵盤輸入）要把拼音掣灰掉
     newQuestion();
   }
   function setScope(s){
@@ -1762,9 +1766,13 @@
   });
 
   const romajiBtn = $('romajiBtn');
+  const romajiLocked = ()=> mode==='read' || mode==='speak';   // 這兩個模式是看字作答
   function applyRomaji(){
-    romajiBtn.classList.toggle('on', romajiHint);
-    romajiBtn.textContent = romajiHint ? '拼音 ✓' : '拼音';
+    const locked = romajiLocked();
+    romajiBtn.disabled = locked;
+    romajiBtn.classList.toggle('on', romajiHint && !locked);
+    romajiBtn.textContent = (romajiHint && !locked) ? '拼音 ✓' : '拼音';
+    romajiBtn.title = locked ? '這個練習要自己打出拼音，不顯示提示' : '在喇叭下面顯示拼音';
     renderRomaji();
   }
   romajiBtn.addEventListener('click', ()=>{

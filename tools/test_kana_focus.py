@@ -135,16 +135,32 @@ async def main():
     check(s2.get("dis") is False, "下一題輸入框應可再輸入", str(s2))
     check(s2.get("val") == "", "下一題輸入框應清空", str(s2))
 
+    # 拼音掣：羅馬拼音／鍵盤輸入要灰掉，其他模式可撳
+    rb = "(function(){var b=document.getElementById('romajiBtn'),c=getComputedStyle(b);" \
+         "return {dis:b.disabled, op:c.opacity, cur:c.cursor, txt:b.textContent};})()"
+    r0 = await b.js(rb) or {}
+    check(r0.get("dis") is True, "羅馬拼音模式拼音掣應停用", str(r0))
+    try:
+        check(float(r0.get("op", 1)) < 0.6, "拼音掣停用時應變灰", str(r0))
+    except ValueError:
+        pass
+    check(r0.get("cur") == "not-allowed", "拼音掣停用時游標應為 not-allowed", str(r0))
+
     # 鍵盤輸入模式的提示字（桌機用全文）
     await b.js("document.querySelector('[data-mode=\"speak\"]').click()")
     await asyncio.sleep(0.5)
     ph = await b.js("document.getElementById('speakInput').placeholder")
     check(ph == "用日文鍵盤手寫／輸入平假名／片假名", "桌機鍵盤輸入提示字不對", str(ph))
+    r1 = await b.js(rb) or {}
+    check(r1.get("dis") is True, "鍵盤輸入模式拼音掣應停用", str(r1))
     await b.js("document.querySelector('[data-mode=\"read\"]').click()")
     await asyncio.sleep(0.6)
 
     await b.js("document.querySelector('[data-mode=\"listen\"]').click()")
     await asyncio.sleep(0.5)
+    r2 = await b.js(rb) or {}
+    check(r2.get("dis") is False, "聽音選字模式拼音掣應可用", str(r2))
+    check(float(r2.get("op", 0)) > 0.9, "聽音選字模式拼音掣不應變灰", str(r2))
     await b.js("document.querySelector('[data-mode=\"read\"]').click()")
     await asyncio.sleep(0.8)
     s3 = await b.js(STATE) or {}
@@ -172,7 +188,7 @@ async def main():
         for f in fails:
             print(" -", f)
         return 1
-    print("全部通過：桌機進入／核對後下一題／切換模式焦點都在 #answer，提示字（桌機全文、手機短版）正確，手機不自動聚焦")
+    print("全部通過：桌機進入／核對後下一題／切換模式焦點都在 #answer，提示字正確、拼音掣在羅馬拼音／鍵盤輸入灰掉而聽音選字可用，手機不自動聚焦")
     return 0
 
 
