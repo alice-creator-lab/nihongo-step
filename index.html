@@ -792,11 +792,14 @@
   .pgh .pk{font-size:11px; color:var(--muted)}
   .pgh em{margin-left:auto; font-style:normal; font-size:11px; color:var(--muted)}
   .pgz{margin:3px 0 2px; font-size:12px; line-height:1.6; color:var(--ink2)}
-  .puse{margin-top:11px}
-  .pul{display:inline-block; font-size:11.5px; font-weight:600; color:#0b5cad;
-    background:#e6eefb; border-radius:999px; padding:2px 9px; line-height:1.6}
-  .pnote{display:block; margin:4px 0 0 2px; font-size:11px; color:var(--muted); line-height:1.5}
+  /* 每個助詞的用法表：左邊簡單中文標籤，右邊例句＋中譯（照課本兩欄的感覺） */
+  .pgtbl{width:100%; border-collapse:collapse; table-layout:fixed}
+  .pgtbl td{border-top:1px solid var(--line); padding:9px 0; vertical-align:top}
+  .pgtbl tr:first-child td{border-top:0}
+  .pglb{width:100px; padding-right:8px; font-size:11.5px; font-weight:600; color:#0b5cad; line-height:1.5}
+  .pgnt{margin:0 0 5px; font-size:11px; line-height:1.5; color:var(--muted)}
   .pex{display:flex; align-items:flex-start; gap:7px; margin-top:6px}
+  .pex:first-child, .pgnt + .pex{margin-top:0}
   .pex .spk{width:26px; height:26px; flex:0 0 26px}
   .pex .ptx{flex:1; min-width:0}
   .pex .pja{font-family:var(--serif); font-size:13.5px; line-height:1.5; color:var(--ink)}
@@ -804,6 +807,7 @@
   .pex .pl{flex:0 0 auto; padding-top:3px; font-size:10.5px; color:var(--muted);
     text-decoration:none; white-space:nowrap}
   .pex .pl:active{color:var(--shu)}
+  @media (max-width:359px){ .pglb{width:88px; font-size:11px} }
   @media (max-width:359px){
     .aptbl .appat{width:118px; font-size:12px}
     .aptbl .apex{font-size:13px}
@@ -848,7 +852,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v221</span>
+    <span class="ver" id="verTag">v222</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3798,9 +3802,10 @@
           (g.kana && g.kana !== g.p ? '<span class="pk">' + esc(g.kana) + '</span>' : '') +
           '<em>' + g.uses.length + ' 個用法</em></h3>' +
         (g.zh ? '<p class="pgz">' + esc(g.zh) + '</p>' : '');
+      h += '<table class="pgtbl"><tbody>';
       g.uses.forEach(function(u){
-        h += '<div class="puse"><span class="pul">' + esc(u.label) + '</span>' +
-          (u.note ? '<span class="pnote">' + esc(u.note) + '</span>' : '');
+        h += '<tr><td class="pglb">' + esc(u.label) + '</td><td class="pgex">' +
+          (u.note ? '<p class="pgnt">' + esc(u.note) + '</p>' : '');
         (u.ex || []).forEach(function(r){
           var x = ('ja' in r)
             ? { ja: r.ja, kana: r.kana || '', zh: r.zh || '',
@@ -3816,8 +3821,9 @@
             (r.l ? '<a class="pl" href="#/l/' + r.l + '">' + esc(r.l) + '</a>' : '') +
           '</div>';
         });
-        h += '</div>';
+        h += '</td></tr>';
       });
+      h += '</tbody></table>';
       h += '</section>';
     });
     h += '</div><p class="secnote">點喇叭聽示範，右邊的課號跳到那一課。部分用法課本有列而 webapp 原本沒有教，' +

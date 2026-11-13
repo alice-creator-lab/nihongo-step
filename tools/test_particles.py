@@ -2,7 +2,7 @@
 """驗證「助詞一覧」頁（#/all/particles）。
 
 檢查：
-1. 19 張助詞卡、57 個用法、59 句例句（13 句是新寫的 audio/particles 音檔）。
+1. 19 張助詞卡、每個助詞一張「標籤｜例句」兩欄表（56 列、60 句例句，14 句是新寫的音檔）。
 2. 每個用法標籤與 data/particles.json 完全一致（含「時間點」「居住」「任職」）。
 3. 例句照 ref 解析出課文原文；右邊課號可跳去該課。
 4. 喇叭：新例句播 audio/particles/<a>.mp3，既有例句播原本課堂音檔。
@@ -118,7 +118,7 @@ async def main():
     n = await wait_until(f"document.querySelectorAll('#pglist section.pgc').length")
     check(n == len(GROUPS), "助詞卡數", f"{n} ≠ {len(GROUPS)}")
     out = await js("""(function(){
-      return { uses: document.querySelectorAll('#pglist .puse').length,
+      return { uses: document.querySelectorAll('#pglist .pgtbl tr').length,
                rows: document.querySelectorAll('#pglist .pex').length,
                newAudio: document.querySelectorAll('#pglist .pex [data-audio^="audio/particles/"]').length,
                links: document.querySelectorAll('#pglist .pex a.pl').length,
@@ -136,7 +136,7 @@ async def main():
     labels = await js("""(function(){
       var o={};
       document.querySelectorAll('#pglist section.pgc').forEach(function(s,i){
-        o[i]=Array.prototype.map.call(s.querySelectorAll('.pul'),function(x){return x.innerText.trim();});
+        o[i]=Array.prototype.map.call(s.querySelectorAll('.pglb'),function(x){return x.innerText.trim();});
       });
       return o;
     })()""") or {}
