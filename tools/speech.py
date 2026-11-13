@@ -47,6 +47,8 @@ def is_particle_ha(nxt, prev):
     只有幾個寫成假名的詞不是助詞：はい／はじめ／おはよう／ごはん。
     其餘（わたしは、これは、こんにちは、では…）都當助詞，讀音一樣是 wa。
     """
+    if prev == 'ん':                                     # さんは／陳さんは…：ん 後面一律是助詞
+        return True                                      #（否則「はなしました」的 は 會被當成詞頭，讀成 ha）
     if prev in ('ご', 'お') and nxt.startswith('ん'):     # ごはん、昼ごはん
         return False
     if prev == 'お' and nxt.startswith('よ'):            # おはよう
