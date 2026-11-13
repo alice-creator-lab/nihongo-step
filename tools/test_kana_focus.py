@@ -135,6 +135,14 @@ async def main():
     check(s2.get("dis") is False, "下一題輸入框應可再輸入", str(s2))
     check(s2.get("val") == "", "下一題輸入框應清空", str(s2))
 
+    # 鍵盤輸入模式的提示字（桌機用全文）
+    await b.js("document.querySelector('[data-mode=\"speak\"]').click()")
+    await asyncio.sleep(0.5)
+    ph = await b.js("document.getElementById('speakInput').placeholder")
+    check(ph == "用日文鍵盤手寫／輸入平假名／片假名", "桌機鍵盤輸入提示字不對", str(ph))
+    await b.js("document.querySelector('[data-mode=\"read\"]').click()")
+    await asyncio.sleep(0.6)
+
     await b.js("document.querySelector('[data-mode=\"listen\"]').click()")
     await asyncio.sleep(0.5)
     await b.js("document.querySelector('[data-mode=\"read\"]').click()")
@@ -152,6 +160,10 @@ async def main():
     await m.go(BASE + "kana/")
     s4 = await m.js(STATE) or {}
     s4["fine"] = await m.js("matchMedia('(hover:hover) and (pointer:fine)').matches")
+    await m.js("document.querySelector('[data-mode=\"speak\"]').click()")
+    await asyncio.sleep(0.5)
+    ph2 = await m.js("document.getElementById('speakInput').placeholder")
+    check(ph2 == "手寫或鍵盤輸入假名", "手機鍵盤輸入提示字應為短版", str(ph2))
     check(s4.get("act") != "answer", "手機不應自動聚焦（鍵盤會自己彈出）", str(s4))
     m.close()
 
@@ -160,7 +172,7 @@ async def main():
         for f in fails:
             print(" -", f)
         return 1
-    print("全部通過：桌機進入／核對後下一題／切換模式焦點都在 #answer，手機不自動聚焦")
+    print("全部通過：桌機進入／核對後下一題／切換模式焦點都在 #answer，提示字（桌機全文、手機短版）正確，手機不自動聚焦")
     return 0
 
 

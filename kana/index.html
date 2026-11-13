@@ -415,7 +415,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v36</span></div>
+      <div class="brand"><span class="jp">五十音</span><span class="sub">Kana Dojo</span><span class="ver" id="verTag">v37</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -520,7 +520,7 @@
         <div class="kana" id="speakKana">あ</div>
         <div class="input-row">
           <input id="speakInput" type="text" inputmode="text" lang="ja" autocomplete="off"
-                 autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="用日文鍵盤打讀音…">
+                 autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="用日文鍵盤手寫／輸入平假名／片假名">
           <button class="btn-main" id="speakCheck">檢查</button>
         </div>
         <div class="speak-row">
@@ -719,6 +719,14 @@
   const emptyPanel=$('emptyPanel'), listenType=$('listenType'), writeType=$('writeType');
   const speakPanel=$('speakPanel'), speakKana=$('speakKana'), speakType=$('speakType');
   const speakInput=$('speakInput'), speakCheck=$('speakCheck'), speakReplay=$('speakReplay');
+  /* 鍵盤輸入的提示字：窄螢幕用短版，免得被輸入框截斷 */
+  function syncSpeakPlaceholder(){
+    speakInput.placeholder = window.innerWidth < 430
+      ? '手寫或鍵盤輸入假名'
+      : '用日文鍵盤手寫／輸入平假名／片假名';
+  }
+  syncSpeakPlaceholder();
+  window.addEventListener('resize', syncSpeakPlaceholder);
   /* 電腦版（有滑鼠、無觸控）才自動把游標放回輸入框；手機／平板不自動聚焦，避免鍵盤自己彈出 */
   const deskFine = ()=> !!(window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches);
   function focusAnswer(){
