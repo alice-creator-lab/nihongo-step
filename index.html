@@ -803,6 +803,7 @@
   .pex .spk{width:26px; height:26px; flex:0 0 26px}
   .pex .ptx{flex:1; min-width:0}
   .pex .pja{font-family:var(--serif); font-size:13.5px; line-height:1.5; color:var(--ink)}
+  .pex .pja .pgmk{color:#0b5cad; font-weight:600}
   .pex .pzh{display:block; font-family:var(--sans); font-size:11px; line-height:1.45; color:var(--muted)}
   .pex .pl{flex:0 0 auto; padding-top:3px; font-size:10.5px; color:var(--muted);
     text-decoration:none; white-space:nowrap}
@@ -852,7 +853,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v222</span>
+    <span class="ver" id="verTag">v223</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3779,6 +3780,33 @@
     if (!x) return null;
     return { ja: x.ja, kana: x.kana || '', zh: x.zh || '', audio: audioFor(r.l, key) };
   }
+  function pgTokens(p){
+    if (p.indexOf('や') >= 0 && p.indexOf('など') >= 0) return ['や', 'など'];
+    if (p.indexOf('とか') >= 0) return ['とか'];
+    return [p];
+  }
+  /* 例句中的助詞上色（照課本：助詞本身換一個顏色，不是紅）。
+     marks＝[{t:助詞字串, i:第幾個（1 起算）}]，不寫就預設標第一個。 */
+  function pgHl(text, marks){
+    var s = String(text || ''), spans = [];
+    (marks || []).forEach(function(m){
+      var t = m.t || m, nth = m.i || 1, pos = -1, from = 0;
+      for (var k = 0; k < nth; k++){
+        pos = s.indexOf(t, from);
+        if (pos < 0) return;
+        from = pos + t.length;
+      }
+      spans.push([pos, pos + t.length]);
+    });
+    spans.sort(function(a, b){ return a[0] - b[0]; });
+    var out = '', cur = 0;
+    spans.forEach(function(sp){
+      if (sp[0] < cur) return;
+      out += esc(s.slice(cur, sp[0])) + '<span class="pgmk">' + esc(s.slice(sp[0], sp[1])) + '</span>';
+      cur = sp[1];
+    });
+    return out + esc(s.slice(cur));
+  }
   function renderParticles(){
     document.title = '助詞一覧 · 日語階梯';
     var d = PARTICLES;
@@ -3803,7 +3831,9 @@
           '<em>' + g.uses.length + ' 個用法</em></h3>' +
         (g.zh ? '<p class="pgz">' + esc(g.zh) + '</p>' : '');
       h += '<table class="pgtbl"><tbody>';
+      var toks = pgTokens(g.p);
       g.uses.forEach(function(u){
+        var mk = u.hl || toks.map(function(t){ return { t: t, i: 1 }; });
         h += '<tr><td class="pglb">' + esc(u.label) + '</td><td class="pgex">' +
           (u.note ? '<p class="pgnt">' + esc(u.note) + '</p>' : '');
         (u.ex || []).forEach(function(r){
@@ -3816,7 +3846,7 @@
             '<button class="spk" data-say="' + esc(x.kana || x.ja) + '"' +
               (x.audio ? ' data-audio="' + esc(x.audio) + '"' : '') +
               ' aria-label="播放例句">' + SPK + '</button>' +
-            '<div class="ptx"><div class="pja">' + esc(x.ja) + '</div>' +
+            '<div class="ptx"><div class="pja">' + pgHl(x.ja, mk) + '</div>' +
               (x.zh ? '<span class="pzh">' + esc(x.zh) + '</span>' : '') + '</div>' +
             (r.l ? '<a class="pl" href="#/l/' + r.l + '">' + esc(r.l) + '</a>' : '') +
           '</div>';

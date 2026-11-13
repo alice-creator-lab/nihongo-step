@@ -26,6 +26,59 @@ PORT = int(os.environ.get("CDP_PORT", "9351"))
 SHOT = os.environ.get("SHOT", "")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = json.load(open(os.path.join(ROOT, "data/particles.json"), encoding="utf-8"))
+LESSONS = {}
+for _f in os.listdir(os.path.join(ROOT, "data")):
+    if _f.startswith("lesson-L") and _f.endswith(".json"):
+        _d = json.load(open(os.path.join(ROOT, "data", _f), encoding="utf-8"))
+        LESSONS[_f[7:10]] = _d
+
+
+def _ja(r):
+    if "ja" in r:
+        return r["ja"]
+    d = LESSONS[r["l"]]
+    if "g" in r:
+        return d["grammar"][r["g"]]["ex"][r["e"]]["ja"]
+    if "p" in r:
+        return d["patterns"][r["p"]]["ex"][r["e"]]["ja"]
+    if "d" in r:
+        return d["dialogues"][r["d"]]["lines"][r["e"]]["ja"]
+    return r["ja"]
+
+
+def _tokens(p):
+    if "や" in p and "など" in p:
+        return ["や", "など"]
+    if "とか" in p:
+        return ["とか"]
+    return [p]
+
+
+def _marks(g, u, ja):
+    """回傳這句會上色的助詞（與前端 pgHl 同一規則）。"""
+    out = []
+    for m in (u.get("hl") or [{"t": t, "i": 1} for t in _tokens(g["p"])]):
+        t, nth, pos, frm = m["t"], m.get("i", 1), -1, 0
+        for _ in range(nth):
+            pos = ja.find(t, frm)
+            if pos < 0:
+                break
+            frm = pos + len(t)
+        if pos >= 0:
+            out.append(ja[pos:pos + len(t)])
+    return out
+
+
+MARKS = sum(len(_marks(g, u, _ja(r))) for g in DATA["groups"] for u in g["uses"] for r in u["ex"])
+# 幾個一定要正確的特例：（助詞, 用法標籤）→ 該句應上色的文字
+CASES = {
+    ("で", "合計・數量"): ["で"],          # 只標「全部で」，不要標到「です」
+    ("で", "原因"): ["で"],                # 同上
+    ("の", "省略「～の」"): ["の"],          # 標「誰の」，不要標到「その」
+    ("に", "目的（～に行く）"): ["に"],      # 標「見に行きます」
+    ("を", "離開點"): ["を", "を"],
+    ("か", "不確定（どこか）"): ["か"],
+}
 GROUPS = DATA["groups"]
 USES = sum(len(g["uses"]) for g in GROUPS)
 ROWS = sum(len(u["ex"]) for g in GROUPS for u in g["uses"])
@@ -143,6 +196,33 @@ async def main():
     for gi in (4, 3, 11):
         want = [u["label"] for u in GROUPS[gi]["uses"]]
         check(labels.get(str(gi)) == want, f"{GROUPS[gi]['p']} 用法標籤", f"{labels.get(str(gi))} ≠ {want}")
+
+    # 2b) 例句中的助詞上色（不是紅）
+    mk = await js("""(function(){
+      var all=document.querySelectorAll('#pglist .pex .pja .pgmk');
+      var first=all[0], cs=first?getComputedStyle(first):null;
+      return { n: all.length, color: cs?cs.color:null,
+               texts: Array.prototype.map.call(all,function(x){return x.innerText;}).slice(0,6) };
+    })()""") or {}
+    check(mk.get("n") == MARKS, "上色的助詞數", f"{mk.get('n')} ≠ {MARKS}")
+    check(mk.get("color") == "rgb(11, 92, 173)", "助詞顏色應為藍色", str(mk.get("color")))
+    got = await js("""(function(){
+      var o={};
+      document.querySelectorAll('#pglist section.pgc').forEach(function(sec){
+        var pj=sec.querySelector('.pgh b').innerText.trim();
+        sec.querySelectorAll('.pgtbl tr').forEach(function(tr){
+          var lb=tr.querySelector('.pglb').innerText.trim();
+          o[pj+'|'+lb]=Array.prototype.map.call(tr.querySelectorAll('.pgmk'),function(x){return x.innerText;});
+        });
+      });
+      return o;
+    })()""") or {}
+    for (gp, label), want in CASES.items():
+        if want is None:
+            continue
+        check(got.get(gp + "|" + label) == want, f"{gp}「{label}」上色位置", f"{got.get(gp+'|'+label)} ≠ {want}")
+    check(got.get("の|說明（んです／のです）") == ["の"], "說明列只應標 のです 那句",
+          str(got.get("の|說明（んです／のです）")))
 
     # 3) 喇叭：新例句與既有例句各播一次
     await js(INSTR)
