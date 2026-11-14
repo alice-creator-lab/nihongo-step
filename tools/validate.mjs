@@ -47,6 +47,8 @@ if (total !== 40) errors.push(`全課程應為 40 課，實際 ${total}`);
 /* 全 40 課的漢字→假名詞庫：句子裡的漢字詞，讀音必須跟單字表一致 */
 const NAMES = { 李: 'り', 林: 'りん', 王: 'おう', 田中: 'たなか', 山田: 'やまだ', 佐藤: 'さとう', 鈴木: 'すずき' };
 const GLOSS = Object.assign({}, NAMES);
+/* 句型／文法可用的形標籤：前五個連去五段動詞詳細表，後五個連去「動詞的衍生形」 */
+const FORM_KEYS = ['masu', 'te', 'ta', 'nai', 'dict', 'pot', 'vol', 'ba', 'pass', 'caus'];
 for (const book of course.books || []) {
   for (const meta of book.lessons.filter((l) => l.available)) {
     try {
@@ -81,15 +83,16 @@ for (const book of course.books || []) {
 
     (les.patterns || []).forEach((p, i) => {
       if (!p.ja || !p.zh) errors.push(`${rel} patterns[${i}] 需要 ja 與 zh`);
-      /* form 只可以是五種形之一：masu／te／ta／nai／dict；一個句型同屬兩個形時寫成陣列
-         （前端 PAT_FORM 對應顯示文字，每個標籤都連去五段動詞詳細表） */
+      /* form 只可以是固定幾種形之一：masu／te／ta／nai／dict（五段動詞詳細表）
+         與 pot／vol／ba／pass／caus（可能・意志・ば・受身・使役，連去衍生形頁）；
+         一個句型同屬兩個形時寫成陣列（前端 PAT_FORM 對應顯示文字） */
       const pforms = 'form' in p ? (Array.isArray(p.form) ? p.form : [p.form]) : [];
       if (Array.isArray(p.form) && !p.form.length) {
         errors.push(`${rel} patterns[${i}].form 是空陣列`);
       }
       pforms.forEach((f) => {
-        if (!['masu', 'te', 'ta', 'nai', 'dict'].includes(f)) {
-          errors.push(`${rel} patterns[${i}].form「${f}」不在 masu／te／ta／nai／dict 之內`);
+        if (!FORM_KEYS.includes(f)) {
+          errors.push(`${rel} patterns[${i}].form「${f}」不在 ${FORM_KEYS.join('／')} 之內`);
         }
       });
       (p.ex || []).forEach((x, j) => {
@@ -106,6 +109,12 @@ for (const book of course.books || []) {
     });
     (les.grammar || []).forEach((g, i) => {
       if (!g.h || !Array.isArray(g.p) || !g.p.length) errors.push(`${rel} grammar[${i}] 需要 h 與 p`);
+      const gforms = 'form' in g ? (Array.isArray(g.form) ? g.form : [g.form]) : [];
+      gforms.forEach((f) => {
+        if (!FORM_KEYS.includes(f)) {
+          errors.push(`${rel} grammar[${i}].form「${f}」不在 ${FORM_KEYS.join('／')} 之內`);
+        }
+      });
     });
     (les.exercises || []).forEach((e, i) => {
       if (!e.q || !e.a) errors.push(`${rel} exercises[${i}] 需要 q 與 a`);

@@ -137,6 +137,9 @@
     line-height:1; padding:6px 8px; border:1px solid #0b5cad; border-radius:7px; background:#e6eefb;
     color:#0b5cad; text-decoration:none; letter-spacing:.04em; white-space:nowrap}
   .pfrm:active{background:#d3e2f8}
+  /* 衍生形（可能・意志・ば・受身・使役）：同一種框、換一個色系，一眼分得出 */
+  .pfrm.dv{border-color:#0f6b5c; background:#e5f1ee; color:#0f6b5c}
+  .pfrm.dv:active{background:#d6e9e4}
   .pat .pzh{font-size:13px; color:var(--shu); margin-top:5px}
   .pat .pnote{font-size:13px; color:var(--ink2); line-height:1.85; margin-top:9px}
   .pat .ex{border-top:1px dashed var(--line); margin-top:12px; padding-top:10px}
@@ -173,6 +176,19 @@
     display:flex; align-items:center; gap:7px; flex-wrap:wrap}
   .gsec p{margin:0 0 9px; font-size:13.5px; color:var(--ink2); line-height:1.95}
   .gsec .ex{border-top:1px dashed var(--line); margin-top:11px; padding-top:10px}
+  /* 動詞的衍生形：一節一個形，三行（五段／一段／不規則）＋例句 */
+  .dfzh{font-size:12.5px; color:var(--shu); margin:-4px 0 9px}
+  .dfT td{border-top:1px solid var(--line); padding:8px 0; vertical-align:top}
+  .dfT tr:first-child td{border-top:0}
+  .dfT .dfk{width:52px; padding-right:8px; font-size:12px; font-weight:600; color:#0b5cad; line-height:1.7}
+  .dfrule{font-size:13px; color:var(--ink2); line-height:1.7}
+  .dfexs{font-family:var(--serif); font-size:13.5px; color:var(--ink); line-height:1.75; margin-top:3px}
+  .dfexs .dfp{display:inline-block; white-space:nowrap; margin:0 9px 1px 0}
+  .dfeg{margin-top:7px; padding:9px 11px; background:var(--sand); border-radius:11px;
+    font-family:var(--serif); font-size:15px; line-height:1.6}
+  .dfnote{font-size:12.5px; color:var(--ink2); line-height:1.85; margin:10px 0 0}
+  .dfmore{margin:8px 0 0}
+  .dfmore .pl{font-size:12px; color:#0b5cad; text-decoration:none}
 
   /* 文法決策流程圖（有 flow 欄位的一節才出現）：豎線串判斷點，右邊是結果卡 */
   .flow{margin:11px 0 2px}
@@ -890,7 +906,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v259</span>
+    <span class="ver" id="verTag">v260</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -921,8 +937,12 @@
   ];
 
   /* 句型若係某個形的應用（資料的 form 欄），在卡片左上顯示可點的形名，連去五段動詞詳細表 */
-  var PAT_FORM = { masu:'ます形', te:'て形', ta:'た形', nai:'ない形', dict:'辞書形' };
+  var PAT_FORM = { masu:'ます形', te:'て形', ta:'た形', nai:'ない形', dict:'辞書形',
+                   pot:'可能形', vol:'意志形', ba:'ば形', pass:'受身形', caus:'使役形' };
   var PAT_FORM_HREF = '#/all/verbs/forms/godan';
+  /* 衍生形沒有逐字的詳細表，標籤統一連去「動詞的衍生形」規則頁 */
+  var DERIVED_FORM = { pot:1, vol:1, ba:1, pass:1, caus:1 };
+  var DERIVED_HREF = '#/all/verbs/derived';
 
   var VOICE = { ja: null };
   /* iOS 把「增強版」人聲的名字列成跟基本版一樣（都是 Kyoko），
@@ -1580,7 +1600,9 @@
     fs = fs.filter(function(f){ return PAT_FORM[f]; });
     if (!fs.length) return '';
     return '<span class="pfrmg">' + fs.map(function(f){
-      return '<a class="pfrm" href="'+PAT_FORM_HREF+'" title="五段動詞 詳細表">'+PAT_FORM[f]+'</a>';
+      var dv = !!DERIVED_FORM[f];
+      return '<a class="pfrm' + (dv ? ' dv' : '') + '" href="' + (dv ? DERIVED_HREF : PAT_FORM_HREF) +
+        '" title="' + (dv ? '動詞的衍生形' : '五段動詞 詳細表') + '">' + PAT_FORM[f] + '</a>';
     }).join('') + '</span>';
   }
 
@@ -3361,6 +3383,11 @@
           '<span>' + (isVerb ? 'ます形・辞書形・て形・た形・ない形 的句型' : '現在・過去 ／ 肯定・否定 一覽') + '</span></div>' +
         '<span class="go">看一覽 →</span>' +
       '</a>' +
+      (isVerb ? '<a class="afentry" href="#/all/verbs/derived">' +
+        '<div class="tx"><b>動詞的衍生形</b>' +
+          '<span>可能形・意志形・ば形・受身形・使役形 的三類造法</span></div>' +
+        '<span class="go">看一覽 →</span>' +
+      '</a>' : '') +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="搜尋原形、假名或中文"></div>' +
       '<div class="jumpbar" id="wtjump"></div>' +
@@ -3892,6 +3919,91 @@
     });
     return out + esc(s.slice(cur));
   }
+  /* ---------- 動詞的衍生形（入口：動詞表／形標籤） ----------
+     可能形・意志形・ば形・受身形・使役形：只列三類動詞的造法與例，
+     用法細節在各自那一課（24／28／34／37／39），標籤連去那裏。 */
+  var DERIVED = [
+    { id:'pot', t:'可能形', k:'かのうけい', l:'L24', zh:'能～、會～：說「做得到」的說法',
+      rows:[
+        ['五段','語尾 u 段→e 段＋る',['書く→書ける','話す→話せる','待つ→待てる','飲む→飲める','買う→買える']],
+        ['一段','去る＋られる',['食べる→食べられる','見る→見られる']],
+        ['不規則','する→できる／来る→来られる',['する→できる','来る→来られる']]
+      ],
+      note:'可能句裡原本的「を」常改成「が」：日本語が話せます。口語的「食べれる」（ら抜き言葉）只可以聽，不要寫進文章。',
+      ex:['このプールで泳げます。','この字は読めますか。'] },
+    { id:'vol', t:'意志形', k:'いしけい', l:'L28', zh:'自己的決心、當場提議、號召一起做',
+      rows:[
+        ['五段','語尾 u 段→o 段＋う',['行く→行こう','読む→読もう','待つ→待とう']],
+        ['一段','去る＋よう',['食べる→食べよう','起きる→起きよう']],
+        ['不規則','する→しよう／来る→こよう',['する→しよう','来る→こよう']]
+      ],
+      note:'常體說法，朋友之間用；丁寧版是「ましょう」。後面接「と思っています」表示一直以來的打算。',
+      ex:['そろそろ帰ろう。','今度こそ合格しよう。'] },
+    { id:'ba', t:'ば形', k:'ばけい', l:'L34', zh:'如果～：條件句的基本形',
+      rows:[
+        ['五段','語尾 u 段→e 段＋ば',['書く→書けば','買う→買えば','待つ→待てば']],
+        ['一段','去る＋れば',['開ける→開ければ','並べる→並べれば']],
+        ['不規則','する→すれば／来る→くれば',['する→すれば','来る→くれば','ある→あれば']],
+        ['形・名','い形去い＋ければ',['高い→高ければ','いい→よければ','静かなら','静かでなければ']]
+      ],
+      note:'「ある」的ば形是「あれば」，沒有「あれれば」。前件是動作時，後句不能是請求、意志或命令；前件是狀態時後句自由。',
+      ex:['時間があれば、行きます。','この機械は電源を入れれば、動きます。'] },
+    { id:'pass', t:'受身形', k:'うけみけい', l:'L37', zh:'被～：從被做的事那一邊來說',
+      rows:[
+        ['五段','語尾 u 段→a 段＋れる',['読む→読まれる','書く→書かれる','買う→買われる']],
+        ['一段','去る＋られる',['ほめる→ほめられる','建てる→建てられる']],
+        ['不規則','する→される／来る→こられる',['する→される','来る→こられる']]
+      ],
+      note:'動作主用「に」；書面或正式場合用「によって」。日文被動常用在「受害」的場面（雨に降られた），不一定譯成中文的「被」。',
+      ex:['先生に呼ばれました。','この手紙は中国語で書かれています。'] },
+    { id:'caus', t:'使役形', k:'しえきけい', l:'L39', zh:'讓／叫某人做～',
+      rows:[
+        ['五段','語尾 u 段→a 段＋せる',['書く→書かせる','待つ→待たせる','買う→買わせる']],
+        ['一段','去る＋させる',['食べる→食べさせる','起きる→起きさせる']],
+        ['不規則','する→させる／来る→こさせる',['する→させる','来る→こさせる']]
+      ],
+      note:'他動詞使役：被使役者用「に」（学生に本を読ませる）；自動詞使役：常用「を」（弟を買い物に行かせる）。使役被動「させられる」帶「被迫」的語氣。',
+      ex:['先生は学生に本を読ませました。','母は弟を買い物に行かせました。'] }
+  ];
+
+  function renderDerivedForms(){
+    document.title = '動詞的衍生形 · 日語階梯';
+    var h = '<div class="lhead">' +
+      '<a class="back" href="#/all/verbs">← 動詞表</a>' +
+      '<h1>動詞的衍生形<span class="k">はってんけい</span></h1>' +
+      '<p class="goal">可能形・意志形・ば形・受身形・使役形：三類動詞的造法一眼看完，用法見各自那一課。</p>' +
+    '</div>' +
+    '<div class="jumpbar" id="dfjump">' + DERIVED.map(function(d, i){
+      return '<button class="jump" data-i="' + i + '">' + esc(d.t) + '</button>';
+    }).join('') + '</div>';
+    DERIVED.forEach(function(d, i){
+      h += '<section class="gsec" id="df-' + i + '">' +
+        '<h3>' + esc(d.t) + '<span class="wk">' + esc(d.k) + '</span></h3>' +
+        '<p class="dfzh">' + esc(d.zh) + '</p>' +
+        '<table class="pgtbl dfT"><tbody>' + d.rows.map(function(r){
+          return '<tr><td class="dfk">' + esc(r[0]) + '</td><td>' +
+            '<div class="dfrule">' + esc(r[1]) + '</div>' +
+            '<div class="dfexs">' + (Array.isArray(r[2])
+              ? r[2].map(function(x){ return '<span class="dfp">' + esc(x) + '</span>'; }).join('')
+              : esc(r[2])) + '</div></td></tr>';
+        }).join('') + '</tbody></table>' +
+        '<div class="dfegs">' + d.ex.map(function(e){
+          return '<div class="dfeg">' + esc(e) + '</div>';
+        }).join('') + '</div>' +
+        '<p class="dfnote">' + esc(d.note) + '</p>' +
+        '<p class="dfmore"><a class="pl" href="#/l/' + d.l + '/grammar">第 ' +
+          parseInt(d.l.replace('L', ''), 10) + ' 課文法 →</a></p>' +
+      '</section>';
+    });
+    app.innerHTML = h;
+    var jb = $('#dfjump');
+    if (jb) jb.addEventListener('click', function(e){
+      var b = e.target.closest('.jump'); if (!b) return;
+      var el = document.getElementById('df-' + b.getAttribute('data-i'));
+      if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  }
+
   function renderParticles(){
     document.title = '助詞一覧 · 日語階梯';
     var d = PARTICLES;
@@ -4638,6 +4750,7 @@
     if (vf){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderVerbForms(vf[1]); return; }
     var wm = h.match(/^\/all\/(verbs|adjs)/);
     if (h === '/all/verbs/apps'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderVerbApps(); return; }
+    if (h === '/all/verbs/derived'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderDerivedForms(); return; }
     if (h === '/all/adjs/forms'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderAdjForms(); return; }
     if (wm){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderWordTable(wm[1]); return; }
     if (h === '/plain'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderPlainForms(); return; }
