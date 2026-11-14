@@ -885,7 +885,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v251</span>
+    <span class="ver" id="verTag">v252</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3958,10 +3958,15 @@
         '<h1>' + esc(name) + '</h1></div><p class="secnote">資料載入失敗，請重新整理。</p>';
       return;
     }
+    // 照課號排序（同一課維持書上原次序）
+    var items = (d.items || []).slice().sort(function(a, b){
+      return (parseInt(String(a.l).replace(/\D/g, ''), 10) || 0) -
+             (parseInt(String(b.l).replace(/\D/g, ''), 10) || 0);
+    });
     var h = '<div class="lhead"><a class="back" href="#/all/grammar">← 文法總表</a>' +
       '<h1>' + esc(name) + '<span class="k">' + meta.kana + '</span></h1></div>' +
       '<div id="aclist"><table class="pgtbl acT"><tbody>';
-    d.items.forEach(function(it){
+    items.forEach(function(it){
       var say = (it.ex || []).map(function(x){ return x.kana || x.ja; }).join('');
       h += '<tr><td class="aclb"><b>' + esc(it.w) + '</b>' +
         (it.zh ? '<span>（' + esc(it.zh) + '）</span>' : '') + '</td>' +
