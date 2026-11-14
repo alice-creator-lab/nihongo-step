@@ -660,6 +660,12 @@
     border:1px solid var(--line); border-radius:14px; background:var(--sand);
     text-decoration:none; color:var(--ink); -webkit-tap-highlight-color:transparent}
   .afentry:active{background:var(--sand2)}
+  /* 三張入口卡排成一行；不夠寬才換行 */
+  .afrow{display:flex; gap:10px; margin:14px 0 0; flex-wrap:wrap}
+  .afrow .afentry{margin:0; flex:1 1 0; min-width:0}
+  @media (max-width:640px){
+    .afrow .afentry{flex:1 1 46%}
+  }
   .afentry .tx{flex:1; min-width:0}
   .afentry b{display:block; font-size:14px; font-weight:600; line-height:1.35}
   .afentry .tx span{display:block; font-size:11.5px; color:var(--muted); margin-top:2px}
@@ -865,7 +871,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v247</span>
+    <span class="ver" id="verTag">v248</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3156,21 +3162,23 @@
         (isVocab ? '' : '<p class="goal">第 1–40 課的全部文法，點標題展開說明與例句。</p>') +
       '</div>' +
       (isVocab ? '' :
-        '<a class="afentry" href="#/all/particles">' +
-          '<div class="tx"><b>助詞一覧</b>' +
-            '<span>19 個助詞 · 每個用法標示是哪一課教</span></div>' +
-          '<span class="go">看一覧 →</span>' +
-        '</a>' +
-        '<a class="afentry" href="#/all/adverbs">' +
-          '<div class="tx"><b>副詞整合</b>' +
-            '<span>23 個副詞 · ちょっと・もう・よく 等一字多義分開列</span></div>' +
-          '<span class="go">看一覧 →</span>' +
-        '</a>' +
-        '<a class="afentry" href="#/all/conjunctions">' +
-          '<div class="tx"><b>連接詞整合</b>' +
-            '<span>6 個接續詞 · じゃ・それから・でも 等</span></div>' +
-          '<span class="go">看一覧 →</span>' +
-        '</a>') +
+        '<div class="afrow">' +
+          '<a class="afentry" href="#/all/particles">' +
+            '<div class="tx"><b>助詞一覧</b>' +
+              '<span>19 個助詞 · 標課號</span></div>' +
+            '<span class="go">看一覧 →</span>' +
+          '</a>' +
+          '<a class="afentry" href="#/all/adverbs">' +
+            '<div class="tx"><b>副詞整合</b>' +
+              '<span>23 個副詞</span></div>' +
+            '<span class="go">看一覧 →</span>' +
+          '</a>' +
+          '<a class="afentry" href="#/all/conjunctions">' +
+            '<div class="tx"><b>連接詞整合</b>' +
+              '<span>6 個接續詞</span></div>' +
+            '<span class="go">看一覧 →</span>' +
+          '</a>' +
+        '</div>') +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="' + (isVocab ? '搜尋假名、漢字或中文' : '搜尋文法標題或例句') + '"></div>' +
       '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
