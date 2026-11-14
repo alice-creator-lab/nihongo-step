@@ -217,21 +217,25 @@ function report() {
 
   // 文法總表的排列次序（data/grammar-index.json）：每段只可出現一次，不可指向不存在的段落
   const gidx = readJSON('data/grammar-index.json');
-  if (gidx && Array.isArray(gidx.groups)) {
+  if (gidx && Array.isArray(gidx.items)) {
     const all = new Set();
     for (const b of course.books) for (const l of b.lessons) {
       const d = readJSON(`data/lesson-${l.id}.json`);
       (d && d.grammar || []).forEach((_, i) => all.add(`${l.id}:${i}`));
     }
     const used = new Map();
-    for (const g of gidx.groups) {
-      for (const k of g.keys || []) {
-        if (!all.has(k)) errors.push(`grammar-index：${g.t} 指向不存在的段落 ${k}`);
-        if (used.has(k)) errors.push(`grammar-index：段落 ${k} 重複（${used.get(k)}／${g.t}）`);
-        used.set(k, g.t);
+    for (const it of gidx.items) {
+      for (const k of it.keys || []) {
+        if (!all.has(k)) errors.push(`grammar-index：「${it.t}」指向不存在的段落 ${k}`);
+        if (used.has(k)) errors.push(`grammar-index：段落 ${k} 重複（「${used.get(k)}」／「${it.t}」）`);
+        used.set(k, it.t);
       }
     }
-    for (const k of all) if (!used.has(k)) errors.push(`grammar-index：段落 ${k} 未排入任何組`);
+    for (const k of all) if (!used.has(k)) errors.push(`grammar-index：段落 ${k} 未掛到任何題目`);
+    const n5 = gidx.items.filter((x) => x.pl === 'n5').length;
+    const n4 = gidx.items.filter((x) => x.pl === 'n4').length;
+    if (n5 !== 119) errors.push(`grammar-index：N5 題目 ${n5} 題，應為 119`);
+    if (n4 !== 120) errors.push(`grammar-index：N4 題目 ${n4} 題，應為 120`);
   }
 
   for (const e of errors) console.error('錯誤：' + e);

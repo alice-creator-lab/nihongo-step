@@ -880,6 +880,29 @@
   .gacc .gex .txt{flex:1}
   .gacc .gex .zh{display:block; font-size:12px; color:var(--muted); margin-top:2px}
   .gacc .gex .nbk{width:28px; height:28px; flex:0 0 28px; font-size:13px}
+  /* 文法總表：每一題一行＝出口日語清單的題目，展開見我們的段落 */
+  .yti{border-bottom:1px solid var(--line)}
+  .yti summary{display:flex; gap:8px; align-items:baseline; padding:10px 2px;
+    font-size:14.5px; cursor:pointer; list-style:none}
+  .yti summary::-webkit-details-marker{display:none}
+  .yti summary::before{content:'▸'; font-size:10px; color:var(--muted); flex:0 0 auto;
+    transform:translateY(-2px); transition:transform .15s}
+  .yti[open] summary::before{transform:rotate(90deg) translateX(2px)}
+  .yti summary .ytno{font-size:10.5px; font-weight:600; color:var(--muted);
+    flex:0 0 auto; letter-spacing:.03em}
+  .yti summary .ytt{flex:1; line-height:1.5}
+  .yti summary .ytc{font-size:11px; color:var(--muted); white-space:nowrap; flex:0 0 auto}
+  .yti[open] summary .ytt{font-weight:600}
+  .yti.empty summary .ytt{color:var(--muted)}
+  .ytnone{font-size:12.5px; color:var(--muted); margin:0 0 12px 20px}
+  .gsb{padding:2px 2px 14px 20px}
+  .gsb + .gsb{border-top:1px dashed var(--line); padding-top:12px}
+  .gsh{display:flex; gap:7px; align-items:center; flex-wrap:wrap;
+    font-size:14px; font-weight:600; margin-bottom:2px}
+  .gsh .gl{margin-left:auto; font-size:11px; font-weight:400; color:var(--muted)}
+  .gsb p{font-size:13.5px; color:var(--ink2); line-height:1.85; margin:8px 0 0}
+  .gsb .gex{display:flex; gap:8px; align-items:flex-start; font-size:13.5px; margin-top:7px}
+  .gsb .gex .txt{flex:1}
 
   /* 匯出的 PDF：畫面上隱藏，只有列印（分享 → 儲存到檔案 → PDF）時才出現 */
   #printout{display:none}
@@ -909,7 +932,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v266</span>
+    <span class="ver" id="verTag">v267</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3219,15 +3242,22 @@
     return '其他';
   }
 
-  function grammarGroupCount(list){
-    var s = {};
-    list.forEach(function(it){ if (it.grp) s[it.grp] = 1; });
-    return Object.keys(s).length;
+  /* 文法總表的目錄：每一題＝出口日語播放清單的一支片，下面掛我們的段落 */
+  function grammarIndexItems(){
+    var byKey = {};
+    allGrammarItems().forEach(function(it){ byKey[it.id + ':' + it.gi] = it; });
+    var list = (GIDX && GIDX.items) ? GIDX.items : [];
+    return list.map(function(g){
+      var secs = (g.keys || []).map(function(k){ return byKey[k]; }).filter(Boolean);
+      return { t: g.t,
+               tag: g.pl === 'n5' ? ('N5 ' + g.no) : g.pl === 'n4' ? ('N4 ' + g.no) : '',
+               pl: g.pl, no: g.no, secs: secs };
+    });
   }
 
   function renderAll(kind){
     var isVocab = kind === 'vocab';
-    var items = isVocab ? allVocabItems() : allGrammarItems();
+    var items = isVocab ? allVocabItems() : grammarIndexItems();
     document.title = (isVocab ? '詞語總表' : '文法總表') + ' · 日語階梯';
     app.innerHTML =
       '<div class="lhead">' +
@@ -3285,6 +3315,26 @@
         '<div class="al">' + it.id + '</div></div>';
     }
 
+    /* 一個文法段落：標題＋形標籤＋說明＋例句。不再包一層 details，
+       點題目那一行就一次看到全部內容。 */
+    function gblock(it){
+      var g = it.g;
+      var ps = (g.p || []).map(function(t){ return '<p>' + esc(t) + '</p>'; }).join('');
+      var ex = (g.ex || []).map(function(x, ei){
+        var au = audioFor(it.id, 'g' + it.gi + '-e' + ei);
+        var gk = it.id + ':' + it.gi + ':' + ei;
+        GSMAP[gk] = { id: it.id, ja: x.ja, kana: x.kana || '', zh: x.zh || '',
+                      audio: au || '', src: it.id + ' · ' + g.h };
+        return '<div class="gex"><button class="nbk' + (nbHasSent(it.id, x.ja) ? ' on' : '') +
+          '" data-gsx="' + gk + '" aria-label="加入練習本">' + (nbHasSent(it.id, x.ja) ? '★' : '☆') + '</button>' +
+          '<button class="spk" data-say="' + esc(ttsText(x)) + '"' +
+          (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放例句">' + SPK + '</button>' +
+          '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
+      }).join('');
+      return '<div class="gsb"><div class="gsh">' + patFormChips(g) + esc(g.h) +
+        '<span class="gl">' + it.id + '</span></div>' + ps + ex + '</div>';
+    }
+
     function draw(q){
       q = (q || '').trim().toLowerCase();
       var base = baseList();
@@ -3293,10 +3343,10 @@
       }) : base;
       curHit = hit;
       cnt.textContent = q
-        ? '找到 ' + hit.length + ' 項（共 ' + base.length + ' 項）'
+        ? '找到 ' + hit.length + ' 題（共 ' + base.length + ' 題）'
         : (isVocab
             ? '共 ' + base.length + ' 項 · ' + (VSORT === 'kana' ? '五十音順' : '40 課')
-            : '共 ' + base.length + ' 節 · ' + grammarGroupCount(base) + ' 組');
+            : '共 ' + base.length + ' 題 · ' + base.filter(function(x){ return x.secs.length; }).length + ' 題有內容');
       if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
       if (isVocab && VSORT === 'kana' && !q){
         /* 五十音順：每行一個分段標題（あ行／か行…），在 983 項裡掃視時做定位 */
@@ -3310,29 +3360,16 @@
       } else if (isVocab){
         list.innerHTML = hit.map(vrow).join('');
       } else {
-        var gprev = '';
         list.innerHTML = hit.map(function(it){
-          var head = '';
-          /* 只有一節的組不另起標題：那節的標題已經講清楚，再加一層只是噪音 */
-          if (it.grp && it.gsize > 1 && it.grp !== gprev){
-            gprev = it.grp;
-            head = '<h3 class="khead ghead">' + esc(it.grp) + '</h3>';
-          }
-          var g = it.g;
-          var ps = (g.p || []).map(function(t){ return '<p>' + esc(t) + '</p>'; }).join('');
-          var ex = (g.ex || []).map(function(x, ei){
-            var au = audioFor(it.id, 'g' + it.gi + '-e' + ei);
-            var gk = it.id + ':' + it.gi + ':' + ei;
-            GSMAP[gk] = { id: it.id, ja: x.ja, kana: x.kana || '', zh: x.zh || '',
-                          audio: au || '', src: it.id + ' · ' + g.h };
-            return '<div class="gex"><button class="nbk' + (nbHasSent(it.id, x.ja) ? ' on' : '') +
-              '" data-gsx="' + gk + '" aria-label="加入練習本">' + (nbHasSent(it.id, x.ja) ? '★' : '☆') + '</button>' +
-              '<button class="spk" data-say="' + esc(ttsText(x)) + '"' +
-              (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放例句">' + SPK + '</button>' +
-              '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
-          }).join('');
-          return head + '<details class="gacc"><summary>' + patFormChips(g) + esc(g.h) +
-            '<span class="gl">' + it.id + '</span></summary>' + ps + ex + '</details>';
+          var n = it.secs.length;
+          return '<details class="yti' + (n ? '' : ' empty') + '"><summary>' +
+            (it.tag ? '<span class="ytno">' + esc(it.tag) + '</span>' : '') +
+            '<span class="ytt">' + esc(it.t) + '</span>' +
+            '<span class="ytc">' + (n ? n + ' 節' : '未收錄') + '</span>' +
+          '</summary>' +
+          (n ? it.secs.map(gblock).join('') :
+               '<p class="ytnone">這個題目在課程裡還沒有對應的說明。</p>') +
+          '</details>';
         }).join('');
       }
       bindSpeakers(list);
@@ -3350,8 +3387,10 @@
     items.forEach(function(it){
       it.search = isVocab
         ? ((it.v.kanji || '') + ' ' + it.v.kana + ' ' + it.v.zh + ' ' + (it.v.pos || '') + ' ' + it.id).toLowerCase()
-        : (it.g.h + ' ' + (it.g.p || []).join(' ') + ' ' +
-           (it.g.ex || []).map(function(x){ return x.ja + ' ' + x.zh; }).join(' ') + ' ' + it.id).toLowerCase();
+        : (it.t + ' ' + it.secs.map(function(s){
+             return s.g.h + ' ' + (s.g.p || []).join(' ') + ' ' +
+               (s.g.ex || []).map(function(x){ return x.ja + ' ' + x.zh; }).join(' ') + ' ' + s.id;
+           }).join(' ')).toLowerCase();
     });
 
     draw('');
