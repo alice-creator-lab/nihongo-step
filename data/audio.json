@@ -756,7 +756,11 @@
     "g4-e0": "audio/L08-g4-e0.mp3",
     "g4-e1": "audio/L08-g4-e1.mp3",
     "g5-e0": "audio/L08-g5-e0.mp3",
-    "g5-e1": "audio/L08-g5-e1.mp3"
+    "g5-e1": "audio/L08-g5-e1.mp3",
+    "g6-e0": "audio/L08-g6-e0.mp3",
+    "g6-e1": "audio/L08-g6-e1.mp3",
+    "g7-e0": "audio/L08-g7-e0.mp3",
+    "g7-e1": "audio/L08-g7-e1.mp3"
   },
   "L09": {
     "d0-l0": "audio/L09-d0-l0.mp3",

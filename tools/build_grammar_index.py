@@ -15,8 +15,8 @@ import json, glob, sys
 ASSIGN = {
  ('n5', 1):  ['L01:1'],
  ('n5', 2):  ['L06:5'],
- ('n5', 3):  ['L08:2'],
- ('n5', 4):  ['L08:1', 'L08:0'],
+ ('n5', 3):  ['L08:0', 'L08:6', 'L08:1'],
+ ('n5', 4):  ['L08:7', 'L08:2'],
  ('n5', 5):  ['L01:0'],
  ('n5', 6):  ['L02:2', 'L04:6'],
  ('n5', 7):  ['L01:3', 'L02:4'],
@@ -149,11 +149,17 @@ OTHER = ['L02:5', 'L04:3', 'L04:7', 'L06:6', 'L06:7', 'L08:5', 'L35:5', 'L35:6']
 pl5 = json.load(open('data/playlist-n5.json', encoding='utf-8'))['items']
 pl4 = json.load(open('data/playlist-n4.json', encoding='utf-8'))['items']
 
+# 題目名對調：清單第 3、4 題的內容次序照使用者指定，題目名一齊對調
+TITLE_SWAP = {('n5', 3): 4, ('n5', 4): 3}
+
 items = []
 for book, pl in (('n5', pl5), ('n4', pl4)):
+    titles = {x['no']: x['title'] for x in pl}
     for it in pl:
-        items.append({'pl': book, 'no': it['no'], 't': it['title'],
-                      'keys': ASSIGN.get((book, it['no']), [])})
+        no = it['no']
+        title = titles[TITLE_SWAP[(book, no)]] if (book, no) in TITLE_SWAP else it['title']
+        items.append({'pl': book, 'no': no, 't': title,
+                      'keys': ASSIGN.get((book, no), [])})
 items.append({'pl': 'other', 'no': 0, 't': '其他（清單沒有）', 'keys': OTHER})
 
 # ---- 驗證 ----
