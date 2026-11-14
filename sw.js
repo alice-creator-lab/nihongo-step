@@ -1,5 +1,5 @@
 /* 日語階梯 — 網路優先的快取策略：先取最新版本，離線時才用快取。 */
-const VERSION = 'ngs-v246';
+const VERSION = 'ngs-v247';
 const SHELL = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ const SHELL = [
   './data/verbforms.json',
   './data/verbapps.json',
   './data/particles.json',
+  './data/advconj.json',
   './data/exam-1.json',
   './data/exam-2.json',
   './data/exam-3.json',

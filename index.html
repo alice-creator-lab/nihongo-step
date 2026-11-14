@@ -805,6 +805,11 @@
   .pgtbl td{border-top:1px solid var(--line); padding:9px 0; vertical-align:top}
   .pgtbl tr:first-child td{border-top:0}
   .pglb{width:100px; padding-right:8px; font-size:11.5px; font-weight:600; color:#0b5cad; line-height:1.5}
+  /* 副詞整合／連接詞整合：左欄是日文詞＋中文意思 */
+  .aclb{width:118px; padding-right:8px; line-height:1.5; vertical-align:top}
+  .aclb b{display:block; font-family:var(--serif); font-size:15px; font-weight:600; color:var(--ink); letter-spacing:.02em}
+  .aclb span{display:block; font-size:11px; color:var(--muted); margin-top:2px}
+  .acT .ptx .pja{font-size:14.5px; line-height:1.6}
   .pex{display:flex; align-items:flex-start; gap:7px; margin-top:6px}
   .pex:first-child{margin-top:0}
   .pex .spk{width:26px; height:26px; flex:0 0 26px}
@@ -860,7 +865,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v246</span>
+    <span class="ver" id="verTag">v247</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3155,6 +3160,16 @@
           '<div class="tx"><b>助詞一覧</b>' +
             '<span>19 個助詞 · 每個用法標示是哪一課教</span></div>' +
           '<span class="go">看一覧 →</span>' +
+        '</a>' +
+        '<a class="afentry" href="#/all/adverbs">' +
+          '<div class="tx"><b>副詞整合</b>' +
+            '<span>23 個副詞 · ちょっと・もう・よく 等一字多義分開列</span></div>' +
+          '<span class="go">看一覧 →</span>' +
+        '</a>' +
+        '<a class="afentry" href="#/all/conjunctions">' +
+          '<div class="tx"><b>連接詞整合</b>' +
+            '<span>6 個接續詞 · じゃ・それから・でも 等</span></div>' +
+          '<span class="go">看一覧 →</span>' +
         '</a>') +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="' + (isVocab ? '搜尋假名、漢字或中文' : '搜尋文法標題或例句') + '"></div>' +
@@ -3909,6 +3924,43 @@
     });
   }
 
+  /* ---------- 副詞整合／連接詞整合（入口：文法總表） ----------
+     資料 data/advconj.json，次序照課本最後兩頁「副詞整理」「接続詞整理」。
+     每筆一個音檔 audio/advconj/<a>.mp3（同一行有幾句就串成一段）。 */
+  var ADVCONJ = null;
+  var AC_META = { adverbs: { title:'副詞整合', kana:'ふくし' },
+                  conjunctions: { title:'連接詞整合', kana:'せつぞくし' } };
+  function renderAdvConj(kind){
+    var meta = AC_META[kind], d = ADVCONJ && ADVCONJ[kind];
+    var name = (d && d.title) || meta.title;
+    document.title = name + ' · 日語階梯';
+    if (!d || !(d.items || []).length){
+      app.innerHTML = '<div class="lhead"><a class="back" href="#/all/grammar">← 文法總表</a>' +
+        '<h1>' + esc(name) + '</h1></div><p class="secnote">資料載入失敗，請重新整理。</p>';
+      return;
+    }
+    var h = '<div class="lhead"><a class="back" href="#/all/grammar">← 文法總表</a>' +
+      '<h1>' + esc(name) + '<span class="k">' + meta.kana + '</span></h1></div>' +
+      '<div id="aclist"><table class="pgtbl acT"><tbody>';
+    d.items.forEach(function(it){
+      var say = (it.ex || []).map(function(x){ return x.kana || x.ja; }).join('');
+      h += '<tr><td class="aclb"><b>' + esc(it.w) + '</b>' +
+        (it.zh ? '<span>' + esc(it.zh) + '</span>' : '') + '</td>' +
+        '<td class="pgex"><div class="pex">' +
+          '<button class="spk" data-say="' + esc(say) + '" data-audio="audio/advconj/' + esc(it.a) + '.mp3"' +
+            ' aria-label="播放例句">' + SPK + '</button>' +
+          '<div class="ptx">' + (it.ex || []).map(function(x){
+            return '<div class="pja">' + esc(x.ja) + '</div>';
+          }).join('') + '</div>' +
+          '<a class="pl" href="#/l/' + esc(it.l) + '">' + esc(it.l) + '</a>' +
+        '</div></td></tr>';
+    });
+    h += '</tbody></table></div>';
+    app.innerHTML = h;
+    var list = $('#aclist');
+    if (list) bindSpeakers(list);
+  }
+
   /* ---------- 形容詞的變化（入口：形容詞表頂部） ----------
      照課本的表格排：欄＝い形容詞／な形容詞，列＝現在・過去 × 肯定・否定。
      每一格右上角的喇叭依次播放該格所有說法（同一格可以有 1–4 句）。 */
@@ -4526,6 +4578,8 @@
     var am = h.match(/^\/all\/(vocab|grammar)/);
     if (am){ VIEW = 'all'; stopAudio(); window.scrollTo(0, 0); renderAll(am[1]); return; }
     if (h === '/all/particles'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderParticles(); return; }
+    if (h === '/all/adverbs'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderAdvConj('adverbs'); return; }
+    if (h === '/all/conjunctions'){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderAdvConj('conjunctions'); return; }
     var vf = h.match(/^\/all\/verbs\/forms\/(godan|ichidan|irregular)/);
     if (vf){ VIEW = 'wt'; stopAudio(); window.scrollTo(0, 0); renderVerbForms(vf[1]); return; }
     var wm = h.match(/^\/all\/(verbs|adjs)/);
@@ -4570,6 +4624,7 @@
     if (/audio\/apps\//.test(url)) return 'ap1';
     /* 助詞一覧的新增例句（audio/particles/）自成一套版本號 */
     if (/audio\/particles\//.test(url)) return 'pa1';
+    if (/audio\/advconj\//.test(url)) return 'ac1';
     /* 形容詞變化頁（audio/adjform/）自成一套版本號 */
     if (/audio\/adjform\//.test(url)) return 'f1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
@@ -4621,6 +4676,7 @@
     getJSON('data/verbforms.json').then(function(m){ VERBFORMS = m || null; }).catch(function(){});
     getJSON('data/verbapps.json').then(function(m){ VERBAPPS = m || null; }).catch(function(){});
     getJSON('data/particles.json').then(function(m){ PARTICLES = m || null; }).catch(function(){});
+    getJSON('data/advconj.json').then(function(m){ ADVCONJ = m || null; }).catch(function(){});
     getJSON('data/kanji-readings.json').then(function(m){ KANJI_READ = (m && m.dict) || {}; }).catch(function(){});
     getJSON('data/course.json').then(function(c){
       course = c;
