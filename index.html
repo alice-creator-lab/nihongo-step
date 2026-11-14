@@ -889,7 +889,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v253</span>
+    <span class="ver" id="verTag">v254</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -4681,7 +4681,7 @@
     /* 形容詞變化頁（audio/adjform/）自成一套版本號 */
     if (/audio\/adjform\//.test(url)) return 'f1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
-    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e11';
+    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e12';
     return AUDIO.v || 1;
   }
   function playFile(url, onend, el, rate){
