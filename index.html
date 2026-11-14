@@ -132,11 +132,11 @@
   .pat .phead{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
   .pat .phead .pja{flex:1 1 auto; min-width:0}
   /* 句型屬於某個形：小框標示，點擊去五段動詞詳細表（與句型應用同一個藍，紅只留給答錯） */
-  .pat .pfrmg{display:flex; gap:6px; flex:0 0 auto}
-  .pat .pfrm{flex:0 0 auto; display:inline-block; font-family:var(--sans); font-size:11px; font-weight:600;
+  .pfrmg{display:flex; gap:6px; flex:0 0 auto}
+  .pfrm{flex:0 0 auto; display:inline-block; font-family:var(--sans); font-size:11px; font-weight:600;
     line-height:1; padding:6px 8px; border:1px solid #0b5cad; border-radius:7px; background:#e6eefb;
     color:#0b5cad; text-decoration:none; letter-spacing:.04em; white-space:nowrap}
-  .pat .pfrm:active{background:#d3e2f8}
+  .pfrm:active{background:#d3e2f8}
   .pat .pzh{font-size:13px; color:var(--shu); margin-top:5px}
   .pat .pnote{font-size:13px; color:var(--ink2); line-height:1.85; margin-top:9px}
   .pat .ex{border-top:1px dashed var(--line); margin-top:12px; padding-top:10px}
@@ -169,7 +169,8 @@
   .arow .az, .nrow .nz{display:flex; align-items:baseline; gap:7px; flex-wrap:wrap}
 
   .gsec{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:11px}
-  .gsec h3{margin:0 0 10px; font-size:15.5px; font-weight:600; letter-spacing:.01em}
+  .gsec h3{margin:0 0 10px; font-size:15.5px; font-weight:600; letter-spacing:.01em;
+    display:flex; align-items:center; gap:7px; flex-wrap:wrap}
   .gsec p{margin:0 0 9px; font-size:13.5px; color:var(--ink2); line-height:1.95}
   .gsec .ex{border-top:1px dashed var(--line); margin-top:11px; padding-top:10px}
 
@@ -889,7 +890,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v257</span>
+    <span class="ver" id="verTag">v259</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1853,7 +1854,7 @@
   function segGrammar(l){
     var h = '<p class="secnote">文法說明可以當作課前預習，也可以做完練習後回來對照。</p>';
     l.grammar.forEach(function(g, gi){
-      h += '<section class="gsec"><h3>'+esc(g.h)+'</h3>';
+      h += '<section class="gsec"><h3>'+patFormChips(g)+esc(g.h)+'</h3>';
       (g.p||[]).forEach(function(p){ h += '<p>'+esc(p)+'</p>'; });
       if (g.flow) h += flowHtml(g.flow);
       if (g.ex && g.ex.length){
@@ -3266,7 +3267,7 @@
               (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放例句">' + SPK + '</button>' +
               '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
           }).join('');
-          return '<details class="gacc"><summary>' + esc(g.h) +
+          return '<details class="gacc"><summary>' + patFormChips(g) + esc(g.h) +
             '<span class="gl">' + it.id + '</span></summary>' + ps + ex + '</details>';
         }).join('');
       }
