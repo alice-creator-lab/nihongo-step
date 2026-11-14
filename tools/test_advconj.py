@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""驗收「副詞整合」(#/all/adverbs) 與「連接詞整合」(#/all/conjunctions)。
+"""驗收「副詞一覧」(#/all/adverbs) 與「連接詞整合」(#/all/conjunctions)。
 
 檢查：入口卡、行數、每行有喇叭且有音檔、課號連結、音檔 200、390px 無橫向溢出。
 用法：python3 tools/test_advconj.py http://127.0.0.1:8912/
@@ -122,9 +122,23 @@ async def main():
     check(cards and "#/all/particles" in cards, "有助詞一覧入口", str(cards))
     check(cards and "#/all/adverbs" in cards, "有副詞整合入口", str(cards))
     check(cards and "#/all/conjunctions" in cards, "有連接詞整合入口", str(cards))
+    # 三張入口卡要排成一行（手機都不換行），且不再有灰色細字
+    for w, mob in ((1200, False), (390, True)):
+        await b.call("Emulation.setDeviceMetricsOverride",
+                     {"width": w, "height": 900, "deviceScaleFactor": 2, "mobile": mob})
+        await b.go(BASE + "?cb=r%d#/all/grammar" % w, 3)
+        for _ in range(40):
+            if await b.js("document.querySelectorAll('.afentry').length>=3"):
+                break
+            await asyncio.sleep(0.5)
+        row = await b.js("""(function(){var cs=[].map.call(document.querySelectorAll('.afentry'),function(a){
+          return Math.round(a.getBoundingClientRect().top);});
+          return {tops:cs, subs:document.querySelectorAll('.afentry .tx span').length};})()""")
+        check(len(set(row["tops"])) == 1, f"入口卡 {w}px 排成一行", str(row["tops"]))
+        check(row["subs"] == 0, f"入口卡 {w}px 無灰色細字", str(row["subs"]))
 
-    for kind, n, path, title in (("adverbs", n_adv, "/all/adverbs", "副詞整合"),
-                                 ("conjunctions", n_cj, "/all/conjunctions", "連接詞整合")):
+    for kind, n, path, title in (("adverbs", n_adv, "/all/adverbs", "副詞一覧"),
+                                 ("conjunctions", n_cj, "/all/conjunctions", "連接詞一覧")):
         print(f"【{title}】")
         await b.go(BASE + "?cb=b#/" + path.lstrip("/"), 5)
         st = await b.js("""(function(){

@@ -663,8 +663,12 @@
   /* 三張入口卡排成一行；不夠寬才換行 */
   .afrow{display:flex; gap:10px; margin:14px 0 0; flex-wrap:wrap}
   .afrow .afentry{margin:0; flex:1 1 0; min-width:0}
+  .afrow .afentry{padding:11px 12px}
   @media (max-width:640px){
-    .afrow .afentry{flex:1 1 46%}
+    .afrow{gap:8px}
+    .afrow .afentry{flex:1 1 0; padding:10px 8px; gap:5px}
+    .afrow .afentry b{font-size:13px}
+    .afrow .afentry .go{font-size:11px}
   }
   .afentry .tx{flex:1; min-width:0}
   .afentry b{display:block; font-size:14px; font-weight:600; line-height:1.35}
@@ -871,7 +875,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v248</span>
+    <span class="ver" id="verTag">v249</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3164,19 +3168,16 @@
       (isVocab ? '' :
         '<div class="afrow">' +
           '<a class="afentry" href="#/all/particles">' +
-            '<div class="tx"><b>助詞一覧</b>' +
-              '<span>19 個助詞 · 標課號</span></div>' +
-            '<span class="go">看一覧 →</span>' +
+            '<div class="tx"><b>助詞一覧</b></div>' +
+            '<span class="go">→</span>' +
           '</a>' +
           '<a class="afentry" href="#/all/adverbs">' +
-            '<div class="tx"><b>副詞整合</b>' +
-              '<span>23 個副詞</span></div>' +
-            '<span class="go">看一覧 →</span>' +
+            '<div class="tx"><b>副詞一覧</b></div>' +
+            '<span class="go">→</span>' +
           '</a>' +
           '<a class="afentry" href="#/all/conjunctions">' +
-            '<div class="tx"><b>連接詞整合</b>' +
-              '<span>6 個接續詞</span></div>' +
-            '<span class="go">看一覧 →</span>' +
+            '<div class="tx"><b>連接詞一覧</b></div>' +
+            '<span class="go">→</span>' +
           '</a>' +
         '</div>') +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
@@ -3936,8 +3937,8 @@
      資料 data/advconj.json，次序照課本最後兩頁「副詞整理」「接続詞整理」。
      每筆一個音檔 audio/advconj/<a>.mp3（同一行有幾句就串成一段）。 */
   var ADVCONJ = null;
-  var AC_META = { adverbs: { title:'副詞整合', kana:'ふくし' },
-                  conjunctions: { title:'連接詞整合', kana:'せつぞくし' } };
+  var AC_META = { adverbs: { title:'副詞一覧', kana:'ふくし' },
+                  conjunctions: { title:'連接詞一覧', kana:'せつぞくし' } };
   function renderAdvConj(kind){
     var meta = AC_META[kind], d = ADVCONJ && ADVCONJ[kind];
     var name = (d && d.title) || meta.title;
