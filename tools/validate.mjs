@@ -215,6 +215,25 @@ function report() {
     }
   }
 
+  // 文法總表的排列次序（data/grammar-index.json）：每段只可出現一次，不可指向不存在的段落
+  const gidx = readJSON('data/grammar-index.json');
+  if (gidx && Array.isArray(gidx.groups)) {
+    const all = new Set();
+    for (const b of course.books) for (const l of b.lessons) {
+      const d = readJSON(`data/lesson-${l.id}.json`);
+      (d && d.grammar || []).forEach((_, i) => all.add(`${l.id}:${i}`));
+    }
+    const used = new Map();
+    for (const g of gidx.groups) {
+      for (const k of g.keys || []) {
+        if (!all.has(k)) errors.push(`grammar-index：${g.t} 指向不存在的段落 ${k}`);
+        if (used.has(k)) errors.push(`grammar-index：段落 ${k} 重複（${used.get(k)}／${g.t}）`);
+        used.set(k, g.t);
+      }
+    }
+    for (const k of all) if (!used.has(k)) errors.push(`grammar-index：段落 ${k} 未排入任何組`);
+  }
+
   for (const e of errors) console.error('錯誤：' + e);
   console.log(errors.length ? `\n校驗失敗：${errors.length} 個錯誤` : `\n校驗通過：${ids.size} 課、${course.books.length} 階段`);
   return errors.length ? 1 : 0;

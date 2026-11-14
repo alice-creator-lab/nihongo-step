@@ -619,6 +619,9 @@
   .khead{font-size:11.5px; font-weight:600; letter-spacing:.14em; color:var(--ink2);
     background:var(--sand); border:1px solid var(--line); border-radius:8px;
     padding:5px 10px; margin:14px 0 2px}
+  /* 文法總表的機能分組標題：每組一條，72 組要一眼分得開 */
+  .khead.ghead{font-size:12.5px; letter-spacing:.04em; color:var(--ink);
+    background:var(--sand2); border-color:transparent; padding:7px 11px; margin:20px 0 4px}
   .arow.playing, .vrow.playing, .exrow.playing{background:var(--sand2)}
   .vplaybar{display:flex; align-items:center; gap:10px; margin:0 0 6px}
   .vplaybar .btn2{padding:8px 14px; font-size:13px}
@@ -906,7 +909,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v263</span>
+    <span class="ver" id="verTag">v264</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2763,6 +2766,23 @@
       var l = lessons[meta.id]; if (!l || !l.grammar) return;
       l.grammar.forEach(function(g, gi){ out.push({ g: g, gi: gi, id: meta.id, no: meta.no, title: meta.title }); });
     });
+    /* 次序跟 data/grammar-index.json：N5 部分照出口日語「Ｎ５文法一覧」的機能點，
+       N4 接在後面。次序表沒提到的段落排到最後（照課號），不會消失。 */
+    if (GIDX && GIDX.groups){
+      var pos = {}, gt = {};
+      GIDX.groups.forEach(function(gr, i){
+        (gr.keys || []).forEach(function(k, j){
+          pos[k] = i * 1000 + j;
+          gt[k] = gr.t;
+        });
+      });
+      out.forEach(function(it){
+        var k = it.id + ':' + it.gi;
+        it.grp = gt[k] || '未分類';
+        it.ord = (k in pos) ? pos[k] : 1e6 + (it.no || 0) * 100 + it.gi;
+      });
+      out.sort(function(a, b){ return a.ord - b.ord; });
+    }
     return out;
   }
   /* ---------- 順序表（數字／月份／日期／星期／鐘點／分鐘／樓層／人數） ---------- */
@@ -3194,6 +3214,12 @@
     return '其他';
   }
 
+  function grammarGroupCount(list){
+    var s = {};
+    list.forEach(function(it){ if (it.grp) s[it.grp] = 1; });
+    return Object.keys(s).length;
+  }
+
   function renderAll(kind){
     var isVocab = kind === 'vocab';
     var items = isVocab ? allVocabItems() : allGrammarItems();
@@ -3203,7 +3229,7 @@
         '<a class="back" href="#/">← 課程地圖</a>' +
         '<h1>' + (isVocab ? '詞語總表' : '文法總表') +
           '<span class="k">' + (isVocab ? 'たんご' : 'ぶんぽう') + '</span></h1>' +
-        (isVocab ? '' : '<p class="goal">第 1–40 課的全部文法，點標題展開說明與例句。</p>') +
+        (isVocab ? '' : '<p class="goal">照機能分組：先 N5（出口日語「Ｎ５文法一覧」的次序），再接 N4。點標題展開說明與例句。</p>') +
       '</div>' +
       (isVocab ? '' :
         '<div class="afrow">' +
@@ -3264,7 +3290,9 @@
       curHit = hit;
       cnt.textContent = q
         ? '找到 ' + hit.length + ' 項（共 ' + base.length + ' 項）'
-        : '共 ' + base.length + ' 項 · ' + (isVocab && VSORT === 'kana' ? '五十音順' : '40 課');
+        : (isVocab
+            ? '共 ' + base.length + ' 項 · ' + (VSORT === 'kana' ? '五十音順' : '40 課')
+            : '共 ' + base.length + ' 節 · ' + grammarGroupCount(base) + ' 組');
       if (!hit.length){ list.innerHTML = '<p class="secnote">沒有符合的項目。</p>'; return; }
       if (isVocab && VSORT === 'kana' && !q){
         /* 五十音順：每行一個分段標題（あ行／か行…），在 983 項裡掃視時做定位 */
@@ -3278,7 +3306,13 @@
       } else if (isVocab){
         list.innerHTML = hit.map(vrow).join('');
       } else {
+        var gprev = '';
         list.innerHTML = hit.map(function(it){
+          var head = '';
+          if (it.grp && it.grp !== gprev){
+            gprev = it.grp;
+            head = '<h3 class="khead ghead">' + esc(it.grp) + '</h3>';
+          }
           var g = it.g;
           var ps = (g.p || []).map(function(t){ return '<p>' + esc(t) + '</p>'; }).join('');
           var ex = (g.ex || []).map(function(x, ei){
@@ -3292,7 +3326,7 @@
               (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放例句">' + SPK + '</button>' +
               '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
           }).join('');
-          return '<details class="gacc"><summary>' + patFormChips(g) + esc(g.h) +
+          return head + '<details class="gacc"><summary>' + patFormChips(g) + esc(g.h) +
             '<span class="gl">' + it.id + '</span></summary>' + ps + ex + '</details>';
         }).join('');
       }
@@ -4776,6 +4810,7 @@
   /* ---------- 預先製作的人聲檔（data/audio.json 有記錄的句子優先用音檔） ---------- */
   var AUDIO = {};
   var WT = null;
+  var GIDX = null;   // 文法總表的排列次序（data/grammar-index.json）
   var KANJI_READ = {};   // 漢字 → 假名讀音（由課程 ja／kana 對照離線產生）
   var VAD_SILENCE_MS = 2500;   // 講完之後要靜幾耐才自動停止收音（句子有標點，停頓正常）
   var VAD_SPEAK_RMS = 0.02;    // 音量門檻：低於此值當作靜音
@@ -4855,6 +4890,10 @@
         return getJSON('data/lesson-' + id + '.json').then(function(j){ lessons[id] = j; })
           .catch(function(e){ console.warn('lesson load failed', id, e); });
       }));
+    }).then(function(){
+      /* 文法總表的次序表：拿不到就照課號排（不影響其他頁） */
+      return getJSON('data/grammar-index.json')
+        .then(function(m){ GIDX = m || null; }).catch(function(){});
     }).then(function(){
       route();
     }).catch(function(e){
