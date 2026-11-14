@@ -820,6 +820,7 @@
   .aclb b{display:block; font-family:var(--serif); font-size:15px; font-weight:600; color:var(--ink); letter-spacing:.02em}
   .aclb span{display:block; font-size:11px; color:var(--muted); margin-top:2px}
   .acT .ptx .pja{font-size:14.5px; line-height:1.6}
+  .acT .aczh{font-size:12.5px; line-height:1.5; color:var(--shu); margin-top:1px}
   .pex{display:flex; align-items:flex-start; gap:7px; margin-top:6px}
   .pex:first-child{margin-top:0}
   .pex .spk{width:26px; height:26px; flex:0 0 26px}
@@ -875,7 +876,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v249</span>
+    <span class="ver" id="verTag">v250</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3959,7 +3960,8 @@
           '<button class="spk" data-say="' + esc(say) + '" data-audio="audio/advconj/' + esc(it.a) + '.mp3"' +
             ' aria-label="播放例句">' + SPK + '</button>' +
           '<div class="ptx">' + (it.ex || []).map(function(x){
-            return '<div class="pja">' + esc(x.ja) + '</div>';
+            return '<div class="pja">' + esc(x.ja) + '</div>' +
+              (x.zh ? '<div class="pzh aczh">' + esc(x.zh) + '</div>' : '');
           }).join('') + '</div>' +
           '<a class="pl" href="#/l/' + esc(it.l) + '">' + esc(it.l) + '</a>' +
         '</div></td></tr>';

@@ -151,7 +151,13 @@ async def main():
             var a = tr.querySelector('.pl');
             if (!a) noLink++; else links.push(a.getAttribute('href'));
           });
-          return {rows:rows.length, spk:spk.length, noAudio:noAudio, noLink:noLink,
+          var noZh = 0;
+          Array.prototype.forEach.call(rows, function(tr){
+            var ja = tr.querySelectorAll('.ptx .pja').length;
+            var zh = tr.querySelectorAll('.ptx .aczh').length;
+            if (!zh || zh !== ja) noZh++;
+          });
+          return {noZh:noZh, rows:rows.length, spk:spk.length, noAudio:noAudio, noLink:noLink,
                   h1:(document.querySelector('.lhead h1')||{}).textContent||'',
                   links:links.slice(0,3),
                   over: document.documentElement.scrollWidth > window.innerWidth + 1};})()""")
@@ -159,6 +165,7 @@ async def main():
         check(st["spk"] == n, f"{title} 每行有喇叭", str(st["spk"]))
         check(st["noAudio"] == 0, f"{title} 每行有音檔", str(st["noAudio"]))
         check(st["noLink"] == 0, f"{title} 每行有課號連結", str(st["noLink"]))
+        check(st["noZh"] == 0, f"{title} 每句都有中文翻譯", str(st["noZh"]))
         check(st["h1"].startswith(title), f"{title} 標題", st["h1"])
         check(all(l.startswith("#/l/L") and len(l) == 7 for l in st["links"]),
               f"{title} 課號連結格式", str(st["links"]))
