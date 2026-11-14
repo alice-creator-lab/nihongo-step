@@ -830,6 +830,10 @@
   }
   .acT .ptx .pja{font-size:14.5px; line-height:1.6}
   .acT .aczh{font-size:12.5px; line-height:1.5; color:var(--shu); margin-top:1px}
+  /* 播放全部時，正在播的那一行著色（同詞語總表一致） */
+  .acT tr.playing td{background:var(--sand2); transition:background .18s ease}
+  .acT tr.playing td:first-child{box-shadow:inset 3px 0 0 var(--shu)}
+  .acT .aclb{cursor:pointer}
   .pex{display:flex; align-items:flex-start; gap:7px; margin-top:6px}
   .pex:first-child{margin-top:0}
   .pex .spk{width:26px; height:26px; flex:0 0 26px}
@@ -885,7 +889,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v252</span>
+    <span class="ver" id="verTag">v253</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2788,7 +2792,7 @@
       ALLPLAY.btn.classList.remove('onplay');
       ALLPLAY.btn = null;
     }
-    Array.prototype.forEach.call(document.querySelectorAll('.arow.playing, .vrow.playing, .exrow.playing, .aptbl tr.playing'), function(r){
+    Array.prototype.forEach.call(document.querySelectorAll('.arow.playing, .vrow.playing, .exrow.playing, .aptbl tr.playing, .acT tr.playing'), function(r){
       r.classList.remove('playing');
     });
   }
@@ -3965,10 +3969,12 @@
     });
     var h = '<div class="lhead"><a class="back" href="#/all/grammar">← 文法總表</a>' +
       '<h1>' + esc(name) + '<span class="k">' + meta.kana + '</span></h1></div>' +
+      '<div class="alltop"><p class="cnt" id="accnt">' + items.length + ' 項</p>' +
+        '<button class="btn2" id="allplay">▶ 播放全部</button></div>' +
       '<div id="aclist"><table class="pgtbl acT"><tbody>';
-    items.forEach(function(it){
+    items.forEach(function(it, k){
       var say = (it.ex || []).map(function(x){ return x.kana || x.ja; }).join('');
-      h += '<tr><td class="aclb"><b>' + esc(it.w) + '</b>' +
+      h += '<tr data-k="' + k + '"><td class="aclb"><b>' + esc(it.w) + '</b>' +
         (it.zh ? '<span>（' + esc(it.zh) + '）</span>' : '') + '</td>' +
         '<td class="acx"><div class="pex">' +
           '<button class="spk" data-say="' + esc(say) + '" data-audio="audio/advconj/' + esc(it.a) + '.mp3"' +
@@ -3984,6 +3990,28 @@
     app.innerHTML = h;
     var list = $('#aclist');
     if (list) bindSpeakers(list);
+
+    /* 播放全部：照畫面上排序逐行播；點左欄的詞可以由那一行開始順播（同詞語總表做法） */
+    var pa = $('#allplay');
+    var rowsOf = function(){ return list ? list.querySelectorAll('tr[data-k]') : []; };
+    var queueOf = function(){
+      var rows = rowsOf();
+      return items.map(function(it, k){
+        return { audio: 'audio/advconj/' + it.a + '.mp3', el: rows[k] };
+      });
+    };
+    if (pa) pa.addEventListener('click', function(){
+      if (ALLPLAY.on && ALLPLAY.btn === this){ stopAllPlay(); stopAudio(); return; }
+      playAllQueued(queueOf(), this);
+    });
+    if (list) list.addEventListener('click', function(e){
+      if (e.target.closest('.spk')) return;          /* 喇叭照舊只播那一行 */
+      var lb = e.target.closest('.aclb'); if (!lb) return;
+      var row = lb.closest('tr'); if (!row) return;
+      var k = Array.prototype.indexOf.call(rowsOf(), row);
+      if (k < 0) return;
+      playAllQueued(queueOf(), pa, k);
+    });
   }
 
   /* ---------- 形容詞的變化（入口：形容詞表頂部） ----------
