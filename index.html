@@ -909,7 +909,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v264</span>
+    <span class="ver" id="verTag">v265</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -2781,6 +2781,11 @@
         it.grp = gt[k] || '未分類';
         it.ord = (k in pos) ? pos[k] : 1e6 + (it.no || 0) * 100 + it.gi;
       });
+      /* 每組有幾節：只有一節的組不再另起標題，改為行內小標籤，
+         否則 116 組會變成一堆「標題＋一行」。 */
+      var size = {};
+      out.forEach(function(it){ size[it.grp] = (size[it.grp] || 0) + 1; });
+      out.forEach(function(it){ it.gsize = size[it.grp]; });
       out.sort(function(a, b){ return a.ord - b.ord; });
     }
     return out;
@@ -3229,7 +3234,7 @@
         '<a class="back" href="#/">← 課程地圖</a>' +
         '<h1>' + (isVocab ? '詞語總表' : '文法總表') +
           '<span class="k">' + (isVocab ? 'たんご' : 'ぶんぽう') + '</span></h1>' +
-        (isVocab ? '' : '<p class="goal">照機能分組：先 N5（出口日語「Ｎ５文法一覧」的次序），再接 N4。點標題展開說明與例句。</p>') +
+        (isVocab ? '' : '<p class="goal">照機能分組：先 N5（出口日語「Ｎ５文法一覧」），再接 N4（「Ｎ４文法」），次序跟兩個播放清單。點標題展開說明與例句。</p>') +
       '</div>' +
       (isVocab ? '' :
         '<div class="afrow">' +
@@ -3309,7 +3314,8 @@
         var gprev = '';
         list.innerHTML = hit.map(function(it){
           var head = '';
-          if (it.grp && it.grp !== gprev){
+          /* 只有一節的組不另起標題：那節的標題已經講清楚，再加一層只是噪音 */
+          if (it.grp && it.gsize > 1 && it.grp !== gprev){
             gprev = it.grp;
             head = '<h3 class="khead ghead">' + esc(it.grp) + '</h3>';
           }
