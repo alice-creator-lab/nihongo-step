@@ -48,7 +48,7 @@ if (total !== 40) errors.push(`全課程應為 40 課，實際 ${total}`);
 const NAMES = { 李: 'り', 林: 'りん', 王: 'おう', 田中: 'たなか', 山田: 'やまだ', 佐藤: 'さとう', 鈴木: 'すずき' };
 const GLOSS = Object.assign({}, NAMES);
 /* 句型／文法可用的形標籤：前五個連去五段動詞詳細表，後五個連去「動詞的衍生形」 */
-const FORM_KEYS = ['masu', 'te', 'ta', 'nai', 'dict', 'pot', 'vol', 'ba', 'pass', 'caus'];
+const FORM_KEYS = ['masu', 'te', 'ta', 'nai', 'dict', 'plain', 'pot', 'vol', 'ba', 'pass', 'caus'];
 for (const book of course.books || []) {
   for (const meta of book.lessons.filter((l) => l.available)) {
     try {

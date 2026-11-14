@@ -906,7 +906,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v260</span>
+    <span class="ver" id="verTag">v261</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -938,7 +938,8 @@
 
   /* 句型若係某個形的應用（資料的 form 欄），在卡片左上顯示可點的形名，連去五段動詞詳細表 */
   var PAT_FORM = { masu:'ます形', te:'て形', ta:'た形', nai:'ない形', dict:'辞書形',
-                   pot:'可能形', vol:'意志形', ba:'ば形', pass:'受身形', caus:'使役形' };
+                   plain:'普通形', pot:'可能形', vol:'意志形', ba:'ば形',
+                   pass:'受身形', caus:'使役形' };
   var PAT_FORM_HREF = '#/all/verbs/forms/godan';
   /* 衍生形沒有逐字的詳細表，標籤統一連去「動詞的衍生形」規則頁 */
   var DERIVED_FORM = { pot:1, vol:1, ba:1, pass:1, caus:1 };
@@ -1601,8 +1602,10 @@
     if (!fs.length) return '';
     return '<span class="pfrmg">' + fs.map(function(f){
       var dv = !!DERIVED_FORM[f];
-      return '<a class="pfrm' + (dv ? ' dv' : '') + '" href="' + (dv ? DERIVED_HREF : PAT_FORM_HREF) +
-        '" title="' + (dv ? '動詞的衍生形' : '五段動詞 詳細表') + '">' + PAT_FORM[f] + '</a>';
+      var href = dv ? DERIVED_HREF : (f === 'plain' ? '#/plain' : PAT_FORM_HREF);
+      var tip = dv ? '動詞的衍生形' : (f === 'plain' ? '普通形 ⇄ ます形 對照表' : '五段動詞 詳細表');
+      return '<a class="pfrm' + (dv ? ' dv' : '') + '" href="' + href +
+        '" title="' + tip + '">' + PAT_FORM[f] + '</a>';
     }).join('') + '</span>';
   }
 
