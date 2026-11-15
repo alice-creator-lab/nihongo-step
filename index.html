@@ -949,7 +949,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v283</span>
+    <span class="ver" id="verTag">v284</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1925,10 +1925,18 @@
     var s = String(text || ''), rest = s, out = '';
     (hl || []).forEach(function(m){
       if (!m) return;
-      var i = rest.indexOf(m);
-      if (i < 0) return;
-      out += esc(rest.slice(0, i)) + '<span class="gmk">' + esc(m) + '</span>';
-      rest = rest.slice(i + m.length);
+      /* m 可以是字串，或 {t:'の', i:2}＝標第 2 個出現位置 */
+      var tok = (typeof m === 'object') ? (m.t || '') : m;
+      var nth = (typeof m === 'object' && m.i) ? m.i : 1;
+      if (!tok) return;
+      var pos = -1, from = 0;
+      for (var k = 0; k < nth; k++){
+        pos = rest.indexOf(tok, from);
+        if (pos < 0) return;
+        from = pos + tok.length;
+      }
+      out += esc(rest.slice(0, pos)) + '<span class="gmk">' + esc(tok) + '</span>';
+      rest = rest.slice(pos + tok.length);
     });
     return out + esc(rest);
   }
