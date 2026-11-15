@@ -523,8 +523,6 @@
     "v30": "audio/L06-v30.mp3",
     "g0-e0": "audio/L06-g0-e0.mp3",
     "g0-e1": "audio/L06-g0-e1.mp3",
-    "g1-e0": "audio/L06-g1-e0.mp3",
-    "g1-e1": "audio/L06-g1-e1.mp3",
     "g2-e0": "audio/L06-g2-e0.mp3",
     "g2-e1": "audio/L06-g2-e1.mp3",
     "g3-e0": "audio/L06-g3-e0.mp3",
@@ -552,7 +550,11 @@
     "p5-e2": "audio/L06-p5-e2.mp3",
     "p6-e0": "audio/L06-p6-e0.mp3",
     "p6-e1": "audio/L06-p6-e1.mp3",
-    "g3-e2": "audio/L06-g3-e2.mp3"
+    "g3-e2": "audio/L06-g3-e2.mp3",
+    "g1-e0": "audio/L06-g1-e0-2.mp3",
+    "g1-e1": "audio/L06-g1-e1-2.mp3",
+    "g1-e2": "audio/L06-g1-e2-2.mp3",
+    "g1-e3": "audio/L06-g1-e3-2.mp3"
   },
   "L07": {
     "d0-l0": "audio/L07-d0-l0.mp3",
