@@ -898,6 +898,11 @@
   .gtbl thead th.gblank{width:58px; border-left:1px solid var(--line)}
   .gtbl tbody tr:first-child th, .gtbl tbody tr:first-child td{border-top:0}
   .gtbl td .gkey{color:var(--ink); font-weight:600}
+  /* 一格兩層：上面丁寧形（墨色），下面普通形（藍） */
+  .gtbl td.gtwo{padding-top:6px; padding-bottom:6px; line-height:1.35; vertical-align:middle}
+  .gtbl td .gpol{display:block; color:var(--ink)}
+  .gtbl td .gpln{display:block; color:#0b5cad; font-size:11.5px}
+  .gtbl tbody tr.gstart td{border-top:1px solid #d3c3a6}
   /* 文法總表：每一題一行＝出口日語清單的題目，展開見我們的段落 */
   .yti{border-bottom:1px solid var(--line)}
   .yti summary{display:flex; gap:8px; align-items:baseline; padding:10px 2px;
@@ -952,7 +957,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v326</span>
+    <span class="ver" id="verTag">v327</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1957,15 +1962,21 @@
       }).join('') + '</tr></thead>';
     }
     h += '<tbody>' + (t.rows || []).map(function(r){
-      return '<tr>' + r.map(function(c){
-        var span = '', txt = c;
+      var rs = r.some(function(c){ return c && typeof c === 'object' && c.rowspan > 1; });
+      return '<tr' + (rs ? ' class="gstart"' : '') + '>' + r.map(function(c){
+        var span = '', txt = c, sub = null;
         if (c && typeof c === 'object'){
           txt = c.t || '';
+          if (c.sub != null) sub = c.sub;
           if (c.rowspan > 1) span += ' rowspan="' + c.rowspan + '"';
           if (c.colspan > 1) span += ' colspan="' + c.colspan + '"';
         }
-        var cls = ' class="gcell' + (c && typeof c === 'object' && c.rowspan > 1 ? ' gspan' : '') + '"';
-        return '<td' + cls + span + '>' + esc(txt) + '</td>';
+        var cls = ' class="gcell' + (c && typeof c === 'object' && c.rowspan > 1 ? ' gspan' : '') +
+                  (sub != null ? ' gtwo' : '') + '"';
+        var inner = sub != null
+          ? '<span class="gpol">' + esc(txt) + '</span><span class="gpln">' + esc(sub) + '</span>'
+          : esc(txt);
+        return '<td' + cls + span + '>' + inner + '</td>';
       }).join('') + '</tr>';
     }).join('') + '</tbody></table>';
     return h;
