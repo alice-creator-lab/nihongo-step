@@ -272,7 +272,9 @@
     "g3-e0": "audio/L03-g3-e0.mp3",
     "g3-e1": "audio/L03-g3-e1.mp3",
     "g4-e0": "audio/L03-g4-e0.mp3",
-    "g4-e1": "audio/L03-g4-e1.mp3"
+    "g4-e1": "audio/L03-g4-e1.mp3",
+    "g5-e0": "audio/L03-g5-e0.mp3",
+    "g5-e1": "audio/L03-g5-e1.mp3"
   },
   "L04": {
     "d0-l0": "audio/L04-d0-l0.mp3",
