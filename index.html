@@ -880,6 +880,19 @@
   .gacc .gex .txt{flex:1}
   .gacc .gex .zh{display:block; font-size:12px; color:var(--muted); margin-top:2px}
   .gacc .gex .nbk{width:28px; height:28px; flex:0 0 28px; font-size:13px}
+  /* 文法規則表：詞類／接法／例子 */
+  .gtbl{width:100%; border-collapse:collapse; margin:10px 0 2px; font-size:13px;
+    background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+  .gtbl thead th{font-size:11.5px; font-weight:600; color:var(--muted); text-align:left;
+    padding:7px 10px; border-bottom:1px solid var(--line); background:var(--sand2)}
+  .gtbl tbody th{width:56px; font-size:12.5px; font-weight:600; color:var(--ink); text-align:left;
+    padding:8px 8px; vertical-align:top; border-top:1px solid var(--line); white-space:nowrap}
+  .gtbl tbody td{font-size:13px; color:var(--ink2); padding:8px 8px; vertical-align:top;
+    border-top:1px solid var(--line); line-height:1.7}
+  .gtbl tbody td.grule{width:58px; white-space:nowrap; color:var(--ink); font-weight:600}
+  .gtbl tbody td.glast{border-left:1px solid var(--line)}
+  .gtbl tbody tr:first-child th, .gtbl tbody tr:first-child td{border-top:0}
+  .gtbl td .gkey{color:var(--ink); font-weight:600}
   /* 文法總表：每一題一行＝出口日語清單的題目，展開見我們的段落 */
   .yti{border-bottom:1px solid var(--line)}
   .yti summary{display:flex; gap:8px; align-items:baseline; padding:10px 2px;
@@ -933,7 +946,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v277</span>
+    <span class="ver" id="verTag">v278</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1903,11 +1916,28 @@
     host.addEventListener('click', host._gnb);
   }
 
+  /* 文法規則表：{head:[…], rows:[[詞類, 接法, 例子], …]} */
+  function tblHtml(t){
+    var h = '<table class="gtbl">';
+    if (t.head && t.head.length){
+      h += '<thead><tr>' + t.head.map(function(c){ return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead>';
+    }
+    h += '<tbody>' + (t.rows || []).map(function(r){
+      return '<tr>' + r.map(function(c, i){
+        if (i === 0) return '<th>' + esc(c) + '</th>';
+        var cls = i === 1 ? ' class="grule"' : (i === 2 ? ' class="glast"' : '');
+        return '<td' + cls + '>' + esc(c) + '</td>';
+      }).join('') + '</tr>';
+    }).join('') + '</tbody></table>';
+    return h;
+  }
+
   function segGrammar(l){
     var h = '<p class="secnote">文法說明可以當作課前預習，也可以做完練習後回來對照。</p>';
     l.grammar.forEach(function(g, gi){
       h += '<section class="gsec"><h3>'+patFormChips(g)+esc(g.h)+'</h3>';
       (g.p||[]).forEach(function(p){ h += '<p>'+esc(p)+'</p>'; });
+      if (g.tbl) h += tblHtml(g.tbl);
       if (g.flow) h += flowHtml(g.flow);
       if (g.ex && g.ex.length){
         h += '<div class="ex">';
@@ -3321,6 +3351,7 @@
     function gblock(it){
       var g = it.g;
       var ps = (g.p || []).map(function(t){ return '<p>' + esc(t) + '</p>'; }).join('');
+      var tb = g.tbl ? tblHtml(g.tbl) : '';
       var ex = (g.ex || []).map(function(x, ei){
         var au = audioFor(it.id, 'g' + it.gi + '-e' + ei);
         var gk = it.id + ':' + it.gi + ':' + ei;
@@ -3333,7 +3364,7 @@
           '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
       }).join('');
       return '<div class="gsb"><div class="gsh">' + patFormChips(g) + esc(g.h) +
-        '<span class="gl">' + it.id + '</span></div>' + ps + ex + '</div>';
+        '<span class="gl">' + it.id + '</span></div>' + ps + tb + ex + '</div>';
     }
 
     function draw(q){
