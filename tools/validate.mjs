@@ -108,7 +108,9 @@ for (const book of course.books || []) {
       }
     });
     (les.grammar || []).forEach((g, i) => {
-      if (!g.h || !Array.isArray(g.p) || !g.p.length) errors.push(`${rel} grammar[${i}] 需要 h 與 p`);
+      /* 有表格的段落可以只有 h＋tbl、不寫說明（v296 N5 28 月與日表）。 */
+      const hasTbl = !!g.tbl;
+      if (!g.h || (!hasTbl && (!Array.isArray(g.p) || !g.p.length))) errors.push(`${rel} grammar[${i}] 需要 h 與 p`);
       const gforms = 'form' in g ? (Array.isArray(g.form) ? g.form : [g.form]) : [];
       gforms.forEach((f) => {
         if (!FORM_KEYS.includes(f)) {
