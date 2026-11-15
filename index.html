@@ -919,6 +919,7 @@
   .gsb .gex{display:flex; gap:8px; align-items:flex-start; font-size:13.5px; margin-top:7px}
   .gsb .gex .txt{flex:1}
   .gsb .gex .zh{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+  .gmk{color:#0b5cad; font-weight:600}
 
   /* 匯出的 PDF：畫面上隱藏，只有列印（分享 → 儲存到檔案 → PDF）時才出現 */
   #printout{display:none}
@@ -948,7 +949,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v280</span>
+    <span class="ver" id="verTag">v281</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1666,7 +1667,7 @@
         p.ex.forEach(function(x, ei){
           var au = audioFor(l.id, 'p' + l.patterns.indexOf(p) + '-e' + ei);
           h += '<div class="exrow"><div class="txt">' +
-               '<div class="ja">'+esc(x.ja)+'</div>' +
+               '<div class="ja">'+gHl(x.ja, x.hl || p.hl)+'</div>' +
                '<div class="zh">'+esc(x.zh)+'</div></div>' +
                '<button class="spk" data-say="'+esc(ttsText(x))+'"' +
                (au ? ' data-audio="'+esc(au)+'"' : '') + ' aria-label="播放例句">'+SPK+'</button></div>';
@@ -1918,6 +1919,20 @@
     host.addEventListener('click', host._gnb);
   }
 
+  /* 例句裡屬於該文法的部分上藍色：hl 是依序出現的片段陣列
+     （同一句多段就寫多個，例如 ['て','て']）。 */
+  function gHl(text, hl){
+    var s = String(text || ''), rest = s, out = '';
+    (hl || []).forEach(function(m){
+      if (!m) return;
+      var i = rest.indexOf(m);
+      if (i < 0) return;
+      out += esc(rest.slice(0, i)) + '<span class="gmk">' + esc(m) + '</span>';
+      rest = rest.slice(i + m.length);
+    });
+    return out + esc(rest);
+  }
+
   /* 文法規則表：{head:[…], rows:[[詞類, 接法, …], …]}
      儲存格可以寫物件 {t:'＋なります', rowspan:3} 做合併格（只在第一列寫，
      其後各列唔要再放那一格）。 */
@@ -1955,7 +1970,7 @@
         g.ex.forEach(function(x, ei){
           var au = audioFor(l.id, 'g' + gi + '-e' + ei);
           h += '<div class="exrow"><div class="txt">' +
-               '<div class="ja">'+esc(x.ja)+'</div>' +
+               '<div class="ja">'+gHl(x.ja, x.hl || g.hl)+'</div>' +
                '<div class="zh">'+esc(x.zh)+'</div></div>' +
                '<button class="nbk'+(nbHasSent(l.id, x.ja) ? ' on' : '')+'" data-gs="'+gi+'-'+ei+'" aria-label="加入練習本">'+
                  (nbHasSent(l.id, x.ja) ? '★' : '☆')+'</button>' +
@@ -3372,7 +3387,7 @@
           '" data-gsx="' + gk + '" aria-label="加入練習本">' + (nbHasSent(it.id, x.ja) ? '★' : '☆') + '</button>' +
           '<button class="spk" data-say="' + esc(ttsText(x)) + '"' +
           (au ? ' data-audio="' + esc(au) + '"' : '') + ' aria-label="播放例句">' + SPK + '</button>' +
-          '<div class="txt">' + esc(x.ja) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
+          '<div class="txt">' + gHl(x.ja, x.hl || g.hl) + '<span class="zh">' + esc(x.zh) + '</span></div></div>';
       }).join('');
       return '<div class="gsb"><div class="gsh">' + patFormChips(g) + esc(g.h) +
         '<span class="gl">' + it.id + '</span></div>' + ps + tb + ex + '</div>';
