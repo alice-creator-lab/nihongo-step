@@ -160,6 +160,8 @@ pl4 = json.load(open('data/playlist-n4.json', encoding='utf-8'))['items']
 TITLE_SWAP = {('n5', 3): 4, ('n5', 4): 3}
 
 SKIP = {('n5', 34), ('n5', 35), ('n5', 36)}  # 已併入 N5 33「授受動詞」
+TITLE_OVERRIDE = {('n5', 33): 'あげます・もらいます・くれます・やります'}
+RENUMBER_FROM, RENUMBER_BY = 37, 3  # 34-36 併入 33 後，37 起往上移 3
 
 items = []
 for book, pl in (('n5', pl5), ('n4', pl4)):
@@ -169,8 +171,12 @@ for book, pl in (('n5', pl5), ('n4', pl4)):
         if (book, no) in SKIP:
             continue
         title = titles[TITLE_SWAP[(book, no)]] if (book, no) in TITLE_SWAP else it['title']
+        title = TITLE_OVERRIDE.get((book, no), title)
         items.append({'pl': book, 'no': no, 't': title,
                       'keys': ASSIGN.get((book, no), [])})
+for it in items:  # 34-36 併入 33 後，N5 37 起編號往上移
+    if it['pl'] == 'n5' and it['no'] >= RENUMBER_FROM:
+        it['no'] -= RENUMBER_BY
 items.append({'pl': 'other', 'no': 0, 't': '其他（清單沒有）', 'keys': OTHER})
 
 # ---- 驗證 ----
