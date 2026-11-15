@@ -883,6 +883,8 @@
   /* 文法規則表：詞類／接法／例子 */
   .gtbl{width:100%; border-collapse:collapse; margin:10px 0 2px; font-size:13px;
     background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+  .gtbl.gtight td, .gtbl.gtight th{padding-left:4px; padding-right:4px}
+  .gtbl.gtight tbody td{font-size:12px}
   .gtbl caption{caption-side:top; text-align:left; font-size:11.5px; color:var(--muted); padding:2px 2px 6px}
   .gtbl thead th{font-size:11.5px; font-weight:600; color:var(--muted); text-align:left; white-space:nowrap;
     padding:7px 10px; border-bottom:1px solid var(--line); background:var(--sand2)}
@@ -950,7 +952,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v291</span>
+    <span class="ver" id="verTag">v292</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1947,7 +1949,7 @@
      其後各列唔要再放那一格）。 */
   function tblHtml(t){
     if (Array.isArray(t)) return t.map(tblHtml).join('');
-    var h = '<table class="gtbl">';
+    var h = '<table class="gtbl' + (t.tight ? ' gtight' : '') + '">';
     if (t.cap) h += '<caption>' + esc(t.cap) + '</caption>';
     if (t.head && t.head.length){
       h += '<thead><tr>' + t.head.map(function(c){
