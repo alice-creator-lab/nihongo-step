@@ -883,6 +883,7 @@
   /* 文法規則表：詞類／接法／例子 */
   .gtbl{width:100%; border-collapse:collapse; margin:10px 0 2px; font-size:13px;
     background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+  .gtbl caption{caption-side:top; text-align:left; font-size:11.5px; color:var(--muted); padding:2px 2px 6px}
   .gtbl thead th{font-size:11.5px; font-weight:600; color:var(--muted); text-align:left; white-space:nowrap;
     padding:7px 10px; border-bottom:1px solid var(--line); background:var(--sand2)}
   .gtbl tbody td{font-size:12.5px; color:var(--ink2); padding:8px 7px; vertical-align:middle;
@@ -949,7 +950,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v290</span>
+    <span class="ver" id="verTag">v291</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1945,7 +1946,9 @@
      儲存格可以寫物件 {t:'＋なります', rowspan:3} 做合併格（只在第一列寫，
      其後各列唔要再放那一格）。 */
   function tblHtml(t){
+    if (Array.isArray(t)) return t.map(tblHtml).join('');
     var h = '<table class="gtbl">';
+    if (t.cap) h += '<caption>' + esc(t.cap) + '</caption>';
     if (t.head && t.head.length){
       h += '<thead><tr>' + t.head.map(function(c){
         return c ? '<th>' + esc(c) + '</th>' : '<th class="gblank"></th>';
