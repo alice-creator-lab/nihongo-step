@@ -3273,8 +3273,6 @@
     "v23": "audio/L38-v23.mp3",
     "v24": "audio/L38-v24.mp3",
     "v25": "audio/L38-v25.mp3",
-    "g0-e0": "audio/L38-g0-e0.mp3",
-    "g0-e1": "audio/L38-g0-e1.mp3",
     "g1-e0": "audio/L38-g1-e0.mp3",
     "g1-e1": "audio/L38-g1-e1.mp3",
     "g2-e0": "audio/L38-g2-e0.mp3",
@@ -3294,7 +3292,11 @@
     "l4": "audio/L38-l4.mp3",
     "l5": "audio/L38-l5.mp3",
     "l6": "audio/L38-l6.mp3",
-    "l7": "audio/L38-l7.mp3"
+    "l7": "audio/L38-l7.mp3",
+    "g0-e0": "audio/L38-g0-e0-2.mp3",
+    "g0-e1": "audio/L38-g0-e1-2.mp3",
+    "g0-e2": "audio/L38-g0-e2-2.mp3",
+    "g0-e3": "audio/L38-g0-e3-2.mp3"
   },
   "L39": {
     "d0-l0": "audio/L39-d0-l0.mp3",
