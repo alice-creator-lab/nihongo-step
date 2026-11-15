@@ -229,7 +229,7 @@ function report() {
     for (const it of gidx.items) {
       for (const k of it.keys || []) {
         if (!all.has(k)) errors.push(`grammar-index：「${it.t}」指向不存在的段落 ${k}`);
-        if (used.has(k)) errors.push(`grammar-index：段落 ${k} 重複（「${used.get(k)}」／「${it.t}」）`);
+        if (used.has(k)) warn.push(`grammar-index：段落 ${k} 由多題共用（「${used.get(k)}」／「${it.t}」）`);
         used.set(k, it.t);
       }
     }

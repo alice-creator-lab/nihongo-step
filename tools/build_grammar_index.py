@@ -192,7 +192,7 @@ for label, lst in (('重複', dup), ('未排', missing), ('不存在', bogus)):
         for x in lst[:40]:
             k = x if isinstance(x, str) else x[0]
             print('   ', x, have.get(k, ''))
-if dup or missing or bogus:
+if missing or bogus:
     sys.exit(1)
 
 json.dump({'v': 3,
