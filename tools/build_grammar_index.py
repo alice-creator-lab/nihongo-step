@@ -159,11 +159,15 @@ pl4 = json.load(open('data/playlist-n4.json', encoding='utf-8'))['items']
 # 題目名對調：清單第 3、4 題的內容次序照使用者指定，題目名一齊對調
 TITLE_SWAP = {('n5', 3): 4, ('n5', 4): 3}
 
+SKIP = {('n5', 34), ('n5', 35), ('n5', 36)}  # 已併入 N5 33「授受動詞」
+
 items = []
 for book, pl in (('n5', pl5), ('n4', pl4)):
     titles = {x['no']: x['title'] for x in pl}
     for it in pl:
         no = it['no']
+        if (book, no) in SKIP:
+            continue
         title = titles[TITLE_SWAP[(book, no)]] if (book, no) in TITLE_SWAP else it['title']
         items.append({'pl': book, 'no': no, 't': title,
                       'keys': ASSIGN.get((book, no), [])})
