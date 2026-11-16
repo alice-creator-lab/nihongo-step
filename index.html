@@ -898,6 +898,12 @@
   .gtbl thead th.gblank{width:58px; border-left:1px solid var(--line)}
   .gtbl tbody tr:first-child th, .gtbl tbody tr:first-child td{border-top:0}
   .gtbl td .gkey{color:var(--ink); font-weight:600}
+  /* 假名格：動詞分類圖（段×行），欄多所以要收窄 */
+  .gtbl.kana thead th{font-size:11px; text-align:center; padding:4px 1px; white-space:nowrap}
+  .gtbl.kana tbody td{font-size:12px; text-align:center; padding:4px 1px; white-space:nowrap}
+  .gtbl.kana tbody td:first-child{width:34px; font-size:10.5px; text-align:left; padding-left:0;
+    letter-spacing:-0.3px; color:var(--muted); font-weight:600}
+
   /* 一格兩層：上面丁寧形（墨色），下面普通形（藍） */
   .gtbl td.gtwo{padding-top:6px; padding-bottom:6px; line-height:1.35; vertical-align:middle}
   .gtbl td .gpol{display:block; color:var(--ink)}
@@ -959,7 +965,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v342</span>
+    <span class="ver" id="verTag">v343</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1956,7 +1962,7 @@
      其後各列唔要再放那一格）。 */
   function tblHtml(t){
     if (Array.isArray(t)) return t.map(tblHtml).join('');
-    var h = '<table class="gtbl' + (t.tight ? ' gtight' : '') + '">';
+    var h = '<table class="gtbl' + (t.tight ? ' gtight' : '') + (t.cls ? ' ' + t.cls : '') + '">';
     if (t.cap) h += '<caption>' + esc(t.cap) + '</caption>';
     if (t.head && t.head.length){
       h += '<thead><tr>' + t.head.map(function(c){
