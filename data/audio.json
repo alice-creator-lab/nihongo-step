@@ -1304,7 +1304,9 @@
     "v40": "audio/L13-v40.mp3",
     "v41": "audio/L13-v41.mp3",
     "v42": "audio/L13-v42.mp3",
-    "v43": "audio/L13-v43.mp3"
+    "v43": "audio/L13-v43.mp3",
+    "g5-e2": "audio/L13-g5-e2.mp3",
+    "g6-e2": "audio/L13-g6-e2.mp3"
   },
   "L14": {
     "d0-l0": "audio/L14-d0-l0.mp3",
@@ -1499,7 +1501,8 @@
     "v29": "audio/L15-v29.mp3",
     "v30": "audio/L15-v30.mp3",
     "v31": "audio/L15-v31.mp3",
-    "v32": "audio/L15-v32.mp3"
+    "v32": "audio/L15-v32.mp3",
+    "g5-e2": "audio/L15-g5-e2.mp3"
   },
   "L16": {
     "d0-l0": "audio/L16-d0-l0.mp3",
