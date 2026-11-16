@@ -988,7 +988,16 @@
     "v43": "audio/L10-v43.mp3",
     "v44": "audio/L10-v44.mp3",
     "v45": "audio/L10-v45.mp3",
-    "v46": "audio/L10-v46.mp3"
+    "v46": "audio/L10-v46.mp3",
+    "g7-e0": "audio/L10-g7-e0.mp3",
+    "g7-e1": "audio/L10-g7-e1.mp3",
+    "g7-e2": "audio/L10-g7-e2.mp3",
+    "g8-e0": "audio/L10-g8-e0.mp3",
+    "g8-e1": "audio/L10-g8-e1.mp3",
+    "g8-e2": "audio/L10-g8-e2.mp3",
+    "g9-e0": "audio/L10-g9-e0.mp3",
+    "g9-e1": "audio/L10-g9-e1.mp3",
+    "g9-e2": "audio/L10-g9-e2.mp3"
   },
   "L11": {
     "d0-l0": "audio/L11-d0-l0.mp3",
