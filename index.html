@@ -904,9 +904,11 @@
   .gtbl.kana tbody td:first-child{width:34px; font-size:10.5px; text-align:left; padding-left:0;
     letter-spacing:-0.3px; color:var(--muted); font-weight:600}
   /* 暗紅框：標示規則用到的那一行（例：い段） */
-  .gtbl.kana tr.gbox td{border-top:2px solid #8c2f39; border-bottom:2px solid #8c2f39; color:#8c2f39}
-  .gtbl.kana tr.gbox td:first-child{border-left:2px solid #8c2f39; color:#8c2f39}
-  .gtbl.kana tr.gbox td:last-child{border-right:2px solid #8c2f39}
+  .gtbl.kana tr.gbox td{color:#8c2f39; position:relative}
+  .gtbl.kana tr.gbox td::before{content:''; position:absolute; inset:-1px;
+    border-top:2px solid #8c2f39; border-bottom:2px solid #8c2f39; pointer-events:none}
+  .gtbl.kana tr.gbox td:first-child::before{border-left:2px solid #8c2f39}
+  .gtbl.kana tr.gbox td:last-child::before{border-right:2px solid #8c2f39}
 
   /* 一格兩層：上面丁寧形（墨色），下面普通形（藍） */
   .gtbl td.gtwo{padding-top:6px; padding-bottom:6px; line-height:1.35; vertical-align:middle}
@@ -969,7 +971,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v351</span>
+    <span class="ver" id="verTag">v352</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
