@@ -903,6 +903,10 @@
   .gtbl.kana tbody td{font-size:12px; text-align:center; padding:4px 1px; white-space:nowrap}
   .gtbl.kana tbody td:first-child{width:34px; font-size:10.5px; text-align:left; padding-left:0;
     letter-spacing:-0.3px; color:var(--muted); font-weight:600}
+  /* 暗紅框：標示規則用到的那一行（例：い段） */
+  .gtbl.kana tr.gbox td{border-top:2px solid #8c2f39; border-bottom:2px solid #8c2f39; color:#8c2f39}
+  .gtbl.kana tr.gbox td:first-child{border-left:2px solid #8c2f39; color:#8c2f39}
+  .gtbl.kana tr.gbox td:last-child{border-right:2px solid #8c2f39}
 
   /* 一格兩層：上面丁寧形（墨色），下面普通形（藍） */
   .gtbl td.gtwo{padding-top:6px; padding-bottom:6px; line-height:1.35; vertical-align:middle}
@@ -965,7 +969,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v350</span>
+    <span class="ver" id="verTag">v351</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1969,11 +1973,14 @@
         return c ? '<th>' + esc(c) + '</th>' : '<th class="gblank"></th>';
       }).join('') + '</tr></thead>';
     }
-    h += '<tbody>' + (t.rows || []).map(function(r){
+    h += '<tbody>' + (t.rows || []).map(function(row){
+      var r = (row && row.cells) ? row.cells : row;
+      var rcls = (row && row.cls) ? row.cls : '';
       var rs = r.some(function(c){ return c && typeof c === 'object' && c.rowspan > 1; });
       var band = r.length === 1 && r[0] && typeof r[0] === 'object' && r[0].colspan > 1;
       if (band) rs = true;
-      return '<tr' + (rs ? ' class="gstart' + (band ? ' gband' : '') + '"' : '') + '>' + r.map(function(c){
+      var trcls = (rs ? 'gstart' + (band ? ' gband' : '') + ' ' : '') + rcls;
+      return '<tr' + (trcls ? ' class="' + trcls + '"' : '') + '>' + r.map(function(c){
         var span = '', txt = c, sub = null;
         if (c && typeof c === 'object'){
           txt = c.t || '';
