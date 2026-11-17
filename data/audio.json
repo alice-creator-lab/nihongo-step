@@ -1210,7 +1210,9 @@
     "g9-e2": "audio/L12-g9-e2.mp3",
     "g10-e0": "audio/L12-g10-e0.mp3",
     "g10-e1": "audio/L12-g10-e1.mp3",
-    "g10-e2": "audio/L12-g10-e2.mp3"
+    "g10-e2": "audio/L12-g10-e2.mp3",
+    "g11-e0": "audio/L12-g11-e0.mp3",
+    "g11-e1": "audio/L12-g11-e1.mp3"
   },
   "L13": {
     "d0-l0": "audio/L13-d0-l0.mp3",
