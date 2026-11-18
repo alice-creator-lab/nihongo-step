@@ -915,6 +915,8 @@
   .gtbl.np thead th:nth-child(3){color:#8c2f39}
   .gtbl.tiny thead th{font-size:10.5px; padding:4px 2px}
   .gtbl.tiny tbody td{font-size:11px; padding:4px 2px}
+  .gtbl.mini thead th{font-size:10px; padding:3px 2px}
+  .gtbl.mini tbody td{font-size:10px; padding:3px 2px}
 
   /* 一格兩層：上面丁寧形（墨色），下面普通形（藍） */
   .gtbl td.gtwo{padding-top:6px; padding-bottom:6px; line-height:1.35; vertical-align:middle}
@@ -977,7 +979,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v375</span>
+    <span class="ver" id="verTag">v376</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -5050,6 +5052,14 @@
     }).catch(function(e){
       app.innerHTML = '<div class="err">課程資料載入失敗。<br><small>'+esc(e.message)+'</small></div>';
     });
+
+    /* 總表一次只展開一題：開新的，自動收起上一個 */
+    document.addEventListener('toggle', function(e){
+      var d = e.target;
+      if (!d || !d.classList || !d.classList.contains('yti') || !d.open) return;
+      var all = document.querySelectorAll('details.yti[open]');
+      for (var i = 0; i < all.length; i++){ if (all[i] !== d) all[i].open = false; }
+    }, true);
 
     window.addEventListener('hashchange', route);
     /* 浮動停止鍵：任何播放中按一下即全部停（含長表的播放全部） */
