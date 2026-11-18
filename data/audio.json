@@ -1776,7 +1776,11 @@
     "v37": "audio/L18-v37.mp3",
     "v38": "audio/L18-v38.mp3",
     "g7-e0": "audio/L18-g7-e0.mp3",
-    "g7-e1": "audio/L18-g7-e1.mp3"
+    "g7-e1": "audio/L18-g7-e1.mp3",
+    "g9-e0": "audio/L18-g9-e0.mp3",
+    "g9-e1": "audio/L18-g9-e1.mp3",
+    "g11-e0": "audio/L18-g11-e0.mp3",
+    "g11-e1": "audio/L18-g11-e1.mp3"
   },
   "L19": {
     "d0-l0": "audio/L19-d0-l0.mp3",
