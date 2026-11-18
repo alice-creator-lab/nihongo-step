@@ -1026,7 +1026,11 @@
     "g10-e0": "audio/L10-g10-e0.mp3",
     "g10-e1": "audio/L10-g10-e1.mp3",
     "g10-e2": "audio/L10-g10-e2.mp3",
-    "g10-e3": "audio/L10-g10-e3.mp3"
+    "g10-e3": "audio/L10-g10-e3.mp3",
+    "g11-e0": "audio/L10-g11-e0.mp3",
+    "g11-e1": "audio/L10-g11-e1.mp3",
+    "g11-e2": "audio/L10-g11-e2.mp3",
+    "g11-e3": "audio/L10-g11-e3.mp3"
   },
   "L11": {
     "d0-l0": "audio/L11-d0-l0.mp3",
@@ -1130,7 +1134,11 @@
     "g11-e0": "audio/L11-g11-e0.mp3",
     "g11-e1": "audio/L11-g11-e1.mp3",
     "g11-e2": "audio/L11-g11-e2.mp3",
-    "g11-e3": "audio/L11-g11-e3.mp3"
+    "g11-e3": "audio/L11-g11-e3.mp3",
+    "g12-e0": "audio/L11-g12-e0.mp3",
+    "g12-e1": "audio/L11-g12-e1.mp3",
+    "g12-e2": "audio/L11-g12-e2.mp3",
+    "g12-e3": "audio/L11-g12-e3.mp3"
   },
   "L12": {
     "d0-l0": "audio/L12-d0-l0.mp3",
@@ -2434,7 +2442,11 @@
     "g14-e0": "audio/L25-g14-e0.mp3",
     "g14-e1": "audio/L25-g14-e1.mp3",
     "g14-e2": "audio/L25-g14-e2.mp3",
-    "g14-e3": "audio/L25-g14-e3.mp3"
+    "g14-e3": "audio/L25-g14-e3.mp3",
+    "g15-e0": "audio/L25-g15-e0.mp3",
+    "g15-e1": "audio/L25-g15-e1.mp3",
+    "g15-e2": "audio/L25-g15-e2.mp3",
+    "g15-e3": "audio/L25-g15-e3.mp3"
   },
   "L26": {
     "d0-l0": "audio/L26-d0-l0.mp3",
@@ -2512,7 +2524,11 @@
     "l4": "audio/L26-l4.mp3",
     "l5": "audio/L26-l5.mp3",
     "l6": "audio/L26-l6.mp3",
-    "l7": "audio/L26-l7.mp3"
+    "l7": "audio/L26-l7.mp3",
+    "g7-e0": "audio/L26-g7-e0.mp3",
+    "g7-e1": "audio/L26-g7-e1.mp3",
+    "g7-e2": "audio/L26-g7-e2.mp3",
+    "g7-e3": "audio/L26-g7-e3.mp3"
   },
   "L27": {
     "d0-l0": "audio/L27-d0-l0.mp3",
