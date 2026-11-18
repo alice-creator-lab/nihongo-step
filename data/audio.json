@@ -1256,7 +1256,11 @@
     "g12-e0": "audio/L12-g12-e0.mp3",
     "g12-e1": "audio/L12-g12-e1.mp3",
     "g12-e2": "audio/L12-g12-e2.mp3",
-    "g12-e3": "audio/L12-g12-e3.mp3"
+    "g12-e3": "audio/L12-g12-e3.mp3",
+    "g13-e0": "audio/L12-g13-e0.mp3",
+    "g13-e1": "audio/L12-g13-e1.mp3",
+    "g13-e2": "audio/L12-g13-e2.mp3",
+    "g13-e3": "audio/L12-g13-e3.mp3"
   },
   "L13": {
     "d0-l0": "audio/L13-d0-l0.mp3",
@@ -1661,7 +1665,11 @@
     "g6-e2": "audio/L16-g6-e2.mp3",
     "g6-e3": "audio/L16-g6-e3.mp3",
     "g6-e4": "audio/L16-g6-e4.mp3",
-    "g6-e5": "audio/L16-g6-e5.mp3"
+    "g6-e5": "audio/L16-g6-e5.mp3",
+    "g7-e0": "audio/L16-g7-e0.mp3",
+    "g7-e1": "audio/L16-g7-e1.mp3",
+    "g7-e2": "audio/L16-g7-e2.mp3",
+    "g7-e3": "audio/L16-g7-e3.mp3"
   },
   "L17": {
     "d0-l0": "audio/L17-d0-l0.mp3",
@@ -2759,7 +2767,11 @@
     "l4": "audio/L29-l4.mp3",
     "l5": "audio/L29-l5.mp3",
     "l6": "audio/L29-l6.mp3",
-    "l7": "audio/L29-l7.mp3"
+    "l7": "audio/L29-l7.mp3",
+    "g7-e0": "audio/L29-g7-e0.mp3",
+    "g7-e1": "audio/L29-g7-e1.mp3",
+    "g7-e2": "audio/L29-g7-e2.mp3",
+    "g7-e3": "audio/L29-g7-e3.mp3"
   },
   "L30": {
     "d0-l0": "audio/L30-d0-l0.mp3",
