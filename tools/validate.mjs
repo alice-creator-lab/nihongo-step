@@ -236,7 +236,7 @@ function report() {
     for (const k of all) if (!used.has(k)) errors.push(`grammar-index：段落 ${k} 未掛到任何題目`);
     const n5 = gidx.items.filter((x) => x.pl === 'n5').length;
     const n4 = gidx.items.filter((x) => x.pl === 'n4').length;
-    if (n5 !== 115) errors.push(`grammar-index：N5 題目 ${n5} 題，應為 115（34–36 併入 33、数量詞已刪）`);
+    if (n5 !== 114) errors.push(`grammar-index：N5 題目 ${n5} 題，應為 114（34–36 併入 33、数量詞與文体已刪）`);
     if (n4 !== 119) errors.push(`grammar-index：N4 題目 ${n4} 題，應為 119（動詞変化の再変化已刪）`);
   }
 
