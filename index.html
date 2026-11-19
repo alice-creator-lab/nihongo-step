@@ -258,6 +258,8 @@
   .seg2 button{appearance:none; border:0; background:transparent; font-family:var(--sans); font-size:12px;
     color:var(--ink2); padding:7px 11px}
   .seg2 button.on{background:var(--ink); color:#fffdf8}
+  /* 未上線的分頁：灰字、不可按 */
+  .seg2 button.soff{color:var(--muted); opacity:.85; cursor:default}
   .quizbar .btn2{padding:9px 15px; font-size:13px}
   .cardmeta{text-align:center; font-size:11.5px; color:var(--muted); letter-spacing:.1em; margin:8px 0 10px}
   .cardmeta.nmeta{display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -983,7 +985,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v401</span>
+    <span class="ver" id="verTag">v402</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3377,7 +3379,8 @@
     var isVocab = kind === 'vocab';
     var items = isVocab ? allVocabItems() : grammarIndexItems();
     /* 文法總表分級：N5／N4，選過的記住 */
-    var GLEVEL = localStorage.getItem('glv') === 'n4' ? 'n4' : 'n5';
+    /* N4 未上線，只顯示 N5 */
+    var GLEVEL = 'n5';
     document.title = (isVocab ? '詞語總表' : '文法總表') + ' · 日語階梯';
     app.innerHTML =
       '<div class="lhead">' +
@@ -3404,7 +3407,7 @@
         'placeholder="' + (isVocab ? '搜尋假名、漢字或中文' : '搜尋文法標題或例句') + '"></div>' +
       (isVocab ? '' : '<div class="sortrow"><div class="seg2" id="alllevel">' +
         '<button data-lv="n5" class="' + (GLEVEL === 'n5' ? 'on' : '') + '">N5</button>' +
-        '<button data-lv="n4" class="' + (GLEVEL === 'n4' ? 'on' : '') + '">N4</button>' +
+        '<button data-lv="n4" class="soff" disabled>N4 未上線</button>' +
       '</div></div>') +
       '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
         (isVocab ? '<button class="btn2" id="allplay">▶ 播放全部</button>' : '') +
