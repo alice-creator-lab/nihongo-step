@@ -979,7 +979,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v396</span>
+    <span class="ver" id="verTag">v397</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3366,6 +3366,8 @@
   function renderAll(kind){
     var isVocab = kind === 'vocab';
     var items = isVocab ? allVocabItems() : grammarIndexItems();
+    /* 文法總表分級：N5／N4／其他，選過的記住 */
+    var GLEVEL = localStorage.getItem('glv') || 'n5';
     document.title = (isVocab ? '詞語總表' : '文法總表') + ' · 日語階梯';
     app.innerHTML =
       '<div class="lhead">' +
@@ -3390,6 +3392,11 @@
         '</div>') +
       '<div class="search"><input id="allq" type="search" autocomplete="off" ' +
         'placeholder="' + (isVocab ? '搜尋假名、漢字或中文' : '搜尋文法標題或例句') + '"></div>' +
+      (isVocab ? '' : '<div class="sortrow"><div class="seg2" id="alllevel">' +
+        '<button data-lv="n5" class="' + (GLEVEL === 'n5' ? 'on' : '') + '">N5</button>' +
+        '<button data-lv="n4" class="' + (GLEVEL === 'n4' ? 'on' : '') + '">N4</button>' +
+        '<button data-lv="other" class="' + (GLEVEL === 'other' ? 'on' : '') + '">其他</button>' +
+      '</div></div>') +
       '<div class="alltop"><p class="cnt" id="allcnt"></p>' +
         (isVocab ? '<button class="btn2" id="allplay">▶ 播放全部</button>' : '') +
       '</div>' +
@@ -3405,7 +3412,8 @@
        sort 是穩定排序，所以完全同音（はし 橋／箸）仍按課號先後。
        每次 draw 都重算：切換排序時 VSORT 已變，不能再沿用 render 時的結果。 */
     function baseList(){
-      return (isVocab && VSORT === 'kana') ? items.slice().sort(kanaCmp) : items;
+      if (isVocab) return VSORT === 'kana' ? items.slice().sort(kanaCmp) : items;
+      return items.filter(function(it){ return (it.pl || 'other') === GLEVEL; });
     }
 
     function vrow(it, k){
@@ -3505,6 +3513,19 @@
     draw('');
     var q = $('#allq');
     q.addEventListener('input', function(){ if (ALLPLAY.on) stopAllPlay(); draw(this.value); });
+
+    /* 分級切換：N5／N4／其他，選擇記在 localStorage */
+    var lv = $('#alllevel');
+    if (lv) lv.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-lv]'); if (!b) return;
+      if (ALLPLAY.on) stopAllPlay();
+      GLEVEL = b.getAttribute('data-lv');
+      try { localStorage.setItem('glv', GLEVEL); } catch(err){}
+      Array.prototype.forEach.call(lv.querySelectorAll('button'), function(x){
+        x.classList.toggle('on', x === b);
+      });
+      draw($('#allq').value);
+    });
 
     /* 排序切換：課程順序 ↔ 五十音順，選擇記在 localStorage */
     var sw = $('#allsort');
