@@ -107,6 +107,9 @@
   /* lesson */
   .lhead{padding:18px 2px 4px}
   .back{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink2); text-decoration:none}
+  /* 測驗結果頁的返回鍵：做成可點的大按鈕（原本 20px 高的純文字太難按） */
+  .backchip{margin:6px 0 14px; padding:9px 14px; font-size:13px; font-weight:600;
+    border:1px solid var(--line); border-radius:999px; background:var(--card); min-height:38px}
   .lhead h1{margin:10px 0 0; font-size:26px; font-weight:600; letter-spacing:.01em; line-height:1.35}
   .lhead h1 .k{display:block; margin-top:6px; font-family:var(--serif); font-size:13px; color:var(--muted); letter-spacing:.16em; font-weight:400}
   .goal{margin:10px 0 0; font-size:13.5px; color:var(--ink2); line-height:1.85}
@@ -985,7 +988,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v402</span>
+    <span class="ver" id="verTag">v403</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -4932,7 +4935,7 @@
     }).join('');
 
     app.innerHTML =
-      '<a class="back" href="#/exam/' + d.stage + '" style="display:inline-block;margin:8px 0 12px">← 測驗首頁</a>' +
+      '<a class="back backchip" href="#/exam/' + d.stage + '">← 測驗首頁</a>' +
       '<div class="sum exsum">' +
         '<div class="big">' + score + '<small> ／ ' + total + '</small></div>' +
         '<p class="verdict" style="margin-top:6px;font-size:14px">' +
@@ -5095,6 +5098,20 @@
     }, true);
 
     window.addEventListener('hashchange', route);
+
+    /* 連結的 href 跟目前網址相同時（例如測驗結果頁的「← 測驗首頁」，
+       因為測驗中已 replaceState 成 #/exam/N）不會觸發 hashchange，
+       按下去好像壞掉。這裡補一次 route()，令同一頁的返回鍵照樣有效。 */
+    document.addEventListener('click', function(e){
+      var a = e.target.closest ? e.target.closest('a[href^="#/"]') : null;
+      if (!a || a.target === '_blank') return;
+      var href = a.getAttribute('href');
+      if (href && href === location.hash){
+        e.preventDefault();
+        route();
+        window.scrollTo(0, 0);
+      }
+    });
     /* 浮動停止鍵：任何播放中按一下即全部停（含長表的播放全部） */
     var vfs = document.getElementById('vfstop');
     if (vfs) vfs.addEventListener('click', function(){ stopAudio(); });
