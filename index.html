@@ -137,8 +137,6 @@
     line-height:1; padding:6px 8px; border:1px solid #0b5cad; border-radius:7px; background:#e6eefb;
     color:#0b5cad; text-decoration:none; letter-spacing:.04em; white-space:nowrap}
   .pfrm:active{background:#d3e2f8}
-  /* 詞類標籤（名詞・い形・な形・副詞）：不是活用，用暖色、不可點 */
-  .pfrm.wc{border-color:#c9b696; background:#f3e9d6; color:#7a6647}
   /* 衍生形（可能・意志・ば・受身・使役）：同一種框、換一個色系，一眼分得出 */
   .pfrm.dv{border-color:#0f6b5c; background:#e5f1ee; color:#0f6b5c}
   .pfrm.dv:active{background:#d6e9e4}
@@ -981,7 +979,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v388</span>
+    <span class="ver" id="verTag">v389</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1014,10 +1012,7 @@
   /* 句型若係某個形的應用（資料的 form 欄），在卡片左上顯示可點的形名，連去五段動詞詳細表 */
   var PAT_FORM = { masu:'ます形', te:'て形', ta:'た形', nai:'ない形', dict:'辞書形',
                    plain:'普通形', pot:'可能形', vol:'意志形', ba:'ば形',
-                   pass:'受身形', caus:'使役形',
-                   noun:'名詞', iadj:'い形', naadj:'な形', adv:'副詞' };
-  /* 不是動詞活用的標籤：只標詞類，不做連結 */
-  var WORDCLASS_FORM = { noun:1, iadj:1, naadj:1, adv:1 };
+                   pass:'受身形', caus:'使役形' };
   var PAT_FORM_HREF = '#/all/verbs/forms/godan';
   /* 衍生形沒有逐字的詳細表，標籤統一連去「動詞的衍生形」規則頁 */
   var DERIVED_FORM = { pot:1, vol:1, ba:1, pass:1, caus:1 };
@@ -1679,7 +1674,6 @@
     fs = fs.filter(function(f){ return PAT_FORM[f]; });
     if (!fs.length) return '';
     return '<span class="pfrmg">' + fs.map(function(f){
-      if (WORDCLASS_FORM[f]) return '<span class="pfrm wc">' + PAT_FORM[f] + '</span>';
       var dv = !!DERIVED_FORM[f];
       var href = dv ? DERIVED_HREF : (f === 'plain' ? '#/plain' : PAT_FORM_HREF);
       var tip = dv ? '動詞的衍生形' : (f === 'plain' ? '普通形 ⇄ ます形 對照表' : '五段動詞 詳細表');
