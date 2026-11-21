@@ -999,7 +999,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v412</span>
+    <span class="ver" id="verTag">v413</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -4755,11 +4755,11 @@
       '<h3>變化可以一層一層疊上去<span class="wk">五段動詞「働く」</span></h3>' +
       '<div class="dfstair">' + [
         { zh:'工作',              nm:'辞書形', parts:[['働',0],['く',0]] },
-        { zh:'叫（人）工作',      nm:'使役形', parts:[['働か',0],['せる',1]] },
-        { zh:'被迫工作／能做',    nm:'受身形', parts:[['働か',0],['せ',1],['られる',2]] },
-        { zh:'不會被迫工作',      nm:'ない形', parts:[['働か',0],['せ',1],['られ',2],['ない',3]] },
-        { zh:'沒有被迫工作',      nm:'た形',   parts:[['働か',0],['せ',1],['られ',2],['な',3],['かった',4]] },
-        { zh:'如果沒有被迫工作',  nm:'条件形', parts:[['働か',0],['せ',1],['られ',2],['な',3],['ければ',5]] }
+        { zh:'叫（人）工作',      nm:'使役形', parts:[['働',0],['かせる',1]] },
+        { zh:'被迫工作／能做',    nm:'受身形', parts:[['働',0],['かせ',1],['られる',2]] },
+        { zh:'不會被迫工作',      nm:'ない形', parts:[['働',0],['かせ',1],['られ',2],['ない',3]] },
+        { zh:'沒有被迫工作',      nm:'た形',   parts:[['働',0],['かせ',1],['られ',2],['な',3],['かった',4]] },
+        { zh:'如果沒有被迫工作',  nm:'条件形', parts:[['働',0],['かせ',1],['られ',2],['な',3],['ければ',5]] }
       ].map(function(st, idx){
         var cur = st.parts[st.parts.length - 1][1];
         var body = st.parts.map(function(p){
@@ -4773,7 +4773,6 @@
         '</div>';
       }).join('') +
       '</div>' +
-      '<p class="dfnote">紅色＝這一級新加的部分；棕色＝之前幾級已經加過的。</p>' +
     '</section>';
     app.innerHTML = h;
     var jb = $('#dfjump');
