@@ -991,7 +991,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v406</span>
+    <span class="ver" id="verTag">v407</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -1688,7 +1688,7 @@
     return '<span class="pfrmg">' + fs.map(function(f){
       var dv = !!DERIVED_FORM[f];
       var href = dv ? DERIVED_HREF : (f === 'plain' ? '#/plain' : PAT_FORM_HREF);
-      var tip = dv ? '動詞的衍生形' : (f === 'plain' ? '普通形 ⇄ ます形 對照表' : '五段動詞 詳細表');
+      var tip = dv ? '動詞變化' : (f === 'plain' ? '普通形 ⇄ ます形 對照表' : '五段動詞 詳細表');
       return '<a class="pfrm' + (dv ? ' dv' : '') + '" href="' + href +
         '" title="' + tip + '">' + PAT_FORM[f] + '</a>';
     }).join('') + '</span>';
@@ -3613,7 +3613,7 @@
         '<span class="go">看一覽 →</span>' +
       '</a>' +
       (isVerb ? '<a class="afentry" href="#/all/verbs/derived">' +
-        '<div class="tx"><b>動詞的衍生形</b>' +
+        '<div class="tx"><b>動詞變化</b>' +
           '<span>可能形・意志形・ば形・受身形・使役形 的三類造法</span></div>' +
         '<span class="go">看一覽 →</span>' +
       '</a>' : '') +
@@ -4730,10 +4730,10 @@
   ];
 
   function renderDerivedForms(){
-    document.title = '動詞的衍生形 · 日語階梯';
+    document.title = '動詞變化 · 日語階梯';
     var h = '<div class="lhead">' +
       '<a class="back" href="#/all/verbs">← 動詞表</a>' +
-      '<h1>動詞的衍生形<span class="k">はってんけい</span></h1>' +
+      '<h1>動詞變化<span class="k">へんか</span></h1>' +
       '<p class="goal">丁寧形・辞書形・て形・た形・ない形・命令形・禁止形・可能形・意志形・条件形・受身形・使役形・使役受身・尊敬形：三類動詞的造法一眼看完，用法見各自那一課。</p>' +
     '</div>' +
       '<div class="gsec" id="df-principle">' +
