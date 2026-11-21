@@ -189,14 +189,14 @@
   .dfexs .dfp{display:inline-block; white-space:nowrap; margin:0 9px 1px 0}
   .dfeg{margin-top:7px; padding:9px 11px; background:var(--sand); border-radius:11px;
     font-family:var(--serif); font-size:15px; line-height:1.6}
-  /* 疊變梯級：每級縮一級，右邊標形名 */
+  /* 疊變梯級：左邊中文、右邊形名，一級一級縮排 */
   .dfstair{margin:10px 0 4px}
-  .dfstep{display:flex; align-items:center; gap:8px; padding:5px 0 5px 10px; position:relative;
-    border-left:2px solid var(--line); margin-bottom:2px}
-  .dfstep:last-child{border-left-color:transparent}
-  .dfsform{font-family:var(--jp); font-size:15px; letter-spacing:.02em}
+  .dfstep{display:flex; align-items:baseline; gap:6px; padding:4px 0}
+  .dfszh{flex:0 0 76px; font-size:11px; color:var(--ink2); line-height:1.45}
+  .dfsform{font-family:var(--jp); font-size:14px; letter-spacing:.01em; white-space:nowrap}
   .dfsadd{color:#8c2f39; font-weight:700}
-  .dfsnm{margin-left:auto; font-size:11px; color:var(--ink2); white-space:nowrap}
+  .dfsold{color:#a4762c}
+  .dfsnm{margin-left:auto; font-size:10.5px; color:var(--ink2); white-space:nowrap}
   /* 形態卡的順位徽章（依白板 1–6） */
   .dfr{margin-left:8px; padding:2px 8px; font-size:11px; font-weight:600; letter-spacing:.02em;
     color:#1f5fa9; background:#eaf1fa; border:1px solid #cfdff2; border-radius:999px; vertical-align:2px}
@@ -999,7 +999,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v411</span>
+    <span class="ver" id="verTag">v412</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -4754,21 +4754,26 @@
     h += '<section class="gsec" id="df-chain">' +
       '<h3>變化可以一層一層疊上去<span class="wk">五段動詞「働く」</span></h3>' +
       '<div class="dfstair">' + [
-        { lv:0, pre:'働', add:'く',   nm:'辞書形' },
-        { lv:1, pre:'働か', add:'せる', nm:'使役形' },
-        { lv:2, pre:'働かせ', add:'られる', nm:'受身形' },
-        { lv:3, pre:'働かせられ', add:'ない', nm:'ない形' },
-        { lv:4, pre:'働かせられ', add:'なかった', nm:'た形' },
-        { lv:5, pre:'働かせられな', add:'ければ', nm:'条件形' },
-        { lv:2, pre:'働かせ', add:'られます', nm:'丁寧形（旁支）' }
-      ].map(function(st, i){
-        return '<div class="dfstep" style="margin-left:' + (st.lv * 15) + 'px">' +
-          '<span class="dfsform">' + esc(st.pre) + '<b class="dfsadd">' + esc(st.add) + '</b></span>' +
+        { zh:'工作',              nm:'辞書形', parts:[['働',0],['く',0]] },
+        { zh:'叫（人）工作',      nm:'使役形', parts:[['働か',0],['せる',1]] },
+        { zh:'被迫工作／能做',    nm:'受身形', parts:[['働か',0],['せ',1],['られる',2]] },
+        { zh:'不會被迫工作',      nm:'ない形', parts:[['働か',0],['せ',1],['られ',2],['ない',3]] },
+        { zh:'沒有被迫工作',      nm:'た形',   parts:[['働か',0],['せ',1],['られ',2],['な',3],['かった',4]] },
+        { zh:'如果沒有被迫工作',  nm:'条件形', parts:[['働か',0],['せ',1],['られ',2],['な',3],['ければ',5]] }
+      ].map(function(st, idx){
+        var cur = st.parts[st.parts.length - 1][1];
+        var body = st.parts.map(function(p){
+          var cls = p[1] === 0 ? '' : (p[1] === cur ? ' dfsadd' : ' dfsold');
+          return '<span class="' + cls.trim() + '">' + esc(p[0]) + '</span>';
+        }).join('');
+        return '<div class="dfstep">' +
+          '<span class="dfszh">' + esc(st.zh) + '</span>' +
+          '<span class="dfsform" style="margin-left:' + (idx * 12) + 'px">' + body + '</span>' +
           '<span class="dfsnm">' + esc(st.nm) + '</span>' +
         '</div>';
       }).join('') +
       '</div>' +
-      '<p class="dfnote">每往下一級，只在前一級後面加一個部分：せる→られる→ない→なかった→なければ；右邊是那一級新增的形。</p>' +
+      '<p class="dfnote">紅色＝這一級新加的部分；棕色＝之前幾級已經加過的。</p>' +
     '</section>';
     app.innerHTML = h;
     var jb = $('#dfjump');
