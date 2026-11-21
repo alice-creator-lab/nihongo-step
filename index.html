@@ -197,6 +197,8 @@
   .dfsadd{color:#8c2f39; font-weight:700}
   .dfsold{color:#a4762c}
   .dfsnm{margin-left:auto; font-size:10.5px; color:var(--ink2); white-space:nowrap}
+  .dsspk{width:20px; height:20px; margin-left:5px; vertical-align:-4px}
+  .dsspk svg{width:11px; height:11px}
   /* 形態卡的順位徽章（依白板 1–6） */
   .dfr{margin-left:8px; padding:2px 8px; font-size:11px; font-weight:600; letter-spacing:.02em;
     color:#1f5fa9; background:#eaf1fa; border:1px solid #cfdff2; border-radius:999px; vertical-align:2px}
@@ -999,7 +1001,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v413</span>
+    <span class="ver" id="verTag">v414</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -4754,12 +4756,12 @@
     h += '<section class="gsec" id="df-chain">' +
       '<h3>變化可以一層一層疊上去<span class="wk">五段動詞「働く」</span></h3>' +
       '<div class="dfstair">' + [
-        { zh:'工作',              nm:'辞書形', parts:[['働',0],['く',0]] },
-        { zh:'叫（人）工作',      nm:'使役形', parts:[['働',0],['かせる',1]] },
-        { zh:'被迫工作／能做',    nm:'受身形', parts:[['働',0],['かせ',1],['られる',2]] },
-        { zh:'不會被迫工作',      nm:'ない形', parts:[['働',0],['かせ',1],['られ',2],['ない',3]] },
-        { zh:'沒有被迫工作',      nm:'た形',   parts:[['働',0],['かせ',1],['られ',2],['な',3],['かった',4]] },
-        { zh:'如果沒有被迫工作',  nm:'条件形', parts:[['働',0],['かせ',1],['られ',2],['な',3],['ければ',5]] }
+        { zh:'工作',              nm:'辞書形', parts:[['働',0],['く',0]], au:'audio/dv-0.mp3' },
+        { zh:'叫（人）工作',      nm:'使役形', parts:[['働',0],['かせる',1]], au:'audio/dv-1.mp3' },
+        { zh:'被迫工作／能做',    nm:'受身形', parts:[['働',0],['かせ',1],['られる',2]], au:'audio/dv-2.mp3' },
+        { zh:'不會被迫工作',      nm:'ない形', parts:[['働',0],['かせ',1],['られ',2],['ない',3]], au:'audio/dv-3.mp3' },
+        { zh:'沒有被迫工作',      nm:'た形',   parts:[['働',0],['かせ',1],['られ',2],['な',3],['かった',4]], au:'audio/dv-4.mp3' },
+        { zh:'如果沒有被迫工作',  nm:'条件形', parts:[['働',0],['かせ',1],['られ',2],['な',3],['ければ',5]], au:'audio/dv-5.mp3' }
       ].map(function(st, idx){
         var cur = st.parts[st.parts.length - 1][1];
         var body = st.parts.map(function(p){
@@ -4768,7 +4770,9 @@
         }).join('');
         return '<div class="dfstep">' +
           '<span class="dfszh">' + esc(st.zh) + '</span>' +
-          '<span class="dfsform" style="margin-left:' + (idx * 12) + 'px">' + body + '</span>' +
+          '<span class="dfsform" style="margin-left:' + (idx * 12) + 'px">' + body +
+            '<button class="spk dsspk" data-say="' + esc(body) + '" data-audio="' + esc(st.au) + '" aria-label="播放">' + SPK + '</button>' +
+          '</span>' +
           '<span class="dfsnm">' + esc(st.nm) + '</span>' +
         '</div>';
       }).join('') +
@@ -4781,6 +4785,7 @@
       var el = document.getElementById('df-' + b.getAttribute('data-i'));
       if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
     });
+    bindSpeakers(app);
   }
 
   function renderParticles(){
@@ -5575,7 +5580,7 @@
     /* 形容詞變化頁（audio/adjform/）自成一套版本號 */
     if (/audio\/adjform\//.test(url)) return 'f1';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
-    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e27';
+    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e28';
     return AUDIO.v || 1;
   }
   function playFile(url, onend, el, rate){
