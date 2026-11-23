@@ -11,8 +11,15 @@ kana 缺失時才退回原句（ja）。
   python3 tools/make_audio.py --force         # 全部重生
   python3 tools/make_audio.py --force-ex      # 只重生句子（會話／句型／文法／聽力），單字不動
   python3 tools/make_audio.py L03 L04         # 只做指定課
+
+  # 商用授權引擎（Azure Speech，需要 AZURE_SPEECH_KEY／AZURE_SPEECH_REGION）
+  # 分批換聲：先寫去 audio/m 同 staging manifest，試聽滿意才合併入 data/audio.json
+  python3 tools/make_audio.py L01 --engine azure --audio-dir audio/m --manifest data/audio-m.json
 """
-import glob, json, os, re, subprocess, sys, concurrent.futures
+import glob, json, os, re, subprocess, sys, concurrent.futures, urllib.request, time
+
+ENGINE = "edge"      # edge｜azure
+RATE = None          # Azure 專用，例如 "-5%"；edge 引擎沿用預設語速
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
@@ -43,7 +50,12 @@ def tts_text(item):
 
 
 def voice_for(who):
+    if ENGINE == "azure":
+        return "ja-JP-KeitaNeural" if who in MALE else "ja-JP-MayuNeural"
     return "ja-JP-KeitaNeural" if who in MALE else "ja-JP-NanamiNeural"
+
+
+ADIR = None          # --audio-dir：換聲時寫去另一個目錄，唔覆蓋原檔
 
 
 def audio_rel(manifest_lesson, lid, key):
@@ -53,10 +65,48 @@ def audio_rel(manifest_lesson, lid, key):
     可以直接把檔案改名（例如 L01-g6-e0-2.mp3）並更新 data/audio.json，
     之後重跑此工具也不會把新內容寫回舊檔名。
     """
+    if ADIR:
+        return f"{ADIR}/{lid}-{key}.mp3"
     return manifest_lesson.get(key) or f"audio/{lid}-{key}.mp3"
 
 
+def synth_azure(voice, text, out):
+    """Azure Speech REST，輸出 24kHz／48kbps CBR，跟現有音檔同格式。"""
+    key = os.environ.get("AZURE_SPEECH_KEY", "")
+    region = os.environ.get("AZURE_SPEECH_REGION", "")
+    if not key or not region:
+        raise SystemExit("缺 AZURE_SPEECH_KEY／AZURE_SPEECH_REGION")
+    open_p = close_p = ""
+    if RATE:
+        open_p, close_p = '<prosody rate="%s">' % RATE, "</prosody>"
+    body = ('<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="ja-JP">'
+            '<voice name="%s">%s%s%s</voice></speak>' % (voice, open_p, text, close_p)).encode("utf-8")
+    url = "https://%s.tts.speech.microsoft.com/cognitiveservices/v1" % region
+    for attempt in range(4):
+        req = urllib.request.Request(url, data=body, method="POST", headers={
+            "Ocp-Apim-Subscription-Key": key,
+            "Content-Type": "application/ssml+xml",
+            "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
+            "User-Agent": "nihongo-step-lesson-audio",
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                data = r.read()
+            if data and len(data) > 2000:
+                tmp = out + ".part"
+                with open(tmp, "wb") as f:
+                    f.write(data)
+                os.replace(tmp, out)
+                return True
+        except Exception as e:        # 429／5xx：退避重試
+            print("  azure retry", attempt + 1, str(e)[:60], flush=True)
+        time.sleep(1.5 * (attempt + 1))
+    return False
+
+
 def synth(voice, text, out):
+    if ENGINE == "azure":
+        return synth_azure(voice, text, out)
     for _ in range(3):
         r = subprocess.run(["edge-tts", "--voice", voice, "--text", text, "--write-media", out],
                            capture_output=True, text=True, timeout=120)
@@ -66,16 +116,24 @@ def synth(voice, text, out):
 
 
 def main():
+    global ENGINE, RATE, ADIR
     force = "--force" in sys.argv
     force_ex = "--force-ex" in sys.argv
     only = [a for a in sys.argv[1:] if a.startswith("L")]
+    opts = {}
+    for i, a in enumerate(sys.argv):
+        if a in ("--engine", "--rate", "--audio-dir", "--manifest") and i + 1 < len(sys.argv):
+            opts[a] = sys.argv[i + 1]
+    ENGINE = opts.get("--engine", ENGINE)
+    RATE = opts.get("--rate", RATE)
+    ADIR = opts.get("--audio-dir", ADIR)
     course = json.load(open(os.path.join(ROOT, "data/course.json"), encoding="utf-8"))
     ids = [l["id"] for b in course["books"] for l in b["lessons"] if l.get("available")]
     if only:
         ids = [i for i in ids if i in only]
 
-    os.makedirs(os.path.join(ROOT, "audio"), exist_ok=True)
-    manifest_path = os.path.join(ROOT, "data/audio.json")
+    os.makedirs(os.path.join(ROOT, ADIR or "audio"), exist_ok=True)
+    manifest_path = os.path.join(ROOT, opts.get("--manifest", "data/audio.json"))
     # 一律先讀回舊 manifest：--force 只代表重生音檔，不代表忘記其他課的索引。
     # （曾經因為 --force 配課號過濾而把整個 manifest 覆蓋成只剩該課。）
     manifest = {}
@@ -100,24 +158,24 @@ def main():
             rel = audio_rel(m, lid, key)
             m[key] = rel
             # 單字本來就用假名合成，避免漢字多讀音（例如 一日 ついたち／いちにち）
-            jobs.append(("ja-JP-NanamiNeural", v["kana"], os.path.join(ROOT, rel), False))
+            jobs.append((voice_for(None), v["kana"], os.path.join(ROOT, rel), False))
         for pi, pat in enumerate(les.get("patterns", [])):
             for ei, ex in enumerate(pat.get("ex", [])):
                 key = f"p{pi}-e{ei}"
                 rel = audio_rel(m, lid, key)
                 m[key] = rel
-                jobs.append(("ja-JP-NanamiNeural", tts_text(ex), os.path.join(ROOT, rel), True))
+                jobs.append((voice_for(None), tts_text(ex), os.path.join(ROOT, rel), True))
         for gi, sec in enumerate(les.get("grammar", [])):
             for ei, ex in enumerate(sec.get("ex", [])):
                 key = f"g{gi}-e{ei}"
                 rel = audio_rel(m, lid, key)
                 m[key] = rel
-                jobs.append(("ja-JP-NanamiNeural", tts_text(ex), os.path.join(ROOT, rel), True))
+                jobs.append((voice_for(None), tts_text(ex), os.path.join(ROOT, rel), True))
         for li, it in enumerate(les.get("listening", [])):
             key = f"l{li}"
             rel = audio_rel(m, lid, key)
             m[key] = rel
-            jobs.append(("ja-JP-NanamiNeural", tts_text(it), os.path.join(ROOT, rel), True))
+            jobs.append((voice_for(None), tts_text(it), os.path.join(ROOT, rel), True))
 
     def stale(job):
         if force or (force_ex and job[3]):
@@ -129,7 +187,7 @@ def main():
 
     done = 0
     fail = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as ex:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4 if ENGINE == "azure" else 6) as ex:
         futs = {ex.submit(synth, v, t, o): o for v, t, o, _ in todo}
         for f in concurrent.futures.as_completed(futs):
             done += 1
