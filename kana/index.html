@@ -419,7 +419,7 @@
   <div class="app">
     <header>
       <a class="backhome" href="../" aria-label="返回課程地圖">←<span>地圖</span></a>
-      <div class="brand"><span class="jp">日語階梯</span><span class="sub">五十音練習</span><span class="ver" id="verTag">v39</span></div>
+      <div class="brand"><span class="jp">日語階梯</span><span class="sub">五十音練習</span><span class="ver" id="verTag">v40</span></div>
       <div class="hactions">
         <button class="iconbtn" id="chartBtn" title="假名表（溫習用）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
@@ -881,11 +881,12 @@
   let audioOk = true, unlocked = false, audioFails = 0;
   let slowMode = localStorage.getItem('kanaSlow') === '1';
   let romajiHint = localStorage.getItem('kanaRomaji') === '1';
-  /* 目前只有一套預製發音（audio/n/，edge-tts 過渡版）；
-     日後換成有商用授權的引擎時，把新聲源放去 audio/<key>/ 再加返個 key 就得。 */
-  let voiceMode = 'n';
+  /* audio/m/：Azure Speech（ja-JP-MayuNeural，-10%），有商用授權的正式版；
+     audio/n/：舊 edge-tts 過渡版，保留作備份，唔再預設使用。
+     日後再加聲源時，把新檔放去 audio/<key>/ 並在此加一個 key 即可。 */
+  let voiceMode = 'm';
   try{ localStorage.removeItem('kanaVoice'); }catch(e){}
-  const VOICE_DIR = { n:'audio/n/' };
+  const VOICE_DIR = { m:'audio/m/', n:'audio/n/' };
 
   function ttsFallback(kana){
     if(muted || !('speechSynthesis' in window)) return;

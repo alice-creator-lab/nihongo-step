@@ -1,732 +1,731 @@
 {
- "kana/audio/n": {
+ "kana/audio/m": {
   "a": {
    "kana": "あ",
-   "file": "kana/audio/n/a.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/a.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "あー"
   },
   "ba": {
    "kana": "ば",
-   "file": "kana/audio/n/ba.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ba.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ばー"
   },
   "be": {
    "kana": "べ",
-   "file": "kana/audio/n/be.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/be.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "べー"
   },
   "bi": {
    "kana": "び",
-   "file": "kana/audio/n/bi.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/bi.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "びー"
   },
   "bo": {
    "kana": "ぼ",
-   "file": "kana/audio/n/bo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/bo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぼー"
   },
   "bu": {
    "kana": "ぶ",
-   "file": "kana/audio/n/bu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/bu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぶー"
   },
   "bya": {
    "kana": "びゃ",
-   "file": "kana/audio/n/bya.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/bya.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "びゃー"
   },
   "byo": {
    "kana": "びょ",
-   "file": "kana/audio/n/byo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/byo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "びょー"
   },
   "byu": {
    "kana": "びゅ",
-   "file": "kana/audio/n/byu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/byu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "びゅー"
   },
   "cha": {
    "kana": "ちゃ",
-   "file": "kana/audio/n/cha.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/cha.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ちゃー"
   },
   "chi": {
    "kana": "ち",
-   "file": "kana/audio/n/chi.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/chi.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ちー"
   },
   "cho": {
    "kana": "ちょ",
-   "file": "kana/audio/n/cho.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/cho.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ちょー"
   },
   "chu": {
    "kana": "ちゅ",
-   "file": "kana/audio/n/chu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/chu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ちゅー"
   },
   "da": {
    "kana": "だ",
-   "file": "kana/audio/n/da.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/da.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "だー"
   },
   "de": {
    "kana": "で",
-   "file": "kana/audio/n/de.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/de.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "でー"
   },
   "di": {
    "kana": "ぢ",
-   "file": "kana/audio/n/di.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/di.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぢー"
   },
   "do": {
    "kana": "ど",
-   "file": "kana/audio/n/do.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/do.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "どー"
   },
   "du": {
    "kana": "づ",
-   "file": "kana/audio/n/du.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/du.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "づー"
   },
   "e": {
    "kana": "え",
-   "file": "kana/audio/n/e.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/e.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "えー"
   },
   "fu": {
    "kana": "ふ",
-   "file": "kana/audio/n/fu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/fu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ふー"
   },
   "ga": {
    "kana": "が",
-   "file": "kana/audio/n/ga.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ga.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "がー"
   },
   "ge": {
    "kana": "げ",
-   "file": "kana/audio/n/ge.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ge.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "げー"
   },
   "gi": {
    "kana": "ぎ",
-   "file": "kana/audio/n/gi.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/gi.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぎー"
   },
   "go": {
    "kana": "ご",
-   "file": "kana/audio/n/go.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/go.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ごー"
   },
   "gu": {
    "kana": "ぐ",
-   "file": "kana/audio/n/gu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/gu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぐー"
   },
   "gya": {
    "kana": "ぎゃ",
-   "file": "kana/audio/n/gya.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/gya.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぎゃー"
   },
   "gyo": {
    "kana": "ぎょ",
-   "file": "kana/audio/n/gyo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/gyo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぎょー"
   },
   "gyu": {
    "kana": "ぎゅ",
-   "file": "kana/audio/n/gyu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/gyu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぎゅー"
   },
   "ha": {
    "kana": "は",
-   "file": "kana/audio/n/ha.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ha.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "はー"
   },
   "he": {
    "kana": "へ",
-   "file": "kana/audio/n/he.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/he.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "へー"
   },
   "hi": {
    "kana": "ひ",
-   "file": "kana/audio/n/hi.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/hi.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ひー"
   },
   "ho": {
    "kana": "ほ",
-   "file": "kana/audio/n/ho.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ho.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ほー"
   },
   "hya": {
    "kana": "ひゃ",
-   "file": "kana/audio/n/hya.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/hya.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ひゃー"
   },
   "hyo": {
    "kana": "ひょ",
-   "file": "kana/audio/n/hyo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/hyo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ひょー"
   },
   "hyu": {
    "kana": "ひゅ",
-   "file": "kana/audio/n/hyu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/hyu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ひゅー"
   },
   "i": {
    "kana": "い",
-   "file": "kana/audio/n/i.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/i.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "いー"
   },
   "ja": {
    "kana": "じゃ",
-   "file": "kana/audio/n/ja.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ja.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "じゃー"
   },
   "ji": {
    "kana": "じ",
-   "file": "kana/audio/n/ji.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ji.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "じー"
   },
   "jo": {
    "kana": "じょ",
-   "file": "kana/audio/n/jo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/jo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "じょー"
   },
   "ju": {
    "kana": "じゅ",
-   "file": "kana/audio/n/ju.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ju.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "じゅー"
   },
   "ka": {
    "kana": "か",
-   "file": "kana/audio/n/ka.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ka.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "かー"
   },
   "ke": {
    "kana": "け",
-   "file": "kana/audio/n/ke.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ke.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "けー"
   },
   "ki": {
    "kana": "き",
-   "file": "kana/audio/n/ki.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ki.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "きー"
   },
   "ko": {
    "kana": "こ",
-   "file": "kana/audio/n/ko.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ko.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "こー"
   },
   "ku": {
    "kana": "く",
-   "file": "kana/audio/n/ku.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ku.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "くー"
   },
   "kya": {
    "kana": "きゃ",
-   "file": "kana/audio/n/kya.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/kya.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "きゃー"
   },
   "kyo": {
    "kana": "きょ",
-   "file": "kana/audio/n/kyo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/kyo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "きょー"
   },
   "kyu": {
    "kana": "きゅ",
-   "file": "kana/audio/n/kyu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/kyu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "きゅー"
   },
   "ma": {
    "kana": "ま",
-   "file": "kana/audio/n/ma.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ma.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "まー"
   },
   "me": {
    "kana": "め",
-   "file": "kana/audio/n/me.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/me.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "めー"
   },
   "mi": {
    "kana": "み",
-   "file": "kana/audio/n/mi.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/mi.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "みー"
   },
   "mo": {
    "kana": "も",
-   "file": "kana/audio/n/mo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/mo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "もー"
   },
   "mu": {
    "kana": "む",
-   "file": "kana/audio/n/mu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/mu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "むー"
   },
   "mya": {
    "kana": "みゃ",
-   "file": "kana/audio/n/mya.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/mya.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "みゃー"
   },
   "myo": {
    "kana": "みょ",
-   "file": "kana/audio/n/myo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/myo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "みょー"
   },
   "myu": {
    "kana": "みゅ",
-   "file": "kana/audio/n/myu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/myu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "みゅー"
   },
   "n": {
    "kana": "ん",
-   "file": "kana/audio/n/n.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/n.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "んー"
   },
   "na": {
    "kana": "な",
-   "file": "kana/audio/n/na.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/na.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "なー"
   },
   "ne": {
    "kana": "ね",
-   "file": "kana/audio/n/ne.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ne.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ねー"
   },
   "ni": {
    "kana": "に",
-   "file": "kana/audio/n/ni.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ni.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "にー"
   },
   "no": {
    "kana": "の",
-   "file": "kana/audio/n/no.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/no.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "のー"
   },
   "nu": {
    "kana": "ぬ",
-   "file": "kana/audio/n/nu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/nu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぬー"
   },
   "nya": {
    "kana": "にゃ",
-   "file": "kana/audio/n/nya.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/nya.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "にゃー"
   },
   "nyo": {
    "kana": "にょ",
-   "file": "kana/audio/n/nyo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/nyo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "にょー"
   },
   "nyu": {
    "kana": "にゅ",
-   "file": "kana/audio/n/nyu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/nyu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "にゅー"
   },
   "o": {
    "kana": "お",
-   "file": "kana/audio/n/o.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/o.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "おー"
   },
   "pa": {
    "kana": "ぱ",
-   "file": "kana/audio/n/pa.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/pa.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぱー"
   },
   "pe": {
    "kana": "ぺ",
-   "file": "kana/audio/n/pe.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/pe.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぺー"
   },
   "pi": {
    "kana": "ぴ",
-   "file": "kana/audio/n/pi.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/pi.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぴー"
   },
   "po": {
    "kana": "ぽ",
-   "file": "kana/audio/n/po.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/po.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぽー"
   },
   "pu": {
    "kana": "ぷ",
-   "file": "kana/audio/n/pu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/pu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぷー"
   },
   "pya": {
    "kana": "ぴゃ",
-   "file": "kana/audio/n/pya.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/pya.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぴゃー"
   },
   "pyo": {
    "kana": "ぴょ",
-   "file": "kana/audio/n/pyo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/pyo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぴょー"
   },
   "pyu": {
    "kana": "ぴゅ",
-   "file": "kana/audio/n/pyu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/pyu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぴゅー"
   },
   "ra": {
    "kana": "ら",
-   "file": "kana/audio/n/ra.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ra.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "らー"
   },
   "re": {
    "kana": "れ",
-   "file": "kana/audio/n/re.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/re.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "れー"
   },
   "ri": {
    "kana": "り",
-   "file": "kana/audio/n/ri.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ri.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "りー"
   },
   "ro": {
    "kana": "ろ",
-   "file": "kana/audio/n/ro.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ro.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ろー"
   },
   "ru": {
    "kana": "る",
-   "file": "kana/audio/n/ru.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ru.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "るー"
   },
   "rya": {
    "kana": "りゃ",
-   "file": "kana/audio/n/rya.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/rya.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "りゃー"
   },
   "ryo": {
    "kana": "りょ",
-   "file": "kana/audio/n/ryo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ryo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "りょー"
   },
   "ryu": {
    "kana": "りゅ",
-   "file": "kana/audio/n/ryu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ryu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "りゅー"
   },
   "sa": {
    "kana": "さ",
-   "file": "kana/audio/n/sa.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/sa.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "さー"
   },
   "se": {
    "kana": "せ",
-   "file": "kana/audio/n/se.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/se.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "せー"
   },
   "sha": {
    "kana": "しゃ",
-   "file": "kana/audio/n/sha.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/sha.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "しゃー"
   },
   "shi": {
    "kana": "し",
-   "file": "kana/audio/n/shi.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "-15%",
-   "text": "しー",
-   "note": "慢 15%，避免起音太硬聽成 chi"
+   "file": "kana/audio/m/shi.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
+   "text": "しー"
   },
   "sho": {
    "kana": "しょ",
-   "file": "kana/audio/n/sho.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/sho.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "しょー"
   },
   "shu": {
    "kana": "しゅ",
-   "file": "kana/audio/n/shu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/shu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "しゅー"
   },
   "so": {
    "kana": "そ",
-   "file": "kana/audio/n/so.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/so.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "そー"
   },
   "su": {
    "kana": "す",
-   "file": "kana/audio/n/su.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/su.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "すー"
   },
   "ta": {
    "kana": "た",
-   "file": "kana/audio/n/ta.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ta.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "たー"
   },
   "te": {
    "kana": "て",
-   "file": "kana/audio/n/te.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/te.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "てー"
   },
   "to": {
    "kana": "と",
-   "file": "kana/audio/n/to.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/to.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "とー"
   },
   "tsu": {
    "kana": "つ",
-   "file": "kana/audio/n/tsu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/tsu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "つー"
   },
   "u": {
    "kana": "う",
-   "file": "kana/audio/n/u.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/u.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "うー"
   },
   "wa": {
    "kana": "わ",
-   "file": "kana/audio/n/wa.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/wa.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "わー"
   },
   "wo": {
    "kana": "を",
-   "file": "kana/audio/n/wo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/wo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "をー"
   },
   "ya": {
    "kana": "や",
-   "file": "kana/audio/n/ya.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ya.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "やー"
   },
   "yo": {
    "kana": "よ",
-   "file": "kana/audio/n/yo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/yo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "よー"
   },
   "yu": {
    "kana": "ゆ",
-   "file": "kana/audio/n/yu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/yu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ゆー"
   },
   "za": {
    "kana": "ざ",
-   "file": "kana/audio/n/za.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/za.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ざー"
   },
   "ze": {
    "kana": "ぜ",
-   "file": "kana/audio/n/ze.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/ze.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぜー"
   },
   "zo": {
    "kana": "ぞ",
-   "file": "kana/audio/n/zo.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/zo.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ぞー"
   },
   "zu": {
    "kana": "ず",
-   "file": "kana/audio/n/zu.mp3",
-   "voice": "ja-JP-NanamiNeural",
-   "rate": "0%",
+   "file": "kana/audio/m/zu.mp3",
+   "voice": "ja-JP-MayuNeural",
+   "rate": "-10%",
    "text": "ずー"
   }
  }

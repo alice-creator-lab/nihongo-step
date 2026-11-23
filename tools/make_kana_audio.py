@@ -9,8 +9,12 @@
     python3 tools/make_kana_audio.py --force         # 全部重出
     python3 tools/make_kana_audio.py --voice ja-JP-KeitaNeural --dir kana/audio/m
 
+    # 商用授權引擎（Azure Speech，需要 AZURE_SPEECH_KEY／AZURE_SPEECH_REGION）
+    python3 tools/make_kana_audio.py --engine azure --voice ja-JP-MayuNeural \
+        --rate -10% --dir kana/audio/m --force
+
 授權：edge-tts 只是過渡（研發用），商業版要用有授權的引擎重出整批。
---engine azure 預留給日後改接 Azure Speech，實作時把 synth() 換成 SDK 呼叫即可。
+Azure Speech 版（預設 F0 免費層 50 萬字元／月，正式商用要轉 S0）。
 """
 import glob
 import json
@@ -18,6 +22,9 @@ import os
 import re
 import subprocess
 import sys
+import urllib.request
+
+ENGINE = "edge"          # edge｜azure
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KANA_HTML = os.path.join(ROOT, "kana/index.html")
@@ -102,7 +109,48 @@ def stretch(path, target=0.34):
     return voiced_seconds(path)
 
 
+def _ssml(voice, text, rate):
+    """Azure 的 SSML：rate 用 prosody，例如 -10%。"""
+    open_p = close_p = ""
+    if rate:
+        open_p, close_p = '<prosody rate="%s">' % rate, "</prosody>"
+    return ('<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" '
+            'xml:lang="ja-JP"><voice name="%s">%s%s%s</voice></speak>' % (voice, open_p, text, close_p))
+
+
+def synth_azure(voice, text, out, rate=None):
+    """Azure Speech REST：輸出 24kHz 48kbps CBR，跟 edge 版同格式（剪音框時可以 -c copy）。"""
+    key = os.environ.get("AZURE_SPEECH_KEY", "")
+    region = os.environ.get("AZURE_SPEECH_REGION", "")
+    if not key or not region:
+        print("缺 AZURE_SPEECH_KEY／AZURE_SPEECH_REGION")
+        return False
+    url = "https://%s.tts.speech.microsoft.com/cognitiveservices/v1" % region
+    body = _ssml(voice, text, rate).encode("utf-8")
+    for attempt in range(4):
+        req = urllib.request.Request(url, data=body, method="POST", headers={
+            "Ocp-Apim-Subscription-Key": key,
+            "Content-Type": "application/ssml+xml",
+            "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
+            "User-Agent": "nihongo-step-kana-audio",
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                data = r.read()
+            if data and len(data) > 1500:
+                with open(out, "wb") as f:
+                    f.write(data)
+                return True
+        except Exception as e:          # 429／暫時性錯誤：退避重試
+            print("  azure retry", attempt + 1, e)
+        import time
+        time.sleep(1.5 * (attempt + 1))
+    return False
+
+
 def synth(voice, text, out, rate=None):
+    if ENGINE == "azure":
+        return synth_azure(voice, text, out, rate)
     for _ in range(4):
         cmd = ["edge-tts", "--voice", voice, "--text", text, "--write-media", out]
         if rate:
@@ -114,12 +162,17 @@ def synth(voice, text, out, rate=None):
 
 
 def main():
+    global ENGINE
     force = "--force" in sys.argv
     voice = "ja-JP-NanamiNeural"
     outdir = "kana/audio/n"
     rate = None        # 預設語速；靠「ー」把母音拉長，避免拖慢後被重新編碼失真
     suffix = "ー"      # 加長音符讓母音有正常長度；「を」會忽略，靠 stretch() 補
     for i, a in enumerate(sys.argv):
+        if a == "--engine" and i + 1 < len(sys.argv):
+            ENGINE = sys.argv[i + 1]
+            if ENGINE == "azure" and voice == "ja-JP-NanamiNeural":
+                voice = "ja-JP-MayuNeural"
         if a == "--voice" and i + 1 < len(sys.argv):
             voice = sys.argv[i + 1]
         if a == "--rate" and i + 1 < len(sys.argv):
