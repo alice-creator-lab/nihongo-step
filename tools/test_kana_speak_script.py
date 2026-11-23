@@ -108,12 +108,18 @@ async def main():
               and "nu" in (await ev("document.getElementById('speakRomaji').textContent") or ""),
               await ev("document.getElementById('speakRomaji').textContent"))
         check("出題自動播發音", (await ev("(window.__aud||[]).length")) >= 1, await ev("JSON.stringify(window.__aud||[])"))
+        tip = await ev("document.querySelector('#speakPanel .speak-tip').textContent")
+        check("提示文字為書面語", "請以假名作答" in (tip or "") and "一律計為錯誤" in (tip or ""), tip)
         r = json.loads(await typ("ヌ"))
-        check("打片假名被擋（提示要平假名）", "平假名" in r["note"] and not r["answered"], r["note"])
+        check("打片假名 → 判錯（字形不符）", r["answered"] and "字形不符" in r["fb"] and "正確是 ぬ" in r["fb"], r["fb"])
+
+        await load(["ぬ"])
         r = json.loads(await typ("nu"))
-        check("打羅馬拼音被擋", "不接受羅馬拼音" in r["note"] and not r["answered"], r["note"])
+        check("打羅馬拼音 → 判錯（不接受羅馬拼音）", r["answered"] and "不接受羅馬拼音" in r["fb"], r["fb"])
+
+        await load(["ぬ"])
         r = json.loads(await typ("ぬ"))
-        check("打平假名答對", "答對" in r["fb"] and r["answered"], r["fb"])
+        check("打平假名 → 答對", r["answered"] and "答對" in r["fb"], r["fb"])
 
         # ── B. 片假名題 ─────────────────────────────
         print("B. 片假名題")
@@ -122,9 +128,10 @@ async def main():
         check("題目是片假名", cur.get("k") == "ヌ" and cur.get("type") == "kata", cur)
         check("有提示要打片假名", "片假名" in (await ev("document.getElementById('speakHintScript').textContent") or ""))
         r = json.loads(await typ("ぬ"))
-        check("打平假名被擋（提示要片假名）", "片假名" in r["note"] and not r["answered"], r["note"])
+        check("打平假名 → 判錯（字形不符）", r["answered"] and "字形不符" in r["fb"], r["fb"])
+        await load(["ヌ"])
         r = json.loads(await typ("ヌ"))
-        check("打片假名答對", "答對" in r["fb"] and r["answered"], r["fb"])
+        check("打片假名 → 答對", r["answered"] and "答對" in r["fb"], r["fb"])
 
         print("RESULT", "PASS" if ok_all else "FAIL")
     finally:

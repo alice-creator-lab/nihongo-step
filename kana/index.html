@@ -532,7 +532,7 @@
           <button class="btn-main" id="speakCheck">檢查</button>
         </div>
         <div class="speak-note" id="speakNote"></div>
-        <div class="speak-tip">只收假名：題目是平假名就打平假名，是片假名就打片假名。</div>
+        <div class="speak-tip">請以假名作答：平假名題目輸入平假名，片假名題目輸入片假名。字形或讀音不符，一律計為錯誤。</div>
         <div class="feedback" id="fbSpeak"></div>
       </div>
 
@@ -1579,18 +1579,10 @@
     if(mode!=='speak' || !current || answered) return;
     const r = judgeTyped(speakInput.value, current.k, { script: current.type });
     if(r.status==='empty'){
-      speakNote.textContent = '請用日文鍵盤輸入假名（例：ぬ）。';
+      speakNote.textContent = '請輸入假名作答。';
       return;
     }
-    if(r.status==='needkana'){
-      speakNote.textContent = '這一題要打假名（不接受羅馬拼音）。';
-      return;
-    }
-    if(r.status==='script'){
-      speakNote.textContent = '這一題要打' + (r.want==='kata' ? '片假名' : '平假名')
-        + '，你打的是「' + escH(r.unit) + '」。';
-      return;
-    }
+    // 除空白輸入外，一律判定：字形不符、羅馬拼音、字形正確但字錯，都計錯
     answered = true; speakInput.disabled = true;
     if(r.status==='ok'){
       stats.correct++; stats.streak++;
@@ -1602,7 +1594,10 @@
     }else{
       stats.wrong++; stats.streak=0; addWrong(current);
       speakInput.classList.add('wrong');
-      showFeedback(fbSpeak, false, '', '你輸入了「'+escH(r.unit)+'」· 正確是 <span class="answer-txt">'+escH(current.k)+'</span>', current.k);
+      const head = r.status==='script'
+        ? '字形不符（本題要' + (r.want==='kata' ? '片假名' : '平假名') + '）'
+        : (r.status==='needkana' ? '不接受羅馬拼音' : '');
+      showFeedback(fbSpeak, false, head, '你輸入了「'+escH(r.unit)+'」· 正確是 <span class="answer-txt">'+escH(current.k)+'</span>', current.k);
       speakCheck.textContent='下一題 →'; speakCheck.className='btn-main next err';
       speakNote.textContent='';
     }
