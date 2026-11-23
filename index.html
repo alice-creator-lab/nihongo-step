@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>日語階梯 · nihongo-step</title>
 <meta name="description" content="依照初級 40 課編排，一步一步學日語。第一課：自我介紹。" />
 <meta name="theme-color" content="#f6f2ea" />
@@ -19,6 +19,9 @@
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
   html,body{margin:0; padding:0}
   body{
+    touch-action:pan-x pan-y;          /* 可捲動，但禁 pinch-zoom（iOS 忽略 user-scalable=no） */
+    overscroll-behavior-y:contain;
+    -webkit-text-size-adjust:100%;
     background:var(--paper);
     background-image:radial-gradient(circle at 18% -8%, #fffbf2 0, rgba(255,251,242,0) 46%),
                      radial-gradient(circle at 92% 2%, #f0e7d5 0, rgba(240,231,213,0) 38%);
@@ -623,7 +626,7 @@
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
   .tool > div{min-width:0}
   .search{position:sticky; top:0; z-index:6; background:var(--paper); padding:10px 0 8px; margin-top:6px}
-  .search input{width:100%; box-sizing:border-box; padding:11px 14px; font-size:15px; color:var(--ink);
+  .search input{width:100%; box-sizing:border-box; padding:11px 14px; font-size:16px; color:var(--ink);
     background:var(--card); border:1px solid var(--line); border-radius:12px; outline:none;
     -webkit-appearance:none; font-family:inherit}
   .search input:focus{border-color:var(--ink2)}
@@ -1001,7 +1004,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v415</span>
+    <span class="ver" id="verTag">v416</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -5686,6 +5689,16 @@
       }).catch(function(){});
     });
   }
+
+  /* 禁止雙指縮放／雙擊放大（iOS Safari 會忽略 meta 的 user-scalable=no） */
+  ['gesturestart','gesturechange','gestureend'].forEach(function(t){
+    document.addEventListener(t, function(e){ e.preventDefault(); }, { passive:false });
+  });
+  ['touchstart','touchmove'].forEach(function(t){
+    document.addEventListener(t, function(e){
+      if(e.touches && e.touches.length > 1) e.preventDefault();   // 兩指以上：手掌誤觸、pinch
+    }, { passive:false });
+  });
 
   boot();
 })();
