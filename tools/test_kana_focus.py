@@ -152,7 +152,7 @@ async def main():
     ph = await b.js("document.getElementById('speakInput').placeholder")
     check(ph == "用日文鍵盤輸入假名（例：ぬ／ヌ）", "桌機鍵盤輸入提示字不對", str(ph))
     r1 = await b.js(rb) or {}
-    check(r1.get("dis") is True, "鍵盤輸入模式拼音掣應停用", str(r1))
+    check(r1.get("dis") is False, "鍵盤輸入模式拼音掣應可用", str(r1))
     await b.js("document.querySelector('[data-mode=\"read\"]').click()")
     await asyncio.sleep(0.6)
 
@@ -188,7 +188,7 @@ async def main():
         for f in fails:
             print(" -", f)
         return 1
-    print("全部通過：桌機進入／核對後下一題／切換模式焦點都在 #answer，提示字正確、拼音掣在羅馬拼音／鍵盤輸入灰掉而聽音選字可用，手機不自動聚焦")
+    print("全部通過：桌機進入／核對後下一題／切換模式焦點都在 #answer，提示字正確、拼音掣只在羅馬拼音模式灰掉，鍵盤輸入／聽音選字可用，手機不自動聚焦")
     return 0
 
 

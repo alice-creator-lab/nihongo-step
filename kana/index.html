@@ -523,6 +523,7 @@
         <div class="type-label" id="speakType">ひらがな（平假名）</div>
         <div class="prompt-wrap">
           <button class="listen-prompt" id="speakReplay" title="按再聽一次"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span></button>
+          <div class="prompt-romaji" id="speakRomaji"></div>
           <div class="prompt-hint">聽發音 → 用日文鍵盤輸入<b id="speakHintScript">平假名</b></div>
         </div>
         <div class="input-row">
@@ -721,7 +722,7 @@
   const candsEl=$('cands');
   const writebarEl=document.querySelector('.writebar');
   const emptyPanel=$('emptyPanel'), listenType=$('listenType'), writeType=$('writeType');
-  const speakPanel=$('speakPanel'), speakType=$('speakType'), speakHintScript=$('speakHintScript');
+  const speakPanel=$('speakPanel'), speakType=$('speakType'), speakHintScript=$('speakHintScript'), speakRomaji=$('speakRomaji');
   const speakInput=$('speakInput'), speakCheck=$('speakCheck'), speakReplay=$('speakReplay');
   /* 鍵盤輸入的提示字：窄螢幕用短版，免得被輸入框截斷 */
   function syncSpeakPlaceholder(){
@@ -867,7 +868,7 @@
       ? current.r[0] + (current.r.length > 1
           ? '<span class="alt">'+current.r.slice(1).join(' / ')+'</span>' : '')
       : '';
-    [listenRomaji, writeRomaji].forEach(el=>{
+    [listenRomaji, writeRomaji, speakRomaji].forEach(el=>{
       el.innerHTML = html;
       el.classList.toggle('on', romajiHint);
     });
@@ -1796,7 +1797,7 @@
   });
 
   const romajiBtn = $('romajiBtn');
-  const romajiLocked = ()=> mode==='read' || mode==='speak';   // 這兩個模式是看字作答
+  const romajiLocked = ()=> mode==='read';   // 只有羅馬拼音模式：拼音就係答案，唔可以提示；鍵盤輸入要打假名，拼音只做提示
   function applyRomaji(){
     const locked = romajiLocked();
     romajiBtn.disabled = locked;

@@ -80,6 +80,7 @@ async def main():
             await ev("localStorage.setItem('kanaWrong', %s);localStorage.setItem('kanaWrongSel','null');"
                      "localStorage.setItem('kanaExtras','[]');localStorage.setItem('kanaMode','speak');"
                      "localStorage.setItem('kanaScope','wrong');localStorage.setItem('kanaMute','0');"
+                     "localStorage.setItem('kanaRomaji','1');"
                      % json.dumps(json.dumps(chars, ensure_ascii=False)))
             await call("Page.reload", {}, sid)
             await asyncio.sleep(2.2)
@@ -103,6 +104,9 @@ async def main():
         check("題目是平假名", cur.get("k") == "ぬ" and cur.get("type") == "hira", cur)
         check("唔再顯示大字假名", await ev("!document.getElementById('speakKana')"))
         check("有提示要打平假名", "平假名" in (await ev("document.getElementById('speakHintScript').textContent") or ""))
+        check("拼音掣可用＋顯示拼音提示", (await ev("document.getElementById('romajiBtn').disabled")) is False
+              and "nu" in (await ev("document.getElementById('speakRomaji').textContent") or ""),
+              await ev("document.getElementById('speakRomaji').textContent"))
         check("出題自動播發音", (await ev("(window.__aud||[]).length")) >= 1, await ev("JSON.stringify(window.__aud||[])"))
         r = json.loads(await typ("ヌ"))
         check("打片假名被擋（提示要平假名）", "平假名" in r["note"] and not r["answered"], r["note"])
