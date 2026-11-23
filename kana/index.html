@@ -436,7 +436,7 @@
       <button data-mode="read" class="active" title="看字 → 輸入羅馬拼音">羅馬拼音</button>
       <button data-mode="listen" title="聽發音 → 從假名表選字">聽音選字</button>
       <button data-mode="write" title="聽發音 → 手寫">手寫</button>
-      <button data-mode="speak" title="看字 → 用日文鍵盤打讀音">鍵盤輸入</button>
+      <button data-mode="speak" title="聽發音 → 用日文鍵盤打假名">鍵盤輸入</button>
     </div>
 
     <div class="modebar">
@@ -518,20 +518,20 @@
         <button class="btn-main" id="writeNextBtn" hidden>下一題 →</button>
       </div>
 
-      <!-- SPEAK PANEL（鍵盤輸入：看字打讀音） -->
+      <!-- SPEAK PANEL（鍵盤輸入：聽發音 → 打假名，要分平／片假名） -->
       <div class="panel" id="speakPanel">
-        <div class="type-label hide" id="speakType"></div>
-        <div class="kana" id="speakKana">あ</div>
+        <div class="type-label" id="speakType">ひらがな（平假名）</div>
+        <div class="prompt-wrap">
+          <button class="listen-prompt" id="speakReplay" title="按再聽一次"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span></button>
+          <div class="prompt-hint">聽發音 → 用日文鍵盤輸入<b id="speakHintScript">平假名</b></div>
+        </div>
         <div class="input-row">
           <input id="speakInput" type="text" inputmode="text" lang="ja" autocomplete="off"
-                 autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="用日文鍵盤手寫／輸入平假名／片假名">
+                 autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="用日文鍵盤輸入假名">
           <button class="btn-main" id="speakCheck">檢查</button>
         </div>
-        <div class="speak-row">
-          <button class="ctlbtn" id="speakReplay">示範</button>
-        </div>
         <div class="speak-note" id="speakNote"></div>
-        <div class="speak-tip">用日文鍵盤輸入這個字的讀音（例：ぬ）。</div>
+        <div class="speak-tip">只收假名：題目是平假名就打平假名，是片假名就打片假名。</div>
         <div class="feedback" id="fbSpeak"></div>
       </div>
 
@@ -721,13 +721,13 @@
   const candsEl=$('cands');
   const writebarEl=document.querySelector('.writebar');
   const emptyPanel=$('emptyPanel'), listenType=$('listenType'), writeType=$('writeType');
-  const speakPanel=$('speakPanel'), speakKana=$('speakKana'), speakType=$('speakType');
+  const speakPanel=$('speakPanel'), speakType=$('speakType'), speakHintScript=$('speakHintScript');
   const speakInput=$('speakInput'), speakCheck=$('speakCheck'), speakReplay=$('speakReplay');
   /* 鍵盤輸入的提示字：窄螢幕用短版，免得被輸入框截斷 */
   function syncSpeakPlaceholder(){
     speakInput.placeholder = window.innerWidth < 430
-      ? '手寫或鍵盤輸入假名'
-      : '用日文鍵盤手寫／輸入平假名／片假名';
+      ? '用日文鍵盤輸入假名'
+      : '用日文鍵盤輸入假名（例：ぬ／ヌ）';
   }
   syncSpeakPlaceholder();
   window.addEventListener('resize', syncSpeakPlaceholder);
@@ -1097,9 +1097,9 @@
       speakPanel.classList.add('active'); readPanel.classList.remove('active'); listenPanel.classList.remove('active'); writePanel.classList.remove('active');
       speakType.textContent = typeName(current.type);
       speakType.classList.toggle('hide', !hint);
-      speakKana.textContent = current.k;
-      speakKana.style.animation='none'; void speakKana.offsetWidth; speakKana.style.animation='';
-      resetSpeak();                 // 讀音模式不自動示範，用戶不識先按「示範」
+      speakHintScript.textContent = current.type === 'kata' ? '片假名' : '平假名';
+      resetSpeak();
+      if(!silent){ clearTimeout(promptTimer); promptTimer = setTimeout(playPrompt, 120); }   // 出題即讀，唔顯示字形
     }else{
       writePanel.classList.add('active'); readPanel.classList.remove('active'); listenPanel.classList.remove('active'); speakPanel.classList.remove('active');
       writeType.textContent = typeName(current.type);
@@ -1532,18 +1532,33 @@
   const normRom = s => (s||'').toLowerCase().replace(/wo/g,'o').replace(/zi/g,'ji').replace(/([aeiou])\1+/g,'$1');
   const VALID_ROM = new Set(Object.keys(BY_ROMAJI).map(normRom));   // 表上有的拼音才算輸入
   // 判定輸入：回傳 { status:'ok' | 'wrong' | 'empty', unit }
-  function judgeTyped(text, kana){
+  const scriptOf = ch => {                              // 分辨平假名／片假名
+    if(!ch) return '';
+    const c = ch.charCodeAt(0);
+    if(c>=0x3041 && c<=0x3096) return 'hira';
+    if(c>=0x30a1 && c<=0x30f6) return 'kata';
+    return '';
+  };
+  function judgeTyped(text, kana, opts){
     const raw = String(text||'').trim();
     if(!raw) return { status:'empty', unit:'' };
+    const want = (opts && opts.script) || '';            // 指定要平假名／片假名（鍵盤輸入模式）
     const targetKana = toHira(kana);
     const targetRom = normRom(ROMAJI[targetKana] || ROMAJI[kana] || '');
-    if(/^[a-z]+$/i.test(raw)){                            // 打羅馬拼音也接受
+    if(/^[a-z]+$/i.test(raw)){                            // 羅馬拼音（只有未指定字型時接受）
+      if(want) return { status:'needkana', unit: raw.toLowerCase() };
       const rom = normRom(raw);
       if(!VALID_ROM.has(rom)) return { status:'empty', unit:'' };   // 不是表上的拼音
       return { status: (targetRom && rom===targetRom) ? 'ok' : 'wrong', unit: raw.toLowerCase() };
     }
     const u = firstUnit(raw);
     if(!u || !inTable(u)) return { status:'empty', unit:'' };   // 表外的字／漢字：不判錯
+    if(want){
+      // firstUnit() 會把片假名轉做平假名，所以字型要由原始輸入判斷
+      const got = scriptOf(raw.replace(/\s+/g, '')[0]);
+      if(got !== want) return { status:'script', unit: raw, got, want };
+      return { status: raw === kana ? 'ok' : 'wrong', unit: raw };   // 同字型都要同一個字
+    }
     const ok = u===targetKana || (targetRom && normRom(ROMAJI[u])===targetRom);
     return { status: ok ? 'ok' : 'wrong', unit: u };
   }
@@ -1556,9 +1571,18 @@
   }
   function checkSpeak(){
     if(mode!=='speak' || !current || answered) return;
-    const r = judgeTyped(speakInput.value, current.k);
+    const r = judgeTyped(speakInput.value, current.k, { script: current.type });
     if(r.status==='empty'){
-      speakNote.textContent = '請用日文鍵盤輸入假名（例：ぬ），或打羅馬拼音（例：nu）。';
+      speakNote.textContent = '請用日文鍵盤輸入假名（例：ぬ）。';
+      return;
+    }
+    if(r.status==='needkana'){
+      speakNote.textContent = '這一題要打假名（不接受羅馬拼音）。';
+      return;
+    }
+    if(r.status==='script'){
+      speakNote.textContent = '這一題要打' + (r.want==='kata' ? '片假名' : '平假名')
+        + '，你打的是「' + escH(r.unit) + '」。';
       return;
     }
     answered = true; speakInput.disabled = true;
@@ -2019,6 +2043,7 @@
       extras: ()=>extrasOn.slice(),
       seq: ()=>chartSeq ? {i:chartSeq.i, n:chartSeq.cells.length, paused:player.paused, t:Math.round(player.currentTime*100)/100, src:(player.currentSrc||'').slice(-20)} : null,
       stats: ()=>({correct:stats.correct, wrong:stats.wrong}),
+      current: ()=> current ? {k:current.k, type:current.type, r:current.r.slice()} : null,
       answered: ()=>answered
     };
   }

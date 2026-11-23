@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const URL = process.argv[2];
+const KURL = URL + (URL.includes("?") ? "&" : "?") + "kdebug=1";   // 需要 __kanaTest 掛鈎
 
 (async () => {
   const browser = await chromium.launch({ args: ['--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', '--single-process'] });
@@ -7,7 +8,7 @@ const URL = process.argv[2];
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
-  await page.goto(URL, { waitUntil: 'load' });
+  await page.goto(KURL, { waitUntil: 'load' });
   await page.waitForTimeout(400);
 
   let bad = 0;
@@ -23,7 +24,8 @@ const URL = process.argv[2];
   await page.waitForTimeout(300);
 
   const state = () => page.evaluate(() => ({
-    kana: document.getElementById('speakKana').textContent.trim(),
+    kana: (window.__kanaTest && window.__kanaTest.current()) ? window.__kanaTest.current().k : '',
+    script: (window.__kanaTest && window.__kanaTest.current()) ? window.__kanaTest.current().type : '',
     fbClass: document.getElementById('fbSpeak').className,
     fbText: document.getElementById('fbSpeak').textContent.replace(/\s+/g, ' ').trim(),
     note: document.getElementById('speakNote').textContent.trim(),
@@ -46,9 +48,21 @@ const URL = process.argv[2];
   s = await state();
   check('輸入「目」不判錯', s.correct === before.correct && s.wrong === before.wrong && !s.fbClass.includes('show'), JSON.stringify(s.note));
 
+  // 打錯字型（平／片假名相反）→ 只提示，不計錯
+  const opposite = s.script === 'kata' ? 'あ' : 'ア';
+  await page.fill('#speakInput', opposite);
+  await page.click('#speakCheck');
+  await page.waitForTimeout(200);
+  const sOpp = await state();
+  check('打錯字型只提示不計錯',
+    (sOpp.script === 'kata' ? sOpp.note.includes('片假名') : sOpp.note.includes('平假名'))
+    && sOpp.wrong === s.wrong && !sOpp.fbClass.includes('show'),
+    'note=' + sOpp.note);
+  await page.fill('#speakInput', '');
+
   // 打錯的和音 → 判錯，並顯示你輸入了什麼
   const target = s.kana;
-  const wrongKana = target === 'あ' ? 'い' : 'あ';
+  const wrongKana = s.script === 'kata' ? 'ア' : 'あ';
   await page.fill('#speakInput', wrongKana);
   await page.click('#speakCheck');
   await page.waitForTimeout(200);
@@ -75,10 +89,7 @@ const URL = process.argv[2];
   await page.waitForTimeout(300);
   s = await state();
   // 用羅馬拼音回答（用假名表反查）
-  const rom = await page.evaluate(() => {
-    const kana = document.getElementById('speakKana').textContent.trim();
-    return kana;
-  });
+  const rom = await page.evaluate(() => window.__kanaTest.current().k);
   await page.screenshot({ path: '/tmp/kana-kbd.png' });
 
   // 切換模式時鍵盤要收起

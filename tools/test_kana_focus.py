@@ -150,7 +150,7 @@ async def main():
     await b.js("document.querySelector('[data-mode=\"speak\"]').click()")
     await asyncio.sleep(0.5)
     ph = await b.js("document.getElementById('speakInput').placeholder")
-    check(ph == "用日文鍵盤手寫／輸入平假名／片假名", "桌機鍵盤輸入提示字不對", str(ph))
+    check(ph == "用日文鍵盤輸入假名（例：ぬ／ヌ）", "桌機鍵盤輸入提示字不對", str(ph))
     r1 = await b.js(rb) or {}
     check(r1.get("dis") is True, "鍵盤輸入模式拼音掣應停用", str(r1))
     await b.js("document.querySelector('[data-mode=\"read\"]').click()")
@@ -179,7 +179,7 @@ async def main():
     await m.js("document.querySelector('[data-mode=\"speak\"]').click()")
     await asyncio.sleep(0.5)
     ph2 = await m.js("document.getElementById('speakInput').placeholder")
-    check(ph2 == "手寫或鍵盤輸入假名", "手機鍵盤輸入提示字應為短版", str(ph2))
+    check(ph2 == "用日文鍵盤輸入假名", "手機鍵盤輸入提示字應為短版", str(ph2))
     check(s4.get("act") != "answer", "手機不應自動聚焦（鍵盤會自己彈出）", str(s4))
     m.close()
 
