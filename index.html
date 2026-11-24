@@ -1004,7 +1004,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v419</span>
+    <span class="ver" id="verTag">v420</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3043,7 +3043,7 @@
     var i = startAt, poll = null, fails = 0, cur = null, gapTimer = null, readyTimer = null;
     /* 每句最多試兩次：iPhone Safari 換 src 時偶爾會卡住（currentTime 一直 0），
        以前一次失敗就跳去下一句，聽起來就像「漏了一句」。 */
-    var tries = {};
+    var tries = {}, itemTok = 0;
     /* 電腦版載入太快，音檔又剪走前後靜音，句與句會黏在一起變成「機關槍」；
        固定留 400ms 換氣位，並等 canplay 才播（避免開頭爆音）。 */
     var PLAY_GAP = 400;
@@ -3082,39 +3082,43 @@
       if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
       if (i >= list.length){ stopAllPlay(); return; }
       cur = list[i];
+      /* 每句一個 token：上一句遲到的 ended／canplay 不可以當成這一句的事件，
+         否則會連續 endItem 兩次，聽起來就係「漏了一句」。 */
+      var myTok = ++itemTok;
+      function endThis(ok){ if (myTok !== itemTok) return; endItem(ok); }
       if (cur.el){ cur.el.classList.add('playing'); followRow(cur.el, true); }
       allBar(true, (i + 1) + '／' + list.length);
-      if (!a){ endItem(false); return; }
+      if (!a){ endThis(false); return; }
       clearTimers();
       try{
         a.pause();
         a.src = cur.audio + '?v=' + auVer(cur.audio) + ((tries[i] || 0) ? '&r=' + tries[i] : '');
         try{ a.currentTime = 0; }catch(e){}
       }catch(e2){}
+      a.onended = function(){ endThis(true); };
+      a.onerror = function(){ endThis(false); };
       var fired = false;
       function begin(){
         if (fired) return;
         fired = true;
         if (readyTimer){ clearTimeout(readyTimer); readyTimer = null; }
-        if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
+        if (!ALLPLAY.on || ALLPLAY.tok !== token || myTok !== itemTok) return;
         try{ var pr = a.play(); if (pr && pr.catch) pr.catch(function(){}); }catch(e3){}
         var zero = 0, stall = 0;
         poll = setInterval(function(){
-          if (!ALLPLAY.on || ALLPLAY.tok !== token){ clearPoll(); return; }
+          if (!ALLPLAY.on || ALLPLAY.tok !== token || myTok !== itemTok){ clearPoll(); return; }
           var st = 0, dur = 0, paused = true;
           try{ st = a.currentTime || 0; dur = a.duration || 0; paused = a.paused; }catch(e){}
-          if (a.ended){ endItem(true); return; }   /* 等真正播完才計 400ms 換氣位，唔好提早 0.25 秒收 */
+          if (a.ended){ endThis(true); return; }   /* 等真正播完才計 400ms 換氣位，唔好提早 0.25 秒收 */
           if (st <= 0.05){ zero++; } else { zero = 0; }
-          if (zero >= 10){ endItem(false); return; }            /* 4 秒完全冇開始播＝失敗 */
+          if (zero >= 10){ endThis(false); return; }            /* 4 秒完全冇開始播＝失敗 */
           if (paused && st > 0.05){ stall++; } else { stall = 0; }
-          if (stall >= 4){ endItem(false); return; }            /* 播到一半停住 1.6 秒＝被系統打斷 */
+          if (stall >= 4){ endThis(false); return; }            /* 播到一半停住 1.6 秒＝被系統打斷 */
         }, 400);
       }
       a.addEventListener('canplay', begin, {once:true});
       readyTimer = setTimeout(begin, 4000);   /* 網絡慢／快取失效時唔好卡死，4 秒照播 */
     }
-    a.onended = function(){ endItem(true); };
-    a.onerror = function(){ endItem(false); };
     step();
   }
 
