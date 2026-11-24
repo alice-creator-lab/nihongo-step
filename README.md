@@ -105,7 +105,8 @@ python3 tools/audit_readings.py --strict   # 例句讀音是否跟單字表一�
 
 - 純前端，無建置步驟、無外部依賴；字體使用系統的日文與繁中字型。
 - 桌面網頁版整體放大 150%：`@media (min-width:900px) and (hover:hover) and (pointer:fine){ html{zoom:1.5} }`。版面尺寸全部寫死 px，用 `zoom` 一次放大字級、行高、按鈕與表格欄寬；手機（≤899px）與觸控平板（無 hover／fine pointer）不受影響。舊版 Firefox（<126）不支援 `zoom`，只會維持原大小。驗收：`python3 tools/test_desktop_zoom.py <url>`。
-- 發音優先用預製人聲：`tools/make_audio.py` 以 edge-tts（ja-JP-KeitaNeural／NanamiNeural）合成，音檔放在 `audio/`，索引在 `data/audio.json`（key 分 `d`會話、`v`單字、`p`句型例句、`g`文法例句、`l`聽力）。只有缺音檔時才退回 `speechSynthesis`。
+- 發音優先用預製人聲：`tools/make_audio.py` 合成，音檔放在 `audio/m/`（L01–L40 全部已改用 Azure Speech：女聲／旁白 `ja-JP-MayuNeural`、男角 `ja-JP-KeitaNeural`，有商用授權），索引在 `data/audio.json`（key 分 `d`會話、`v`單字、`p`句型例句、`g`文法例句、`l`聽力）。只有缺音檔時才退回 `speechSynthesis`。
+- 分批換聲：`python3 tools/azure_batch.py L21 L22 L23 L24 L25`（自動為「母は→ははわ」這類會黏連的句子加漢字覆寫，再生成、合併、把 `v` 加一）。舊 edge 檔仍在 `audio/L0x-*.mp3`，可隨時切回。
 - 朗讀文字由 `tools/speech.py` 產生：以句子自己的 `kana` 為準（「町」一定是 まち，不會被 TTS 讀成 ちょう），再把助詞 は／へ／を 改寫成 わ／え／お，因為整句假名時 edge-tts 會把助詞「は」讀成 ha（實測：漢字句讀 wa，假名句讀 ha）。整句一律用假名合成，不留漢字給 TTS 猜（對齊失敗的句子也退回全假名）。
 - 改動 `kana` 之後要跑 `python3 tools/make_audio.py --force-ex` 重生句子音檔（會話、句型例句、文法例句、聽力；單字不動），它會把 `data/audio.json` 的 `v` 加一，令瀏覽器重抓音檔。
 - 已移除「慢速」功能（v51）：header 的慢速鍵、聽力頁的慢速重播、全域 `ngs-slow` 設定全部刪除，播放一律原速。`playFile(url,onend,el)` 仍保留選用的 `rate` 參數供連播使用，但 UI 不再提供慢速入口。
