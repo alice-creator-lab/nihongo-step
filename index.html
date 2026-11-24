@@ -1004,7 +1004,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v418</span>
+    <span class="ver" id="verTag">v419</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3041,6 +3041,9 @@
     }
     var a = seqAudio();
     var i = startAt, poll = null, fails = 0, cur = null, gapTimer = null, readyTimer = null;
+    /* 每句最多試兩次：iPhone Safari 換 src 時偶爾會卡住（currentTime 一直 0），
+       以前一次失敗就跳去下一句，聽起來就像「漏了一句」。 */
+    var tries = {};
     /* 電腦版載入太快，音檔又剪走前後靜音，句與句會黏在一起變成「機關槍」；
        固定留 400ms 換氣位，並等 canplay 才播（避免開頭爆音）。 */
     var PLAY_GAP = 400;
@@ -3055,6 +3058,16 @@
       clearPoll();
       if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
       if (cur && cur.el) cur.el.classList.remove('playing');
+      if (!ok && (tries[i] || 0) < 1){
+        tries[i] = (tries[i] || 0) + 1;      /* 同一句再播一次，不要靜靜跳過 */
+        clearTimers();
+        gapTimer = setTimeout(function(){
+          gapTimer = null;
+          if (!ALLPLAY.on || ALLPLAY.tok !== token) return;
+          step();
+        }, 250);
+        return;
+      }
       fails = ok ? 0 : fails + 1;
       if (fails >= 3){ stopAllPlay(); toast('播放中斷，請再按一次「播放全部」'); return; }
       i++;
@@ -3075,7 +3088,7 @@
       clearTimers();
       try{
         a.pause();
-        a.src = cur.audio + '?v=' + auVer(cur.audio);
+        a.src = cur.audio + '?v=' + auVer(cur.audio) + ((tries[i] || 0) ? '&r=' + tries[i] : '');
         try{ a.currentTime = 0; }catch(e){}
       }catch(e2){}
       var fired = false;
