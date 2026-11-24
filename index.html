@@ -1004,7 +1004,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v422</span>
+    <span class="ver" id="verTag">v423</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -5592,7 +5592,10 @@
     return (m && m[key]) || null;
   }
   /* 動詞表／形容詞表有自己的音檔版本，避免為了它們把全部音檔重新下載 */
+  /* 個別句子改過讀音時只推那一個檔的版本，不必叫全站重新下載句子音檔 */
+  var AUV_OVERRIDE = { 'audio/m/L02-d0-l5.mp3': 'e32a' };
   function auVer(url){
+    if (AUV_OVERRIDE[url]) return AUV_OVERRIDE[url];
     // 句子（會話・句型・文法・聽力）與動詞／形容詞表各自一套版本號，
     // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
     if (/audio\/(verb|adj)\//.test(url)) return 't2';
