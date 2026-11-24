@@ -1004,7 +1004,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v421</span>
+    <span class="ver" id="verTag">v422</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -5595,18 +5595,20 @@
   function auVer(url){
     // 句子（會話・句型・文法・聽力）與動詞／形容詞表各自一套版本號，
     // 改句子讀音時不用連 822 個單字音檔（約 60MB）一齊重下。
-    if (/audio\/(verb|adj)\//.test(url)) return 't1';
+    if (/audio\/(verb|adj)\//.test(url)) return 't2';
     /* 動詞詳細表（audio/verbform/）自成一套版本號 */
-    if (/audio\/verbform\//.test(url)) return 'vf1';
+    if (/audio\/verbform\//.test(url)) return 'vf2';
     /* 不同形態的應用（audio/apps/）自成一套版本號 */
-    if (/audio\/apps\//.test(url)) return 'ap1';
+    if (/audio\/apps\//.test(url)) return 'ap2';
     /* 助詞一覧的新增例句（audio/particles/）自成一套版本號 */
-    if (/audio\/particles\//.test(url)) return 'pa1';
-    if (/audio\/advconj\//.test(url)) return 'ac1';
+    if (/audio\/particles\//.test(url)) return 'pa2';
+    if (/audio\/advconj\//.test(url)) return 'ac2';
     /* 形容詞變化頁（audio/adjform/）自成一套版本號 */
-    if (/audio\/adjform\//.test(url)) return 'f1';
+    if (/audio\/adjform\//.test(url)) return 'f2';
     /* 順序表音檔（audio/seq/）剪過靜音、內容變過，版本一齊推，免得手機用舊快取 */
-    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e31';
+    /* 順序表與聽解測驗音檔已轉 Azure，另給一個版本號 */
+    if (/audio\/(seq|exam)\//.test(url)) return 's2';
+    if (!/\/L\d{2}-v\d+\.mp3$/.test(url)) return 'e30';
     return AUDIO.v || 1;
   }
   function playFile(url, onend, el, rate){

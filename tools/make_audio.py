@@ -18,7 +18,7 @@ kana 缺失時才退回原句（ja）。
 """
 import glob, json, os, re, subprocess, sys, concurrent.futures, urllib.request, time
 
-ENGINE = "edge"      # edge｜azure
+ENGINE = os.environ.get("TTS_ENGINE", "edge").strip().lower()   # edge｜azure
 RATE = None          # Azure 專用，例如 "-5%"；edge 引擎沿用預設語速
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -123,9 +123,14 @@ def synth_azure(voice, text, out):
     return False
 
 
+EDGE_TO_AZURE = {"ja-JP-NanamiNeural": "ja-JP-MayuNeural",
+                 "ja-JP-KeitaNeural": "ja-JP-KeitaNeural"}
+
+
 def synth(voice, text, out):
     if ENGINE == "azure":
-        return synth_azure(voice, text, out)
+        # 舊工具寫的是 edge 聲名（Nanami），Azure 沒有這把聲，換成 Mayu
+        return synth_azure(EDGE_TO_AZURE.get(voice, voice), text, out)
     for _ in range(3):
         r = subprocess.run(["edge-tts", "--voice", voice, "--text", text, "--write-media", out],
                            capture_output=True, text=True, timeout=120)

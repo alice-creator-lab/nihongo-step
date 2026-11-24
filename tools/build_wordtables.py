@@ -108,12 +108,8 @@ def adj_type(pos, kana):
 
 
 def synth(text, out):
-    for _ in range(3):
-        r = subprocess.run(["edge-tts", "--voice", VOICE, "--text", text,
-                            "--write-media", out], capture_output=True, text=True, timeout=90)
-        if r.returncode == 0 and os.path.exists(out) and os.path.getsize(out) > 900:
-            return True
-    return False
+    from tts import say
+    return say(text, out, voice=VOICE)
 
 
 def main():

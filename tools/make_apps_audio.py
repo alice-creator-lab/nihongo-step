@@ -42,13 +42,10 @@ def main():
         if os.path.exists(path) and os.path.getsize(path) > 2000 and not force:
             skip += 1
             continue
-        for _ in range(3):
-            r = subprocess.run(["edge-tts", "--voice", VOICE, "--text", text,
-                                "--write-media", path], capture_output=True, text=True, timeout=120)
-            if r.returncode == 0 and os.path.exists(path) and os.path.getsize(path) > 2000:
-                ok += 1
-                print("ok  ", key, text, flush=True)
-                break
+        from tts import say as _say
+        if _say(text, path, voice=VOICE) and os.path.exists(path) and os.path.getsize(path) > 2000:
+            ok += 1
+            print("ok  ", key, text, flush=True)
         else:
             fail += 1
             print("FAIL", key, text, flush=True)

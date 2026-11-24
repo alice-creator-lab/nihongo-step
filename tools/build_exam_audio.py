@@ -30,7 +30,10 @@ JOINS = {
 
 
 def src(lid, dk, ln):
-    p = os.path.join(ROOT, "audio", f"{lid}-{dk}-l{ln}.mp3")
+    # 課程音檔已轉 Azure（audio/m/）；舊 edge 檔仍在 audio/ 作後備
+    p = os.path.join(ROOT, "audio", "m", f"{lid}-{dk}-l{ln}.mp3")
+    if not os.path.exists(p):
+        p = os.path.join(ROOT, "audio", f"{lid}-{dk}-l{ln}.mp3")
     if not os.path.exists(p):
         raise SystemExit("缺音檔：" + p)
     return p

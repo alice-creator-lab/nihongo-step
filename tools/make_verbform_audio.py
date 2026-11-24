@@ -22,12 +22,8 @@ VOICE = "ja-JP-NanamiNeural"      # 與單字表同一個女聲
 
 
 def synth(text, path):
-    for _ in range(3):
-        r = subprocess.run(["edge-tts", "--voice", VOICE, "--text", text,
-                            "--write-media", path], capture_output=True, text=True, timeout=120)
-        if r.returncode == 0 and os.path.exists(path) and os.path.getsize(path) > 900:
-            return True
-    return False
+    from tts import say
+    return say(text, path, voice=VOICE)
 
 
 def main():

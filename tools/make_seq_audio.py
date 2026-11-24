@@ -10,12 +10,8 @@ VOICE = "ja-JP-NanamiNeural"
 
 
 def synth(kana, out):
-    for _ in range(3):
-        r = subprocess.run(["edge-tts", "--voice", VOICE, "--text", kana, "--write-media", out],
-                           capture_output=True, text=True, timeout=90)
-        if r.returncode == 0 and os.path.exists(out) and os.path.getsize(out) > 1200:
-            return True
-    return False
+    from tts import say
+    return say(kana, out, voice=VOICE)
 
 
 def main():
