@@ -1004,7 +1004,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v425</span>
+    <span class="ver" id="verTag">v426</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3414,7 +3414,7 @@
       return { t: g.t,
                tag: g.pl === 'n5' ? ('N5 ' + g.no) : g.pl === 'n4' ? ('N4 ' + g.no) : '',
                pl: g.pl, no: g.no, secs: secs };
-    });
+    }).filter(function(g){ return g.secs.length > 0; });   // 課程沒有對應說明就不列出
   }
 
   function renderAll(kind){
