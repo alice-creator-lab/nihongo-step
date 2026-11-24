@@ -80,6 +80,11 @@ window.__played=[];
                 await call("Input.dispatchMouseEvent", {"type": ty, "x": box["x"], "y": box["y"],
                                                         "button": "left", "clickCount": 1}, sid)
         await asyncio.sleep(2)
+        if os.environ.get("SIM_DOUBLE"):
+            await asyncio.sleep(3)
+            await ev("""(function(){var a=document.querySelector('audio');
+                if(!a)return; a.dispatchEvent(new Event('ended')); a.dispatchEvent(new Event('ended'));})()""")
+            print("simulated duplicate ended")
         for _ in range(40):
             state = await ev("""(function(){var b=document.getElementById('pplayall');return b?b.textContent.trim():'';})()""")
             if "停止" not in state:

@@ -1004,7 +1004,7 @@
     <span class="b2">nihongo-step</span>
   </a>
   <div class="hact">
-    <span class="ver" id="verTag">v420</span>
+    <span class="ver" id="verTag">v421</span>
   </div>
 </header>
 <main class="wrap" id="app"><div class="err">載入中……</div></main>
@@ -3084,8 +3084,14 @@
       cur = list[i];
       /* 每句一個 token：上一句遲到的 ended／canplay 不可以當成這一句的事件，
          否則會連續 endItem 兩次，聽起來就係「漏了一句」。 */
-      var myTok = ++itemTok;
-      function endThis(ok){ if (myTok !== itemTok) return; endItem(ok); }
+      var myTok = ++itemTok, finished = false;
+      /* 同一句只可以收一次：ended 事件、poll、error 可能一齊報到，
+         以前會連續 endItem 幾次，結果一口氣跳幾句。 */
+      function endThis(ok){
+        if (finished || myTok !== itemTok) return;
+        finished = true;
+        endItem(ok);
+      }
       if (cur.el){ cur.el.classList.add('playing'); followRow(cur.el, true); }
       allBar(true, (i + 1) + '／' + list.length);
       if (!a){ endThis(false); return; }
