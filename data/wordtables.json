@@ -1,6 +1,6 @@
 {
  "verbs": {
-  "total": 181,
+  "total": 180,
   "groups": [
    {
     "id": "godan",
@@ -271,7 +271,7 @@
       "id": "L11",
       "vi": 27,
       "group": "godan",
-      "kanji": "なる",
+      "kanji": "",
       "kana": "なる",
       "jisho": "なる",
       "masu": "なります",
@@ -327,7 +327,7 @@
       "id": "L11",
       "vi": 32,
       "group": "godan",
-      "kanji": "やる",
+      "kanji": "",
       "kana": "やる",
       "jisho": "やる",
       "masu": "やります",
@@ -761,28 +761,28 @@
      },
      {
       "id": "L14",
-      "vi": 35,
+      "vi": 37,
       "group": "godan",
-      "kanji": "かかる",
+      "kanji": "",
       "kana": "かかる",
       "jisho": "かかる",
       "masu": "かかります",
       "zh": "花費（時間、金錢）",
-      "audio": "audio/verb/L14-35.mp3",
+      "audio": "audio/verb/L14-37.mp3",
       "lessons": [
        "L14"
       ]
      },
      {
       "id": "L14",
-      "vi": 36,
+      "vi": 38,
       "group": "godan",
       "kanji": "差す",
       "kana": "さす",
       "jisho": "さす",
       "masu": "さします",
       "zh": "撐（傘）",
-      "audio": "audio/verb/L14-36.mp3",
+      "audio": "audio/verb/L14-38.mp3",
       "lessons": [
        "L14"
       ]
@@ -1035,20 +1035,6 @@
       "masu": "ほしがります",
       "zh": "想要（第三人稱）",
       "audio": "audio/verb/L23-24.mp3",
-      "lessons": [
-       "L23"
-      ]
-     },
-     {
-      "id": "L23",
-      "vi": 25,
-      "group": "godan",
-      "kanji": "",
-      "kana": "たがる",
-      "jisho": "たがる",
-      "masu": "たがります",
-      "zh": "想做（第三人稱）",
-      "audio": "audio/verb/L23-25.mp3",
       "lessons": [
        "L23"
       ]
@@ -1921,14 +1907,14 @@
      },
      {
       "id": "L14",
-      "vi": 34,
+      "vi": 36,
       "group": "ichidan",
       "kanji": "浴びる",
       "kana": "あびる",
       "jisho": "あびる",
       "masu": "あびます",
       "zh": "淋浴、泡（澡）",
-      "audio": "audio/verb/L14-34.mp3",
+      "audio": "audio/verb/L14-36.mp3",
       "lessons": [
        "L14"
       ]
@@ -2473,7 +2459,7 @@
       "id": "L11",
       "vi": 26,
       "group": "irregular",
-      "kanji": "する",
+      "kanji": "",
       "kana": "する",
       "jisho": "する",
       "masu": "します",
@@ -3254,7 +3240,7 @@
       "group": "na",
       "kanji": "嫌",
       "kana": "いや",
-      "zh": "討厭、不願意",
+      "zh": "討厭、不願意（口語；「嫌い」是討厭某事物的な形容詞）",
       "audio": "audio/adj/L08-34.mp3"
      },
      {
