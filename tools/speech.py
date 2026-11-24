@@ -31,12 +31,31 @@ NAMES = {"田中": "たなか", "鈴木": "すずき", "佐藤": "さとう", "�
 
 _WHOLE = None
 
+# 單字表沒有收、但切分時必須知道讀音長度的常用詞。
+# 缺了它們，母／父 這類兩拍漢字會被切成單拍（母→は），
+# 於是「母は」變成「はわ」而讀錯母音。
+STATIC = {
+    "母": "はは", "父": "ちち", "姉": "あね", "兄": "あに",
+    "妹": "いもうと", "弟": "おとうと", "両親": "りょうしん", "家族": "かぞく",
+    "母親": "ははおや", "父親": "ちちおや", "兄弟": "きょうだい",
+    "一人": "ひとり", "二人": "ふたり", "大人": "おとな",
+    "今日": "きょう", "明日": "あした", "昨日": "きのう", "毎日": "まいにち",
+    "今朝": "けさ", "今年": "ことし", "来年": "らいねん", "去年": "きょねん",
+}
+
 
 def _whole():
     global _WHOLE
     if _WHOLE is None:
         gloss = ar.build_gloss(ar.load_lessons())
+        for w, r in STATIC.items():
+            gloss.setdefault(w, {}).setdefault(r, set()).add("STATIC")
         _WHOLE, _ = ar.build_readings(gloss)
+        if isinstance(_WHOLE, set):
+            _WHOLE |= set(STATIC.values())
+        elif isinstance(_WHOLE, dict):
+            for r in STATIC.values():
+                _WHOLE.setdefault(r, set())
     return _WHOLE
 
 
