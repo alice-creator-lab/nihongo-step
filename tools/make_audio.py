@@ -27,6 +27,23 @@ from speech import speech  # noqa: E402  朗讀文字：以資料檔假名為準
 FEMALE = {"李", "林", "妻", "仲居", "店員"}
 MALE = {"王", "田中", "佐藤", "山田", "鈴木", "係員", "店長", "部長"}
 
+# 同場有兩個以上男角時，全部用 Keita 會分不出誰說話。依「角色同時出場」
+# 的關係做三色分配，保證同一段會話不會兩個角色同聲：
+#   Keita  田中・山田・係員・店長・部長
+#   Daichi 王
+#   Naoki  佐藤・鈴木
+# 女角一律 Mayu；未列出的男角沿用 Keita。
+AZURE_VOICE_BY_NAME = {
+    "田中": "ja-JP-KeitaNeural",
+    "山田": "ja-JP-KeitaNeural",
+    "係員": "ja-JP-KeitaNeural",
+    "店長": "ja-JP-KeitaNeural",
+    "部長": "ja-JP-KeitaNeural",
+    "王": "ja-JP-DaichiNeural",
+    "佐藤": "ja-JP-NaokiNeural",
+    "鈴木": "ja-JP-NaokiNeural",
+}
+
 
 def tts_text(item):
     """朗讀文字：用資料檔假名，並把助詞 は／へ／を 寫成 わ／え／お。
@@ -51,6 +68,8 @@ def tts_text(item):
 
 def voice_for(who):
     if ENGINE == "azure":
+        if who in AZURE_VOICE_BY_NAME:
+            return AZURE_VOICE_BY_NAME[who]
         return "ja-JP-KeitaNeural" if who in MALE else "ja-JP-MayuNeural"
     return "ja-JP-KeitaNeural" if who in MALE else "ja-JP-NanamiNeural"
 
